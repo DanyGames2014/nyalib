@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "nyalibtest",
+  "version": "${version}",
+
+  "name": "NyaLib Test",
+  "description": "Testing mod for NyaLib",
+  "authors": [
+    "DanyGames2014"
+  ],
+
+  "license": "MIT",
+  "icon": "assets/nyalibtest/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "stationapi:event_bus": [
+    ],
+    "stationapi:event_bus_client": [
+    ],
+    "stationapi:event_bus_server": [
+    ]
+  },
+  "mixins": [
+    "nyalibtest.mixins.json"
+  ],
+
+  "depends": {
+    "minecraft": "1.0.0-beta.7.3"
+  }
+}
