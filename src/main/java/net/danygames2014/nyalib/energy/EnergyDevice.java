@@ -3,10 +3,17 @@ package net.danygames2014.nyalib.energy;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * A device which can have the ability to receieve and send energy
+ * see {@link #canInsertEnergy(Direction)} and {@link #canExtractEnergy(Direction)} for the exact capabilities of a given device
+ */
 @SuppressWarnings({"UnusedReturnValue", "unused"})
 public interface EnergyDevice extends EnergyCapable{
 
     /**
+     * Check if a device supports extracting energy from it, if this returns false there
+     * should be no point in trying to use {@link #extractEnergy(int, boolean, Direction)}
+     *
      * @param direction Direction to check
      * @return <code>true</code> if the device supports energy extraction from the given direction
      */
@@ -24,6 +31,9 @@ public interface EnergyDevice extends EnergyCapable{
 
 
     /**
+     * Check if a device supports inserting energy into it, if this returns false there
+     * should be no point in trying to use {@link #insertEnergy(int, boolean, Direction)}
+     *
      * @param direction Direction to check
      * @return <code>true</code> if the device supports energy insertion from the given direction
      */
