@@ -15,6 +15,7 @@
   "environment": "*",
   "entrypoints": {
     "stationapi:event_bus": [
+      "net.danygames2014.nyalibtest.NyaLibTest"
     ],
     "stationapi:event_bus_client": [
     ],
