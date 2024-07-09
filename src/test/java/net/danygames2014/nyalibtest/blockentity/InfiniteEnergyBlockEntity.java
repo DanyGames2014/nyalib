@@ -11,7 +11,7 @@ public class InfiniteEnergyBlockEntity extends BlockEntity implements EnergyDevi
             BlockEntity blockEntity = world.getBlockEntity(x + dir.getOffsetX(), y + dir.getOffsetY(), z + dir.getOffsetZ());
             if (blockEntity instanceof EnergyDevice energyDevice) {
                 if (energyDevice.canInsertEnergy(dir.getOpposite())) {
-                    energyDevice.insertEnergy(Integer.MAX_VALUE, false, dir.getOpposite());
+                    energyDevice.insertEnergy(Integer.MAX_VALUE, dir.getOpposite());
                 }
             }
         }
@@ -28,7 +28,7 @@ public class InfiniteEnergyBlockEntity extends BlockEntity implements EnergyDevi
     }
 
     @Override
-    public int extractEnergy(int amount, boolean simulate, Direction direction) {
+    public int extractEnergy(int amount, Direction direction) {
         return amount;
     }
 
@@ -38,7 +38,7 @@ public class InfiniteEnergyBlockEntity extends BlockEntity implements EnergyDevi
     }
 
     @Override
-    public int insertEnergy(int amount, boolean simulate, Direction direction) {
+    public int insertEnergy(int amount, Direction direction) {
         return 0;
     }
 }

@@ -12,7 +12,7 @@ public interface EnergyDevice extends EnergyCapable{
 
     /**
      * Check if a device supports extracting energy from it, if this returns false there
-     * should be no point in trying to use {@link #extractEnergy(int, boolean, Direction)}
+     * should be no point in trying to use {@link #extractEnergy(int, Direction)}
      *
      * @param direction Direction to check
      * @return <code>true</code> if the device supports energy extraction from the given direction
@@ -23,16 +23,15 @@ public interface EnergyDevice extends EnergyCapable{
      * Extract energy from the device
      *
      * @param amount    Amount of energy to be extracted
-     * @param simulate  If <code>true</code> the action will only be simulated
      * @param direction {@link Direction} from which the energy is extracted from
      * @return Amount of energy that was (or would have been, if simulated) extracted
      */
-    int extractEnergy(int amount, boolean simulate, @Nullable Direction direction);
+    int extractEnergy(int amount, @Nullable Direction direction);
 
 
     /**
      * Check if a device supports inserting energy into it, if this returns false there
-     * should be no point in trying to use {@link #insertEnergy(int, boolean, Direction)}
+     * should be no point in trying to use {@link #insertEnergy(int, Direction)}
      *
      * @param direction Direction to check
      * @return <code>true</code> if the device supports energy insertion from the given direction
@@ -43,9 +42,8 @@ public interface EnergyDevice extends EnergyCapable{
      * Provide energy to the device
      *
      * @param amount    Amount of energy provided to the device
-     * @param simulate  If <code>true</code> the action will only be simulated
      * @param direction {@link Direction} from which the energy is received
      * @return Amount of energy that was (or would have been, if simulated) received
      */
-    int insertEnergy(int amount, boolean simulate, @Nullable Direction direction);
+    int insertEnergy(int amount, @Nullable Direction direction);
 }
