@@ -64,5 +64,10 @@ public interface ItemHandler {
      */
     ItemStack getStackInSlot(int slot, @Nullable Direction direction);
 
+    /**
+     * Get the size of the block inventory
+     *
+     * @return The number of slots this block has
+     */
     int getSize();
 }
