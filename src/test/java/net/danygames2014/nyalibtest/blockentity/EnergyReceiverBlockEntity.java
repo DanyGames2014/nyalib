@@ -7,6 +7,8 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 import net.modificationstation.stationapi.api.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
 
+import java.math.BigInteger;
+
 public class EnergyReceiverBlockEntity extends BlockEntity implements EnergyDevice, EnergyStorage {
     public int storedEnergy;
 
@@ -38,7 +40,7 @@ public class EnergyReceiverBlockEntity extends BlockEntity implements EnergyDevi
     }
 
     @Override
-    public boolean canConnect(Direction direction) {
+    public boolean canConnectEnergy(Direction direction) {
         return true;
     }
 
