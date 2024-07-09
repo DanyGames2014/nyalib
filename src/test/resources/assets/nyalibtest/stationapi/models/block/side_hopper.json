@@ -1,0 +1,40 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "nyalibtest:block/side_hopper_side",
+    "up": "nyalibtest:block/side_hopper_side",
+    "north": "nyalibtest:block/side_hopper_side",
+    "east": "nyalibtest:block/side_hopper_in",
+    "south": "nyalibtest:block/side_hopper_side",
+    "west": "nyalibtest:block/side_hopper_out"
+  },
+  "elements": [
+    {
+      "from": [0, 0, 0],
+      "to": [16, 16, 16],
+      "faces": {
+        "down": {
+          "texture": "#down",
+          "rotation": 180
+        },
+        "up": {
+          "texture": "#up",
+          "rotation": 180
+        },
+        "north": {
+          "texture": "#north"
+        },
+        "east": {
+          "texture": "#east"
+        },
+        "south": {
+          "texture": "#south",
+          "rotation": 180
+        },
+        "west": {
+          "texture": "#west"
+        }
+      }
+    }
+  ]
+}

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
  * see {@link #canInsertEnergy(Direction)} and {@link #canExtractEnergy(Direction)} for the exact capabilities of a given device
  */
 @SuppressWarnings({"UnusedReturnValue", "unused"})
-public interface EnergyDevice extends EnergyCapable{
+public interface EnergyDevice extends EnergyCapable {
 
     /**
      * Check if a device supports extracting energy from it, if this returns false there
