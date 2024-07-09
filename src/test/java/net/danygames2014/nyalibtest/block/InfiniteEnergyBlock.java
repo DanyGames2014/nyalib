@@ -9,6 +9,8 @@ import net.modificationstation.stationapi.api.util.Identifier;
 public class InfiniteEnergyBlock extends TemplateBlockWithEntity {
     public InfiniteEnergyBlock(Identifier identifier) {
         super(identifier, Material.METAL);
+        this.setHardness(1F);
+        this.setResistance(1F);
     }
 
     @Override

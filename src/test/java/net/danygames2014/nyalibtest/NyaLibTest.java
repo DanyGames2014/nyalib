@@ -1,6 +1,8 @@
 package net.danygames2014.nyalibtest;
 
+import net.danygames2014.nyalibtest.block.EnergyReceiverBlock;
 import net.danygames2014.nyalibtest.block.InfiniteEnergyBlock;
+import net.danygames2014.nyalibtest.blockentity.EnergyReceiverBlockEntity;
 import net.danygames2014.nyalibtest.blockentity.InfiniteEnergyBlockEntity;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
@@ -16,14 +18,17 @@ public class NyaLibTest {
     public static final Namespace NAMESPACE = Null.get();
 
     public static Block infiniteEnergyBlock;
+    public static Block energyReceiverBlock;
 
     @EventListener
     public void registerBlock(BlockRegistryEvent event){
-        infiniteEnergyBlock = new InfiniteEnergyBlock(NAMESPACE.id("infinite_energy_block"));
+        infiniteEnergyBlock = new InfiniteEnergyBlock(NAMESPACE.id("infinite_energy")).setTranslationKey(NAMESPACE, "infinite_energy");
+        energyReceiverBlock = new EnergyReceiverBlock(NAMESPACE.id("energy_receiver")).setTranslationKey(NAMESPACE, "energy_receiver");
     }
 
     @EventListener
     public void registerBlockEntites(BlockEntityRegisterEvent event){
         event.register(InfiniteEnergyBlockEntity.class, "infinite_energy");
+        event.register(EnergyReceiverBlockEntity.class, "energy_receiver");
     }
 }
