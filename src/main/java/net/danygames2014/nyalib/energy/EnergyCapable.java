@@ -12,5 +12,5 @@ public interface EnergyCapable {
      *                  Example: If a machine is to the West of a cable, that cable should call this with East as a parameter because the cable will be to the East of the machine
      * @return <code>true</code> if the block can connect, <code>false</code> if it cannot connect
      */
-    boolean canConnect(Direction direction);
+    boolean canConnectEnergy(Direction direction);
 }
