@@ -18,7 +18,7 @@ public class InfiniteEnergyBlockEntity extends BlockEntity implements EnergyDevi
     }
 
     @Override
-    public boolean canConnect(Direction direction) {
+    public boolean canConnectEnergy(Direction direction) {
         return true;
     }
 
