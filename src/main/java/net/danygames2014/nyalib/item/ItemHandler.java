@@ -56,7 +56,6 @@ public interface ItemHandler {
     /**
      * Get the {@link ItemStack} in the given slot, If there is no {@link ItemStack}, then return null
      * <p>
-     * WARNING: DO NOT MODIFY THE RETURNED ITEMSTACK
      *
      * @param slot The slot to get the {@link ItemStack} from
      * @param direction The direction to query from
