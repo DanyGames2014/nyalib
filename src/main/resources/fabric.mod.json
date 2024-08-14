@@ -15,6 +15,7 @@
   "environment": "*",
   "entrypoints": {
     "stationapi:event_bus": [
+      "net.danygames2014.nyalib.NyaLib",
       "net.danygames2014.nyalib.network.NetworkLoader"
     ],
     "stationapi:event_bus_client": [
@@ -25,7 +26,7 @@
   "mixins": [
     "nyalib.mixins.json"
   ],
-
+  "accessWidener": "nyalib.accessWidener",
   "depends": {
     "minecraft": "1.0.0-beta.7.3"
   }

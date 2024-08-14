@@ -1,5 +1,6 @@
 package net.danygames2014.nyalib.network;
 
+import net.danygames2014.nyalib.NyaLib;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtIo;
@@ -9,36 +10,42 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
-@SuppressWarnings("CallToPrintStackTrace")
 public class NetworkLoader {
 
     @EventListener
     public void saveNetworks(WorldEvent.Save event) {
+        //NyaLib.LOGGER.info("Saving NyaLib networks");
         try {
-            File file = event.world.method_261().method_1736("nyalib_networks");
-            if (file.exists()) {
-                NbtCompound tag = NbtIo.readCompressed(new FileInputStream(file));
+            File file = event.world.dimensionData.method_1736("nyalib_networks");
 
-                // Tag
+            NbtCompound tag = new NbtCompound();
+            if(file.exists()){
+                tag = NbtIo.readCompressed(new FileInputStream(file));
             }
+
+            NetworkManager.writeNbt(event.world, tag);
+
+            NbtIo.writeCompressed(tag, new FileOutputStream(file));
+            NyaLib.LOGGER.info("Saved NyaLib networks");
         } catch (Exception e) {
-            e.printStackTrace();
+            NyaLib.LOGGER.error("Error occured while saving NyaLib Networks", e);
         }
     }
 
     @EventListener
     public void loadNetworks(WorldEvent.Init event) {
+        NyaLib.LOGGER.info("Loading NyaLib networks");
         try {
-            File file = event.world.method_261().method_1736("nyalib_networks");
+            File file = event.world.dimensionData.method_1736("nyalib_networks");
             if (file.exists()) {
                 NbtCompound tag = NbtIo.readCompressed(new FileInputStream(file));
 
-                // Modify Tag Here
+                NetworkManager.readNbt(event.world, tag);
 
-                NbtIo.writeCompressed(tag, new FileOutputStream(file));
+                NyaLib.LOGGER.info("Loaded NyaLib networks");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            NyaLib.LOGGER.error("Error occured while loading NyaLib Networks", e);
         }
     }
 }

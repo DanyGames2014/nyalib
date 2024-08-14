@@ -1,5 +1,6 @@
 package net.danygames2014.nyalibtest;
 
+import net.danygames2014.nyalibtest.block.CableBlock;
 import net.danygames2014.nyalibtest.block.EnergyReceiverBlock;
 import net.danygames2014.nyalibtest.block.InfiniteEnergyBlock;
 import net.danygames2014.nyalibtest.block.SideHopperBlock;
@@ -22,12 +23,14 @@ public class NyaLibTest {
     public static Block infiniteEnergyBlock;
     public static Block energyReceiverBlock;
     public static Block sideHopper;
+    public static Block cableBlock;
 
     @EventListener
     public void registerBlock(BlockRegistryEvent event){
         infiniteEnergyBlock = new InfiniteEnergyBlock(NAMESPACE.id("infinite_energy")).setTranslationKey(NAMESPACE, "infinite_energy");
         energyReceiverBlock = new EnergyReceiverBlock(NAMESPACE.id("energy_receiver")).setTranslationKey(NAMESPACE, "energy_receiver");
         sideHopper = new SideHopperBlock(NAMESPACE.id("side_hopper")).setTranslationKey(NAMESPACE, "side_hopper");
+        cableBlock = new CableBlock(NAMESPACE.id("cable_block")).setTranslationKey(NAMESPACE, "cable_block");
     }
 
     @EventListener
