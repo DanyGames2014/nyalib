@@ -30,6 +30,11 @@ public class CableBlock extends TemplateBlock implements NetworkComponent {
     }
 
     @Override
+    public void onBreak(World world, int x, int y, int z) {
+        NetworkManager.removeBlock(x, y, z, world, this, this);
+    }
+
+    @Override
     public int getColorMultiplier(BlockView blockView, int x, int y, int z) {
         if (theWorld != null) {
             Network net = NetworkManager.getAt(x, y, z, theWorld.dimension, this.getNetworkTypeIdentifier());

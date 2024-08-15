@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@SuppressWarnings({"UnusedReturnValue", "DuplicatedCode", "LoggingSimilarMessage", "CollectionAddAllCanBeReplacedWithConstructor"})
 public class NetworkManager {
     /**
      * For each Dimension there is a hashmap which takes network type Identifier as a key
@@ -23,6 +24,8 @@ public class NetworkManager {
     public static HashMap<Dimension, HashMap<Identifier, ArrayList<Network>>> NETWORKS = new HashMap<>();
 
     public static AtomicInteger NEXT_ID = new AtomicInteger(0);
+
+    public static ArrayList<Network> removeQueue = new ArrayList<>();
 
     // Getting Networks
     public static ArrayList<Network> getNetworks(Dimension dimension, Identifier networkTypeIdentifier) {
@@ -65,6 +68,46 @@ public class NetworkManager {
         addNetwork(dimension, networkTypeIdentifier, network);
         return network;
     }
+
+    public static void removeNetwork(Network network) {
+        if (!removeQueue.contains(network)) {
+            removeQueue.add(network);
+        }
+    }
+
+    public static void removeQueuedNetworks(){
+        for (Network toremove : removeQueue) {
+            removeNetworkInternal(toremove);
+        }
+    }
+
+    private static boolean removeNetworkInternal(Network toRemove) {
+        for (var dimensions : NETWORKS.entrySet()) {
+            for (var networks : dimensions.getValue().entrySet()) {
+                for (var network : networks.getValue()) {
+                    if (network == toRemove) {
+                        networks.getValue().remove(network);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+//    public static boolean removeNetworkInternal(int id) {
+//        for (var dimensions : NETWORKS.entrySet()) {
+//            for (var networks : dimensions.getValue().entrySet()) {
+//                for (var network : networks.getValue()) {
+//                    if (network.getId() == id) {
+//                        networks.getValue().remove(network);
+//                        return true;
+//                    }
+//                }
+//            }
+//        }
+//        return false;
+//    }
 
     // For Colorizing Temp
     public static Network getAt(int x, int y, int z, Dimension dimension, Identifier networkTypeIdentifier) {
@@ -111,15 +154,24 @@ public class NetworkManager {
                 default -> {
                     network = neighborNets.get(0);
                     for (int i = 1; i < neighborNets.size(); i++) {
+
+                        if (neighborNets.get(i).getId() == network.getId()) {
+                            continue;
+                        }
+
                         network.blocks.putAll(neighborNets.get(i).blocks);
-                        //NetworkManager.removeNetwork(neighborNets.get(i).id);
                         neighborNets.get(i).blocks.clear();
+                        removeNetwork(neighborNets.get(i));
                     }
                 }
             }
 
             network.addBlock(x, y, z, BlockRegistry.INSTANCE.getId(block));
         }
+    }
+
+    public static void removeBlock(int x, int y, int z, World world, Block block, NetworkComponent component){
+
     }
 
     // Load & Save
@@ -134,8 +186,6 @@ public class NetworkManager {
             return;
         }
         dimIdentifier = dimIdentifierO.get();
-
-        System.out.println("WRITE " + dimIdentifier + " (" + dim.id + ")");
 
         // Get the compound containing all the compounds for each dimension
         if (!nbt.contains("dimensions")) {
@@ -165,8 +215,19 @@ public class NetworkManager {
             for (Network network : networks) {
                 networksOfTypeNbt.put(network.id + "", network.writeNbt());
             }
+
+            // Empty Network Cleanup
+            for (Object networkO : networksOfTypeNbt.values()) {
+                if (networkO instanceof NbtCompound network) {
+                    if (network.getList("blocks").size() == 0) {
+                        networksOfTypeNbt.values().remove(networkO);
+                    }
+                }
+            }
         }
 
+        // Remove queued up networks on save
+        removeQueuedNetworks();
     }
 
     public static void readNbt(World world, NbtCompound nbt) {
@@ -181,8 +242,6 @@ public class NetworkManager {
         }
         dimIdentifier = dimIdentifierO.get();
 
-        System.out.println("READ " + dimIdentifier + " (" + dim.id + ")");
-
         // Get the compound containing all the compounds for each dimension
         NbtCompound dimensionsNbt = nbt.getCompound("dimensions");
 
@@ -195,7 +254,7 @@ public class NetworkManager {
 
                 // Loading a network for a give type
                 for (Object networksO : networksOfType.values()) {
-                    if(networksO instanceof NbtCompound networks){
+                    if (networksO instanceof NbtCompound networks) {
                         addNetwork(
                                 dim,
                                 Identifier.of(networksOfType.getKey()),

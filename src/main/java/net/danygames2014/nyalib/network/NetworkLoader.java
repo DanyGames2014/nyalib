@@ -12,21 +12,28 @@ import java.io.FileOutputStream;
 
 public class NetworkLoader {
 
+    public static boolean readOnly = false;
+
     @EventListener
     public void saveNetworks(WorldEvent.Save event) {
-        //NyaLib.LOGGER.info("Saving NyaLib networks");
+        NyaLib.LOGGER.debug("Saving NyaLib networks");
+
+        if (readOnly) {
+            NyaLib.LOGGER.warn("Saving NyaLib networks prevented as they are read-only due to error when loading.");
+        }
+
         try {
             File file = event.world.dimensionData.method_1736("nyalib_networks");
 
             NbtCompound tag = new NbtCompound();
-            if(file.exists()){
+            if (file.exists()) {
                 tag = NbtIo.readCompressed(new FileInputStream(file));
             }
 
             NetworkManager.writeNbt(event.world, tag);
 
             NbtIo.writeCompressed(tag, new FileOutputStream(file));
-            NyaLib.LOGGER.info("Saved NyaLib networks");
+            NyaLib.LOGGER.debug("Saved NyaLib networks");
         } catch (Exception e) {
             NyaLib.LOGGER.error("Error occured while saving NyaLib Networks", e);
         }
@@ -34,7 +41,7 @@ public class NetworkLoader {
 
     @EventListener
     public void loadNetworks(WorldEvent.Init event) {
-        NyaLib.LOGGER.info("Loading NyaLib networks");
+        NyaLib.LOGGER.debug("Loading NyaLib networks");
         try {
             File file = event.world.dimensionData.method_1736("nyalib_networks");
             if (file.exists()) {
@@ -45,7 +52,8 @@ public class NetworkLoader {
                 NyaLib.LOGGER.info("Loaded NyaLib networks");
             }
         } catch (Exception e) {
-            NyaLib.LOGGER.error("Error occured while loading NyaLib Networks", e);
+            NyaLib.LOGGER.error("Error occured while loading NyaLib Networks, networks are now read only to prevent saving corrupted data", e);
+            readOnly = true;
         }
     }
 }
