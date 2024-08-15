@@ -3,6 +3,7 @@ package net.danygames2014.nyalib.network;
 import net.danygames2014.nyalib.NyaLib;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.Dimension;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
@@ -10,10 +11,7 @@ import net.modificationstation.stationapi.api.registry.DimensionRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @SuppressWarnings({"UnusedReturnValue", "DuplicatedCode", "LoggingSimilarMessage", "CollectionAddAllCanBeReplacedWithConstructor"})
@@ -75,7 +73,7 @@ public class NetworkManager {
         }
     }
 
-    public static void removeQueuedNetworks(){
+    public static void removeQueuedNetworks() {
         for (Network toremove : removeQueue) {
             removeNetworkInternal(toremove);
         }
@@ -94,20 +92,6 @@ public class NetworkManager {
         }
         return false;
     }
-
-//    public static boolean removeNetworkInternal(int id) {
-//        for (var dimensions : NETWORKS.entrySet()) {
-//            for (var networks : dimensions.getValue().entrySet()) {
-//                for (var network : networks.getValue()) {
-//                    if (network.getId() == id) {
-//                        networks.getValue().remove(network);
-//                        return true;
-//                    }
-//                }
-//            }
-//        }
-//        return false;
-//    }
 
     // For Colorizing Temp
     public static Network getAt(int x, int y, int z, Dimension dimension, Identifier networkTypeIdentifier) {
@@ -128,7 +112,7 @@ public class NetworkManager {
 
             potentialNets.addAll(getNetworks(world.dimension, typeIdentifier));
 
-            System.out.println("FOUND " + potentialNets.size() + " POTENTIAL NETWORKS FOR " + typeIdentifier);
+//            System.out.println("FOUND " + potentialNets.size() + " POTENTIAL NETWORKS FOR " + typeIdentifier);
 
             for (Network potentialNet : potentialNets) {
                 for (Direction direction : Direction.values()) {
@@ -138,7 +122,7 @@ public class NetworkManager {
                 }
             }
 
-            System.out.println("FOUND " + neighborNets.size() + " NEIGHBOR NETWORKS FOR " + typeIdentifier);
+//            System.out.println("FOUND " + neighborNets.size() + " NEIGHBOR NETWORKS FOR " + typeIdentifier);
 
             Network network;
 
@@ -170,8 +154,58 @@ public class NetworkManager {
         }
     }
 
-    public static void removeBlock(int x, int y, int z, World world, Block block, NetworkComponent component){
+    public static void removeBlock(int x, int y, int z, World world, Block block, NetworkComponent component) {
+        for (Identifier typeIdentifier : component.getNetworkTypeIdentifiers()) {
+            Network net = getAt(x, y, z, world.dimension, typeIdentifier);
 
+            if (net == null) {
+                NyaLib.LOGGER.warn("Removed a block at [x={}, y={}, z={}] which was not in any network of type {}.", x, y, z, typeIdentifier.toString());
+                continue;
+            }
+
+            ArrayList<Vec3i> neighborBlocks = new ArrayList<>();
+            for (Direction direction : Direction.values()) {
+                var neighborPos = new Vec3i(x + direction.getOffsetX(), y + direction.getOffsetY(), z + direction.getOffsetZ());
+                if (net.isAt(neighborPos.x, neighborPos.y, neighborPos.z)) {
+                    neighborBlocks.add(neighborPos);
+                }
+            }
+
+            System.out.println("NET SIZE:" + net.blocks.size() + " | NEIGHBORS FOUND :" + neighborBlocks.size());
+            switch (neighborBlocks.size()) {
+                // There are no neighbors, which should mean that this is the last block in the network and the network can be removed
+                case 0 -> {
+                    NyaLib.LOGGER.debug("Last block in network, removing network with ID {}", net.getId());
+                    net.removeBlock(x, y, z);
+
+                    if (net.blocks.isEmpty()) {
+                        removeNetwork(net);
+                    } else {
+                        NyaLib.LOGGER.warn("Removed a block from network {} with no neighbors but the network still has {} blocks. Network will not be deleted", net.getId(), net.blocks.size());
+                    }
+
+                }
+
+                case 1 -> {
+                    NyaLib.LOGGER.debug("Only one neighbor, its a stump and can be removed normally");
+                    net.removeBlock(x, y, z);
+                }
+
+                default -> {
+                    net.removeBlock(x, y, z);
+
+                    // Walk thru all the sides
+                    for (Direction dir : Direction.values()) {
+                        Vec3i neighbor = new Vec3i(x + dir.getOffsetX(), y + dir.getOffsetY(), z + dir.getOffsetZ());
+                        if (net.isAt(neighbor.x, neighbor.y, neighbor.z)) {
+                            Set<Vec3i> discovered = net.walk(neighbor);
+                            System.out.println("DISCOVERED " + discovered.size());
+                        }
+                    }
+                }
+            }
+
+        }
     }
 
     // Load & Save

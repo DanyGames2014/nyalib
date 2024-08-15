@@ -1,14 +1,15 @@
 package net.danygames2014.nyalib.network;
 
+import com.google.common.collect.Sets;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
+import net.modificationstation.stationapi.api.util.math.Direction;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Network {
     protected HashMap<Vec3i, Identifier> blocks;
@@ -27,6 +28,48 @@ public class Network {
 
     public void addBlock(int x, int y, int z, Identifier identifier){
         blocks.put(new Vec3i(x, y, z), identifier);
+    }
+
+    public boolean removeBlock(int x, int y, int z){
+        if(blocks.containsKey(new Vec3i(x, y, z))){
+            blocks.remove(new Vec3i(x, y, z));
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param start The position to start walking from
+     * @return A list of blocks discovered
+     * @author paulevs
+     */
+    public Set<Vec3i> walk(Vec3i start) {
+        ArrayList<Set<Vec3i>> edges = new ArrayList<>();
+        HashSet<Vec3i> result = new HashSet<>();
+
+        edges.add(Sets.newHashSet(start));
+        edges.add(Sets.newHashSet());
+
+        byte n = 0;
+        boolean added = true;
+        while (added) {
+            Set<Vec3i> oldEdge = edges.get(n & 1);
+            Set<Vec3i> newEdge = edges.get((n + 1) & 1);
+            n = (byte) ((n + 1) & 1);
+            oldEdge.forEach(pos -> {
+                for (Direction dir : Direction.values()) {
+                    Vec3i side = new Vec3i(pos.x + dir.getOffsetX(), pos.y + dir.getOffsetY(), pos.z + dir.getOffsetZ());
+                    if (blocks.containsKey(side) && !result.contains(side)) {
+                        newEdge.add(side);
+                    }
+                }
+            });
+            added = !oldEdge.isEmpty();
+            result.addAll(oldEdge);
+            oldEdge.clear();
+        }
+
+        return result;
     }
 
     public NbtCompound writeNbt() {
