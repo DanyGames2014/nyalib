@@ -24,6 +24,18 @@ public class Network {
         blocks = new HashMap<>();
     }
 
+    private Network(World world) {
+        throw new IllegalArgumentException("The use of this contructor is not supported. Use the Network(World, NetworkType) constructor");
+    }
+
+    private Network(NetworkType type) {
+        throw new IllegalArgumentException("The use of this contructor is not supported. Use the Network(World, NetworkType) constructor");
+    }
+
+    private Network() {
+        throw new IllegalArgumentException("The use of this contructor is not supported. Use the Network(World, NetworkType) constructor");
+    }
+
     public boolean isAt(int x, int y, int z) {
         Vec3i pos = new Vec3i(x, y, z);
         return blocks.containsKey(pos);
