@@ -194,12 +194,67 @@ public class NetworkManager {
                 default -> {
                     net.removeBlock(x, y, z);
 
+                    ArrayList<HashSet<Vec3i>> potentialNetworks = new ArrayList<>(6);
                     // Walk thru all the sides
                     for (Direction dir : Direction.values()) {
                         Vec3i neighbor = new Vec3i(x + dir.getOffsetX(), y + dir.getOffsetY(), z + dir.getOffsetZ());
+
+                        // If the network reaches this neighbor side, walk thru all the blocks
                         if (net.isAt(neighbor.x, neighbor.y, neighbor.z)) {
-                            Set<Vec3i> discovered = net.walk(neighbor);
-                            System.out.println("DISCOVERED " + discovered.size());
+                            HashSet<Vec3i> discovered = net.walk(neighbor);
+
+                            System.out.println("DISCOVERED A POTENTIAL NETWORK OF " + discovered.size() + " BLOCKS");
+
+                            boolean exists = false;
+
+                            // Check if the first block of this potential networks exists in the other potential networks
+                            // We dont have to check every block because if theyre connected
+                            // somewhere they *should* have access to the same block
+                            for (var potentialNet : potentialNetworks) {
+                                if(potentialNet.contains(discovered.iterator().next())) {
+                                    exists = true;
+                                }
+                            }
+
+                            // If it doesnt exist, we can safely assume this is an independed new network
+                            if(!exists){
+                                potentialNetworks.add(discovered);
+                            }
+                        }
+                    }
+
+                    System.out.println("THERE WILL BE " + potentialNetworks.size() + " NEW NETWORKS");
+
+                    switch (potentialNetworks.size()){
+                        // This shouldnt happen
+                        case 0 -> {
+                            NyaLib.LOGGER.warn("There were {} potential networks when splitting, this shouldn't happen", potentialNetworks.size());
+                        }
+
+                        case 1 -> {
+                            // This is fine
+                        }
+
+                        // 2 or more networks
+                        // The first potential network will be kept in the existing one while others will be transferred to a new one
+                        // `net` is the first network here
+                        default -> {
+                            // Iterate over the new potential networks
+                            for (int i = 1; i < potentialNetworks.size(); i++) {
+
+                                Network newNetwork = createNetwork(world.dimension, typeIdentifier);
+
+                                // Iterate over every block in this new potential network
+                                for (Vec3i pos : potentialNetworks.get(i)) {
+                                    net.removeBlock(pos.x, pos.y, pos.z);
+                                    newNetwork.addBlock(
+                                            pos.x,
+                                            pos.y,
+                                            pos.z,
+                                            BlockRegistry.INSTANCE.getId(world.getBlockState(pos.x, pos.y, pos.z).getBlock())
+                                    );
+                                }
+                            }
                         }
                     }
                 }

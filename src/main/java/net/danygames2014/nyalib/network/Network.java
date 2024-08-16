@@ -43,7 +43,7 @@ public class Network {
      * @return A list of blocks discovered
      * @author paulevs
      */
-    public Set<Vec3i> walk(Vec3i start) {
+    public HashSet<Vec3i> walk(Vec3i start) {
         ArrayList<Set<Vec3i>> edges = new ArrayList<>();
         HashSet<Vec3i> result = new HashSet<>();
 
