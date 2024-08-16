@@ -22,10 +22,12 @@ public class WorldMixin {
 
     @Inject(method = "method_227", at = @At(value = "TAIL"))
     public void tickNetworks(CallbackInfo ci) {
-        HashMap<Identifier, ArrayList<Network>> nm = NetworkManager.getNetworks(this.dimension);
-        for (ArrayList<Network> networkTypes : nm.values()) {
-            for (Network network : networkTypes) {
-                network.tick();
+        HashMap<Identifier, ArrayList<Network>> networks = NetworkManager.getNetworks(this.dimension);
+        if(networks != null){
+            for (ArrayList<Network> networkTypes : networks.values()) {
+                for (Network network : networkTypes) {
+                    network.tick();
+                }
             }
         }
     }

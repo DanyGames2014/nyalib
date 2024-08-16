@@ -5,6 +5,8 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "item.ChestBlockEntityMixin",
+    "item.DispenserBlockEntityMixin",
+    "item.FurnaceBlockEntityMixin",
     "network.WorldMixin"
   ],
   "server": [
