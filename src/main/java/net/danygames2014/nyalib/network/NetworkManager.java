@@ -93,7 +93,7 @@ public class NetworkManager {
         return false;
     }
 
-    // For Colorizing Temp
+    // Get a network of type at these coords
     public static Network getAt(int x, int y, int z, Dimension dimension, Identifier networkTypeIdentifier) {
         for (Network net : getNetworks(dimension, networkTypeIdentifier)) {
             if (net.isAt(x, y, z)) {
