@@ -1,11 +1,13 @@
 package net.danygames2014.nyalib.network;
 
 import com.google.common.collect.Sets;
+import net.danygames2014.nyalib.NyaLib;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.*;
@@ -13,10 +15,12 @@ import java.util.*;
 public class Network {
     protected HashMap<Vec3i, Block> blocks;
     public World world;
+    public NetworkType type;
     protected int id;
 
-    public Network(World world) {
+    public Network(World world, NetworkType type) {
         this.world = world;
+        this.type = type;
         blocks = new HashMap<>();
     }
 
@@ -51,7 +55,7 @@ public class Network {
         for (Map.Entry<Vec3i, Block> block : blocks.entrySet()) {
             Vec3i pos = block.getKey();
 
-            if(block.getValue() instanceof NetworkComponent component) {
+            if (block.getValue() instanceof NetworkComponent component) {
                 component.update(pos.x, pos.y, pos.z, this, world);
             }
         }
@@ -116,8 +120,23 @@ public class Network {
         return tag;
     }
 
-    public static Network readNbt(NbtCompound tag, World world) {
-        Network network = new Network(world);
+    public static Network readNbt(NbtCompound tag, World world, Identifier networkTypeIdentifier) {
+        NetworkType networkType = NetworkTypeRegistry.get(networkTypeIdentifier);
+
+        if(networkType == null){
+            NyaLib.LOGGER.error("Network of type {} not found in registry. Has the modlist been changed? Skipping the loading of this network.", networkTypeIdentifier);
+            return null;
+        }
+
+        Network network;
+
+        try {
+            network = networkType.getNetworkClass().getDeclaredConstructor(World.class, NetworkType.class).newInstance(world, networkType);
+        } catch (Exception e) {
+            NyaLib.LOGGER.error("Error when creating a network of type {}", networkType.getIdentifier(), e);
+            return null;
+        }
+
         network.blocks = new HashMap<>();
 
         network.id = tag.getInt("id");

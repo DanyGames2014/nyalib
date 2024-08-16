@@ -7,12 +7,12 @@ import net.modificationstation.stationapi.api.util.Identifier;
 import java.util.ArrayList;
 
 public interface NetworkComponent {
-    Identifier getNetworkTypeIdentifier();
+    NetworkType getNetworkType();
 
-    default ArrayList<Identifier> getNetworkTypeIdentifiers() {
-        ArrayList<Identifier> identifiers = new ArrayList<>();
-        identifiers.add(getNetworkTypeIdentifier());
-        return identifiers;
+    default ArrayList<NetworkType> getNetworkTypes() {
+        ArrayList<NetworkType> types = new ArrayList<>();
+        types.add(getNetworkType());
+        return types;
     }
 
     default void update(int x, int y, int z, Network network, World world) {

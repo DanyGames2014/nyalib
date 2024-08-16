@@ -6,7 +6,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.Dimension;
-import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.registry.DimensionRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
@@ -43,27 +42,39 @@ public class NetworkManager {
 
     // Adding a network
     @SuppressWarnings("Java8MapApi")
-    public static void addNetwork(Dimension dimension, Identifier networkTypeIdentifier, Network network) {
+    public static void addNetwork(Dimension dimension, Network network) {
         HashMap<Identifier, ArrayList<Network>> dimNetworks = NETWORKS.get(dimension);
+
+        if (network == null) {
+            return;
+        }
 
         if (dimNetworks == null) {
             dimNetworks = new HashMap<>();
             NETWORKS.put(dimension, dimNetworks);
         }
 
-        ArrayList<Network> typeNetworks = dimNetworks.get(networkTypeIdentifier);
+        ArrayList<Network> typeNetworks = dimNetworks.get(network.type.getIdentifier());
         if (typeNetworks == null) {
             typeNetworks = new ArrayList<>();
-            dimNetworks.put(networkTypeIdentifier, typeNetworks);
+            dimNetworks.put(network.type.getIdentifier(), typeNetworks);
         }
 
         typeNetworks.add(network);
     }
 
-    public static Network createNetwork(Dimension dimension, Identifier networkTypeIdentifier) {
-        Network network = new Network(dimension.world);
+    public static Network createNetwork(Dimension dimension, NetworkType networkType) {
+        Network network = null;
+
+        try {
+            network = networkType.getNetworkClass().getDeclaredConstructor(World.class, NetworkType.class).newInstance(dimension.world, networkType);
+        } catch (Exception e) {
+            NyaLib.LOGGER.error("Error when creating a network of type {}", networkType.getIdentifier(), e);
+            return null;
+        }
+
         network.id = NEXT_ID.getAndIncrement();
-        addNetwork(dimension, networkTypeIdentifier, network);
+        addNetwork(dimension, network);
         return network;
     }
 
@@ -106,11 +117,11 @@ public class NetworkManager {
     // Adding and Removing Blocks
     public static void addBlock(int x, int y, int z, World world, Block block, NetworkComponent component) {
         // For each of the network types this network component can handle, discover and add to networks
-        for (Identifier typeIdentifier : component.getNetworkTypeIdentifiers()) {
+        for (NetworkType networkType : component.getNetworkTypes()) {
             ArrayList<Network> neighborNets = new ArrayList<>(2);
             ArrayList<Network> potentialNets = new ArrayList<>();
 
-            potentialNets.addAll(getNetworks(world.dimension, typeIdentifier));
+            potentialNets.addAll(getNetworks(world.dimension, networkType.getIdentifier()));
 
 //            System.out.println("FOUND " + potentialNets.size() + " POTENTIAL NETWORKS FOR " + typeIdentifier);
 
@@ -128,7 +139,7 @@ public class NetworkManager {
 
             switch (neighborNets.size()) {
                 case 0 -> {
-                    network = createNetwork(world.dimension, typeIdentifier);
+                    network = createNetwork(world.dimension, networkType);
                 }
 
                 case 1 -> {
@@ -156,11 +167,11 @@ public class NetworkManager {
     }
 
     public static void removeBlock(int x, int y, int z, World world, Block block, NetworkComponent component) {
-        for (Identifier typeIdentifier : component.getNetworkTypeIdentifiers()) {
-            Network net = getAt(x, y, z, world.dimension, typeIdentifier);
+        for (NetworkType networkType : component.getNetworkTypes()) {
+            Network net = getAt(x, y, z, world.dimension, networkType.getIdentifier());
 
             if (net == null) {
-                NyaLib.LOGGER.warn("Removed a block at [x={}, y={}, z={}] which was not in any network of type {}.", x, y, z, typeIdentifier.toString());
+                NyaLib.LOGGER.warn("Removed a block at [x={}, y={}, z={}] which was not in any network of type {}.", x, y, z, networkType.toString());
                 continue;
             }
 
@@ -213,13 +224,13 @@ public class NetworkManager {
                             // We dont have to check every block because if theyre connected
                             // somewhere they *should* have access to the same block
                             for (var potentialNet : potentialNetworks) {
-                                if(potentialNet.contains(discovered.iterator().next())) {
+                                if (potentialNet.contains(discovered.iterator().next())) {
                                     exists = true;
                                 }
                             }
 
                             // If it doesnt exist, we can safely assume this is an independed new network
-                            if(!exists){
+                            if (!exists) {
                                 potentialNetworks.add(discovered);
                             }
                         }
@@ -227,7 +238,7 @@ public class NetworkManager {
 
                     NyaLib.LOGGER.debug("There will be {} new networks", potentialNetworks.size());
 
-                    switch (potentialNetworks.size()){
+                    switch (potentialNetworks.size()) {
                         // This shouldnt happen
                         case 0 -> {
                             NyaLib.LOGGER.warn("There were {} potential networks when splitting, this shouldn't happen", potentialNetworks.size());
@@ -244,7 +255,7 @@ public class NetworkManager {
                             // Iterate over the new potential networks
                             for (int i = 1; i < potentialNetworks.size(); i++) {
 
-                                Network newNetwork = createNetwork(world.dimension, typeIdentifier);
+                                Network newNetwork = createNetwork(world.dimension, networkType);
 
                                 // Iterate over every block in this new potential network
                                 for (Vec3i pos : potentialNetworks.get(i)) {
@@ -343,8 +354,7 @@ public class NetworkManager {
                     if (networksO instanceof NbtCompound networks) {
                         addNetwork(
                                 dim,
-                                Identifier.of(networksOfType.getKey()),
-                                Network.readNbt(networks, world)
+                                Network.readNbt(networks, world, Identifier.of(networksOfType.getKey()))
                         );
                     }
                 }

@@ -1,9 +1,7 @@
 package net.danygames2014.nyalibtest.block;
 
-import net.danygames2014.nyalib.network.Network;
-import net.danygames2014.nyalib.network.NetworkComponent;
-import net.danygames2014.nyalib.network.NetworkManager;
-import net.danygames2014.nyalib.network.NetworkType;
+import net.danygames2014.nyalib.network.*;
+import net.danygames2014.nyalibtest.NyaLibTest;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.BlockView;
@@ -19,8 +17,8 @@ public class CableBlock extends TemplateBlock implements NetworkComponent {
     }
 
     @Override
-    public Identifier getNetworkTypeIdentifier() {
-        return NetworkType.ENERGY.getType();
+    public NetworkType getNetworkType() {
+        return NyaLibTest.energyNetworkType;
     }
 
     @Override
@@ -37,7 +35,7 @@ public class CableBlock extends TemplateBlock implements NetworkComponent {
     @Override
     public int getColorMultiplier(BlockView blockView, int x, int y, int z) {
         if (theWorld != null) {
-            Network net = NetworkManager.getAt(x, y, z, theWorld.dimension, this.getNetworkTypeIdentifier());
+            Network net = NetworkManager.getAt(x, y, z, theWorld.dimension, this.getNetworkType().getIdentifier());
 
             if (net != null) {
                 return net.hashCode();
@@ -49,7 +47,7 @@ public class CableBlock extends TemplateBlock implements NetworkComponent {
 
     @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
-        Network net = NetworkManager.getAt(x, y, z, world.dimension, this.getNetworkTypeIdentifier());
+        Network net = NetworkManager.getAt(x, y, z, world.dimension, this.getNetworkType().getIdentifier());
         if (net != null) {
             player.method_490("NET " + net.getId() + " HASHCODE: " + net.hashCode());
         }

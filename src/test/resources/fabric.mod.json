@@ -20,6 +20,8 @@
     "stationapi:event_bus_client": [
     ],
     "stationapi:event_bus_server": [
+    ],
+    "nyalib:event_bus" : [
     ]
   },
   "mixins": [

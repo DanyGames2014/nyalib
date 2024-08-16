@@ -1,19 +1,25 @@
 package net.danygames2014.nyalib.network;
 
-import net.danygames2014.nyalib.NyaLib;
 import net.modificationstation.stationapi.api.util.Identifier;
 
-public enum NetworkType {
-    ENERGY(NyaLib.NAMESPACE.id("energy"));
+public class NetworkType {
+    Identifier identifier;
+    Class<? extends Network> networkClass;
 
-
-    private final Identifier type;
-
-    NetworkType(Identifier type) {
-        this.type = type;
+    public NetworkType(Identifier identifier, Class<? extends Network> networkClass) {
+        this.identifier = identifier;
+        this.networkClass = networkClass;
     }
 
-    public Identifier getType() {
-        return type;
+    public NetworkType(Identifier identifier) {
+        this(identifier, Network.class);
+    }
+
+    public Identifier getIdentifier() {
+        return identifier;
+    }
+
+    public Class<? extends Network> getNetworkClass() {
+        return networkClass;
     }
 }
