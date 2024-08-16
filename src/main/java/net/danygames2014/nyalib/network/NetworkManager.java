@@ -240,23 +240,12 @@ public class NetworkManager {
             var networks = networksOfType.getValue();
 
             // Get all the networks of the given type
-            if (!dimensionNbt.contains(type.toString())) {
-                dimensionNbt.put(type.toString(), new NbtCompound());
-            }
+            dimensionNbt.put(type.toString(), new NbtCompound());
             NbtCompound networksOfTypeNbt = dimensionNbt.getCompound(type.toString());
 
             // Write Each network
             for (Network network : networks) {
                 networksOfTypeNbt.put(network.id + "", network.writeNbt());
-            }
-
-            // Empty Network Cleanup
-            for (Object networkO : networksOfTypeNbt.values()) {
-                if (networkO instanceof NbtCompound network) {
-                    if (network.getList("blocks").size() == 0) {
-                        networksOfTypeNbt.values().remove(networkO);
-                    }
-                }
             }
         }
 
