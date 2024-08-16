@@ -2,10 +2,10 @@ package net.danygames2014.nyalib.network;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
-import net.modificationstation.stationapi.api.util.Identifier;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("unused")
 public interface NetworkComponent {
     NetworkType getNetworkType();
 

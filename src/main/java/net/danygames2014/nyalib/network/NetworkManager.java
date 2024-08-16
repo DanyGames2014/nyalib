@@ -64,7 +64,7 @@ public class NetworkManager {
     }
 
     public static Network createNetwork(Dimension dimension, NetworkType networkType) {
-        Network network = null;
+        Network network;
 
         try {
             network = networkType.getNetworkClass().getDeclaredConstructor(World.class, NetworkType.class).newInstance(dimension.world, networkType);
@@ -115,6 +115,7 @@ public class NetworkManager {
     }
 
     // Adding and Removing Blocks
+    @SuppressWarnings("RedundantLabeledSwitchRuleCodeBlock")
     public static void addBlock(int x, int y, int z, World world, Block block, NetworkComponent component) {
         // For each of the network types this network component can handle, discover and add to networks
         for (NetworkType networkType : component.getNetworkTypes()) {
@@ -161,11 +162,14 @@ public class NetworkManager {
                 }
             }
 
-            network.addBlock(x, y, z, block);
-            network.update();
+            if (network != null) {
+                network.addBlock(x, y, z, block);
+                network.update();
+            }
         }
     }
 
+    @SuppressWarnings("RedundantLabeledSwitchRuleCodeBlock")
     public static void removeBlock(int x, int y, int z, World world, Block block, NetworkComponent component) {
         for (NetworkType networkType : component.getNetworkTypes()) {
             Network net = getAt(x, y, z, world.dimension, networkType.getIdentifier());
@@ -241,7 +245,7 @@ public class NetworkManager {
                     switch (potentialNetworks.size()) {
                         // This shouldnt happen
                         case 0 -> {
-                            NyaLib.LOGGER.warn("There were {} potential networks when splitting, this shouldn't happen", potentialNetworks.size());
+                            NyaLib.LOGGER.warn("There were 0 potential networks when splitting, this shouldn't happen");
                         }
 
                         case 1 -> {

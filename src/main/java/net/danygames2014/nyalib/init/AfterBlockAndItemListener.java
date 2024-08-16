@@ -5,6 +5,7 @@ import net.mine_diver.unsafeevents.listener.EventListener;
 import net.modificationstation.stationapi.api.StationAPI;
 import net.modificationstation.stationapi.api.event.registry.AfterBlockAndItemRegisterEvent;
 
+@SuppressWarnings("unused")
 public class AfterBlockAndItemListener {
     @EventListener
     public void sendNetworkTypeRegisterEvent(AfterBlockAndItemRegisterEvent event){

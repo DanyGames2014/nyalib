@@ -4,6 +4,7 @@ import net.modificationstation.stationapi.api.util.Identifier;
 
 import java.util.HashMap;
 
+@SuppressWarnings("unused")
 public class NetworkTypeRegistry {
     private final HashMap<Identifier, NetworkType> registry;
     private static NetworkTypeRegistry INSTANCE;

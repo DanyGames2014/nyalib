@@ -12,6 +12,7 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.*;
 
+@SuppressWarnings("unused")
 public class Network {
     protected HashMap<Vec3i, Block> blocks;
     public World world;
