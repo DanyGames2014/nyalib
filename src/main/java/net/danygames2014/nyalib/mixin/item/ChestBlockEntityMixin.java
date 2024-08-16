@@ -1,13 +1,16 @@
 package net.danygames2014.nyalib.mixin.item;
 
 import net.danygames2014.nyalib.item.ItemHandler;
+import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 
 @SuppressWarnings("AddedMixinMembersNamePattern")
 @Mixin(ChestBlockEntity.class)
@@ -25,6 +28,9 @@ public abstract class ChestBlockEntityMixin extends BlockEntity implements ItemH
     @Shadow
     public abstract void setStack(int slot, ItemStack stack);
 
+
+    // API Methods
+
     @Override
     public boolean canExtractItem(@Nullable Direction direction) {
         return true;
@@ -32,6 +38,10 @@ public abstract class ChestBlockEntityMixin extends BlockEntity implements ItemH
 
     @Override
     public ItemStack extractItem(int slot, int amount, @Nullable Direction direction) {
+        if (slot > 26 && isDoubleChest()) {
+            return getSecondChest().removeStack((slot - 27), amount);
+        }
+
         return this.removeStack(slot, amount);
     }
 
@@ -42,10 +52,21 @@ public abstract class ChestBlockEntityMixin extends BlockEntity implements ItemH
 
     @Override
     public ItemStack insertItem(ItemStack stack, int slot, @Nullable Direction direction) {
-        ItemStack slotStack = this.getStack(slot);
+        ItemStack slotStack;
+
+        if (slot > 26 && isDoubleChest()) {
+            slotStack = getSecondChest().getStack(slot - 27);
+        } else {
+            slotStack = this.getStack(slot);
+        }
+
 
         if (slotStack == null) {
-            this.setStack(slot, stack);
+            if (slot > 26 && isDoubleChest()) {
+                getSecondChest().setStack(slot - 27, stack);
+            } else {
+                this.setStack(slot, stack);
+            }
             return null;
         }
 
@@ -68,7 +89,7 @@ public abstract class ChestBlockEntityMixin extends BlockEntity implements ItemH
     public ItemStack insertItem(ItemStack stack, @Nullable Direction direction) {
         ItemStack insertedStack = stack.copy();
 
-        for (int i = 0; i < size(); ++i) {
+        for (int i = 0; i < this.getSize(); ++i) {
             insertedStack = insertItem(insertedStack, i, direction);
             if (insertedStack == null) {
                 return insertedStack;
@@ -80,11 +101,65 @@ public abstract class ChestBlockEntityMixin extends BlockEntity implements ItemH
 
     @Override
     public ItemStack getStackInSlot(int slot, @Nullable Direction direction) {
+        if (slot > 26 && isDoubleChest()) {
+            return getSecondChest().getStack(slot - 27);
+        }
+
         return this.getStack(slot);
     }
 
     @Override
     public int getSize() {
+        if (isDoubleChest()) {
+            return this.size() + getSecondChest().size();
+        }
+
         return this.size();
     }
+
+    // Double Chest Helper Methods
+    @Unique
+    public ChestBlockEntity getSecondChest() {
+        BlockPos chestPos = null;
+
+        // Find the chest
+        if (isChestAtPos(x + 1, y, z)) {
+            chestPos = new BlockPos(x + 1, y, z);
+        }
+
+        if (isChestAtPos(x - 1, y, z)) {
+            chestPos = new BlockPos(x - 1, y, z);
+        }
+
+        if (isChestAtPos(x, y, z + 1)) {
+            chestPos = new BlockPos(x, y, z + 1);
+        }
+
+        if (isChestAtPos(x, y, z - 1)) {
+            chestPos = new BlockPos(x, y, z - 1);
+        }
+
+        // If no chest return null
+        if (chestPos == null) {
+            return null;
+        }
+
+        // Return the Item Handler for second chest
+        if (world.getBlockEntity(chestPos.x, chestPos.y, chestPos.z) instanceof ChestBlockEntity chestEntity) {
+            return chestEntity;
+        }
+
+        return null;
+    }
+
+    @Unique
+    public boolean isDoubleChest() {
+        return isChestAtPos(x + 1, y, z) || isChestAtPos(x - 1, y, z) || isChestAtPos(x, y, z + 1) || isChestAtPos(x, y, z - 1);
+    }
+
+    @Unique
+    public boolean isChestAtPos(int x, int y, int z) {
+        return world.getBlockId(x, y, z) == Block.CHEST.id;
+    }
+
 }
