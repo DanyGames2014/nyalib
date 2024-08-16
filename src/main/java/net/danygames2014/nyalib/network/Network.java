@@ -26,12 +26,18 @@ public class Network {
         return blocks.containsKey(pos);
     }
 
-    public void addBlock(int x, int y, int z, Identifier identifier){
+    public void addBlock(int x, int y, int z, Identifier identifier) {
         blocks.put(new Vec3i(x, y, z), identifier);
+        if (world.getBlockState(x, y, z).getBlock() instanceof NetworkComponent component) {
+            component.onAddedToNet(x, y, z, this, world);
+        }
     }
 
-    public boolean removeBlock(int x, int y, int z){
-        if(blocks.containsKey(new Vec3i(x, y, z))){
+    public boolean removeBlock(int x, int y, int z) {
+        if (blocks.containsKey(new Vec3i(x, y, z))) {
+            if (world.getBlockState(x, y, z).getBlock() instanceof NetworkComponent component) {
+                component.onRemovedFromNet(x, y, z, this, world);
+            }
             blocks.remove(new Vec3i(x, y, z));
             return true;
         }
