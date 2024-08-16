@@ -64,6 +64,16 @@ public class Network {
         return false;
     }
 
+    /**
+     * Called on every world tick
+     */
+    public void tick(){
+
+    }
+
+    /**
+     * Called when there is a change to the network physical topology
+     */
     public void update() {
         for (Map.Entry<Vec3i, Block> block : blocks.entrySet()) {
             Vec3i pos = block.getKey();
