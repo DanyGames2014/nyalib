@@ -1,18 +1,17 @@
 package net.danygames2014.nyalib.network;
 
 import com.google.common.collect.Sets;
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import net.modificationstation.stationapi.api.registry.BlockRegistry;
-import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.*;
 
 public class Network {
-    protected HashMap<Vec3i, Identifier> blocks;
+    protected HashMap<Vec3i, Block> blocks;
     public World world;
     protected int id;
 
@@ -26,22 +25,36 @@ public class Network {
         return blocks.containsKey(pos);
     }
 
-    public void addBlock(int x, int y, int z, Identifier identifier) {
-        blocks.put(new Vec3i(x, y, z), identifier);
-        if (world.getBlockState(x, y, z).getBlock() instanceof NetworkComponent component) {
+    public void addBlock(int x, int y, int z, Block block) {
+        blocks.put(new Vec3i(x, y, z), block);
+
+        if (block instanceof NetworkComponent component) {
             component.onAddedToNet(x, y, z, this, world);
         }
     }
 
     public boolean removeBlock(int x, int y, int z) {
-        if (blocks.containsKey(new Vec3i(x, y, z))) {
-            if (world.getBlockState(x, y, z).getBlock() instanceof NetworkComponent component) {
+        Vec3i pos = new Vec3i(x, y, z);
+        if (blocks.containsKey(pos)) {
+
+            if (blocks.get(pos) instanceof NetworkComponent component) {
                 component.onRemovedFromNet(x, y, z, this, world);
             }
-            blocks.remove(new Vec3i(x, y, z));
+
+            blocks.remove(pos);
             return true;
         }
         return false;
+    }
+
+    public void update() {
+        for (Map.Entry<Vec3i, Block> block : blocks.entrySet()) {
+            Vec3i pos = block.getKey();
+
+            if(block.getValue() instanceof NetworkComponent component) {
+                component.update(pos.x, pos.y, pos.z, this, world);
+            }
+        }
     }
 
     /**
@@ -85,13 +98,17 @@ public class Network {
         tag.putInt("id", id);
         tag.put("blocks", blocksNbt);
 
-        for (Map.Entry<Vec3i, Identifier> block : blocks.entrySet()) {
+        for (Map.Entry<Vec3i, Block> block : blocks.entrySet()) {
             NbtCompound blockNbt = new NbtCompound();
 
             Vec3i pos = block.getKey();
             blockNbt.putInt("x", pos.x);
             blockNbt.putInt("y", pos.y);
             blockNbt.putInt("z", pos.z);
+
+            if (block.getValue() instanceof NetworkComponent component) {
+                component.writeNbt(pos.x, pos.y, pos.z, this, world, blockNbt);
+            }
 
             blocksNbt.add(blockNbt);
         }
@@ -106,17 +123,30 @@ public class Network {
         network.id = tag.getInt("id");
         NbtList blocksNbt = tag.getList("blocks");
 
+        // Iterate over all the block NBT Compounds
         for (int i = 0; i < blocksNbt.size(); i++) {
+            // Get this block NBT Compound
             NbtCompound blockNbt = (NbtCompound) blocksNbt.get(i);
 
+            // Fetch the position of the block
             Vec3i pos = new Vec3i(blockNbt.getInt("x"), blockNbt.getInt("y"), blockNbt.getInt("z"));
 
+            // Fetch the type of the block
+            Block block = world.getBlockState(pos.x, pos.y, pos.z).getBlock();
+
+            // Mod NBT
+            if (block instanceof NetworkComponent component) {
+                component.readNbt(pos.x, pos.y, pos.z, network, world, blockNbt);
+            }
+
+            // Put the block in Network
             network.blocks.put(
                     pos,
-                    BlockRegistry.INSTANCE.getId(world.getBlockState(pos.x, pos.y, pos.z).getBlock())
+                    block
             );
         }
 
+        // Return the loaded network
         return network;
     }
 

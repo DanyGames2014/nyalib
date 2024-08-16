@@ -150,7 +150,8 @@ public class NetworkManager {
                 }
             }
 
-            network.addBlock(x, y, z, BlockRegistry.INSTANCE.getId(block));
+            network.addBlock(x, y, z, block);
+            network.update();
         }
     }
 
@@ -171,7 +172,8 @@ public class NetworkManager {
                 }
             }
 
-            System.out.println("NET SIZE:" + net.blocks.size() + " | NEIGHBORS FOUND :" + neighborBlocks.size());
+            NyaLib.LOGGER.debug("NET SIZE: {} | NEIGHBORS FOUND : {}", net.blocks.size(), neighborBlocks.size());
+
             switch (neighborBlocks.size()) {
                 // There are no neighbors, which should mean that this is the last block in the network and the network can be removed
                 case 0 -> {
@@ -203,7 +205,7 @@ public class NetworkManager {
                         if (net.isAt(neighbor.x, neighbor.y, neighbor.z)) {
                             HashSet<Vec3i> discovered = net.walk(neighbor);
 
-                            System.out.println("DISCOVERED A POTENTIAL NETWORK OF " + discovered.size() + " BLOCKS");
+                            NyaLib.LOGGER.debug("Discovered a potential network of {} blocks", discovered.size());
 
                             boolean exists = false;
 
@@ -223,7 +225,7 @@ public class NetworkManager {
                         }
                     }
 
-                    System.out.println("THERE WILL BE " + potentialNetworks.size() + " NEW NETWORKS");
+                    NyaLib.LOGGER.debug("There will be {} new networks", potentialNetworks.size());
 
                     switch (potentialNetworks.size()){
                         // This shouldnt happen
@@ -251,10 +253,16 @@ public class NetworkManager {
                                             pos.x,
                                             pos.y,
                                             pos.z,
-                                            BlockRegistry.INSTANCE.getId(world.getBlockState(pos.x, pos.y, pos.z).getBlock())
+                                            world.getBlockState(pos.x, pos.y, pos.z).getBlock()
                                     );
                                 }
+
+                                // Update the new network
+                                newNetwork.update();
                             }
+
+                            // Update the existing network
+                            net.update();
                         }
                     }
                 }

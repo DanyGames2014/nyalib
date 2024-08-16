@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
+@SuppressWarnings("unused")
 public class NetworkLoader {
 
     public static boolean readOnly = false;
