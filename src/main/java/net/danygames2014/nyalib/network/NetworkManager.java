@@ -104,7 +104,15 @@ public class NetworkManager {
         return false;
     }
 
-    // Get a network of type at these coords
+    /**
+     * Get a network of the given type at the given coords
+     * @param x x-position to check
+     * @param y y-position to check
+     * @param z z-position to checj
+     * @param dimension The dimension to check in
+     * @param networkTypeIdentifier The type of network to check for
+     * @return A network if it exists on the coordinates. null if there is no network on the given coordinates.
+     */
     public static Network getAt(int x, int y, int z, Dimension dimension, Identifier networkTypeIdentifier) {
         for (Network net : getNetworks(dimension, networkTypeIdentifier)) {
             if (net.isAt(x, y, z)) {
@@ -112,6 +120,53 @@ public class NetworkManager {
             }
         }
         return null;
+    }
+
+    /**
+     * Returns an ArrayList of networks of any type neighboring this block
+     * @param x x-position to check
+     * @param y y-position to check
+     * @param z z-position to checj
+     * @param world The world to check in
+     * @return An ArrayList of networks neighboring this block
+     */
+    public static ArrayList<Network> getNeighbors(int x, int y, int z, World world) {
+        ArrayList<Network> neighborNets = new ArrayList<>();
+
+        for (var networksOfType : getNetworks(world.dimension).values()) {
+            for (var network : networksOfType) {
+                for (Direction direction : Direction.values()) {
+                    if (network.isAt(x + direction.getOffsetX(), y + direction.getOffsetY(), z + direction.getOffsetZ())) {
+                        neighborNets.add(network);
+                    }
+                }
+            }
+        }
+
+        return neighborNets;
+    }
+
+    /**
+     * Returns an ArrayList of networks of a given type neighboring this block
+     * @param x x-position to check
+     * @param y y-position to check
+     * @param z z-position to checj
+     * @param world The world to check in
+     * @param networkTypeIdentifier The type of network to check for
+     * @return An ArrayList of networks neighboring this block
+     */
+    public static ArrayList<Network> getNeighbors(int x, int y, int z, World world, Identifier networkTypeIdentifier) {
+        ArrayList<Network> neighborNets = new ArrayList<>();
+
+        for (Network network : getNetworks(world.dimension, networkTypeIdentifier)) {
+            for (Direction direction : Direction.values()) {
+                if (network.isAt(x + direction.getOffsetX(), y + direction.getOffsetY(), z + direction.getOffsetZ())) {
+                    neighborNets.add(network);
+                }
+            }
+        }
+
+        return neighborNets;
     }
 
     // Adding and Removing Blocks

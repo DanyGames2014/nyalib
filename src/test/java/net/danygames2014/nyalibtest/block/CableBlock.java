@@ -35,7 +35,7 @@ public class CableBlock extends TemplateBlock implements NetworkComponent {
     @Override
     public int getColorMultiplier(BlockView blockView, int x, int y, int z) {
         if (theWorld != null) {
-            Network net = NetworkManager.getAt(x, y, z, theWorld.dimension, this.getNetworkType().getIdentifier());
+            Network net = NetworkManager.getAt(x, y, z, theWorld.dimension, this.getNetworkTypes().get(0).getIdentifier());
 
             if (net != null) {
                 return net.hashCode();
@@ -47,7 +47,7 @@ public class CableBlock extends TemplateBlock implements NetworkComponent {
 
     @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
-        Network net = NetworkManager.getAt(x, y, z, world.dimension, this.getNetworkType().getIdentifier());
+        Network net = NetworkManager.getAt(x, y, z, world.dimension, this.getNetworkTypes().get(0).getIdentifier());
         if (net != null) {
             player.method_490("NET " + net.getId() + " HASHCODE: " + net.hashCode());
         }
