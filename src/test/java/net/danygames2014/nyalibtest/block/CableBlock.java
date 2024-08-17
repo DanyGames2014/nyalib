@@ -33,6 +33,11 @@ public class CableBlock extends TemplateBlock implements NetworkComponent {
     }
 
     @Override
+    public void update(int x, int y, int z, Network network, World world) {
+        world.method_244(x,y,z, 0);
+    }
+
+    @Override
     public int getColorMultiplier(BlockView blockView, int x, int y, int z) {
         if (theWorld != null) {
             Network net = NetworkManager.getAt(x, y, z, theWorld.dimension, this.getNetworkTypes().get(0).getIdentifier());
@@ -42,7 +47,7 @@ public class CableBlock extends TemplateBlock implements NetworkComponent {
             }
         }
 
-        return 8989898;
+        return 0;
     }
 
     @Override
