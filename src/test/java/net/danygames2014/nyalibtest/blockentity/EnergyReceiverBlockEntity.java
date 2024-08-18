@@ -1,15 +1,13 @@
 package net.danygames2014.nyalibtest.blockentity;
 
-import net.danygames2014.nyalib.energy.EnergyDevice;
+import net.danygames2014.nyalib.energy.EnergyHandler;
 import net.danygames2014.nyalib.energy.EnergyStorage;
 import net.minecraft.block.entity.BlockEntity;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import net.modificationstation.stationapi.api.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
 
-import java.math.BigInteger;
-
-public class EnergyReceiverBlockEntity extends BlockEntity implements EnergyDevice, EnergyStorage {
+public class EnergyReceiverBlockEntity extends BlockEntity implements EnergyHandler, EnergyStorage {
     public int storedEnergy;
 
     public EnergyReceiverBlockEntity() {
