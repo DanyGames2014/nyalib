@@ -55,7 +55,10 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Ite
 
         slotStack = this.getStack(slot);
 
-        this.setStack(slot, stack);
+        if (slotStack == null) {
+            this.setStack(slot, stack);
+            return null;
+        }
 
         if (slotStack.isItemEqual(stack)) {
             int addedCount = Math.min(slotStack.getItem().getMaxCount() - slotStack.count, stack.count);

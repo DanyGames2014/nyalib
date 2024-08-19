@@ -15,11 +15,14 @@ public abstract class DispenserBlockEntityMixin extends BlockEntity implements I
     @Shadow
     public abstract ItemStack removeStack(int slot, int amount);
 
-    @Shadow public abstract ItemStack getStack(int slot);
+    @Shadow
+    public abstract ItemStack getStack(int slot);
 
-    @Shadow public abstract void setStack(int slot, ItemStack stack);
+    @Shadow
+    public abstract void setStack(int slot, ItemStack stack);
 
-    @Shadow public abstract int size();
+    @Shadow
+    public abstract int size();
 
     @Override
     public boolean canExtractItem(@Nullable Direction direction) {
@@ -42,7 +45,10 @@ public abstract class DispenserBlockEntityMixin extends BlockEntity implements I
 
         slotStack = this.getStack(slot);
 
-        this.setStack(slot, stack);
+        if (slotStack == null) {
+            this.setStack(slot, stack);
+            return null;
+        }
 
         if (slotStack.isItemEqual(stack)) {
             int addedCount = Math.min(slotStack.getItem().getMaxCount() - slotStack.count, stack.count);
