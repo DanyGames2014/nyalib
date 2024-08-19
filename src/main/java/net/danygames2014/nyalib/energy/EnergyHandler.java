@@ -58,7 +58,7 @@ public interface EnergyHandler extends EnergyCapable {
      * @return The amount of energy sent. If there is no neighbor in that direction, returns zero
      */
     default int sendEnergy(World world, int x, int y, int z, int amount, Direction direction){
-        EnergyHandler neighbor = getNeighbor(world, x, y, z, direction);
+        EnergyHandler neighbor = getNeighborEnergyHandler(world, x, y, z, direction);
 
         if(neighbor == null){
             return 0;
@@ -76,7 +76,7 @@ public interface EnergyHandler extends EnergyCapable {
      * @param direction The direction you want to look for the neighbor in
      * @return The neighbor's {@link EnergyHandler}, if there is not a neighboring {@link EnergyHandler} then returns <code>null</code>
      */
-    default EnergyHandler getNeighbor(World world, int x, int y, int z, Direction direction) {
+    default EnergyHandler getNeighborEnergyHandler(World world, int x, int y, int z, Direction direction) {
         if (direction == null) {
             return null;
         }

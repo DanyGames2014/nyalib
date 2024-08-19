@@ -28,8 +28,8 @@ public class SideHopperBlockEntity extends BlockEntity {
             if(world.getBlockEntity(x + facing.getOffsetX(), y, z + facing.getOffsetZ()) instanceof ItemHandler south && world.getBlockEntity(x + facing.getOpposite().getOffsetX(), y, z + facing.getOpposite().getOffsetZ()) instanceof ItemHandler north){
                 // If there is nothing in internal buffer, try to retrive item
                 if (internalBuffer == null){
-                    if(south.canExtractItem(facing)){
-                        for (int i = 0; i < south.getSize(); i++) {
+                    if(south.canExtractItem(facing.getOpposite())){
+                        for (int i = 0; i < south.getSize(facing.getOpposite()); i++) {
                             internalBuffer = south.extractItem(i, 999, facing.getOpposite());
                             if(internalBuffer != null){
                                 break;
