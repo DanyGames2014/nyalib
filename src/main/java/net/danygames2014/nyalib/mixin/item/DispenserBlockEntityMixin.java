@@ -69,7 +69,7 @@ public abstract class DispenserBlockEntityMixin extends BlockEntity implements I
     public ItemStack insertItem(ItemStack stack, @Nullable Direction direction) {
         ItemStack insertedStack = stack.copy();
 
-        for (int i = 0; i < this.getSize(); ++i) {
+        for (int i = 0; i < this.getSize(direction); ++i) {
             insertedStack = insertItem(insertedStack, i, direction);
             if (insertedStack == null) {
                 return insertedStack;
@@ -85,7 +85,7 @@ public abstract class DispenserBlockEntityMixin extends BlockEntity implements I
     }
 
     @Override
-    public int getSize() {
+    public int getSize(Direction direction) {
         return this.size();
     }
 }

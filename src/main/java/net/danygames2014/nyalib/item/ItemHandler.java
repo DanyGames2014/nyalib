@@ -69,4 +69,5 @@ public interface ItemHandler {
      * @return The number of slots this block has
      */
     int getSize();
+    int getSize(@Nullable Direction direction);
 }
