@@ -122,6 +122,16 @@ jar {
 publishing {
 	repositories {
 		mavenLocal()
+		if(project.hasProperty("calmilamsy_secret_publishing_cave_username")){
+			maven {
+				url = "https://maven.glass-launcher.net/releases"
+				credentials {
+					username "${project.calmilamsy_secret_publishing_cave_username}"
+					password "${project.calmilamsy_secret_publishing_cave_password}"
+				}
+			}
+		}
+
 		if(project.hasProperty("nyarepo_publishing_cave_username")){
 			maven {
 				url = "https://maven.fildand.cz/releases"
