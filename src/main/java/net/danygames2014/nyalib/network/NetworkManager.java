@@ -378,7 +378,7 @@ public class NetworkManager {
 
             // Write Each network
             for (Network network : networks) {
-                networksOfTypeNbt.put(network.id + "", network.writeNbt());
+                networksOfTypeNbt.put(network.id + "", network.toNbt());
             }
         }
 
@@ -413,7 +413,7 @@ public class NetworkManager {
                     if (networksO instanceof NbtCompound networks) {
                         addNetwork(
                                 dim,
-                                Network.readNbt(networks, world, Identifier.of(networksOfType.getKey()))
+                                Network.fromNbt(networks, world, Identifier.of(networksOfType.getKey()))
                         );
                     }
                 }

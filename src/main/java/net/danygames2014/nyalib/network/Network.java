@@ -67,7 +67,7 @@ public class Network {
     /**
      * Called on every world tick
      */
-    public void tick(){
+    public void tick() {
 
     }
 
@@ -118,7 +118,15 @@ public class Network {
         return result;
     }
 
-    public NbtCompound writeNbt() {
+    public void writeNbt(NbtCompound tag) {
+
+    }
+
+    public void readNbt(NbtCompound tag) {
+
+    }
+
+    public NbtCompound toNbt() {
         NbtCompound tag = new NbtCompound();
         NbtList blocksNbt = new NbtList();
 
@@ -140,13 +148,15 @@ public class Network {
             blocksNbt.add(blockNbt);
         }
 
+        this.writeNbt(tag);
+
         return tag;
     }
 
-    public static Network readNbt(NbtCompound tag, World world, Identifier networkTypeIdentifier) {
+    public static Network fromNbt(NbtCompound tag, World world, Identifier networkTypeIdentifier) {
         NetworkType networkType = NetworkTypeRegistry.get(networkTypeIdentifier);
 
-        if(networkType == null){
+        if (networkType == null) {
             NyaLib.LOGGER.error("Network of type {} not found in registry. Has the modlist been changed? Skipping the loading of this network.", networkTypeIdentifier);
             return null;
         }
@@ -187,6 +197,8 @@ public class Network {
                     block
             );
         }
+
+        network.readNbt(tag);
 
         // Return the loaded network
         return network;
