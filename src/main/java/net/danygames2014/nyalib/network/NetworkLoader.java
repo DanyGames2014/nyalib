@@ -31,6 +31,7 @@ public class NetworkLoader {
                 tag = NbtIo.readCompressed(new FileInputStream(file));
             }
 
+            tag.putInt("next_id", NetworkManager.NEXT_ID.get());
             NetworkManager.writeNbt(event.world, tag);
 
             NbtIo.writeCompressed(tag, new FileOutputStream(file));
@@ -48,6 +49,7 @@ public class NetworkLoader {
             if (file.exists()) {
                 NbtCompound tag = NbtIo.readCompressed(new FileInputStream(file));
 
+                NetworkManager.NEXT_ID.set(tag.getInt("next_id"));
                 NetworkManager.readNbt(event.world, tag);
 
                 NyaLib.LOGGER.info("Loaded NyaLib networks");
