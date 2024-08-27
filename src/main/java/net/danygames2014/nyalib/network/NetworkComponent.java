@@ -1,5 +1,6 @@
 package net.danygames2014.nyalib.network;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
 
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 public interface NetworkComponent {
     /**
      * This is a helper method if you only need one network.
+     *
      * @return A network type this component can participate in
      */
     NetworkType getNetworkType();
@@ -60,6 +62,34 @@ public interface NetworkComponent {
      */
     default void onRemovedFromNet(World world, int x, int y, int z, Network network) {
 
+    }
+
+    /**
+     * Called when this component is automatically added to network
+     *
+     * @param world     The world this component is in
+     * @param x         The x-position of this component
+     * @param y         The y-position of this component
+     * @param z         The z-position of this component
+     * @param component Reference to this component
+     * @param <T>       {@link Block} implementing a {@link NetworkComponent}
+     */
+    default <T extends Block & NetworkComponent> void addToNet(World world, int x, int y, int z, T component) {
+        NetworkManager.addBlock(world, x, y, z, component);
+    }
+
+    /**
+     * Called when this component is automatically removed from network
+     *
+     * @param world     The world this component is in
+     * @param x         The x-position of this component
+     * @param y         The y-position of this component
+     * @param z         The z-position of this component
+     * @param component Reference to this component
+     * @param <T>       {@link Block} implementing a {@link NetworkComponent}
+     */
+    default <T extends Block & NetworkComponent> void removeFromNet(World world, int x, int y, int z, T component) {
+        NetworkManager.removeBlock(world, x, y, z, component);
     }
 
     /**

@@ -16,8 +16,11 @@ public class BlockWithEntityMixin extends BlockMixin {
     @Inject(method = "onPlaced(Lnet/minecraft/world/World;III)V", at = @At(value = "TAIL"))
     public <T extends Block & NetworkComponent> void addToNetOnPlaced(World world, int x, int y, int z, CallbackInfo ci) {
         if ((Object) this instanceof Block && (Object) this instanceof NetworkComponent) {
-            NetworkManager.addBlock(world, x, y, z, (T) (Object) this);
-            System.out.println("onPlace BlockWithEntityMixin");
+            T component = (T) (Object) this;
+            component.addToNet(world,x,y,z, component);
+
+            //NetworkManager.addBlock(world, x, y, z, (T) (Object) this);
+            //System.out.println("onPlace BlockWithEntityMixin");
         }
     }
 
@@ -25,8 +28,11 @@ public class BlockWithEntityMixin extends BlockMixin {
     @Inject(method = "onBreak", at = @At(value = "HEAD"))
     public <T extends Block & NetworkComponent> void removeFromNetOnPlaced(World world, int x, int y, int z, CallbackInfo ci) {
         if ((Object) this instanceof Block && (Object) this instanceof NetworkComponent) {
-            NetworkManager.removeBlock(world, x, y, z, (T) (Object) this);
-            System.out.println("onBreak BlockWithEntityMixin");
+            T component = (T) (Object) this;
+            component.removeFromNet(world,x,y,z, component);
+
+            //NetworkManager.removeBlock(world, x, y, z, (T) (Object) this);
+            //System.out.println("onBreak BlockWithEntityMixin");
         }
     }
 }
