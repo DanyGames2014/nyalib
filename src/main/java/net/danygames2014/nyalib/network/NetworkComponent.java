@@ -24,64 +24,69 @@ public interface NetworkComponent {
 
     /**
      * Called when the physical topology of the network updates
-     * @param x The x-position of this component
-     * @param y The y-position of this component
-     * @param z The z-position of this component
+     *
+     * @param world   The world this network is in
+     * @param x       The x-position of this component
+     * @param y       The y-position of this component
+     * @param z       The z-position of this component
      * @param network The network this component is in
-     * @param world The world this network is in
      */
-    default void update(int x, int y, int z, Network network, World world) {
+    default void update(World world, int x, int y, int z, Network network) {
 
     }
 
     /**
      * Called when this component is added to the network
-     * @param x The x-position of this component
-     * @param y The y-position of this component
-     * @param z The z-position of this component
+     *
+     * @param world   The world this network is in
+     * @param x       The x-position of this component
+     * @param y       The y-position of this component
+     * @param z       The z-position of this component
      * @param network The network this component is in
-     * @param world The world this network is in
      */
-    default void onAddedToNet(int x, int y, int z, Network network, World world) {
+    default void onAddedToNet(World world, int x, int y, int z, Network network) {
 
     }
 
     /**
      * Called when this component is removed from the network
      * (it's called right before it is removed from the network)
-     * @param x The x-position of this component
-     * @param y The y-position of this component
-     * @param z The z-position of this component
+     *
+     * @param world   The world this network is in
+     * @param x       The x-position of this component
+     * @param y       The y-position of this component
+     * @param z       The z-position of this component
      * @param network The network this component is in
-     * @param world The world this network is in
      */
-    default void onRemovedFromNet(int x, int y, int z, Network network, World world) {
+    default void onRemovedFromNet(World world, int x, int y, int z, Network network) {
 
     }
 
     /**
      * Called when this network is being saved
-     * @param x The x-position of this component
-     * @param y The y-position of this component
-     * @param z The z-position of this component
+     *
+     * @param world   The world this network is in
+     * @param x       The x-position of this component
+     * @param y       The y-position of this component
+     * @param z       The z-position of this component
      * @param network The network this component is in
-     * @param world The world this network is in
-     * @param nbt The NBT Compound being saved
+     * @param nbt     The NBT Compound being saved
      */
-    default void writeNbt(int x, int y, int z, Network network, World world, NbtCompound nbt) {
+    default void writeNbt(World world, int x, int y, int z, Network network, NbtCompound nbt) {
 
     }
 
     /**
      * Called when this network is being loaded
-     * @param x The x-position of this component
-     * @param y The y-position of this component
-     * @param z The z-position of this component
+     *
+     * @param world   The world this network is in
+     * @param x       The x-position of this component
+     * @param y       The y-position of this component
+     * @param z       The z-position of this component
      * @param network The network this component is in
-     * @param world The world this network is in
-     * @param nbt The NBT Compound being read
+     * @param nbt     The NBT Compound being read
      */
-    default void readNbt(int x, int y, int z, Network network, World world, NbtCompound nbt) {
+    default void readNbt(World world, int x, int y, int z, Network network, NbtCompound nbt) {
 
     }
 }

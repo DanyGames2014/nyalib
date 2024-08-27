@@ -46,7 +46,7 @@ public class Network {
         blocks.put(new Vec3i(x, y, z), block);
 
         if (block instanceof NetworkComponent component) {
-            component.onAddedToNet(x, y, z, this, world);
+            component.onAddedToNet(world, x, y, z, this);
         }
     }
 
@@ -55,7 +55,7 @@ public class Network {
         if (blocks.containsKey(pos)) {
 
             if (blocks.get(pos) instanceof NetworkComponent component) {
-                component.onRemovedFromNet(x, y, z, this, world);
+                component.onRemovedFromNet(world, x, y, z, this);
             }
 
             blocks.remove(pos);
@@ -79,7 +79,7 @@ public class Network {
             Vec3i pos = block.getKey();
 
             if (block.getValue() instanceof NetworkComponent component) {
-                component.update(pos.x, pos.y, pos.z, this, world);
+                component.update(world, pos.x, pos.y, pos.z, this);
             }
         }
     }
@@ -142,7 +142,7 @@ public class Network {
             blockNbt.putInt("z", pos.z);
 
             if (block.getValue() instanceof NetworkComponent component) {
-                component.writeNbt(pos.x, pos.y, pos.z, this, world, blockNbt);
+                component.writeNbt(world, pos.x, pos.y, pos.z, this, blockNbt);
             }
 
             blocksNbt.add(blockNbt);
@@ -188,7 +188,7 @@ public class Network {
 
             // Mod NBT
             if (block instanceof NetworkComponent component) {
-                component.readNbt(pos.x, pos.y, pos.z, network, world, blockNbt);
+                component.readNbt(world, pos.x, pos.y, pos.z, network, blockNbt);
             }
 
             // Put the block in Network

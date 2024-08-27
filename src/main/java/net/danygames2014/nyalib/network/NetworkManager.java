@@ -106,14 +106,15 @@ public class NetworkManager {
 
     /**
      * Get a network of the given type at the given coords
-     * @param x x-position to check
-     * @param y y-position to check
-     * @param z z-position to checj
-     * @param dimension The dimension to check in
+     *
+     * @param dimension             The dimension to check in
+     * @param x                     x-position to check
+     * @param y                     y-position to check
+     * @param z                     z-position to checj
      * @param networkTypeIdentifier The type of network to check for
      * @return A network if it exists on the coordinates. null if there is no network on the given coordinates.
      */
-    public static Network getAt(int x, int y, int z, Dimension dimension, Identifier networkTypeIdentifier) {
+    public static Network getAt(Dimension dimension, int x, int y, int z, Identifier networkTypeIdentifier) {
         for (Network net : getNetworks(dimension, networkTypeIdentifier)) {
             if (net.isAt(x, y, z)) {
                 return net;
@@ -124,13 +125,14 @@ public class NetworkManager {
 
     /**
      * Returns an ArrayList of networks of any type neighboring this block
-     * @param x x-position to check
-     * @param y y-position to check
-     * @param z z-position to checj
+     *
      * @param world The world to check in
+     * @param x     x-position to check
+     * @param y     y-position to check
+     * @param z     z-position to checj
      * @return An ArrayList of networks neighboring this block
      */
-    public static ArrayList<Network> getNeighbors(int x, int y, int z, World world) {
+    public static ArrayList<Network> getNeighbors(World world, int x, int y, int z) {
         ArrayList<Network> neighborNets = new ArrayList<>();
 
         for (var networksOfType : getNetworks(world.dimension).values()) {
@@ -148,14 +150,15 @@ public class NetworkManager {
 
     /**
      * Returns an ArrayList of networks of a given type neighboring this block
-     * @param x x-position to check
-     * @param y y-position to check
-     * @param z z-position to checj
-     * @param world The world to check in
+     *
+     * @param world                 The world to check in
+     * @param x                     x-position to check
+     * @param y                     y-position to check
+     * @param z                     z-position to checj
      * @param networkTypeIdentifier The type of network to check for
      * @return An ArrayList of networks neighboring this block
      */
-    public static ArrayList<Network> getNeighbors(int x, int y, int z, World world, Identifier networkTypeIdentifier) {
+    public static ArrayList<Network> getNeighbors(World world, int x, int y, int z, Identifier networkTypeIdentifier) {
         ArrayList<Network> neighborNets = new ArrayList<>();
 
         for (Network network : getNetworks(world.dimension, networkTypeIdentifier)) {
@@ -171,7 +174,11 @@ public class NetworkManager {
 
     // Adding and Removing Blocks
     @SuppressWarnings("RedundantLabeledSwitchRuleCodeBlock")
-    public static void addBlock(int x, int y, int z, World world, Block block, NetworkComponent component) {
+    public static <T extends Block & NetworkComponent> void addBlock(World world, int x, int y, int z, T component) {
+        if (component == null) {
+            return;
+        }
+
         // For each of the network types this network component can handle, discover and add to networks
         for (NetworkType networkType : component.getNetworkTypes()) {
             ArrayList<Network> neighborNets = new ArrayList<>(2);
@@ -218,16 +225,16 @@ public class NetworkManager {
             }
 
             if (network != null) {
-                network.addBlock(x, y, z, block);
+                network.addBlock(x, y, z, component);
                 network.update();
             }
         }
     }
 
     @SuppressWarnings("RedundantLabeledSwitchRuleCodeBlock")
-    public static void removeBlock(int x, int y, int z, World world, Block block, NetworkComponent component) {
+    public static <T extends Block & NetworkComponent> void removeBlock(World world, int x, int y, int z, T component) {
         for (NetworkType networkType : component.getNetworkTypes()) {
-            Network net = getAt(x, y, z, world.dimension, networkType.getIdentifier());
+            Network net = getAt(world.dimension, x, y, z, networkType.getIdentifier());
 
             if (net == null) {
                 NyaLib.LOGGER.warn("Removed a block at [x={}, y={}, z={}] which was not in any network of type {}.", x, y, z, networkType.toString());

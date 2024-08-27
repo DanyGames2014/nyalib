@@ -6,6 +6,7 @@ import net.danygames2014.nyalibtest.block.CableBlock;
 import net.danygames2014.nyalibtest.block.EnergyReceiverBlock;
 import net.danygames2014.nyalibtest.block.InfiniteEnergyBlock;
 import net.danygames2014.nyalibtest.block.SideHopperBlock;
+import net.danygames2014.nyalibtest.blockentity.EmptyBlockEntity;
 import net.danygames2014.nyalibtest.blockentity.EnergyReceiverBlockEntity;
 import net.danygames2014.nyalibtest.blockentity.InfiniteEnergyBlockEntity;
 import net.danygames2014.nyalibtest.blockentity.SideHopperBlockEntity;
@@ -46,6 +47,7 @@ public class NyaLibTest {
         event.register(InfiniteEnergyBlockEntity.class, "infinite_energy");
         event.register(EnergyReceiverBlockEntity.class, "energy_receiver");
         event.register(SideHopperBlockEntity.class, "side_hopper");
+        event.register(EmptyBlockEntity.class, "empty");
     }
 
     @EventListener
