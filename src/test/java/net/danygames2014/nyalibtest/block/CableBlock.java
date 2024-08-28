@@ -45,7 +45,7 @@ public class CableBlock extends TemplateBlock implements NetworkComponent {
 
     @Override
     public void update(World world, int x, int y, int z, Network network) {
-        world.method_244(x,y,z, 0);
+        world.notifyNeighbors(x,y,z, 0);
     }
 
     @Override

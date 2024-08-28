@@ -20,7 +20,7 @@ import java.util.HashMap;
 public class WorldMixin {
     @Shadow @Final public Dimension dimension;
 
-    @Inject(method = "method_227", at = @At(value = "TAIL"))
+    @Inject(method = "tickEntities", at = @At(value = "TAIL"))
     public void tickNetworks(CallbackInfo ci) {
         HashMap<Identifier, ArrayList<Network>> networks = NetworkManager.getNetworks(this.dimension);
         if(networks != null){
