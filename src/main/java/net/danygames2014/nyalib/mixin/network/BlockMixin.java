@@ -18,7 +18,7 @@ public abstract class BlockMixin {
         if (!((Object) this instanceof BlockWithEntity)) { // I hate this, I hate this, I hate this
             if ((Object) this instanceof Block && (Object) this instanceof NetworkComponent) {
                 T component = (T) (Object) this;
-                component.removeFromNet(world,x,y,z, component);
+                component.addToNet(world,x,y,z, component);
 
                 //NetworkManager.addBlock(world, x, y, z, (T) (Object) this);
                 //System.out.println("onPlaced BlockMixin");
@@ -32,7 +32,7 @@ public abstract class BlockMixin {
         if (!((Object) this instanceof BlockWithEntity)) { // I hate this, I hate this, I hate this
             if ((Object) this instanceof Block && (Object) this instanceof NetworkComponent) {
                 T component = (T) (Object) this;
-                component.addToNet(world,x,y,z, component);
+                component.removeFromNet(world,x,y,z, component);
 
                 //NetworkManager.removeBlock(world, x, y, z, (T) (Object) this);
                 //System.out.println("onBreak BlockMixin");
