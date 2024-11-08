@@ -4,10 +4,10 @@ import net.minecraft.block.Block;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 @SuppressWarnings("unused")
 public interface NetworkComponent {
@@ -84,11 +84,11 @@ public interface NetworkComponent {
      * @param x         The x-position of this component
      * @param y         The y-position of this component
      * @param z         The z-position of this component
-     * @param network   The network the potential neigbor is in
+     * @param network   The network the potential neigbor is in. Can be null if this is called from a network component that is being placed
      * @param direction The direction in which the potential neighbor is
      * @return Whether this component should connect to the potential neighbor
      */
-    default boolean canConnectTo(World world, int x, int y, int z, Network network, Direction direction) {
+    default boolean canConnectTo(World world, int x, int y, int z, @Nullable Network network, Direction direction) {
         return true;
     }
 

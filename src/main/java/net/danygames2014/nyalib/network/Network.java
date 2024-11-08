@@ -41,6 +41,10 @@ public class Network {
         Vec3i pos = new Vec3i(x, y, z);
         return components.containsKey(pos);
     }
+    
+    public boolean isAt(Vec3i pos) {
+        return components.containsKey(pos);
+    }
 
     public NetworkComponentEntry getEntry(int x, int y, int z) {
         Vec3i pos = new Vec3i(x, y, z);

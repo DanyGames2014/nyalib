@@ -185,18 +185,23 @@ public class NetworkManager {
             ArrayList<Network> potentialNets = new ArrayList<>();
 
             potentialNets.addAll(getNetworks(world.dimension, networkType.getIdentifier()));
-
+            
             // Check all the potential networks to connect to
             for (Network potentialNet : potentialNets) {
                 // Loop thru all sides
                 for (Direction direction : Direction.values()) {
                     // Check if the network exists on this side
-                    if (potentialNet.isAt(x + direction.getOffsetX(), y + direction.getOffsetY(), z + direction.getOffsetZ())) {
+                    Vec3i side = new Vec3i(x + direction.getOffsetX(), y + direction.getOffsetY(), z + direction.getOffsetZ());
+                    
+                    if (potentialNet.isAt(side)) {
                         // If it exists, check if the found component of the potential net isnt an edge and this component isnt an edge
-                        if (!((potentialNet.getEntry(x + direction.getOffsetX(), y + direction.getOffsetY(), z + direction.getOffsetZ()).block() instanceof NetworkEdgeComponent) && component instanceof NetworkEdgeComponent)) {
+                        if (!((potentialNet.getEntry(side).block() instanceof NetworkEdgeComponent) && component instanceof NetworkEdgeComponent)) {
                             // Check if this component can connect to the other one in the potential network
                             if (component.canConnectTo(world, x, y, z, potentialNet, direction)) {
-                                neighborNets.add(potentialNet);
+                                // Check if the other component can connect to this one in the potential network
+                                if(potentialNet.getEntry(side).component().canConnectTo(world, side.x, side.y, side.z, null, direction.getOpposite())) {
+                                    neighborNets.add(potentialNet);
+                                }
                             }
                         }
                     }
