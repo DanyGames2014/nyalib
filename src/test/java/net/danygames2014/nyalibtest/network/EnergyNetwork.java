@@ -1,6 +1,5 @@
 package net.danygames2014.nyalibtest.network;
 
-import com.google.errorprone.annotations.Var;
 import net.danygames2014.nyalib.network.Network;
 import net.danygames2014.nyalib.network.NetworkType;
 import net.minecraft.nbt.NbtCompound;

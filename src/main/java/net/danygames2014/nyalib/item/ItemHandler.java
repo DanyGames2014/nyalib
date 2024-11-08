@@ -71,6 +71,8 @@ public interface ItemHandler {
      */
     int getSize(@Nullable Direction direction);
 
+    // TODO: getInventory
+    
     /**
      * Attempts to send {@link ItemStack} to the given side
      *
