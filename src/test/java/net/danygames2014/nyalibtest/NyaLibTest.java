@@ -2,10 +2,7 @@ package net.danygames2014.nyalibtest;
 
 import net.danygames2014.nyalib.event.NetworkTypeRegistryEvent;
 import net.danygames2014.nyalib.network.NetworkType;
-import net.danygames2014.nyalibtest.block.CableBlock;
-import net.danygames2014.nyalibtest.block.EnergyReceiverBlock;
-import net.danygames2014.nyalibtest.block.InfiniteEnergyBlock;
-import net.danygames2014.nyalibtest.block.SideHopperBlock;
+import net.danygames2014.nyalibtest.block.*;
 import net.danygames2014.nyalibtest.blockentity.EmptyBlockEntity;
 import net.danygames2014.nyalibtest.blockentity.EnergyReceiverBlockEntity;
 import net.danygames2014.nyalibtest.blockentity.InfiniteEnergyBlockEntity;
@@ -30,6 +27,8 @@ public class NyaLibTest {
     public static Block energyReceiverBlock;
     public static Block sideHopper;
     public static Block cableBlock;
+    public static Block eastWestCableBlock;
+    public static Block networkEdgeBlock;
 
     public static NetworkType basicNetworkType;
     public static NetworkType energyNetworkType;
@@ -40,6 +39,8 @@ public class NyaLibTest {
         energyReceiverBlock = new EnergyReceiverBlock(NAMESPACE.id("energy_receiver")).setTranslationKey(NAMESPACE, "energy_receiver");
         sideHopper = new SideHopperBlock(NAMESPACE.id("side_hopper")).setTranslationKey(NAMESPACE, "side_hopper");
         cableBlock = new CableBlock(NAMESPACE.id("cable_block")).setTranslationKey(NAMESPACE, "cable_block");
+        eastWestCableBlock = new EastWestCableBlock(NAMESPACE.id("east_west_cable")).setTranslationKey(NAMESPACE, "east_west_cable");
+        networkEdgeBlock = new NetworkEdgeBlock(NAMESPACE.id("network_edge")).setTranslationKey(NAMESPACE, "network_edge");
     }
 
     @EventListener

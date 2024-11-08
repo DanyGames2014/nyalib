@@ -186,29 +186,38 @@ public class NetworkManager {
 
             potentialNets.addAll(getNetworks(world.dimension, networkType.getIdentifier()));
 
-//            System.out.println("FOUND " + potentialNets.size() + " POTENTIAL NETWORKS FOR " + typeIdentifier);
-
+            // Check all the potential networks to connect to
             for (Network potentialNet : potentialNets) {
+                // Loop thru all sides
                 for (Direction direction : Direction.values()) {
+                    // Check if the network exists on this side
                     if (potentialNet.isAt(x + direction.getOffsetX(), y + direction.getOffsetY(), z + direction.getOffsetZ())) {
-                        neighborNets.add(potentialNet);
+                        // If it exists, check if the found component of the potential net isnt an edge and this component isnt an edge
+                        if (!((potentialNet.getAt(x + direction.getOffsetX(), y + direction.getOffsetY(), z + direction.getOffsetZ()).block() instanceof NetworkEdgeComponent) && component instanceof NetworkEdgeComponent)) {
+                            // Check if this component can connect to the other one in the potential network
+                            if (component.canConnectTo(world, x, y, z, potentialNet, direction)) {
+                                neighborNets.add(potentialNet);
+                            }
+                        }
                     }
                 }
             }
 
-//            System.out.println("FOUND " + neighborNets.size() + " NEIGHBOR NETWORKS FOR " + typeIdentifier);
-
             Network network;
 
+            // Check how many neighbor networks have been found
             switch (neighborNets.size()) {
+                // No networks have been found -> Create a new one
                 case 0 -> {
                     network = createNetwork(world.dimension, networkType);
                 }
 
+                // One networks has been found -> Add to that network
                 case 1 -> {
                     network = neighborNets.get(0);
                 }
 
+                // Two or more networks have been found, merge them
                 default -> {
                     network = neighborNets.get(0);
                     for (int i = 1; i < neighborNets.size(); i++) {
@@ -217,13 +226,14 @@ public class NetworkManager {
                             continue;
                         }
 
-                        network.blocks.putAll(neighborNets.get(i).blocks);
-                        neighborNets.get(i).blocks.clear();
+                        network.components.putAll(neighborNets.get(i).components);
+                        neighborNets.get(i).components.clear();
                         removeNetwork(neighborNets.get(i));
                     }
                 }
             }
 
+            // Add to the network
             if (network != null) {
                 network.addBlock(x, y, z, component);
                 network.update();
@@ -231,7 +241,6 @@ public class NetworkManager {
         }
     }
 
-    @SuppressWarnings("RedundantLabeledSwitchRuleCodeBlock")
     public static <T extends Block & NetworkComponent> void removeBlock(World world, int x, int y, int z, T component) {
         for (NetworkType networkType : component.getNetworkTypes()) {
             Network net = getAt(world.dimension, x, y, z, networkType.getIdentifier());
@@ -249,7 +258,7 @@ public class NetworkManager {
                 }
             }
 
-            NyaLib.LOGGER.debug("NET SIZE: {} | NEIGHBORS FOUND : {}", net.blocks.size(), neighborBlocks.size());
+            NyaLib.LOGGER.debug("NET SIZE: {} | NEIGHBORS FOUND : {}", net.components.size(), neighborBlocks.size());
 
             switch (neighborBlocks.size()) {
                 // There are no neighbors, which should mean that this is the last block in the network and the network can be removed
@@ -257,10 +266,10 @@ public class NetworkManager {
                     NyaLib.LOGGER.debug("Last block in network, removing network with ID {}", net.getId());
                     net.removeBlock(x, y, z);
 
-                    if (net.blocks.isEmpty()) {
+                    if (net.components.isEmpty()) {
                         removeNetwork(net);
                     } else {
-                        NyaLib.LOGGER.warn("Removed a block from network {} with no neighbors but the network still has {} blocks. Network will not be deleted", net.getId(), net.blocks.size());
+                        NyaLib.LOGGER.warn("Removed a block from network {} with no neighbors but the network still has {} blocks. Network will not be deleted", net.getId(), net.components.size());
                     }
 
                 }

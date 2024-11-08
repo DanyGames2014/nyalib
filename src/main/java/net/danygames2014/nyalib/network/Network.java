@@ -14,7 +14,7 @@ import java.util.*;
 
 @SuppressWarnings("unused")
 public class Network {
-    protected HashMap<Vec3i, Block> blocks;
+    protected HashMap<Vec3i, NetworkComponentEntry> components;
     public World world;
     public NetworkType type;
     protected int id;
@@ -22,7 +22,7 @@ public class Network {
     public Network(World world, NetworkType type) {
         this.world = world;
         this.type = type;
-        blocks = new HashMap<>();
+        components = new HashMap<>();
     }
 
     private Network(World world) {
@@ -39,26 +39,34 @@ public class Network {
 
     public boolean isAt(int x, int y, int z) {
         Vec3i pos = new Vec3i(x, y, z);
-        return blocks.containsKey(pos);
+        return components.containsKey(pos);
+    }
+
+    public NetworkComponentEntry getAt(int x, int y, int z) {
+        Vec3i pos = new Vec3i(x, y, z);
+        return components.get(pos);
+    }
+
+    public NetworkComponentEntry getAt(Vec3i pos) {
+        return components.get(pos);
     }
 
     public void addBlock(int x, int y, int z, Block block) {
-        blocks.put(new Vec3i(x, y, z), block);
-
         if (block instanceof NetworkComponent component) {
+            components.put(new Vec3i(x, y, z), new NetworkComponentEntry(block, component));
             component.onAddedToNet(world, x, y, z, this);
         }
     }
 
     public boolean removeBlock(int x, int y, int z) {
         Vec3i pos = new Vec3i(x, y, z);
-        if (blocks.containsKey(pos)) {
+        if (components.containsKey(pos)) {
 
-            if (blocks.get(pos) instanceof NetworkComponent component) {
+            if (components.get(pos).block() instanceof NetworkComponent component) {
                 component.onRemovedFromNet(world, x, y, z, this);
             }
 
-            blocks.remove(pos);
+            components.remove(pos);
             return true;
         }
         return false;
@@ -75,10 +83,10 @@ public class Network {
      * Called when there is a change to the network physical topology
      */
     public void update() {
-        for (Map.Entry<Vec3i, Block> block : blocks.entrySet()) {
+        for (Map.Entry<Vec3i, NetworkComponentEntry> block : components.entrySet()) {
             Vec3i pos = block.getKey();
 
-            if (block.getValue() instanceof NetworkComponent component) {
+            if (block.getValue().block() instanceof NetworkComponent component) {
                 component.update(world, pos.x, pos.y, pos.z, this);
             }
         }
@@ -97,20 +105,24 @@ public class Network {
         edges.add(Sets.newHashSet());
 
         byte n = 0;
-        boolean added = true;
-        while (added) {
+        boolean done = false;
+        while (!done) {
             Set<Vec3i> oldEdge = edges.get(n & 1);
             Set<Vec3i> newEdge = edges.get((n + 1) & 1);
             n = (byte) ((n + 1) & 1);
             oldEdge.forEach(pos -> {
                 for (Direction dir : Direction.values()) {
                     Vec3i side = new Vec3i(pos.x + dir.getOffsetX(), pos.y + dir.getOffsetY(), pos.z + dir.getOffsetZ());
-                    if (blocks.containsKey(side) && !result.contains(side)) {
-                        newEdge.add(side);
+                    if (components.containsKey(side) && !result.contains(side)) {
+                        if (getAt(side).component().canConnectTo(world, pos.x, pos.y, pos.z, this, dir)) {
+                            if (!(getAt(pos).block() instanceof NetworkEdgeComponent && getAt(side).block() instanceof NetworkEdgeComponent)) {
+                                newEdge.add(side);
+                            }
+                        }
                     }
                 }
             });
-            added = !oldEdge.isEmpty();
+            done = oldEdge.isEmpty();
             result.addAll(oldEdge);
             oldEdge.clear();
         }
@@ -133,15 +145,15 @@ public class Network {
         tag.putInt("id", id);
         tag.put("blocks", blocksNbt);
 
-        for (Map.Entry<Vec3i, Block> block : blocks.entrySet()) {
+        for (Map.Entry<Vec3i, NetworkComponentEntry> entry : components.entrySet()) {
             NbtCompound blockNbt = new NbtCompound();
 
-            Vec3i pos = block.getKey();
+            Vec3i pos = entry.getKey();
             blockNbt.putInt("x", pos.x);
             blockNbt.putInt("y", pos.y);
             blockNbt.putInt("z", pos.z);
 
-            if (block.getValue() instanceof NetworkComponent component) {
+            if (entry.getValue().block() instanceof NetworkComponent component) {
                 component.writeNbt(world, pos.x, pos.y, pos.z, this, blockNbt);
             }
 
@@ -170,7 +182,7 @@ public class Network {
             return null;
         }
 
-        network.blocks = new HashMap<>();
+        network.components = new HashMap<>();
 
         network.id = tag.getInt("id");
         NbtList blocksNbt = tag.getList("blocks");
@@ -189,13 +201,13 @@ public class Network {
             // Mod NBT
             if (block instanceof NetworkComponent component) {
                 component.readNbt(world, pos.x, pos.y, pos.z, network, blockNbt);
-            }
 
-            // Put the block in Network
-            network.blocks.put(
-                    pos,
-                    block
-            );
+                // Put the block in Network
+                network.components.put(
+                        pos,
+                        new NetworkComponentEntry(block, component)
+                );
+            }
         }
 
         network.readNbt(tag);

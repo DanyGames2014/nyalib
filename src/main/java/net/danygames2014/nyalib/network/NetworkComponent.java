@@ -3,6 +3,7 @@ package net.danygames2014.nyalib.network;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.ArrayList;
 
@@ -24,6 +25,21 @@ public interface NetworkComponent {
         return types;
     }
 
+    /**
+     * Allows the component to conditionally not connect to other components
+     * 
+     * @param world     The world this component is in
+     * @param x         The x-position of this component
+     * @param y         The y-position of this component
+     * @param z         The z-position of this component
+     * @param network   The network the potential neigbor is in
+     * @param direction The direction in which the potential neighbor is
+     * @return Whether this component should connect to the potential neighbor
+     */
+    default boolean canConnectTo(World world, int x, int y, int z, Network network, Direction direction) {
+        return true;
+    }
+    
     /**
      * Called when the physical topology of the network updates
      *
