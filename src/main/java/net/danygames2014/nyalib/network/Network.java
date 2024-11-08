@@ -42,18 +42,18 @@ public class Network {
         return components.containsKey(pos);
     }
 
-    public NetworkComponentEntry getAt(int x, int y, int z) {
+    public NetworkComponentEntry getEntry(int x, int y, int z) {
         Vec3i pos = new Vec3i(x, y, z);
         return components.get(pos);
     }
 
-    public NetworkComponentEntry getAt(Vec3i pos) {
+    public NetworkComponentEntry getEntry(Vec3i pos) {
         return components.get(pos);
     }
 
     public void addBlock(int x, int y, int z, Block block) {
         if (block instanceof NetworkComponent component) {
-            components.put(new Vec3i(x, y, z), new NetworkComponentEntry(block, component));
+            components.put(new Vec3i(x, y, z), new NetworkComponentEntry(block, component, new NbtCompound()));
             component.onAddedToNet(world, x, y, z, this);
         }
     }
@@ -114,8 +114,8 @@ public class Network {
                 for (Direction dir : Direction.values()) {
                     Vec3i side = new Vec3i(pos.x + dir.getOffsetX(), pos.y + dir.getOffsetY(), pos.z + dir.getOffsetZ());
                     if (components.containsKey(side) && !result.contains(side)) {
-                        if (getAt(side).component().canConnectTo(world, pos.x, pos.y, pos.z, this, dir)) {
-                            if (!(getAt(pos).block() instanceof NetworkEdgeComponent && getAt(side).block() instanceof NetworkEdgeComponent)) {
+                        if (getEntry(side).component().canConnectTo(world, pos.x, pos.y, pos.z, this, dir)) {
+                            if (!(getEntry(pos).block() instanceof NetworkEdgeComponent && getEntry(side).block() instanceof NetworkEdgeComponent)) {
                                 newEdge.add(side);
                             }
                         }
@@ -156,6 +156,8 @@ public class Network {
             if (entry.getValue().block() instanceof NetworkComponent component) {
                 component.writeNbt(world, pos.x, pos.y, pos.z, this, blockNbt);
             }
+            
+            blockNbt.put("entryData", entry.getValue().data());
 
             blocksNbt.add(blockNbt);
         }
@@ -205,7 +207,7 @@ public class Network {
                 // Put the block in Network
                 network.components.put(
                         pos,
-                        new NetworkComponentEntry(block, component)
+                        new NetworkComponentEntry(block, component, blockNbt.getCompound("entryData"))
                 );
             }
         }

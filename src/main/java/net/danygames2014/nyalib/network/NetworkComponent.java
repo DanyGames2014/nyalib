@@ -6,6 +6,8 @@ import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @SuppressWarnings("unused")
 public interface NetworkComponent {
@@ -26,8 +28,58 @@ public interface NetworkComponent {
     }
 
     /**
+     * Retrieves the {@link NetworkComponentEntry} of a network component
+     *
+     * @param world       The world this component is in
+     * @param x           The x-position of this component
+     * @param y           The y-position of this component
+     * @param z           The z-position of this component
+     * @param networkType The type of network you want to retrieve the entry from
+     * @return The retrieved {@link NetworkComponentEntry}
+     */
+    default NetworkComponentEntry getEntry(World world, int x, int y, int z, NetworkType networkType) {
+        Network net = NetworkManager.getAt(world.dimension, x, y, z, networkType.identifier);
+
+        if (net != null) {
+            return net.getEntry(x, y, z);
+        }
+
+        return null;
+    }
+
+    /**
+     * Retrieves all of the {@link NetworkComponentEntry} of a component from all of its networks
+     *
+     * @param world The world this component is in
+     * @param x     The x-position of this component
+     * @param y     The y-position of this component
+     * @param z     The z-position of this component
+     * @return The retrieved {@link NetworkComponentEntry}
+     */
+    default HashMap<Network, NetworkComponentEntry> getEntries(World world, int x, int y, int z) {
+        var validNetworkTypes = getNetworkTypes();
+        HashMap<Network, NetworkComponentEntry> entries = new HashMap<>();
+        
+        // Loop thru all of the networks of all types
+        for (var networkTypes : NetworkManager.getNetworks(world.dimension).entrySet()) {
+            // Check if the network has the type that this component can participate in
+            if (validNetworkTypes.contains(NetworkTypeRegistry.get(networkTypes.getKey()))) {
+                // Loop thru all the networks of this types
+                for (var network : networkTypes.getValue()) {
+                    // Check if the network is at the position
+                    if (network.isAt(x, y, z)) {
+                        entries.put(network, network.getEntry(x, y, z));
+                    }
+                }
+            }
+        }
+
+        return entries;
+    }
+
+    /**
      * Allows the component to conditionally not connect to other components
-     * 
+     *
      * @param world     The world this component is in
      * @param x         The x-position of this component
      * @param y         The y-position of this component
@@ -39,7 +91,7 @@ public interface NetworkComponent {
     default boolean canConnectTo(World world, int x, int y, int z, Network network, Direction direction) {
         return true;
     }
-    
+
     /**
      * Called when the physical topology of the network updates
      *

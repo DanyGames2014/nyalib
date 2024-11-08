@@ -13,7 +13,7 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@SuppressWarnings({"UnusedReturnValue", "DuplicatedCode", "LoggingSimilarMessage", "CollectionAddAllCanBeReplacedWithConstructor"})
+@SuppressWarnings({"UnusedReturnValue", "DuplicatedCode", "LoggingSimilarMessage", "CollectionAddAllCanBeReplacedWithConstructor", "unused", "RedundantLabeledSwitchRuleCodeBlock"})
 public class NetworkManager {
     /**
      * For each Dimension there is a hashmap which takes network type Identifier as a key
@@ -193,7 +193,7 @@ public class NetworkManager {
                     // Check if the network exists on this side
                     if (potentialNet.isAt(x + direction.getOffsetX(), y + direction.getOffsetY(), z + direction.getOffsetZ())) {
                         // If it exists, check if the found component of the potential net isnt an edge and this component isnt an edge
-                        if (!((potentialNet.getAt(x + direction.getOffsetX(), y + direction.getOffsetY(), z + direction.getOffsetZ()).block() instanceof NetworkEdgeComponent) && component instanceof NetworkEdgeComponent)) {
+                        if (!((potentialNet.getEntry(x + direction.getOffsetX(), y + direction.getOffsetY(), z + direction.getOffsetZ()).block() instanceof NetworkEdgeComponent) && component instanceof NetworkEdgeComponent)) {
                             // Check if this component can connect to the other one in the potential network
                             if (component.canConnectTo(world, x, y, z, potentialNet, direction)) {
                                 neighborNets.add(potentialNet);
@@ -331,6 +331,11 @@ public class NetworkManager {
                             for (int i = 1; i < potentialNetworks.size(); i++) {
 
                                 Network newNetwork = createNetwork(world.dimension, networkType);
+
+                                if (newNetwork == null) {
+                                    NyaLib.LOGGER.error("Unable to initialize a new network when block was removed");
+                                    return;
+                                }
 
                                 // Iterate over every block in this new potential network
                                 for (Vec3i pos : potentialNetworks.get(i)) {

@@ -1,5 +1,6 @@
 package net.danygames2014.nyalibtest.network;
 
+import com.google.errorprone.annotations.Var;
 import net.danygames2014.nyalib.network.Network;
 import net.danygames2014.nyalib.network.NetworkType;
 import net.minecraft.nbt.NbtCompound;
@@ -10,6 +11,13 @@ import java.time.LocalDateTime;
 public class EnergyNetwork extends Network {
     public EnergyNetwork(World world, NetworkType type) {
         super(world, type);
+    }
+
+    @Override
+    public void tick() {
+        for (var entry : this.components.entrySet()) {
+            entry.getValue().data().putInt("test", world.random.nextInt(50));    
+        }
     }
 
     @Override
