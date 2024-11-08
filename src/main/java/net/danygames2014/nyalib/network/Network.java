@@ -77,9 +77,23 @@ public class Network {
     }
 
     /**
-     * Called on every world tick
+     * Called before entities/block entities are ticked
      */
-    public void tick() {
+    public void tick(){
+        
+    }
+
+    /**
+     * Called after entities/block entities are ticked
+     */
+    public void postEntityTick(){
+        
+    }
+    
+    /**
+     * Called on every world tick, which is after entities/block entities are ticked
+     */
+    public void worldTick() {
 
     }
 

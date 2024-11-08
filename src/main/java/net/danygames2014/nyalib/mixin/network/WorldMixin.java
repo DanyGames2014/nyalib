@@ -4,7 +4,6 @@ import net.danygames2014.nyalib.network.Network;
 import net.danygames2014.nyalib.network.NetworkManager;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.Dimension;
-import net.minecraft.world.dimension.DimensionData;
 import net.modificationstation.stationapi.api.util.Identifier;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,13 +19,37 @@ import java.util.HashMap;
 public class WorldMixin {
     @Shadow @Final public Dimension dimension;
 
-    @Inject(method = "tickEntities", at = @At(value = "TAIL"))
-    public void tickNetworks(CallbackInfo ci) {
+    @Inject(method = "tickEntities", at = @At(value = "HEAD"))
+    public void tickNetworks_preEntity(CallbackInfo ci){
         HashMap<Identifier, ArrayList<Network>> networks = NetworkManager.getNetworks(this.dimension);
         if(networks != null){
             for (ArrayList<Network> networkTypes : networks.values()) {
                 for (Network network : networkTypes) {
                     network.tick();
+                }
+            }
+        }
+    }
+    
+    @Inject(method = "tickEntities", at = @At(value = "TAIL"))
+    public void tickNetworks_postEntity(CallbackInfo ci) {
+        HashMap<Identifier, ArrayList<Network>> networks = NetworkManager.getNetworks(this.dimension);
+        if(networks != null){
+            for (ArrayList<Network> networkTypes : networks.values()) {
+                for (Network network : networkTypes) {
+                    network.postEntityTick();
+                }
+            }
+        }
+    }
+
+    @Inject(method = "tick", at = @At(value = "TAIL"))
+    public void tickNetworks_worldTick(CallbackInfo ci){
+        HashMap<Identifier, ArrayList<Network>> networks = NetworkManager.getNetworks(this.dimension);
+        if(networks != null){
+            for (ArrayList<Network> networkTypes : networks.values()) {
+                for (Network network : networkTypes) {
+                    network.worldTick();
                 }
             }
         }
