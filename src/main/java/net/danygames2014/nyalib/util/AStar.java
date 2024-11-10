@@ -4,59 +4,90 @@ import net.minecraft.util.math.Vec3i;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AStar {
     Vec3i start;
     Vec3i end;
-    ArrayList<AStarNode> open;
-    ArrayList<AStarNode> closed;
-    ArrayList<Vec3i> avalibleNodes;
+    HashMap<Vec3i, AStarNode> open;
+    HashMap<Vec3i, AStarNode> closed;
+    HashMap<Vec3i, AStarNode> validNodes;
 
     public AStar(Vec3i start, Vec3i end, Vec3i[] avalibleNodes) {
-        this.open = new ArrayList<>(avalibleNodes.length);
-        this.closed = new ArrayList<>(avalibleNodes.length);
+        this.open = new HashMap<>();
+        this.closed = new HashMap<>();
+        this.validNodes = new HashMap<>();
         this.start = start;
         this.end = end;
-        
-        open.add(new AStarNode(start, null));
+
+        for (Vec3i node : avalibleNodes) {
+            validNodes.put(node, new AStarNode(node, null));
+        }
+
+        open.put(start, new AStarNode(start, null));
     }
 
     public Vec3i[] calculate() {
-        boolean done = false;
+        AStarNode endNode = null;
         
-        while (!done) {
+        while (endNode == null) {
             AStarNode current = getLowestFCost();
-            open.remove(current);
-            closed.add(current);
+            open.remove(current.position);
+            closed.put(current.position, current);
 
-            if(current.position.equals(end)){
-                done = true;
+            if (current.position.equals(end)) {
+                endNode = current;
             }
-            
+
             for (Direction direction : Direction.values()) {
-                Vec3i side = new Vec3i(current.position.x + direction.getOffsetX(), current.position.y + direction.getOffsetY(), current.position.z + direction.getOffsetZ());
-                if(!avalibleNodes.contains(side)){
+                Vec3i neighbor = new Vec3i(current.position.x + direction.getOffsetX(), current.position.y + direction.getOffsetY(), current.position.z + direction.getOffsetZ());
+                if (!validNodes.containsKey(neighbor) || closed.containsKey(neighbor)) {
                     continue;
+                }
+
+                AStarNode neighborNode = validNodes.get(neighbor);
+                double neighborCost = neighborNode.fCost;
+                double newCost = neighborNode.calculateCost(start, end);
+                
+                if(newCost < neighborCost || !open.containsKey(neighbor)) {
+                    neighborNode.fCost = newCost;
+                    neighborNode.parent = current;
+                    if(!open.containsKey(neighbor)) {
+                        open.put(neighbor, neighborNode);
+                    }
                 }
 
             }
         }
+
+        AStarNode traversedNode = endNode;
+        ArrayList<Vec3i> path = new ArrayList<>();
         
-        return null;
+        while(traversedNode != null) {
+            path.add(traversedNode.position);
+            traversedNode = traversedNode.parent;
+        }
+
+        Collections.reverse(path);
+
+        return path.toArray(new Vec3i[0]);
     }
-    
-    AStarNode getLowestFCost(){
+
+    AStarNode getLowestFCost() {
         double lowestCost = Double.MAX_VALUE;
         AStarNode bestNode = null;
 
-        for (AStarNode node : open) {
-            node.calculateCost(start, end);
-            if (node.fCost < lowestCost) {
-                lowestCost = node.fCost;
+        for (Map.Entry<Vec3i, AStarNode> nodeEntry : open.entrySet()) {
+            AStarNode node = nodeEntry.getValue();
+            double cost = node.calculateCost(start, end);
+            if (cost < lowestCost) {
+                lowestCost = node.fCost = cost;
                 bestNode = node;
             }
         }
-        
+
         return bestNode;
     }
 }
@@ -67,21 +98,17 @@ public class AStar {
 class AStarNode {
     Vec3i position;
     AStarNode parent;
-    double gCost;
-    double hCost;
     double fCost;
-    
-    public AStarNode(Vec3i position, AStarNode parent){
+
+    public AStarNode(Vec3i position, AStarNode parent) {
         this.position = position;
         this.parent = parent;
-        this.gCost = Double.MAX_VALUE;
-        this.hCost = Double.MAX_VALUE;
         this.fCost = Double.MAX_VALUE;
     }
-    
-    public void calculateCost(Vec3i start, Vec3i end){
-        this.gCost = position.distanceTo(start.x, start.y, start.z);
-        this.hCost = position.distanceTo(end.x, end.y, end.z);
-        this.fCost = this.gCost + this.hCost;
+
+    public double calculateCost(Vec3i start, Vec3i end) {
+        double gCostT = position.distanceTo(start.x, start.y, start.z);
+        double hCostT = position.distanceTo(end.x, end.y, end.z);
+        return gCostT + hCostT;
     }
 }
