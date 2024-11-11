@@ -12,6 +12,8 @@ import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.template.block.TemplateBlock;
 import net.modificationstation.stationapi.api.util.Identifier;
 
+import java.util.ArrayList;
+
 public class NetworkEdgeBlock extends TemplateBlock implements NetworkEdgeComponent {
     public static World theWorld;
 
@@ -50,8 +52,9 @@ public class NetworkEdgeBlock extends TemplateBlock implements NetworkEdgeCompon
 
     @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
-        Network net = NetworkManager.getAt(world.dimension, x, y, z, this.getNetworkTypes().get(0).getIdentifier());
-        if (net != null) {
+        ArrayList<Network> networks = NetworkManager.getAt(world.dimension, x, y, z, this.getNetworkTypes());
+        player.method_490("This block is in networks:");
+        for (var net : networks){
             player.method_490("NET " + net.getId() + " HASHCODE: " + net.hashCode());
         }
         return true;

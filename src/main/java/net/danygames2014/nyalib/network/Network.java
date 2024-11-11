@@ -41,7 +41,7 @@ public class Network {
         Vec3i pos = new Vec3i(x, y, z);
         return components.containsKey(pos);
     }
-    
+
     public boolean isAt(Vec3i pos) {
         return components.containsKey(pos);
     }
@@ -79,17 +79,17 @@ public class Network {
     /**
      * Called before entities/block entities are ticked
      */
-    public void tick(){
-        
+    public void tick() {
+
     }
 
     /**
      * Called after entities/block entities are ticked
      */
-    public void postEntityTick(){
-        
+    public void postEntityTick() {
+
     }
-    
+
     /**
      * Called on every world tick, which is after entities/block entities are ticked
      */
@@ -115,7 +115,7 @@ public class Network {
      * @return A list of blocks discovered
      * @author paulevs
      */
-    public HashSet<Vec3i> walk(Vec3i start) {
+    public HashSet<Vec3i> oldWalk(Vec3i start) {
         ArrayList<Set<Vec3i>> edges = new ArrayList<>();
         HashSet<Vec3i> result = new HashSet<>();
 
@@ -133,7 +133,7 @@ public class Network {
                     Vec3i side = new Vec3i(pos.x + dir.getOffsetX(), pos.y + dir.getOffsetY(), pos.z + dir.getOffsetZ());
                     if (components.containsKey(side) && !result.contains(side)) {
                         if (getEntry(side).component().canConnectTo(world, pos.x, pos.y, pos.z, this, dir)) {
-                            if (!(getEntry(pos).block() instanceof NetworkEdgeComponent && getEntry(side).block() instanceof NetworkEdgeComponent)) {
+                            if (!(getEntry(pos).component() instanceof NetworkEdgeComponent)) {
                                 newEdge.add(side);
                             }
                         }
@@ -146,6 +146,45 @@ public class Network {
         }
 
         return result;
+    }
+
+    public ArrayList<Vec3i> walk(Vec3i start) {
+        // ArrayList for list of blocks yet to explore
+        ArrayList<Vec3i> open = new ArrayList<>();
+        // ArrayList for list of blocks that have been found
+        ArrayList<Vec3i> closed = new ArrayList<>();
+
+        // Add the starting position to explore
+        open.add(start);
+
+        // Go until open isnt empty
+        while (!open.isEmpty()) {
+            // Get the position to explore
+            Vec3i pos = open.get(0);
+            // Look at all of its sides
+            for (Direction dir : Direction.values()) {
+                // Get the side and see if there is a block on it. Then check if it doesnt already exist
+                Vec3i side = new Vec3i(pos.x + dir.getOffsetX(), pos.y + dir.getOffsetY(), pos.z + dir.getOffsetZ());
+                if (components.containsKey(side) && !closed.contains(side)) {
+                    // Check if the side block can connect to this block and reverse
+                    if (getEntry(side).component().canConnectTo(world, pos.x, pos.y, pos.z, this, dir) && getEntry(pos).component().canConnectTo(world, side.x, side.y, side.z, this, dir)) {
+                        // Check if the component is an edge, or a node
+                        NetworkComponent component = getEntry(side).component();
+                        if (component instanceof NetworkNodeComponent) {
+                            open.add(side);
+                        } else if (component instanceof NetworkEdgeComponent) {
+                            closed.add(side);
+                        }
+                    }
+                }
+            }
+            
+            // Add the position to closed and remove it from open
+            closed.add(pos);
+            open.remove(pos);
+        }
+
+        return closed;
     }
 
     public void writeNbt(NbtCompound tag) {
@@ -174,7 +213,7 @@ public class Network {
             if (entry.getValue().block() instanceof NetworkComponent component) {
                 component.writeNbt(world, pos.x, pos.y, pos.z, this, blockNbt);
             }
-            
+
             blockNbt.put("entryData", entry.getValue().data());
 
             blocksNbt.add(blockNbt);

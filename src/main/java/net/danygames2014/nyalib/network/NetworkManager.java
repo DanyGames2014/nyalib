@@ -10,10 +10,13 @@ import net.modificationstation.stationapi.api.registry.DimensionRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@SuppressWarnings({"UnusedReturnValue", "DuplicatedCode", "LoggingSimilarMessage", "CollectionAddAllCanBeReplacedWithConstructor", "unused", "RedundantLabeledSwitchRuleCodeBlock"})
+@SuppressWarnings({"UnusedReturnValue", "DuplicatedCode", "LoggingSimilarMessage", "CollectionAddAllCanBeReplacedWithConstructor", "unused", "RedundantLabeledSwitchRuleCodeBlock", "SwitchStatementWithTooFewBranches"})
 public class NetworkManager {
     /**
      * For each Dimension there is a hashmap which takes network type Identifier as a key
@@ -124,6 +127,53 @@ public class NetworkManager {
     }
 
     /**
+     * Get a network of the given types at the given coords
+     *
+     * @param dimension    The dimension to check in
+     * @param x            x-position to check
+     * @param y            y-position to check
+     * @param z            z-position to checj
+     * @param networkTypes The types of network to check for
+     * @return Network if they exists on the coordinates.
+     */
+    public static ArrayList<Network> getAt(Dimension dimension, int x, int y, int z, ArrayList<NetworkType> networkTypes) {
+        ArrayList<Network> networks = new ArrayList<>();
+
+        for (NetworkType networkType : networkTypes) {
+            for (Network net : getNetworks(dimension, networkType.getIdentifier())) {
+                if (net.isAt(x, y, z)) {
+                    networks.add(net);
+                }
+            }
+        }
+
+        return networks;
+    }
+
+    /**
+     * Gets networks of any type at the given coords
+     *
+     * @param dimension The dimension to check in
+     * @param x         x-position to check
+     * @param y         y-position to check
+     * @param z         z-position to checj
+     * @return Networks if any exist on the coordinates.
+     */
+    public static ArrayList<Network> getAt(Dimension dimension, int x, int y, int z) {
+        ArrayList<Network> networks = new ArrayList<>();
+
+        for (ArrayList<Network> netsOfType : getNetworks(dimension).values()) {
+            for (Network net : netsOfType) {
+                if (net.isAt(x, y, z)) {
+                    networks.add(net);
+                }
+            }
+        }
+
+        return networks;
+    }
+
+    /**
      * Returns an ArrayList of networks of any type neighboring this block
      *
      * @param world The world to check in
@@ -172,35 +222,44 @@ public class NetworkManager {
         return neighborNets;
     }
 
+    record PotentialNeighbor(NetworkComponentEntry entry, Network network, Vec3i position) {
+
+    }
+
     // Adding and Removing Blocks
     @SuppressWarnings("RedundantLabeledSwitchRuleCodeBlock")
     public static <T extends Block & NetworkComponent> void addBlock(World world, int x, int y, int z, T component) {
+        // If the component is null, don't bother
         if (component == null) {
             return;
         }
 
         // For each of the network types this network component can handle, discover and add to networks
         for (NetworkType networkType : component.getNetworkTypes()) {
-            ArrayList<Network> neighborNets = new ArrayList<>(2);
+
+            // Query all the networks which neighbor this block
+            ArrayList<PotentialNeighbor> nodeNeighbors = new ArrayList<>(2);
+            ArrayList<PotentialNeighbor> edgeNeighbors = new ArrayList<>(2);
             ArrayList<Network> potentialNets = new ArrayList<>();
 
             potentialNets.addAll(getNetworks(world.dimension, networkType.getIdentifier()));
-            
-            // Check all the potential networks to connect to
+
+            // Check all the potential networks
             for (Network potentialNet : potentialNets) {
-                // Loop thru all sides
+                // Loop through all sides
                 for (Direction direction : Direction.values()) {
                     // Check if the network exists on this side
                     Vec3i side = new Vec3i(x + direction.getOffsetX(), y + direction.getOffsetY(), z + direction.getOffsetZ());
-                    
                     if (potentialNet.isAt(side)) {
-                        // If it exists, check if the found component of the potential net isnt an edge and this component isnt an edge
-                        if (!((potentialNet.getEntry(side).block() instanceof NetworkEdgeComponent) && component instanceof NetworkEdgeComponent)) {
-                            // Check if this component can connect to the other one in the potential network
-                            if (component.canConnectTo(world, x, y, z, potentialNet, direction)) {
-                                // Check if the other component can connect to this one in the potential network
-                                if(potentialNet.getEntry(side).component().canConnectTo(world, side.x, side.y, side.z, null, direction.getOpposite())) {
-                                    neighborNets.add(potentialNet);
+                        // Check if the components can connect to each other
+                        if (component.canConnectTo(world, x, y, z, potentialNet, direction)) {
+                            NetworkComponentEntry componentEntry = potentialNet.getEntry(side);
+                            if (componentEntry.component().canConnectTo(world, side.x, side.y, side.z, null, direction.getOpposite())) {
+                                // If they can connect to each other, then its a valid neighbor
+                                if (componentEntry.component() instanceof NetworkNodeComponent) {
+                                    nodeNeighbors.add(new PotentialNeighbor(componentEntry, potentialNet, side));
+                                } else if (componentEntry.component() instanceof NetworkEdgeComponent) {
+                                    edgeNeighbors.add(new PotentialNeighbor(componentEntry, potentialNet, side));
                                 }
                             }
                         }
@@ -208,53 +267,90 @@ public class NetworkManager {
                 }
             }
 
-            Network network;
-
-            // Check how many neighbor networks have been found
-            switch (neighborNets.size()) {
-                // No networks have been found -> Create a new one
-                case 0 -> {
-                    network = createNetwork(world.dimension, networkType);
-                }
-
-                // One networks has been found -> Add to that network
-                case 1 -> {
-                    network = neighborNets.get(0);
-                }
-
-                // Two or more networks have been found, merge them
-                default -> {
-                    network = neighborNets.get(0);
-                    for (int i = 1; i < neighborNets.size(); i++) {
-
-                        if (neighborNets.get(i).getId() == network.getId()) {
-                            continue;
+            // Check the component type
+            if (component instanceof NetworkEdgeComponent) {
+                // If the component is an edge component -> Look for any sorrounding non-edge components and join all of their networks
+                switch (nodeNeighbors.size()) {
+                    // If there were no networks found, create one
+                    case 0 -> {
+                        Network network = createNetwork(world.dimension, networkType);
+                        if (network != null) {
+                            network.addBlock(x, y, z, component);
+                            network.update();
                         }
+                    }
 
-                        network.components.putAll(neighborNets.get(i).components);
-                        neighborNets.get(i).components.clear();
-                        removeNetwork(neighborNets.get(i));
+                    // If there are some networks, connect to all of them
+                    default -> {
+                        for (PotentialNeighbor neighbor : nodeNeighbors) {
+                            if (neighbor.entry.component() instanceof NetworkNodeComponent) {
+                                neighbor.network.addBlock(x, y, z, component);
+                                neighbor.network.update();
+                            }
+                        }
                     }
                 }
-            }
 
-            // Add to the network
-            if (network != null) {
-                network.addBlock(x, y, z, component);
-                network.update();
+            } else if (component instanceof NetworkNodeComponent) {
+                // If the component is a node component -> Look for sorrounding components and merge their networks
+                Network networkToJoin;
+
+                // Check how many node neighbor networks have been found
+                switch (nodeNeighbors.size()) {
+                    // No networks have been found -> Create a new one
+                    case 0 -> {
+                        networkToJoin = createNetwork(world.dimension, networkType);
+                    }
+
+                    // One networks has been found -> Add to that network
+                    case 1 -> {
+                        networkToJoin = nodeNeighbors.get(0).network;
+                    }
+
+                    // Two or more networks have been found, merge them
+                    default -> {
+                        networkToJoin = nodeNeighbors.get(0).network;
+                        for (int i = 1; i < nodeNeighbors.size(); i++) {
+
+                            // If this is the network we are merging into, skip
+                            if (nodeNeighbors.get(i).network.getId() == networkToJoin.getId()) {
+                                continue;
+                            }
+
+                            networkToJoin.components.putAll(nodeNeighbors.get(i).network.components);
+                            nodeNeighbors.get(i).network.components.clear();
+                            removeNetwork(nodeNeighbors.get(i).network);
+                        }
+                    }
+                }
+
+                // Now handle the edges found
+                for (var neighbor : edgeNeighbors) {
+                    // If the neighbor is a stub, eliminate and absorb it
+                    if (neighbor.network.components.size() <= 1 && networkToJoin != null) {
+                        networkToJoin.components.putAll(neighbor.network.components);
+                        neighbor.network.components.clear();
+                        removeNetwork(neighbor.network);
+
+                        // If the neighbor is not a stub, add it to the network, but also leave it in its own network
+                    } else if (neighbor.network.components.size() > 1 && networkToJoin != null) {
+                        networkToJoin.addBlock(neighbor.position.x, neighbor.position.y, neighbor.position.z, neighbor.entry.block());
+                        networkToJoin.update();
+                    }
+
+                }
+
+                // Add to the network
+                if (networkToJoin != null) {
+                    networkToJoin.addBlock(x, y, z, component);
+                    networkToJoin.update();
+                }
             }
         }
     }
 
     public static <T extends Block & NetworkComponent> void removeBlock(World world, int x, int y, int z, T component) {
-        for (NetworkType networkType : component.getNetworkTypes()) {
-            Network net = getAt(world.dimension, x, y, z, networkType.getIdentifier());
-
-            if (net == null) {
-                NyaLib.LOGGER.warn("Removed a block at [x={}, y={}, z={}] which was not in any network of type {}.", x, y, z, networkType.toString());
-                continue;
-            }
-
+        for (Network net : getAt(world.dimension, x, y, z, component.getNetworkTypes())) {
             ArrayList<Vec3i> neighborBlocks = new ArrayList<>();
             for (Direction direction : Direction.values()) {
                 var neighborPos = new Vec3i(x + direction.getOffsetX(), y + direction.getOffsetY(), z + direction.getOffsetZ());
@@ -287,14 +383,14 @@ public class NetworkManager {
                 default -> {
                     net.removeBlock(x, y, z);
 
-                    ArrayList<HashSet<Vec3i>> potentialNetworks = new ArrayList<>(6);
+                    ArrayList<ArrayList<Vec3i>> potentialNetworks = new ArrayList<>(4);
                     // Walk thru all the sides
                     for (Direction dir : Direction.values()) {
-                        Vec3i neighbor = new Vec3i(x + dir.getOffsetX(), y + dir.getOffsetY(), z + dir.getOffsetZ());
+                        Vec3i side = new Vec3i(x + dir.getOffsetX(), y + dir.getOffsetY(), z + dir.getOffsetZ());
 
                         // If the network reaches this neighbor side, walk thru all the blocks
-                        if (net.isAt(neighbor.x, neighbor.y, neighbor.z)) {
-                            HashSet<Vec3i> discovered = net.walk(neighbor);
+                        if (net.isAt(side.x, side.y, side.z)) {
+                            ArrayList<Vec3i> discovered = net.walk(side);
 
                             NyaLib.LOGGER.debug("Discovered a potential network of {} blocks", discovered.size());
 
@@ -303,10 +399,14 @@ public class NetworkManager {
                             // Check if the first block of this potential networks exists in the other potential networks
                             // We dont have to check every block because if theyre connected
                             // somewhere they *should* have access to the same block
-                            for (var potentialNet : potentialNetworks) {
-                                if (potentialNet.contains(discovered.iterator().next())) {
-                                    exists = true;
+                            for (ArrayList<Vec3i> potentialNet : potentialNetworks) {
+                                for (Vec3i neighbor : discovered) {
+                                    if (world.getBlockState(neighbor.x, neighbor.y, neighbor.z).getBlock() instanceof NetworkNodeComponent && potentialNet.contains(neighbor)) {
+                                        exists = true;
+                                        break;
+                                    }
                                 }
+
                             }
 
                             // If it doesnt exist, we can safely assume this is an independed new network
@@ -332,10 +432,21 @@ public class NetworkManager {
                         // The first potential network will be kept in the existing one while others will be transferred to a new one
                         // `net` is the first network here
                         default -> {
+                            // TODO: NEW CODE
+                            // 1.  Determine the largest network
+                            // 2.  Identify which discoveredNetwork is the current network
+                            // 3.  Loop thru the other networks and create new networks for them
+                            // 3.1 Check if we are moving a node or an edge
+                            // 3.2 If we are moving a node, remove it from the current netowrk
+                            //     If we are moving an edge, check if it also has been discoevered by the current network and if yes, dont remove it and add it to both
+                            // 4.  Update all the networks
+                            
+                            
+                            // OLD CODE
                             // Iterate over the new potential networks
                             for (int i = 1; i < potentialNetworks.size(); i++) {
 
-                                Network newNetwork = createNetwork(world.dimension, networkType);
+                                Network newNetwork = createNetwork(world.dimension, net.type);
 
                                 if (newNetwork == null) {
                                     NyaLib.LOGGER.error("Unable to initialize a new network when block was removed");
@@ -344,7 +455,8 @@ public class NetworkManager {
 
                                 // Iterate over every block in this new potential network
                                 for (Vec3i pos : potentialNetworks.get(i)) {
-                                    net.removeBlock(pos.x, pos.y, pos.z);
+                                    // TODO: This should not remove edge components that are also supposed to be present in this network
+                                    net.removeBlock(pos.x, pos.y, pos.z); 
                                     newNetwork.addBlock(
                                             pos.x,
                                             pos.y,
@@ -363,7 +475,6 @@ public class NetworkManager {
                     }
                 }
             }
-
         }
     }
 

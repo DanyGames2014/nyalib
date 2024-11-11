@@ -9,6 +9,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * A base interface representing every NetworkComponent
+ */
 @SuppressWarnings("unused")
 public interface NetworkComponent {
     /**

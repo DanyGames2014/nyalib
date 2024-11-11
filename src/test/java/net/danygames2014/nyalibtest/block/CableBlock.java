@@ -1,19 +1,17 @@
 package net.danygames2014.nyalibtest.block;
 
-import com.oath.cyclops.types.futurestream.Continuation;
 import net.danygames2014.nyalib.network.*;
 import net.danygames2014.nyalibtest.NyaLibTest;
-import net.danygames2014.nyalibtest.blockentity.EmptyBlockEntity;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.template.block.TemplateBlock;
-import net.modificationstation.stationapi.api.template.block.TemplateBlockWithEntity;
 import net.modificationstation.stationapi.api.util.Identifier;
 
-public class CableBlock extends TemplateBlock implements NetworkComponent {
+import java.util.ArrayList;
+
+public class CableBlock extends TemplateBlock implements NetworkNodeComponent {
     public static World theWorld;
 
     public CableBlock(Identifier identifier) {
@@ -28,20 +26,8 @@ public class CableBlock extends TemplateBlock implements NetworkComponent {
     @Override
     public void onPlaced(World world, int x, int y, int z) {
         super.onPlaced(world, x, y, z);
-//        NetworkManager.addBlock(world, x, y, z, this);
         theWorld = world;
     }
-
-//    @Override
-//    protected BlockEntity createBlockEntity() {
-//        return new EmptyBlockEntity();
-//    }
-
-//    @Override
-//    public void onBreak(World world, int x, int y, int z) {
-//        NetworkManager.removeBlock(world, x, y, z, this);
-//        super.onBreak(world, x, y, z);
-//    }
 
     @Override
     public void update(World world, int x, int y, int z, Network network) {
@@ -63,8 +49,9 @@ public class CableBlock extends TemplateBlock implements NetworkComponent {
 
     @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
-        Network net = NetworkManager.getAt(world.dimension, x, y, z, this.getNetworkTypes().get(0).getIdentifier());
-        if (net != null) {
+        ArrayList<Network> networks = NetworkManager.getAt(world.dimension, x, y, z, this.getNetworkTypes());
+        player.method_490("This block is in networks:");
+        for (var net : networks){
             player.method_490("NET " + net.getId() + " HASHCODE: " + net.hashCode());
         }
         return true;
