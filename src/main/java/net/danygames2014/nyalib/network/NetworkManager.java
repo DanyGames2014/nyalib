@@ -390,9 +390,9 @@ public class NetworkManager {
 
                         // If the network reaches this neighbor side, walk thru all the blocks
                         if (net.isAt(side.x, side.y, side.z)) {
-                            ArrayList<Vec3i> discovered = net.walk(side);
+                            ArrayList<Vec3i> discoveredBlocks = net.walk(side);
 
-                            NyaLib.LOGGER.debug("Discovered a potential network of {} blocks", discovered.size());
+                            NyaLib.LOGGER.debug("Discovered a potential network of {} blocks", discoveredBlocks.size());
 
                             boolean exists = false;
 
@@ -400,7 +400,7 @@ public class NetworkManager {
                             // We dont have to check every block because if theyre connected
                             // somewhere they *should* have access to the same block
                             for (ArrayList<Vec3i> potentialNet : potentialNetworks) {
-                                for (Vec3i neighbor : discovered) {
+                                for (Vec3i neighbor : discoveredBlocks) {
                                     if (world.getBlockState(neighbor.x, neighbor.y, neighbor.z).getBlock() instanceof NetworkNodeComponent && potentialNet.contains(neighbor)) {
                                         exists = true;
                                         break;
@@ -411,7 +411,7 @@ public class NetworkManager {
 
                             // If it doesnt exist, we can safely assume this is an independed new network
                             if (!exists) {
-                                potentialNetworks.add(discovered);
+                                potentialNetworks.add(discoveredBlocks);
                             }
                         }
                     }
@@ -434,6 +434,7 @@ public class NetworkManager {
                         default -> {
                             // TODO: NEW CODE
                             // 1.  Determine the largest network
+                            
                             // 2.  Identify which discoveredNetwork is the current network
                             // 3.  Loop thru the other networks and create new networks for them
                             // 3.1 Check if we are moving a node or an edge
