@@ -4,6 +4,7 @@ import net.danygames2014.nyalib.item.ItemHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ChestBlockEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.modificationstation.stationapi.api.util.math.Direction;
@@ -30,6 +31,8 @@ public abstract class ChestBlockEntityMixin extends BlockEntity implements ItemH
 
 
     // API Methods
+
+    @Shadow private ItemStack[] inventory;
 
     @Override
     public boolean canExtractItem(@Nullable Direction direction) {
@@ -115,6 +118,11 @@ public abstract class ChestBlockEntityMixin extends BlockEntity implements ItemH
         }
 
         return this.size();
+    }
+
+    @Override
+    public ItemStack[] getInventory(@Nullable Direction direction) {
+        return this.inventory;
     }
 
     // Double Chest Helper Methods

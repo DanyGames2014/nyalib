@@ -47,7 +47,7 @@ public class NetworkPathManager {
         // Calculate Path
         AStar aStar = new AStar(from, to, network.components.keySet().toArray(new Vec3i[0]));
         Vec3i[] path = aStar.calculate();
-
+        
         // Calculate Path Cost
         int cost = 0;
         for (Vec3i pos : path) {

@@ -24,6 +24,8 @@ public abstract class DispenserBlockEntityMixin extends BlockEntity implements I
     @Shadow
     public abstract int size();
 
+    @Shadow private ItemStack[] inventory;
+
     @Override
     public boolean canExtractItem(@Nullable Direction direction) {
         return true;
@@ -82,6 +84,11 @@ public abstract class DispenserBlockEntityMixin extends BlockEntity implements I
     @Override
     public ItemStack getStackInSlot(int slot, @Nullable Direction direction) {
         return this.getStack(slot);
+    }
+
+    @Override
+    public ItemStack[] getInventory(@Nullable Direction direction) {
+        return this.inventory;
     }
 
     @Override

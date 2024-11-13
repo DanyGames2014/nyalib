@@ -1,5 +1,6 @@
 package net.danygames2014.nyalib.item;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
@@ -17,7 +18,7 @@ public interface ItemHandler {
     boolean canExtractItem(@Nullable Direction direction);
 
     /**
-     * Extract an item from the block
+     * Extract an item in the given slot from the block
      *
      * @param slot      The slot to extract from
      * @param amount    The amount to extract (can be larger than the maximum stack size)
@@ -25,6 +26,40 @@ public interface ItemHandler {
      * @return The ItemStack extracted, null if nothing is extracted
      */
     ItemStack extractItem(int slot, int amount, @Nullable Direction direction);
+
+
+    /**
+     * Extract the given item in any slot from the block
+     *
+     * @param item      The Item to extract
+     * @param amount    The amount to extract (can be larger than the maximum stack size)
+     * @param direction The direction to extract from
+     * @return The ItemStack extracted, null if nothing is extracted
+     */
+    default ItemStack extractItem(Item item, int amount, @Nullable Direction direction){
+        ItemStack currentStack = null;
+        int remaining = amount;
+
+        for (int i = 0; i < getSize(direction); i++) {
+            if(remaining <= 0){
+                break;
+            }
+
+            if (currentStack != null) {
+                if(this.getStackInSlot(i, direction).equals(currentStack)){
+                    ItemStack extractedStack = extractItem(i, remaining, direction);
+                    remaining -= extractedStack.count;
+                    currentStack.count += extractedStack.count;
+                }
+            } else {
+                ItemStack extractedStack = extractItem(i, remaining, direction);
+                remaining -= extractedStack.count;
+                currentStack = extractedStack;
+            }
+        }
+
+        return currentStack;
+    }
 
     /**
      * Check if the block supports inserting items on this side, if this returns false there
@@ -67,12 +102,19 @@ public interface ItemHandler {
     /**
      * Get the size of the block inventory
      *
+     * @param direction The direction to get the size from
      * @return The number of slots this block has
      */
     int getSize(@Nullable Direction direction);
 
-    // TODO: getInventory
-    
+    /**
+     * Get the entire inventory of the block
+     *
+     * @param direction The direction to get the inventory from
+     * @return An array of all the ItemStacks
+     */
+    ItemStack[] getInventory(@Nullable Direction direction);
+
     /**
      * Attempts to send {@link ItemStack} to the given side
      *

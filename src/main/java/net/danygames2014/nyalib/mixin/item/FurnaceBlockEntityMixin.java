@@ -24,6 +24,8 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Ite
     @Shadow
     public abstract int size();
 
+    @Shadow private ItemStack[] inventory;
+
     @Override
     public boolean canExtractItem(@Nullable Direction direction) {
 //        if (direction == null) {
@@ -92,6 +94,11 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Ite
     @Override
     public ItemStack getStackInSlot(int slot, @Nullable Direction direction) {
         return this.getStack(slot);
+    }
+
+    @Override
+    public ItemStack[] getInventory(@Nullable Direction direction) {
+        return this.inventory;
     }
 
     @Override
