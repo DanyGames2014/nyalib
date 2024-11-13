@@ -96,6 +96,20 @@ public interface NetworkComponent {
     }
 
     /**
+     * Gets the path finding cost of this component 
+     *
+     * @param world     The world this component is in
+     * @param x         The x-position of this component
+     * @param y         The y-position of this component
+     * @param z         The z-position of this component
+     * @param network   The network the component is in
+     * @return The pathing cost of this component
+     */
+    default int getPathingCost(World world, int x, int y, int z, @Nullable Network network) {
+        return 1;
+    }
+
+    /**
      * Called when the physical topology of the network updates
      *
      * @param world   The world this network is in

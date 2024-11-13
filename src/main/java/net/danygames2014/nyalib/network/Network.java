@@ -15,6 +15,7 @@ import java.util.*;
 @SuppressWarnings("unused")
 public class Network {
     protected HashMap<Vec3i, NetworkComponentEntry> components;
+    public NetworkPathManager pathManager;
     public World world;
     public NetworkType type;
     protected int id;
@@ -23,6 +24,7 @@ public class Network {
         this.world = world;
         this.type = type;
         components = new HashMap<>();
+        pathManager = new NetworkPathManager(this);
     }
 
     private Network(World world) {
@@ -55,9 +57,29 @@ public class Network {
         return components.get(pos);
     }
 
+    public NetworkPath getPath(Vec3i from, Vec3i to) {
+        return pathManager.getPath(from, to);
+    }
+    
+    public NetworkPath getPath(NetworkComponentEntry from, NetworkComponentEntry to) {
+        return getPath(from.pos(), to.pos());
+    }
+
+    /**
+     * Allows you to add a check on paths validity,
+     * Keep in mind that the path manager already checks if all components on the path exist
+     * 
+     * @param path The path to validate 
+     * @return <code>true</code> if the path is valid
+     */
+    public boolean isPathValid(NetworkPath path) {
+        return true;
+    }
+    
     public void addBlock(int x, int y, int z, Block block) {
         if (block instanceof NetworkComponent component) {
-            components.put(new Vec3i(x, y, z), new NetworkComponentEntry(block, component, new NbtCompound()));
+            Vec3i pos = new Vec3i(x, y, z);
+            components.put(pos, new NetworkComponentEntry(pos, block, component, new NbtCompound()));
             component.onAddedToNet(world, x, y, z, this);
         }
     }
@@ -264,7 +286,7 @@ public class Network {
                 // Put the block in Network
                 network.components.put(
                         pos,
-                        new NetworkComponentEntry(block, component, blockNbt.getCompound("entryData"))
+                        new NetworkComponentEntry(pos, block, component, blockNbt.getCompound("entryData"))
                 );
             }
         }
