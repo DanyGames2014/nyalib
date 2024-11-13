@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@SuppressWarnings({"UnusedReturnValue", "DuplicatedCode", "LoggingSimilarMessage", "CollectionAddAllCanBeReplacedWithConstructor", "unused", "RedundantLabeledSwitchRuleCodeBlock", "SwitchStatementWithTooFewBranches"})
+@SuppressWarnings({"UnusedReturnValue", "DuplicatedCode", "LoggingSimilarMessage", "CollectionAddAllCanBeReplacedWithConstructor", "unused", "RedundantLabeledSwitchRuleCodeBlock", "SwitchStatementWithTooFewBranches", "ExtractMethodRecommender"})
 public class NetworkManager {
     /**
      * For each Dimension there is a hashmap which takes network type Identifier as a key
@@ -432,51 +432,83 @@ public class NetworkManager {
                         // The first potential network will be kept in the existing one while others will be transferred to a new one
                         // `net` is the first network here
                         default -> {
-                            // TODO: NEW CODE
-                            // 1.  Determine the largest network
                             
-                            // 2.  Identify which discoveredNetwork is the current network
-                            // 3.  Loop thru the other networks and create new networks for them
-                            // 3.1 Check if we are moving a node or an edge
-                            // 3.2 If we are moving a node, remove it from the current netowrk
-                            //     If we are moving an edge, check if it also has been discoevered by the current network and if yes, dont remove it and add it to both
-                            // 4.  Update all the networks
+                            // 1.Determine the largest and current from potential networks
+                            // 2.Identify which discoveredNetwork is the current network
                             
-                            
-                            // OLD CODE
-                            // Iterate over the new potential networks
-                            for (int i = 1; i < potentialNetworks.size(); i++) {
+                            int largestNetworkIndex = 0;
+                            int largestNetworkSize = 0;
+                            int currentNetworkIndex = 0;
 
-                                Network newNetwork = createNetwork(world.dimension, net.type);
-
-                                if (newNetwork == null) {
-                                    NyaLib.LOGGER.error("Unable to initialize a new network when block was removed");
-                                    return;
+                            for (int i = 0; i < potentialNetworks.size(); i++) {
+                                if (potentialNetworks.get(i).size() > largestNetworkSize) {
+                                    largestNetworkIndex = i;
+                                    largestNetworkSize = potentialNetworks.get(i).size();
                                 }
 
-                                // Iterate over every block in this new potential network
-                                for (Vec3i pos : potentialNetworks.get(i)) {
-                                    // TODO: This should not remove edge components that are also supposed to be present in this network
-                                    net.removeBlock(pos.x, pos.y, pos.z); 
-                                    newNetwork.addBlock(
-                                            pos.x,
-                                            pos.y,
-                                            pos.z,
-                                            world.getBlockState(pos.x, pos.y, pos.z).getBlock()
-                                    );
+                                for (Map.Entry<Vec3i, NetworkComponentEntry> currentComponent : net.components.entrySet()) {
+                                    if (potentialNetworks.get(i).contains(currentComponent.getKey())) {
+                                        currentNetworkIndex = i;
+                                        break;
+                                    }
                                 }
-
-                                // Update the new network
-                                newNetwork.update();
                             }
 
-                            // Update the existing network
+                            // 3.  Loop thru the other networks and create new networks for them
+                            for (int i = 0; i < potentialNetworks.size(); i++) {
+                                if (i != largestNetworkIndex) {
+                                    Network newNetwork = createNetwork(world.dimension, net.type);
+
+                                    if (newNetwork == null) {
+                                        NyaLib.LOGGER.error("Unable to initialize a new network when block was removed");
+                                        return;
+                                    }
+
+                                    for (Vec3i pos : potentialNetworks.get(i)) {
+                                        // 3.1 Check if we are moving a node or an edge
+                                        // 3.2 If we are moving a node, remove it from the current netowrk
+                                        if (isNode(world, pos.x, pos.y, pos.z)) {
+                                            net.removeBlock(pos.x, pos.y, pos.z);
+                                            newNetwork.addBlock(
+                                                    pos.x,
+                                                    pos.y,
+                                                    pos.z,
+                                                    world.getBlockState(pos.x, pos.y, pos.z).getBlock()
+                                            );
+
+                                            // If we are moving an edge, check if it also has been discoevered by the current network and if yes, dont remove it and add it to both
+                                        } else if (isEdge(world, pos.x, pos.y, pos.z)) {
+                                            if (potentialNetworks.get(currentNetworkIndex).contains(pos)) {
+                                                newNetwork.addBlock(
+                                                        pos.x,
+                                                        pos.y,
+                                                        pos.z,
+                                                        world.getBlockState(pos.x, pos.y, pos.z).getBlock()
+                                                );
+                                            }
+                                        }
+                                    }
+
+                                    newNetwork.update();
+                                }
+                            }
+
+
+                            // 4.  Update all the networks
                             net.update();
                         }
                     }
                 }
             }
         }
+    }
+
+    public static boolean isEdge(World world, int x, int y, int z) {
+        return world.getBlockState(x, y, z).getBlock() instanceof NetworkEdgeComponent;
+    }
+
+    public static boolean isNode(World world, int x, int y, int z) {
+        return world.getBlockState(x, y, z).getBlock() instanceof NetworkNodeComponent;
     }
 
     // Load & Save
