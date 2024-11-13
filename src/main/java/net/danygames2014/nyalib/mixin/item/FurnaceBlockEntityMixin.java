@@ -1,5 +1,6 @@
 package net.danygames2014.nyalib.mixin.item;
 
+import net.danygames2014.nyalib.NyaLib;
 import net.danygames2014.nyalib.item.ItemHandler;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.FurnaceBlockEntity;
@@ -24,35 +25,72 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Ite
     @Shadow
     public abstract int size();
 
-    @Shadow private ItemStack[] inventory;
+    @Shadow
+    private ItemStack[] inventory;
 
     @Override
     public boolean canExtractItem(@Nullable Direction direction) {
-//        if (direction == null) {
-//            return false;
-//        }
-//
-//        return direction != Direction.DOWN && direction != Direction.UP;
-        return true;
+        // Simplified Handling
+        if (NyaLib.ITEM_CONFIG.simplifiedFurnaceHandling) {
+            return true;
+        }
+
+        // Normal Hnadling
+        if (direction == null) {
+            return false;
+        }
+
+        return direction != Direction.DOWN && direction != Direction.UP;
     }
 
     @Override
     public ItemStack extractItem(int slot, int amount, @Nullable Direction direction) {
-        return this.removeStack(slot, amount);
+        // Simplified Handling
+        if (NyaLib.ITEM_CONFIG.simplifiedFurnaceHandling) {
+            return this.removeStack(slot, amount);
+        }
+
+        // Normal Handling
+        if (canExtractItem(direction) && slot == 2) {
+            return this.removeStack(slot, amount);
+        } else {
+            return null;
+        }
     }
 
     @Override
     public boolean canInsertItem(@Nullable Direction direction) {
-//        if (direction == null) {
-//            return false;
-//        }
-//
-//        return direction == Direction.DOWN || direction == Direction.UP;
-        return true;
+        // Simplified Handling
+        if (NyaLib.ITEM_CONFIG.simplifiedFurnaceHandling) {
+            return true;
+        }
+
+        // Normal Handling
+        if (direction == null) {
+            return false;
+        }
+
+        return direction == Direction.DOWN || direction == Direction.UP;
     }
 
     @Override
     public ItemStack insertItem(ItemStack stack, int slot, @Nullable Direction direction) {
+        if (!NyaLib.ITEM_CONFIG.simplifiedFurnaceHandling) {
+            if (direction == null) {
+                return stack;
+            }
+
+            // Disallow inserting into Input from Bottom
+            if (slot == 0 && direction == Direction.DOWN) {
+                return stack;
+            }
+            
+            // Disallow inserting Fuel from Top
+            if(slot == 1 && direction == Direction.UP) {
+                return stack;
+            }
+        }
+
         ItemStack slotStack;
 
         slotStack = this.getStack(slot);

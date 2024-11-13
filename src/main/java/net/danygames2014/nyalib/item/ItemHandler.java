@@ -46,7 +46,7 @@ public interface ItemHandler {
             }
 
             if (currentStack != null) {
-                if(this.getStackInSlot(i, direction).equals(currentStack)){
+                if(this.getStackInSlot(i, direction).isItemEqual(currentStack)){
                     ItemStack extractedStack = extractItem(i, remaining, direction);
                     remaining -= extractedStack.count;
                     currentStack.count += extractedStack.count;
