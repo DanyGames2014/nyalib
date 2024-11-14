@@ -4,7 +4,6 @@ import net.danygames2014.nyalib.item.ItemHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ChestBlockEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.modificationstation.stationapi.api.util.math.Direction;
@@ -92,7 +91,7 @@ public abstract class ChestBlockEntityMixin extends BlockEntity implements ItemH
     public ItemStack insertItem(ItemStack stack, @Nullable Direction direction) {
         ItemStack insertedStack = stack.copy();
 
-        for (int i = 0; i < this.getSize(direction); ++i) {
+        for (int i = 0; i < this.getItemSlots(direction); ++i) {
             insertedStack = insertItem(insertedStack, i, direction);
             if (insertedStack == null) {
                 return insertedStack;
@@ -103,7 +102,7 @@ public abstract class ChestBlockEntityMixin extends BlockEntity implements ItemH
     }
 
     @Override
-    public ItemStack getStackInSlot(int slot, @Nullable Direction direction) {
+    public ItemStack getItemInSlot(int slot, @Nullable Direction direction) {
         if (slot > 26 && isDoubleChest()) {
             return getSecondChest().getStack(slot - 27);
         }
@@ -112,7 +111,7 @@ public abstract class ChestBlockEntityMixin extends BlockEntity implements ItemH
     }
 
     @Override
-    public int getSize(Direction direction) {
+    public int getItemSlots(Direction direction) {
         if (isDoubleChest()) {
             return this.size() + getSecondChest().size();
         }

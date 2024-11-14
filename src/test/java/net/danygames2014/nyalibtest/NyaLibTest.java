@@ -3,10 +3,7 @@ package net.danygames2014.nyalibtest;
 import net.danygames2014.nyalib.event.NetworkTypeRegistryEvent;
 import net.danygames2014.nyalib.network.NetworkType;
 import net.danygames2014.nyalibtest.block.*;
-import net.danygames2014.nyalibtest.blockentity.EmptyBlockEntity;
-import net.danygames2014.nyalibtest.blockentity.EnergyReceiverBlockEntity;
-import net.danygames2014.nyalibtest.blockentity.InfiniteEnergyBlockEntity;
-import net.danygames2014.nyalibtest.blockentity.SideHopperBlockEntity;
+import net.danygames2014.nyalibtest.blockentity.*;
 import net.danygames2014.nyalibtest.network.BasicNetworkType;
 import net.danygames2014.nyalibtest.network.EnergyNetwork;
 import net.danygames2014.nyalibtest.network.EnergyNetworkType;
@@ -29,6 +26,8 @@ public class NyaLibTest {
     public static Block cableBlock;
     public static Block eastWestCableBlock;
     public static Block networkEdgeBlock;
+    public static Block fluidTankBlock;
+    public static Block infiniteWaterBlock;
 
     public static NetworkType basicNetworkType;
     public static NetworkType energyNetworkType;
@@ -41,6 +40,8 @@ public class NyaLibTest {
         cableBlock = new CableBlock(NAMESPACE.id("cable_block")).setTranslationKey(NAMESPACE, "cable_block");
         eastWestCableBlock = new EastWestCableBlock(NAMESPACE.id("east_west_cable")).setTranslationKey(NAMESPACE, "east_west_cable");
         networkEdgeBlock = new NetworkEdgeBlock(NAMESPACE.id("network_edge")).setTranslationKey(NAMESPACE, "network_edge");
+        fluidTankBlock = new FluidTankBlock(NAMESPACE.id("fluid_tank")).setTranslationKey(NAMESPACE, "fluid_tank");
+        infiniteWaterBlock = new InfiniteWaterBlock(NAMESPACE.id("infinite_water_block")).setTranslationKey(NAMESPACE, "infinite_water_block");
     }
 
     @EventListener
@@ -48,7 +49,8 @@ public class NyaLibTest {
         event.register(InfiniteEnergyBlockEntity.class, "infinite_energy");
         event.register(EnergyReceiverBlockEntity.class, "energy_receiver");
         event.register(SideHopperBlockEntity.class, "side_hopper");
-        event.register(EmptyBlockEntity.class, "empty");
+        event.register(FluidTankBlockEntity.class, "fluid_tank");
+        event.register(InfiniteWaterBlockEntity.class, "infinite_water_block");
     }
 
     @EventListener

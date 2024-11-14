@@ -3,7 +3,6 @@ package net.danygames2014.nyalibtest.blockentity;
 import net.danygames2014.nyalib.item.ItemHandler;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.state.property.Properties;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
@@ -29,7 +28,7 @@ public class SideHopperBlockEntity extends BlockEntity {
                 // If there is nothing in internal buffer, try to retrive item
                 if (internalBuffer == null){
                     if(south.canExtractItem(facing.getOpposite())){
-                        for (int i = 0; i < south.getSize(facing.getOpposite()); i++) {
+                        for (int i = 0; i < south.getItemSlots(facing.getOpposite()); i++) {
                             internalBuffer = south.extractItem(i, 999, facing.getOpposite());
                             if(internalBuffer != null){
                                 break;

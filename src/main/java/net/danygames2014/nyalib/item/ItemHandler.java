@@ -7,7 +7,7 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unused")
-public interface ItemHandler {
+public interface ItemHandler extends ItemCapable {
     /**
      * Check if the block supports extracting items on this side, if this returns false there
      * should be no point in trying to use {@link #extractItem(int, int, Direction)}
@@ -40,13 +40,13 @@ public interface ItemHandler {
         ItemStack currentStack = null;
         int remaining = amount;
 
-        for (int i = 0; i < getSize(direction); i++) {
+        for (int i = 0; i < getItemSlots(direction); i++) {
             if(remaining <= 0){
                 break;
             }
 
             if (currentStack != null) {
-                if(this.getStackInSlot(i, direction).isItemEqual(currentStack)){
+                if(this.getItemInSlot(i, direction).isItemEqual(currentStack)){
                     ItemStack extractedStack = extractItem(i, remaining, direction);
                     remaining -= extractedStack.count;
                     currentStack.count += extractedStack.count;
@@ -97,7 +97,7 @@ public interface ItemHandler {
      * @param direction The direction to query from
      * @return The {@link ItemStack} in the slot
      */
-    ItemStack getStackInSlot(int slot, @Nullable Direction direction);
+    ItemStack getItemInSlot(int slot, @Nullable Direction direction);
 
     /**
      * Get the size of the block inventory
@@ -105,7 +105,7 @@ public interface ItemHandler {
      * @param direction The direction to get the size from
      * @return The number of slots this block has
      */
-    int getSize(@Nullable Direction direction);
+    int getItemSlots(@Nullable Direction direction);
 
     /**
      * Get the entire inventory of the block

@@ -1,5 +1,10 @@
 package net.danygames2014.nyalib.fluid;
 
+import net.minecraft.nbt.NbtCompound;
+import net.modificationstation.stationapi.api.util.Identifier;
+
+import java.util.Objects;
+
 @SuppressWarnings("unused")
 public class FluidStack {
     /**
@@ -12,13 +17,16 @@ public class FluidStack {
      */
     public int amount;
 
-    private FluidStack() {}
-    
-    private FluidStack(int amount) {}
-    
+    private FluidStack() {
+    }
+
+    private FluidStack(int amount) {
+    }
+
     /**
      * Initializes a new FluidStack with the given fluid and amount
-     * @param fluid The fluid to initialize the ItemStack with
+     *
+     * @param fluid  The fluid to initialize the ItemStack with
      * @param amount The amount of the fluid in mB
      */
     public FluidStack(Fluid fluid, int amount) {
@@ -26,11 +34,74 @@ public class FluidStack {
         this.amount = amount;
     }
 
+    public FluidStack(Identifier id) {
+        this(id, 1000);
+    }
+
+    public FluidStack(Identifier id, int amount) {
+        this.fluid = FluidRegistry.get(id);
+        this.amount = amount;
+    }
+
+    public FluidStack(NbtCompound nbt) {
+        this.readNbt(nbt);
+    }
+
+    public FluidStack copy() {
+        return new FluidStack(this.fluid, this.amount);
+    }
+
     /**
      * Initializes a new FluidStack with the given fluid and 1000mB
+     *
      * @param fluid The fluid to initialize the ItemStack with
      */
     public FluidStack(Fluid fluid) {
         this(fluid, 1000);
+    }
+
+    public boolean isFluidEqual(FluidStack other) {
+        if (other == null) {
+            return false;
+        }
+
+        return other.fluid == this.fluid;
+    }
+
+    @Override
+    public final boolean equals(Object other) {
+        if(other instanceof FluidStack otherStack) {
+            return isFluidEqual(otherStack);
+        }
+        
+        return false;
+    }
+
+    public NbtCompound writeNbt(NbtCompound nbt) {
+        nbt.putString("fluid", this.fluid.getIdentifier().toString());
+        nbt.putInt("amount", this.amount);
+        return nbt;
+    }
+
+    public void readNbt(NbtCompound nbt) {
+        this.fluid = FluidRegistry.get(Identifier.of(nbt.getString("fluid")));
+        this.amount = nbt.getInt("amount");
+    }
+
+    public FluidStack fromNbt(NbtCompound nbt) {
+        FluidStack stack = new FluidStack();
+
+        stack.readNbt(nbt);
+
+        if (stack.fluid != null) {
+            return stack;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "FluidStack { Fluid = " + fluid.getTranslatedName() + " | Amount = " + amount + "mB }";
     }
 }

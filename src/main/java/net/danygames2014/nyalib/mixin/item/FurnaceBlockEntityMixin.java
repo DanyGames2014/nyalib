@@ -119,7 +119,7 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Ite
     public ItemStack insertItem(ItemStack stack, @Nullable Direction direction) {
         ItemStack insertedStack = stack.copy();
 
-        for (int i = 0; i < this.getSize(direction); ++i) {
+        for (int i = 0; i < this.getItemSlots(direction); ++i) {
             insertedStack = insertItem(insertedStack, i, direction);
             if (insertedStack == null) {
                 return insertedStack;
@@ -130,7 +130,7 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Ite
     }
 
     @Override
-    public ItemStack getStackInSlot(int slot, @Nullable Direction direction) {
+    public ItemStack getItemInSlot(int slot, @Nullable Direction direction) {
         return this.getStack(slot);
     }
 
@@ -140,7 +140,7 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Ite
     }
 
     @Override
-    public int getSize(Direction direction) {
+    public int getItemSlots(Direction direction) {
         return this.size();
     }
 }
