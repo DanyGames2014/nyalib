@@ -29,6 +29,22 @@ public interface ItemHandler extends ItemCapable {
 
 
     /**
+     * Extract any item from the given direction
+     *
+     * @param direction The direction to extract from
+     * @return The extracted ItemStack
+     */
+    default ItemStack extractItem(@Nullable Direction direction) {
+        for (int i = 0; i < getItemSlots(direction); i++) {
+            if(getItemInSlot(i, direction) != null) {
+                return extractItem(i, Integer.MAX_VALUE, direction);
+            }
+        }
+        return null;
+    }
+
+
+    /**
      * Extract the given item in any slot from the block
      *
      * @param item      The Item to extract
@@ -36,25 +52,27 @@ public interface ItemHandler extends ItemCapable {
      * @param direction The direction to extract from
      * @return The ItemStack extracted, null if nothing is extracted
      */
-    default ItemStack extractItem(Item item, int amount, @Nullable Direction direction){
+    default ItemStack extractItem(Item item, int amount, @Nullable Direction direction) {
         ItemStack currentStack = null;
         int remaining = amount;
 
         for (int i = 0; i < getItemSlots(direction); i++) {
-            if(remaining <= 0){
+            if (remaining <= 0) {
                 break;
             }
 
             if (currentStack != null) {
-                if(this.getItemInSlot(i, direction).isItemEqual(currentStack)){
+                if (this.getItemInSlot(i, direction).isItemEqual(currentStack)) {
                     ItemStack extractedStack = extractItem(i, remaining, direction);
                     remaining -= extractedStack.count;
                     currentStack.count += extractedStack.count;
                 }
             } else {
-                ItemStack extractedStack = extractItem(i, remaining, direction);
-                remaining -= extractedStack.count;
-                currentStack = extractedStack;
+                if (getItemInSlot(i, direction).isOf(item)) {
+                    ItemStack extractedStack = extractItem(i, remaining, direction);
+                    remaining -= extractedStack.count;
+                    currentStack = extractedStack;
+                }
             }
         }
 
