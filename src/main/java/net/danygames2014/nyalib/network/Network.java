@@ -132,44 +132,6 @@ public class Network {
         }
     }
 
-    /**
-     * @param start The position to start walking from
-     * @return A list of blocks discovered
-     * @author paulevs
-     */
-    public HashSet<Vec3i> oldWalk(Vec3i start) {
-        ArrayList<Set<Vec3i>> edges = new ArrayList<>();
-        HashSet<Vec3i> result = new HashSet<>();
-
-        edges.add(Sets.newHashSet(start));
-        edges.add(Sets.newHashSet());
-
-        byte n = 0;
-        boolean done = false;
-        while (!done) {
-            Set<Vec3i> oldEdge = edges.get(n & 1);
-            Set<Vec3i> newEdge = edges.get((n + 1) & 1);
-            n = (byte) ((n + 1) & 1);
-            oldEdge.forEach(pos -> {
-                for (Direction dir : Direction.values()) {
-                    Vec3i side = new Vec3i(pos.x + dir.getOffsetX(), pos.y + dir.getOffsetY(), pos.z + dir.getOffsetZ());
-                    if (components.containsKey(side) && !result.contains(side)) {
-                        if (getEntry(side).component().canConnectTo(world, pos.x, pos.y, pos.z, this, dir)) {
-                            if (!(getEntry(pos).component() instanceof NetworkEdgeComponent)) {
-                                newEdge.add(side);
-                            }
-                        }
-                    }
-                }
-            });
-            done = oldEdge.isEmpty();
-            result.addAll(oldEdge);
-            oldEdge.clear();
-        }
-
-        return result;
-    }
-
     public ArrayList<Vec3i> walk(Vec3i start) {
         // ArrayList for list of blocks yet to explore
         ArrayList<Vec3i> open = new ArrayList<>();
