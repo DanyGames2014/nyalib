@@ -5,6 +5,7 @@ import net.danygames2014.nyalib.item.ItemHandler;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.FurnaceBlockEntity;
 import net.minecraft.item.ItemStack;
+import net.modificationstation.stationapi.api.recipe.FuelRegistry;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -84,11 +85,16 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Ite
             if (slot == 0 && direction == Direction.DOWN) {
                 return stack;
             }
-            
+
             // Disallow inserting Fuel from Top
-            if(slot == 1 && direction == Direction.UP) {
+            if (slot == 1 && direction == Direction.UP) {
                 return stack;
             }
+        }
+
+        // Only allow fuels into the fuel slot
+        if (slot == 1 && FuelRegistry.getFuelTime(stack) <= 0) {
+            return stack;
         }
 
         ItemStack slotStack;
