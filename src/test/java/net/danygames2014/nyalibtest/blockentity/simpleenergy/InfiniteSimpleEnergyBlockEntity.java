@@ -1,17 +1,17 @@
-package net.danygames2014.nyalibtest.blockentity;
+package net.danygames2014.nyalibtest.blockentity.simpleenergy;
 
-import net.danygames2014.nyalib.energy.EnergyHandler;
+import net.danygames2014.nyalib.energy.simple.SimpleEnergyHandler;
 import net.minecraft.block.entity.BlockEntity;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
-public class InfiniteEnergyBlockEntity extends BlockEntity implements EnergyHandler {
+public class InfiniteSimpleEnergyBlockEntity extends BlockEntity implements SimpleEnergyHandler {
     @Override
     public void tick() {
         for (Direction dir : Direction.values()) {
             BlockEntity blockEntity = world.getBlockEntity(x + dir.getOffsetX(), y + dir.getOffsetY(), z + dir.getOffsetZ());
-            if (blockEntity instanceof EnergyHandler energyHandler) {
-                if (energyHandler.canInsertEnergy(dir.getOpposite())) {
-                    energyHandler.insertEnergy(Integer.MAX_VALUE, dir.getOpposite());
+            if (blockEntity instanceof SimpleEnergyHandler simpleEnergyHandler) {
+                if (simpleEnergyHandler.canInsertEnergy(dir.getOpposite())) {
+                    simpleEnergyHandler.insertEnergy(Integer.MAX_VALUE, dir.getOpposite());
                 }
             }
         }

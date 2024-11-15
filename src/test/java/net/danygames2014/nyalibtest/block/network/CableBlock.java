@@ -1,9 +1,6 @@
-package net.danygames2014.nyalibtest.block;
+package net.danygames2014.nyalibtest.block.network;
 
-import net.danygames2014.nyalib.network.Network;
-import net.danygames2014.nyalib.network.NetworkEdgeComponent;
-import net.danygames2014.nyalib.network.NetworkManager;
-import net.danygames2014.nyalib.network.NetworkType;
+import net.danygames2014.nyalib.network.*;
 import net.danygames2014.nyalibtest.NyaLibTest;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,10 +11,10 @@ import net.modificationstation.stationapi.api.util.Identifier;
 
 import java.util.ArrayList;
 
-public class NetworkEdgeBlock extends TemplateBlock implements NetworkEdgeComponent {
+public class CableBlock extends TemplateBlock implements NetworkNodeComponent {
     public static World theWorld;
 
-    public NetworkEdgeBlock(Identifier identifier) {
+    public CableBlock(Identifier identifier) {
         super(identifier, Material.STONE);
     }
 

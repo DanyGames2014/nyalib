@@ -1,4 +1,4 @@
-package net.danygames2014.nyalibtest.blockentity;
+package net.danygames2014.nyalibtest.blockentity.item;
 
 import net.danygames2014.nyalib.item.ItemHandler;
 import net.minecraft.block.entity.BlockEntity;

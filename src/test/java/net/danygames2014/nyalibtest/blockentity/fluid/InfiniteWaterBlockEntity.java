@@ -1,4 +1,4 @@
-package net.danygames2014.nyalibtest.blockentity;
+package net.danygames2014.nyalibtest.blockentity.fluid;
 
 import net.danygames2014.nyalib.fluid.Fluids;
 import net.danygames2014.nyalib.fluid.FluidHandler;

@@ -1,14 +1,24 @@
 package net.danygames2014.nyalib.energy;
 
-public interface EnergyStorage extends EnergyCapable {
-    /**
-     * @return The amount of energy stored
-     */
-    int getEnergyStored();
-
-
-    /**
-     * @return The maximum amount of energy stored
-     */
-    int getMaxEnergyStored();
+@SuppressWarnings("unused")
+public interface EnergyStorage extends EnergyHandler {
+    int getStoredEnergy();
+    
+    int getEnergyCapacity();
+    
+    default int getRemainingCapacity(){
+        return getEnergyCapacity() - getStoredEnergy();
+    }
+    
+    int setEnergy(int energy);
+    
+    int changeEnergy(int amount);
+    
+    default int addEnergy(int amount){
+        return changeEnergy(amount);
+    }
+    
+    default int removeEnergy(int amount){
+        return changeEnergy(-amount);
+    }
 }

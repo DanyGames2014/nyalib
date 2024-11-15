@@ -1,4 +1,4 @@
-package net.danygames2014.nyalibtest.block;
+package net.danygames2014.nyalibtest.block.network;
 
 import net.danygames2014.nyalib.network.*;
 import net.danygames2014.nyalibtest.NyaLibTest;

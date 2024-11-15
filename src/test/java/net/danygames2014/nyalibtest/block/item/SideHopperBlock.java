@@ -1,6 +1,6 @@
-package net.danygames2014.nyalibtest.block;
+package net.danygames2014.nyalibtest.block.item;
 
-import net.danygames2014.nyalibtest.blockentity.SideHopperBlockEntity;
+import net.danygames2014.nyalibtest.blockentity.item.SideHopperBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;

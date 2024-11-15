@@ -1,16 +1,16 @@
-package net.danygames2014.nyalibtest.blockentity;
+package net.danygames2014.nyalibtest.blockentity.simpleenergy;
 
-import net.danygames2014.nyalib.energy.EnergyHandler;
-import net.danygames2014.nyalib.energy.EnergyStorage;
+import net.danygames2014.nyalib.energy.simple.SimpleEnergyHandler;
+import net.danygames2014.nyalib.energy.simple.SimpleEnergyStorage;
 import net.minecraft.block.entity.BlockEntity;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import net.modificationstation.stationapi.api.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
 
-public class EnergyReceiverBlockEntity extends BlockEntity implements EnergyHandler, EnergyStorage {
+public class SimpleEnergyReceiverBlockEntity extends BlockEntity implements SimpleEnergyHandler, SimpleEnergyStorage {
     public int storedEnergy;
 
-    public EnergyReceiverBlockEntity() {
+    public SimpleEnergyReceiverBlockEntity() {
         this.storedEnergy = 0;
     }
 

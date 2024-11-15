@@ -1,6 +1,6 @@
-package net.danygames2014.nyalibtest.block;
+package net.danygames2014.nyalibtest.block.simpleenergy;
 
-import net.danygames2014.nyalibtest.blockentity.EnergyReceiverBlockEntity;
+import net.danygames2014.nyalibtest.blockentity.simpleenergy.SimpleEnergyReceiverBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
@@ -8,8 +8,8 @@ import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.template.block.TemplateBlockWithEntity;
 import net.modificationstation.stationapi.api.util.Identifier;
 
-public class EnergyReceiverBlock extends TemplateBlockWithEntity {
-    public EnergyReceiverBlock(Identifier identifier) {
+public class SimpleEnergyReceiverBlock extends TemplateBlockWithEntity {
+    public SimpleEnergyReceiverBlock(Identifier identifier) {
         super(identifier, Material.METAL);
         this.setHardness(1F);
         this.setResistance(1F);
@@ -18,7 +18,7 @@ public class EnergyReceiverBlock extends TemplateBlockWithEntity {
     @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
         BlockEntity blockEntity = world.getBlockEntity(x, y, z);
-        if (blockEntity instanceof EnergyReceiverBlockEntity receiverBlockEntity) {
+        if (blockEntity instanceof SimpleEnergyReceiverBlockEntity receiverBlockEntity) {
             player.method_490(receiverBlockEntity.getEnergyStored() + "/" + receiverBlockEntity.getMaxEnergyStored());
             return true;
         }
@@ -28,7 +28,7 @@ public class EnergyReceiverBlock extends TemplateBlockWithEntity {
     @Override
     public void onBlockBreakStart(World world, int x, int y, int z, PlayerEntity player) {
         BlockEntity blockEntity = world.getBlockEntity(x, y, z);
-        if (blockEntity instanceof EnergyReceiverBlockEntity receiverBlockEntity) {
+        if (blockEntity instanceof SimpleEnergyReceiverBlockEntity receiverBlockEntity) {
             receiverBlockEntity.storedEnergy = 0;
             player.method_490(receiverBlockEntity.getEnergyStored() + "/" + receiverBlockEntity.getMaxEnergyStored());
         }
@@ -36,6 +36,6 @@ public class EnergyReceiverBlock extends TemplateBlockWithEntity {
 
     @Override
     protected BlockEntity createBlockEntity() {
-        return new EnergyReceiverBlockEntity();
+        return new SimpleEnergyReceiverBlockEntity();
     }
 }

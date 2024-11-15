@@ -1,20 +1,18 @@
-package net.danygames2014.nyalibtest.block;
+package net.danygames2014.nyalibtest.block.fluid;
 
-import net.danygames2014.nyalibtest.blockentity.InfiniteEnergyBlockEntity;
+import net.danygames2014.nyalibtest.blockentity.fluid.InfiniteWaterBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
 import net.modificationstation.stationapi.api.template.block.TemplateBlockWithEntity;
 import net.modificationstation.stationapi.api.util.Identifier;
 
-public class InfiniteEnergyBlock extends TemplateBlockWithEntity {
-    public InfiniteEnergyBlock(Identifier identifier) {
+public class InfiniteWaterBlock extends TemplateBlockWithEntity {
+    public InfiniteWaterBlock(Identifier identifier) {
         super(identifier, Material.METAL);
-        this.setHardness(1F);
-        this.setResistance(1F);
     }
 
     @Override
     protected BlockEntity createBlockEntity() {
-        return new InfiniteEnergyBlockEntity();
+        return new InfiniteWaterBlockEntity();
     }
 }
