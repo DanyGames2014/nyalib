@@ -22,7 +22,7 @@ public class FluidRegistry {
     }
 
     public static void register(Fluid fluid) {
-        FluidRegistry.register(fluid.identifier(), fluid);
+        FluidRegistry.register(fluid.getIdentifier(), fluid);
     }
     
     public static void register(Identifier identifier, Fluid fluid) {
