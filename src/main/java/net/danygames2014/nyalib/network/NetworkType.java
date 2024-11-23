@@ -3,6 +3,9 @@ package net.danygames2014.nyalib.network;
 import net.modificationstation.stationapi.api.util.Identifier;
 
 public class NetworkType {
+    // Base Network Types
+    public static NetworkType ENERGY;
+    
     Identifier identifier;
     Class<? extends Network> networkClass;
 

@@ -1,4 +1,4 @@
-package net.danygames2014.nyalibtest.network;
+package net.danygames2014.nyalib.network.energy;
 
 import net.danygames2014.nyalib.network.Network;
 import net.danygames2014.nyalib.network.NetworkType;

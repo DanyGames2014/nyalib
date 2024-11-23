@@ -19,7 +19,7 @@ public class EastWestCableBlock extends TemplateBlock implements NetworkNodeComp
 
     @Override
     public NetworkType getNetworkType() {
-        return NyaLibTest.energyNetworkType;
+        return NetworkType.ENERGY;
     }
 
     @Override

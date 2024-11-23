@@ -1,6 +1,7 @@
 package net.danygames2014.nyalibtest;
 
 import net.danygames2014.nyalib.event.NetworkTypeRegistryEvent;
+import net.danygames2014.nyalib.network.energy.EnergyNetwork;
 import net.danygames2014.nyalib.network.NetworkType;
 import net.danygames2014.nyalibtest.block.fluid.FluidTankBlock;
 import net.danygames2014.nyalibtest.block.fluid.InfiniteWaterBlock;
@@ -16,8 +17,7 @@ import net.danygames2014.nyalibtest.blockentity.item.SideHopperBlockEntity;
 import net.danygames2014.nyalibtest.blockentity.simpleenergy.InfiniteSimpleEnergyBlockEntity;
 import net.danygames2014.nyalibtest.blockentity.simpleenergy.SimpleEnergyReceiverBlockEntity;
 import net.danygames2014.nyalibtest.network.BasicNetworkType;
-import net.danygames2014.nyalibtest.network.EnergyNetwork;
-import net.danygames2014.nyalibtest.network.EnergyNetworkType;
+import net.danygames2014.nyalib.network.energy.EnergyNetworkType;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
 import net.modificationstation.stationapi.api.event.block.entity.BlockEntityRegisterEvent;
@@ -44,7 +44,6 @@ public class NyaLibTest {
     public static Block infiniteWaterBlock;
 
     public static NetworkType basicNetworkType;
-    public static NetworkType energyNetworkType;
 
     @EventListener
     public void registerBlock(BlockRegistryEvent event){
@@ -70,6 +69,5 @@ public class NyaLibTest {
     @EventListener
     public void registerNetworkTypes(NetworkTypeRegistryEvent event){
         event.register(basicNetworkType = new BasicNetworkType(NAMESPACE.id("basic")));
-        event.register(energyNetworkType = new EnergyNetworkType(NAMESPACE.id("energy"), EnergyNetwork.class));
     }
 }

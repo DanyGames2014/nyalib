@@ -1,4 +1,4 @@
-package net.danygames2014.nyalibtest.network;
+package net.danygames2014.nyalib.network.energy;
 
 import net.danygames2014.nyalib.network.Network;
 import net.danygames2014.nyalib.network.NetworkType;
@@ -15,7 +15,7 @@ public class EnergyNetwork extends Network {
     @Override
     public void tick() {
         for (var entry : this.components.entrySet()) {
-            entry.getValue().data().putInt("test", world.random.nextInt(50));    
+            entry.getValue().data().putInt("test", world.random.nextInt(50));
         }
     }
 

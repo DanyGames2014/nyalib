@@ -20,7 +20,7 @@ public class CableBlock extends TemplateBlock implements NetworkNodeComponent {
 
     @Override
     public NetworkType getNetworkType() {
-        return NyaLibTest.energyNetworkType;
+        return NetworkType.ENERGY;
     }
 
     @Override

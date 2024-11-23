@@ -23,7 +23,7 @@ public class NetworkEdgeBlock extends TemplateBlock implements NetworkEdgeCompon
 
     @Override
     public NetworkType getNetworkType() {
-        return NyaLibTest.energyNetworkType;
+        return NetworkType.ENERGY;
     }
 
     @Override
