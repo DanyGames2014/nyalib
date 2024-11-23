@@ -1,11 +1,10 @@
 package net.danygames2014.nyalib.energy;
 
 import net.modificationstation.stationapi.api.util.math.Direction;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unused")
-public interface EnergyHandler extends EnergyCapable {
+public interface EnergyHandler extends EnergyCapable, EnergyStorage {
 
     // Input Parameters
 
@@ -15,7 +14,7 @@ public interface EnergyHandler extends EnergyCapable {
      * @param direction The direction to query from
      * @return The maximum input voltage this machine can handle
      */
-    int getMaxInputVoltage(@NotNull Direction direction);
+    int getMaxInputVoltage(@Nullable Direction direction);
 
     /**
      * Get the maximum input amperage this machine can consume
@@ -23,7 +22,7 @@ public interface EnergyHandler extends EnergyCapable {
      * @param direction The direction to query from
      * @return The maximum input amperage this machine can consume
      */
-    double getMaxInputAmperage(@NotNull Direction direction);
+    double getMaxInputAmperage(@Nullable Direction direction);
 
 
     // Output Parameters
@@ -34,7 +33,7 @@ public interface EnergyHandler extends EnergyCapable {
      * @param direction The direction to query from
      * @return The current output voltage of this machine
      */
-    int getOutputVoltage(@NotNull Direction direction);
+    int getOutputVoltage(@Nullable Direction direction);
 
     /**
      * Get the maximum output voltage that this machine can supply
@@ -42,7 +41,7 @@ public interface EnergyHandler extends EnergyCapable {
      * @param direction The direction to query from
      * @return The maximum output voltage this machine can supply
      */
-    int getMaxOutputVoltage(@NotNull Direction direction);
+    int getMaxOutputVoltage(@Nullable Direction direction);
 
     /**
      * Get the maximum output amperage this machine can supply
@@ -50,7 +49,7 @@ public interface EnergyHandler extends EnergyCapable {
      * @param direction The direction to query from
      * @return The maximum output current this machine can supply
      */
-    double getMaxOutputAmperage(@NotNull Direction direction);
+    double getMaxOutputAmperage(@Nullable Direction direction);
 
 
     // Receiving Energy
@@ -71,7 +70,30 @@ public interface EnergyHandler extends EnergyCapable {
      * @param amperage  The amperage provided
      * @return The amperage actually used by the machine
      */
-    double receiveEnergy(@Nullable Direction direction, int voltage, double amperage);
+    default double receiveEnergy(@Nullable Direction direction, int voltage, double amperage) {
+        // If we cannot receive energy in this direction, dont care, return zero
+        if (!canReceiveEnergy(direction)) {
+            return 0;
+        }
+
+        // The lowest receive current we will care about is 10mA
+        if (getRemainingCapacity() < (voltage * 0.01)) {
+            return 0;
+        }
+
+        // Check if the voltage is higher than the maximum input voltage
+        if (voltage > getMaxInputVoltage(direction)) {
+            this.onOvervoltage(direction, voltage);
+            return 0;
+        }
+
+        // Calculate the received and unused power
+        int receivedPower = (int) (voltage * Math.min(amperage, getMaxInputAmperage(direction)));
+        int unusedPower = receivedPower - addEnergy(receivedPower);
+
+        // Return the unused amperage to the precision of 3 decimal places
+        return Math.floor(((double) unusedPower / voltage) * 1000) / 1000;
+    }
 
 
     // Extracting Energy
@@ -86,20 +108,35 @@ public interface EnergyHandler extends EnergyCapable {
 
     /**
      * Extract energy from the machine on the given side
+     * The voltage is the output of {@link #getOutputVoltage(Direction)}
      *
      * @param direction         The direction to extract from
      * @param requestedAmperage The amperage requested from the machine
      * @return The actual amperage provided
      */
-    double extractEnergy(@Nullable Direction direction, double requestedAmperage);
+    default double extractEnergy(@Nullable Direction direction, double requestedAmperage) {
+        // Calculate output power
+        int outputVoltage = getOutputVoltage(direction);
+        double outputAmperage = Math.min(requestedAmperage, getMaxOutputAmperage(direction));
 
+        // Calculate the energy output
+        int outputEnergy = (int) Math.floor(Math.min(outputVoltage * outputAmperage, getEnergyStored()) * 1000) / 1000;
+        
+        // Get the actual energy extracted
+        int extractedEnergy = this.removeEnergy(outputEnergy);
+
+        // Return the extracted amperage to the precision of 3 decimal places
+        return Math.floor(((double) extractedEnergy / outputVoltage) * 1000) / 1000;
+    }
+
+    // Events
 
     /**
      * Triggered when a voltage higher than maximum is received on a given side
+     * <p>
+     * $ * @param direction The side on which overvoltage happened
      *
-     * @param direction The side on which overvoltage happened
-     * @param voltage   The voltage
+     * @param voltage The voltage
      */
-    // Events
-    void onOvervoltage(@NotNull Direction direction, double voltage);
+    void onOvervoltage(@Nullable Direction direction, double voltage);
 }

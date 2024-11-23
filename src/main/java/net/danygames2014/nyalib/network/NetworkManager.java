@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@SuppressWarnings({"UnusedReturnValue", "DuplicatedCode", "LoggingSimilarMessage", "CollectionAddAllCanBeReplacedWithConstructor", "unused", "RedundantLabeledSwitchRuleCodeBlock", "SwitchStatementWithTooFewBranches", "ExtractMethodRecommender"})
+@SuppressWarnings({"UnusedReturnValue", "DuplicatedCode", "LoggingSimilarMessage", "CollectionAddAllCanBeReplacedWithConstructor", "unused", "RedundantLabeledSwitchRuleCodeBlock", "SwitchStatementWithTooFewBranches"})
 public class NetworkManager {
     /**
      * For each Dimension there is a hashmap which takes network type Identifier as a key

@@ -9,6 +9,7 @@ import net.modificationstation.stationapi.api.event.world.WorldEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.HashMap;
 
 @SuppressWarnings("unused")
 public class NetworkLoader {
@@ -49,10 +50,18 @@ public class NetworkLoader {
             if (file.exists()) {
                 NbtCompound tag = NbtIo.readCompressed(new FileInputStream(file));
 
+                NetworkManager.NETWORKS = new HashMap<>();
                 NetworkManager.NEXT_ID.set(tag.getInt("next_id"));
                 NetworkManager.readNbt(event.world, tag);
 
-                NyaLib.LOGGER.info("Loaded NyaLib networks");
+                int networkCount = 0;
+                for (var dimEntries : NetworkManager.NETWORKS.values()) {
+                    for (var networks : dimEntries.values()) {
+                        networkCount += networks.size();
+                    }
+                }
+
+                NyaLib.LOGGER.info("Loaded {} NyaLib networks", networkCount);
             }
         } catch (Exception e) {
             NyaLib.LOGGER.error("Error occured while loading NyaLib Networks, networks are now read only to prevent saving corrupted data", e);

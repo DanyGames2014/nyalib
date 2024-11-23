@@ -19,7 +19,7 @@ public class SimpleEnergyReceiverBlock extends TemplateBlockWithEntity {
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
         BlockEntity blockEntity = world.getBlockEntity(x, y, z);
         if (blockEntity instanceof SimpleEnergyReceiverBlockEntity receiverBlockEntity) {
-            player.method_490(receiverBlockEntity.getEnergyStored() + "/" + receiverBlockEntity.getMaxEnergyStored());
+            player.method_490(receiverBlockEntity.getEnergyStored() + "/" + receiverBlockEntity.getEnergyCapacity());
             return true;
         }
         return false;
@@ -30,7 +30,7 @@ public class SimpleEnergyReceiverBlock extends TemplateBlockWithEntity {
         BlockEntity blockEntity = world.getBlockEntity(x, y, z);
         if (blockEntity instanceof SimpleEnergyReceiverBlockEntity receiverBlockEntity) {
             receiverBlockEntity.storedEnergy = 0;
-            player.method_490(receiverBlockEntity.getEnergyStored() + "/" + receiverBlockEntity.getMaxEnergyStored());
+            player.method_490(receiverBlockEntity.getEnergyStored() + "/" + receiverBlockEntity.getEnergyCapacity());
         }
     }
 

@@ -41,4 +41,19 @@ public class InfiniteSimpleEnergyBlockEntity extends BlockEntity implements Simp
     public int insertEnergy(int amount, Direction direction) {
         return 0;
     }
+
+    @Override
+    public int getEnergyStored() {
+        return 0;
+    }
+
+    @Override
+    public int getEnergyCapacity() {
+        return 0;
+    }
+
+    @Override
+    public int setEnergy(int value) {
+        return 0;
+    }
 }
