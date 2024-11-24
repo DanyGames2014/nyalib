@@ -432,25 +432,17 @@ public class NetworkManager {
                         // The first potential network will be kept in the existing one while others will be transferred to a new one
                         // `net` is the first network here
                         default -> {
-                            
+
                             // 1.Determine the largest and current from potential networks
                             // 2.Identify which discoveredNetwork is the current network
-                            
+
                             int largestNetworkIndex = 0;
                             int largestNetworkSize = 0;
-                            int currentNetworkIndex = 0;
 
                             for (int i = 0; i < potentialNetworks.size(); i++) {
                                 if (potentialNetworks.get(i).size() > largestNetworkSize) {
                                     largestNetworkIndex = i;
                                     largestNetworkSize = potentialNetworks.get(i).size();
-                                }
-
-                                for (Map.Entry<Vec3i, NetworkComponentEntry> currentComponent : net.components.entrySet()) {
-                                    if (potentialNetworks.get(i).contains(currentComponent.getKey())) {
-                                        currentNetworkIndex = i;
-                                        break;
-                                    }
                                 }
                             }
 
@@ -476,15 +468,17 @@ public class NetworkManager {
                                                     world.getBlockState(pos.x, pos.y, pos.z).getBlock()
                                             );
 
-                                            // If we are moving an edge, check if it also has been discoevered by the current network and if yes, dont remove it and add it to both
+                                        // If we are moving an edge, check if it also has been discoevered by the largest network and if yes, dont remove it and add it to both
                                         } else if (isEdge(world, pos.x, pos.y, pos.z)) {
-                                            if (potentialNetworks.get(currentNetworkIndex).contains(pos)) {
-                                                newNetwork.addBlock(
-                                                        pos.x,
-                                                        pos.y,
-                                                        pos.z,
-                                                        world.getBlockState(pos.x, pos.y, pos.z).getBlock()
-                                                );
+                                            newNetwork.addBlock(
+                                                    pos.x,
+                                                    pos.y,
+                                                    pos.z,
+                                                    world.getBlockState(pos.x, pos.y, pos.z).getBlock()
+                                            );
+                                            
+                                            if (!potentialNetworks.get(largestNetworkIndex).contains(pos)) {
+                                                net.removeBlock(pos.x, pos.y, pos.z);
                                             }
                                         }
                                     }
