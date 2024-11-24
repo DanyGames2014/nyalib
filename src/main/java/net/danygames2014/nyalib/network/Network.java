@@ -1,6 +1,5 @@
 package net.danygames2014.nyalib.network;
 
-import com.google.common.collect.Sets;
 import net.danygames2014.nyalib.NyaLib;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NbtCompound;
@@ -10,11 +9,14 @@ import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @SuppressWarnings("unused")
 public class Network {
     protected HashMap<Vec3i, NetworkComponentEntry> components;
+    protected HashMap<Vec3i, NetworkComponentEntry> edges;
     public NetworkPathManager pathManager;
     public World world;
     public NetworkType type;
@@ -24,6 +26,7 @@ public class Network {
         this.world = world;
         this.type = type;
         components = new HashMap<>();
+        edges = new HashMap<>();
         pathManager = new NetworkPathManager(this);
     }
 
@@ -60,7 +63,7 @@ public class Network {
     public NetworkPath getPath(Vec3i from, Vec3i to) {
         return pathManager.getPath(from, to);
     }
-    
+
     public NetworkPath getPath(NetworkComponentEntry from, NetworkComponentEntry to) {
         return getPath(from.pos(), to.pos());
     }
@@ -68,14 +71,14 @@ public class Network {
     /**
      * Allows you to add a check on paths validity,
      * Keep in mind that the path manager already checks if all components on the path exist
-     * 
-     * @param path The path to validate 
+     *
+     * @param path The path to validate
      * @return <code>true</code> if the path is valid
      */
     public boolean isPathValid(NetworkPath path) {
         return true;
     }
-    
+
     public void addBlock(int x, int y, int z, Block block) {
         if (block instanceof NetworkComponent component) {
             Vec3i pos = new Vec3i(x, y, z);
@@ -123,11 +126,17 @@ public class Network {
      * Called when there is a change to the network physical topology
      */
     public void update() {
+        edges.clear();
+        
         for (Map.Entry<Vec3i, NetworkComponentEntry> block : components.entrySet()) {
             Vec3i pos = block.getKey();
 
             if (block.getValue().block() instanceof NetworkComponent component) {
                 component.update(world, pos.x, pos.y, pos.z, this);
+            }
+            
+            if (block.getValue().component() instanceof NetworkEdgeComponent edge) {
+                edges.put(block.getKey(), block.getValue());
             }
         }
     }
@@ -162,7 +171,7 @@ public class Network {
                     }
                 }
             }
-            
+
             // Add the position to closed and remove it from open
             closed.add(pos);
             open.remove(pos);
