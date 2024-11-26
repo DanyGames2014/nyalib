@@ -16,7 +16,6 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public class Network {
     protected HashMap<Vec3i, NetworkComponentEntry> components;
-    protected HashMap<Vec3i, NetworkComponentEntry> edges;
     public NetworkPathManager pathManager;
     public World world;
     public NetworkType type;
@@ -26,7 +25,6 @@ public class Network {
         this.world = world;
         this.type = type;
         components = new HashMap<>();
-        edges = new HashMap<>();
         pathManager = new NetworkPathManager(this);
     }
 
@@ -126,17 +124,11 @@ public class Network {
      * Called when there is a change to the network physical topology
      */
     public void update() {
-        edges.clear();
-        
         for (Map.Entry<Vec3i, NetworkComponentEntry> block : components.entrySet()) {
             Vec3i pos = block.getKey();
 
             if (block.getValue().block() instanceof NetworkComponent component) {
                 component.update(world, pos.x, pos.y, pos.z, this);
-            }
-            
-            if (block.getValue().component() instanceof NetworkEdgeComponent edge) {
-                edges.put(block.getKey(), block.getValue());
             }
         }
     }
