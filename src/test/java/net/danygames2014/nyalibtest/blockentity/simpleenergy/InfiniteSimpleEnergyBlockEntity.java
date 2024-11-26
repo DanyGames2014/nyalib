@@ -23,16 +23,6 @@ public class InfiniteSimpleEnergyBlockEntity extends BlockEntity implements Simp
     }
 
     @Override
-    public boolean canExtractEnergy(Direction direction) {
-        return true;
-    }
-
-    @Override
-    public int extractEnergy(int amount, Direction direction) {
-        return amount;
-    }
-
-    @Override
     public boolean canInsertEnergy(Direction direction) {
         return false;
     }
@@ -43,17 +33,27 @@ public class InfiniteSimpleEnergyBlockEntity extends BlockEntity implements Simp
     }
 
     @Override
+    public boolean canExtractEnergy(Direction direction) {
+        return true;
+    }
+
+    @Override
+    public int extractEnergy(int amount, Direction direction) {
+        return amount;
+    }
+
+    @Override
     public int getEnergyStored() {
-        return 0;
+        return Integer.MAX_VALUE;
     }
 
     @Override
     public int getEnergyCapacity() {
-        return 0;
+        return Integer.MAX_VALUE;
     }
 
     @Override
     public int setEnergy(int value) {
-        return 0;
+        return Integer.MAX_VALUE;
     }
 }

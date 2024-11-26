@@ -60,14 +60,28 @@ public class NetworkPathManager {
         Vec3i end = path[path.length - 1];
         Vec3i beforeEnd = path[path.length - 2];
 
-        Direction face = null;
+        Direction endFace = null;
         for (Direction dir : Direction.values()) {
             if (beforeEnd.x + dir.getOffsetX() == end.x && beforeEnd.y + dir.getOffsetY() == end.y && beforeEnd.z + dir.getOffsetZ() == end.z) {
-                face = dir.getOpposite();
+                endFace = dir.getOpposite();
             }
         }
 
+        Direction startFace = null;
+        
+        if(path.length >= 2){
+            Vec3i start = path[0];
+            Vec3i afterStart = path[1];
+            
+            for (Direction dir : Direction.values()) {
+                if (start.x + dir.getOffsetX() == afterStart.x && start.y + dir.getOffsetY() == afterStart.y && start.z + dir.getOffsetZ() == afterStart.z) {
+                    startFace = dir;
+                }
+            }
+        }
+        
+
         // Return path
-        return new NetworkPath(from, to, face, path, cost);
+        return new NetworkPath(from, startFace, to, endFace, path, cost);
     }
 }

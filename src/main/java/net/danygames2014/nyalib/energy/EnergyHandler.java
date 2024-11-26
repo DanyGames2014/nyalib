@@ -115,6 +115,11 @@ public interface EnergyHandler extends EnergyCapable, EnergyStorage {
      * @return The actual amperage provided
      */
     default double extractEnergy(@Nullable Direction direction, double requestedAmperage) {
+        // If there is no energy, skip the calculations
+        if(getEnergyStored() <= 0){
+            return 0;
+        }
+        
         // Calculate output power
         int outputVoltage = getOutputVoltage(direction);
         double outputAmperage = Math.min(requestedAmperage, getMaxOutputAmperage(direction));

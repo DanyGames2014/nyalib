@@ -9,6 +9,8 @@ public class NetworkPath {
      */
     public final Vec3i start;
 
+    public final Direction startFace;
+    
     /**
      * The destination component
      */
@@ -17,7 +19,7 @@ public class NetworkPath {
     /**
      * The face of the destination component
      */
-    public final Direction face;
+    public final Direction endFace;
 
     /**
      * The cost of the path, unless modified this is 1 unit / block
@@ -30,10 +32,11 @@ public class NetworkPath {
      */
     public final Vec3i[] path;
 
-    public NetworkPath(Vec3i start, Vec3i end, Direction face, Vec3i[] path, int cost) {
+    public NetworkPath(Vec3i start, Direction startFace, Vec3i end, Direction endFace, Vec3i[] path, int cost) {
         this.start = start;
+        this.startFace = startFace;
         this.end = end;
-        this.face = face;
+        this.endFace = endFace;
         this.cost = cost;
         this.path = path;
     }
