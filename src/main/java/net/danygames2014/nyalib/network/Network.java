@@ -251,6 +251,8 @@ public class Network {
                         pos,
                         new NetworkComponentEntry(pos, block, component, blockNbt.getCompound("entryData"))
                 );
+                
+                component.onAddedToNet(world, pos.x, pos.y, pos.z, network);
             }
         }
 

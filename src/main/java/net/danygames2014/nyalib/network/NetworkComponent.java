@@ -123,7 +123,7 @@ public interface NetworkComponent {
     }
 
     /**
-     * Called when this component is added to the network
+     * Called when this component is added to the network or the network is loaded
      *
      * @param world   The world this network is in
      * @param x       The x-position of this component

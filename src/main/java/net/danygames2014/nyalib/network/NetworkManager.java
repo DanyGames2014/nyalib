@@ -468,7 +468,7 @@ public class NetworkManager {
                                                     world.getBlockState(pos.x, pos.y, pos.z).getBlock()
                                             );
 
-                                        // If we are moving an edge, check if it also has been discoevered by the largest network and if yes, dont remove it and add it to both
+                                            // If we are moving an edge, check if it also has been discoevered by the largest network and if yes, dont remove it and add it to both
                                         } else if (isEdge(world, pos.x, pos.y, pos.z)) {
                                             newNetwork.addBlock(
                                                     pos.x,
@@ -476,7 +476,7 @@ public class NetworkManager {
                                                     pos.z,
                                                     world.getBlockState(pos.x, pos.y, pos.z).getBlock()
                                             );
-                                            
+
                                             if (!potentialNetworks.get(largestNetworkIndex).contains(pos)) {
                                                 net.removeBlock(pos.x, pos.y, pos.z);
                                             }
@@ -575,10 +575,13 @@ public class NetworkManager {
                 // Loading a network for a give type
                 for (Object networksO : networksOfType.values()) {
                     if (networksO instanceof NbtCompound networks) {
-                        addNetwork(
-                                dim,
-                                Network.fromNbt(networks, world, Identifier.of(networksOfType.getKey()))
-                        );
+                        Network loadedNet = Network.fromNbt(networks, world, Identifier.of(networksOfType.getKey()));
+                        
+                        addNetwork(dim, loadedNet);
+                        
+                        if (loadedNet != null) {
+                            loadedNet.update();
+                        }
                     }
                 }
             }
