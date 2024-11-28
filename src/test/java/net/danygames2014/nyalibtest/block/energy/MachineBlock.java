@@ -54,7 +54,7 @@ public class MachineBlock extends TemplateBlockWithEntity implements NetworkEdge
                 machine.removeEnergy(10);
             }
 
-            player.method_490(machine.getEnergyStored() + "/" + machine.getEnergyCapacity() + "[" + machine.hashCode() + "]");
+            player.method_490(machine.getEnergyStored() + "/" + machine.getEnergyCapacity());
             return true;
         }
         return false;
