@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "UnusedReturnValue"})
 public class Network {
     protected HashMap<Vec3i, NetworkComponentEntry> components;
     public NetworkPathManager pathManager;
