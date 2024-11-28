@@ -1,5 +1,6 @@
 package net.danygames2014.nyalibtest.block.energy;
 
+import net.danygames2014.nyalib.network.Network;
 import net.danygames2014.nyalib.network.NetworkEdgeComponent;
 import net.danygames2014.nyalib.network.NetworkType;
 import net.danygames2014.nyalibtest.block.energy.entity.MachineBlockEntity;
@@ -23,6 +24,27 @@ public class MachineBlock extends TemplateBlockWithEntity implements NetworkEdge
     @Override
     protected BlockEntity createBlockEntity() {
         return new MachineBlockEntity();
+    }
+
+    @Override
+    public void onAddedToNet(World world, int x, int y, int z, Network network) {
+        if (world.getBlockEntity(x, y, z) instanceof MachineBlockEntity machine) {
+            machine.addedToNet(world, x, y, z, network);
+        }
+    }
+
+    @Override
+    public void onRemovedFromNet(World world, int x, int y, int z, Network network) {
+        if (world.getBlockEntity(x, y, z) instanceof MachineBlockEntity machine) {
+            machine.removedFromNet(world, x, y, z, network);
+        }
+    }
+
+    @Override
+    public void update(World world, int x, int y, int z, Network network) {
+        if (world.getBlockEntity(x, y, z) instanceof MachineBlockEntity machine) {
+            machine.update(world, x, y, z, network);
+        }
     }
 
     @Override
