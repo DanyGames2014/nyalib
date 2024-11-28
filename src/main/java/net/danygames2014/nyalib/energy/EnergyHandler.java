@@ -75,6 +75,10 @@ public interface EnergyHandler extends EnergyCapable, EnergyStorage {
         if (!canReceiveEnergy(direction)) {
             return 0;
         }
+        
+//        if(amperage <= 0.0){
+//            return 0;
+//        }
 
         // The lowest receive current we will care about is 10mA
         if (getRemainingCapacity() < (voltage * 0.01)) {

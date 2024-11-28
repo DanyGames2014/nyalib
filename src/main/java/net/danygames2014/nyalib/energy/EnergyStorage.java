@@ -83,6 +83,6 @@ public interface EnergyStorage {
      * @return The amount of energy removed from the buffer
      */
     default int removeEnergy(int amount) {
-        return changeEnergy(-amount);
+        return Math.abs(changeEnergy(-amount));
     }
 }

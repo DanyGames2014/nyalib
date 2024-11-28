@@ -1,8 +1,12 @@
 package net.danygames2014.nyalibtest;
 
 import net.danygames2014.nyalib.event.NetworkTypeRegistryEvent;
-import net.danygames2014.nyalib.network.energy.EnergyNetwork;
 import net.danygames2014.nyalib.network.NetworkType;
+import net.danygames2014.nyalibtest.block.energy.GeneratorBlock;
+import net.danygames2014.nyalibtest.block.energy.MachineBlock;
+import net.danygames2014.nyalibtest.block.energy.WireBlock;
+import net.danygames2014.nyalibtest.block.energy.entity.GeneratorBlockEntity;
+import net.danygames2014.nyalibtest.block.energy.entity.MachineBlockEntity;
 import net.danygames2014.nyalibtest.block.fluid.FluidTankBlock;
 import net.danygames2014.nyalibtest.block.fluid.InfiniteWaterBlock;
 import net.danygames2014.nyalibtest.block.item.SideHopperBlock;
@@ -11,13 +15,12 @@ import net.danygames2014.nyalibtest.block.network.EastWestCableBlock;
 import net.danygames2014.nyalibtest.block.network.NetworkEdgeBlock;
 import net.danygames2014.nyalibtest.block.simpleenergy.SimpleEnergyReceiverBlock;
 import net.danygames2014.nyalibtest.block.simpleenergy.SimpleInfiniteEnergyBlock;
-import net.danygames2014.nyalibtest.blockentity.fluid.FluidTankBlockEntity;
-import net.danygames2014.nyalibtest.blockentity.fluid.InfiniteWaterBlockEntity;
-import net.danygames2014.nyalibtest.blockentity.item.SideHopperBlockEntity;
-import net.danygames2014.nyalibtest.blockentity.simpleenergy.InfiniteSimpleEnergyBlockEntity;
-import net.danygames2014.nyalibtest.blockentity.simpleenergy.SimpleEnergyReceiverBlockEntity;
+import net.danygames2014.nyalibtest.block.fluid.entity.FluidTankBlockEntity;
+import net.danygames2014.nyalibtest.block.fluid.entity.InfiniteWaterBlockEntity;
+import net.danygames2014.nyalibtest.block.item.entity.SideHopperBlockEntity;
+import net.danygames2014.nyalibtest.block.simpleenergy.entity.InfiniteSimpleEnergyBlockEntity;
+import net.danygames2014.nyalibtest.block.simpleenergy.entity.SimpleEnergyReceiverBlockEntity;
 import net.danygames2014.nyalibtest.network.BasicNetworkType;
-import net.danygames2014.nyalib.network.energy.EnergyNetworkType;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
 import net.modificationstation.stationapi.api.event.block.entity.BlockEntityRegisterEvent;
@@ -40,6 +43,10 @@ public class NyaLibTest {
     public static Block eastWestCableBlock;
     public static Block networkEdgeBlock;
     
+    public static Block generatorBlock;
+    public static Block machineBlock;
+    public static Block wireBlock;
+    
     public static Block fluidTankBlock;
     public static Block infiniteWaterBlock;
 
@@ -55,6 +62,9 @@ public class NyaLibTest {
         networkEdgeBlock = new NetworkEdgeBlock(NAMESPACE.id("network_edge")).setTranslationKey(NAMESPACE, "network_edge");
         fluidTankBlock = new FluidTankBlock(NAMESPACE.id("fluid_tank")).setTranslationKey(NAMESPACE, "fluid_tank");
         infiniteWaterBlock = new InfiniteWaterBlock(NAMESPACE.id("infinite_water_block")).setTranslationKey(NAMESPACE, "infinite_water_block");
+        generatorBlock = new GeneratorBlock(NAMESPACE.id("generator")).setTranslationKey(NAMESPACE, "generator");
+        machineBlock = new MachineBlock(NAMESPACE.id("machine")).setTranslationKey(NAMESPACE, "machine");
+        wireBlock = new WireBlock(NAMESPACE.id("wire")).setTranslationKey(NAMESPACE, "wire");
     }
 
     @EventListener
@@ -64,6 +74,8 @@ public class NyaLibTest {
         event.register(SideHopperBlockEntity.class, "side_hopper");
         event.register(FluidTankBlockEntity.class, "fluid_tank");
         event.register(InfiniteWaterBlockEntity.class, "infinite_water_block");
+        event.register(GeneratorBlockEntity.class, "generator");
+        event.register(MachineBlockEntity.class, "machine");
     }
 
     @EventListener

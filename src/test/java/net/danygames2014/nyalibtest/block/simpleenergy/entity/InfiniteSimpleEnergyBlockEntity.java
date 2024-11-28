@@ -1,4 +1,4 @@
-package net.danygames2014.nyalibtest.blockentity.simpleenergy;
+package net.danygames2014.nyalibtest.block.simpleenergy.entity;
 
 import net.danygames2014.nyalib.energy.simple.SimpleEnergyHandler;
 import net.minecraft.block.entity.BlockEntity;

@@ -1,6 +1,6 @@
 package net.danygames2014.nyalibtest.block.fluid;
 
-import net.danygames2014.nyalibtest.blockentity.fluid.FluidTankBlockEntity;
+import net.danygames2014.nyalibtest.block.fluid.entity.FluidTankBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;

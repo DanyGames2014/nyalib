@@ -1,6 +1,6 @@
 package net.danygames2014.nyalibtest.block.simpleenergy;
 
-import net.danygames2014.nyalibtest.blockentity.simpleenergy.SimpleEnergyReceiverBlockEntity;
+import net.danygames2014.nyalibtest.block.simpleenergy.entity.SimpleEnergyReceiverBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;

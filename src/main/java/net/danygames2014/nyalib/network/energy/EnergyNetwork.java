@@ -54,14 +54,14 @@ public class EnergyNetwork extends Network {
 
         // For each valid source, try to extract energy
         for (var source : getValidSources(requestorPos)) {
-            double extracted = source.handler.extractEnergy(source.path.endFace, remaining); 
+            double extracted = source.handler.extractEnergy(source.path.endFace, remaining);
             remaining -= extracted;
 
             // If we reached zero, there is no point in going further
             if (remaining <= 0) {
                 break;
             }
-            
+
             requestor.receiveEnergy(source.path().endFace, source.handler.getOutputVoltage(source.path().endFace), extracted);
         }
     }
@@ -73,6 +73,10 @@ public class EnergyNetwork extends Network {
             ArrayList<SourcePath> sources = new ArrayList<>();
 
             for (var edge : edges.keySet()) {
+                if (edge.equals(destination)) {
+                    continue;
+                }
+
                 NetworkPath path = this.getPath(destination, edge);
                 if (world.getBlockEntity(edge.x, edge.y, edge.z) instanceof EnergyHandler handler) {
                     if (handler.canExtractEnergy(path.endFace)) {
