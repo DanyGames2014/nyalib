@@ -1,95 +1,111 @@
 package net.danygames2014.nyalib.network.energy;
 
-import net.danygames2014.nyalib.energy.EnergyHandler;
+import net.danygames2014.nyalib.energy.EnergyConsumer;
+import net.danygames2014.nyalib.energy.EnergySource;
 import net.danygames2014.nyalib.network.*;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class EnergyNetwork extends Network {
-    public HashMap<Vec3i, NetworkComponentEntry> edges;
-    public HashMap<Vec3i, ArrayList<SourcePath>> sourcesCache;
+    public HashMap<Vec3i, ConsumerEntry> consumers;
+
+    public HashMap<Vec3i, ArrayList<ConsumerPath>> consumerCache;
 
     public EnergyNetwork(World world, NetworkType type) {
         super(world, type);
-        edges = new HashMap<>();
-        sourcesCache = new HashMap<>();
+        consumers = new HashMap<>();
+        consumerCache = new HashMap<>();
     }
 
     @Override
     public void update() {
         super.update();
 
-        sourcesCache.clear();
+        consumers.clear();
+        consumerCache.clear();
         for (NetworkComponentEntry componentEntry : components.values()) {
             if (componentEntry.component() instanceof NetworkEdgeComponent) {
-                edges.put(componentEntry.pos(), componentEntry);
+                if (world.getBlockEntity(componentEntry.pos().x, componentEntry.pos().y, componentEntry.pos().z) instanceof EnergyConsumer consumer) {
+                    consumers.put(componentEntry.pos(), new ConsumerEntry(componentEntry, consumer));
+                }
             }
         }
     }
 
-    @Override
-    public void tick() {
-        for (var entry : this.components.entrySet()) {
-            entry.getValue().data().putInt("test", world.random.nextInt(50));
-        }
-    }
+    //long time = System.nanoTime();
+    //System.out.println(((System.nanoTime() - time) / 1000) + "uS");
 
-    @Override
-    public void writeNbt(NbtCompound tag) {
-        tag.putString("writtenOn", LocalDateTime.now().toString());
-    }
+    /**
+     * Provide energy to the energy net
+     *
+     * @param source    The source of energy
+     * @param sourcePos The position of the source
+     * @param voltage   The voltage provided
+     * @param amperage  The amperage provided
+     * @return The amperage used
+     */
+    public double provideEnergy(EnergySource source, Vec3i sourcePos, int voltage, double amperage) {
+        double remainingAmperage = amperage;
 
-    @Override
-    public void readNbt(NbtCompound tag) {
-        System.out.println("Reading network written at " + tag.getString("writtenOn"));
-    }
+        for (ConsumerPath consumerPath : getValidConsumers(sourcePos)) {
+            EnergyConsumer consumer = consumerPath.consumer;
+            NetworkPath path = consumerPath.path;
 
-    public void requestEnergy(EnergyHandler requestor, Vec3i requestorPos, double amperage) {
-        double remaining = amperage;
+            // Check if the consumer can even accept more energy
+            if (consumer.getRemainingCapacity() > 0) {
+                // Insert Energy into the consumers
+                double usedAmperage = consumer.receiveEnergy(path.endFace, voltage, Math.min(remainingAmperage, consumer.getMaxInputAmperage(path.endFace)));
 
-        // For each valid source, try to extract energy
-        for (var source : getValidSources(requestorPos)) {
-            double extracted = source.handler.extractEnergy(source.path.endFace, remaining);
-            remaining -= extracted;
+                // Reduce the remaining amount
+                remainingAmperage -= usedAmperage;
 
-            // If we reached zero, there is no point in going further
-            if (remaining <= 0) {
-                break;
+                // If there are 0 amps remaining, end it
+                if (remainingAmperage <= 0) {
+                    return amperage;
+                }
             }
 
-            requestor.receiveEnergy(source.path().endFace, source.handler.getOutputVoltage(source.path().endFace), extracted);
         }
+
+        System.out.println("REMAINING AMPS:" + remainingAmperage);
+        return amperage - remainingAmperage;
     }
 
-    public ArrayList<SourcePath> getValidSources(Vec3i destination) {
-        if (sourcesCache.containsKey(destination)) {
-            return sourcesCache.get(destination);
+    /**
+     * Retrieves all the valid reachable consumers from the source position
+     *
+     * @param source The position of the source
+     * @return An ArrayList of paths to valid consumers
+     */
+    public ArrayList<ConsumerPath> getValidConsumers(Vec3i source) {
+        if (consumerCache.containsKey(source)) {
+            return consumerCache.get(source);
         } else {
-            ArrayList<SourcePath> sources = new ArrayList<>();
+            ArrayList<ConsumerPath> consumers = new ArrayList<>();
 
-            for (var edge : edges.keySet()) {
-                if (edge.equals(destination)) {
+            for (Map.Entry<Vec3i, ConsumerEntry> consumer : this.consumers.entrySet()) {
+                if (consumer.getKey().equals(source)) {
                     continue;
                 }
 
-                NetworkPath path = this.getPath(destination, edge);
-                if (world.getBlockEntity(edge.x, edge.y, edge.z) instanceof EnergyHandler handler) {
-                    if (handler.canExtractEnergy(path.endFace)) {
-                        sources.add(new SourcePath(handler, path));
-                    }
+                NetworkPath path = this.getPath(source, consumer.getKey());
+                if (consumer.getValue().consumer.canReceiveEnergy(path.endFace)) {
+                    consumers.add(new ConsumerPath(consumer.getValue().consumer, path));
                 }
             }
 
-            sourcesCache.put(destination, sources);
-            return sources;
+            consumerCache.put(source, consumers);
+            return consumers;
         }
     }
 
-    public record SourcePath(EnergyHandler handler, NetworkPath path) {
+    public record ConsumerPath(EnergyConsumer consumer, NetworkPath path) {
+    }
+
+    public record ConsumerEntry(NetworkComponentEntry componentEntry, EnergyConsumer consumer) {
     }
 }

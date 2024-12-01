@@ -27,27 +27,6 @@ public class MachineBlock extends TemplateBlockWithEntity implements NetworkEdge
     }
 
     @Override
-    public void onAddedToNet(World world, int x, int y, int z, Network network) {
-        if (world.getBlockEntity(x, y, z) instanceof MachineBlockEntity machine) {
-            machine.addedToNet(world, x, y, z, network);
-        }
-    }
-
-    @Override
-    public void onRemovedFromNet(World world, int x, int y, int z, Network network) {
-        if (world.getBlockEntity(x, y, z) instanceof MachineBlockEntity machine) {
-            machine.removedFromNet(world, x, y, z, network);
-        }
-    }
-
-    @Override
-    public void update(World world, int x, int y, int z, Network network) {
-        if (world.getBlockEntity(x, y, z) instanceof MachineBlockEntity machine) {
-            machine.update(world, x, y, z, network);
-        }
-    }
-
-    @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
         if (world.getBlockEntity(x, y, z) instanceof MachineBlockEntity machine) {
             if (player.isSneaking()) {

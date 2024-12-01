@@ -4,7 +4,7 @@ package net.danygames2014.nyalib.energy;
  * A base EnergyStorage that can be implemented on blocks, items and entities
  * It can be shared between normal Energy and Simple Energy
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "ManualMinMaxCalculation"})
 public interface EnergyStorage {
     /**
      * Get the energy stored in the internal buffer.
@@ -46,24 +46,24 @@ public interface EnergyStorage {
      */
     default int changeEnergy(int difference) {
         // Store the current energy amount
-        int currentEnergy = this.getEnergyStored();
+        int prevEnergy = this.getEnergyStored();
 
         // Calculate the desired energy amount
-        int desiredEnergy = currentEnergy + difference;
+        int desiredEnergy = prevEnergy + difference;
 
         // If the desired energy is higher than the capacity, try to set the energy to maximum
         if (desiredEnergy > this.getEnergyCapacity()) {
-            return this.setEnergy(this.getEnergyCapacity());
+            this.setEnergy(this.getEnergyCapacity());
+        } else if (desiredEnergy < 0) {
+            this.setEnergy(0);
+        } else {
+            this.setEnergy(desiredEnergy);
         }
 
-        // If the desired energy is lower than the capacity, try to set it to zero
-        if (desiredEnergy < 0) {
-            return this.setEnergy(0);
-        }
 
         // Calculate by how much the energy has changed and return
-        int newEnergy = this.setEnergy(desiredEnergy);
-        return newEnergy - currentEnergy;
+        int newEnergy = this.getEnergyStored();
+        return newEnergy - prevEnergy;
     }
 
     /**

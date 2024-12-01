@@ -1,47 +1,20 @@
 package net.danygames2014.nyalibtest.block.energy.entity;
 
-import net.danygames2014.nyalib.energy.EnergyHandler;
+import net.danygames2014.nyalib.energy.EnergyConsumer;
 import net.danygames2014.nyalib.network.Network;
-import net.danygames2014.nyalib.network.energy.EnergyNetwork;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
-public class MachineBlockEntity extends BlockEntity implements EnergyHandler {
+public class MachineBlockEntity extends BlockEntity implements EnergyConsumer {
     public int energy;
-    public ArrayList<Network> networks = new ArrayList<>(2);
 
     @Override
     public void tick() {
         super.tick();
-
-        if (energy < this.getEnergyCapacity() - 10) {
-            for (Network net : networks) {
-                if (net instanceof EnergyNetwork energyNet) {
-                    energyNet.requestEnergy(this, new Vec3i(this.x, this.y, this.z), this.getMaxInputAmperage(null));
-                }
-            }
-        }
-    }
-
-    public void addedToNet(World world, int x, int y, int z, Network network) {
-        if (!networks.contains(network)) {
-            networks.add(network);
-        }
-    }
-
-    public void removedFromNet(World world, int x, int y, int z, Network network) {
-        networks.remove(network);
-    }
-
-    public void update(World world, int x, int y, int z, Network network) {
-        if (!networks.contains(network)) {
-            networks.add(network);
-        }
     }
 
     @Override
@@ -55,28 +28,8 @@ public class MachineBlockEntity extends BlockEntity implements EnergyHandler {
     }
 
     @Override
-    public int getOutputVoltage(@Nullable Direction direction) {
-        return 0;
-    }
-
-    @Override
-    public int getMaxOutputVoltage(@Nullable Direction direction) {
-        return 0;
-    }
-
-    @Override
-    public double getMaxOutputAmperage(@Nullable Direction direction) {
-        return 0;
-    }
-
-    @Override
     public boolean canReceiveEnergy(@Nullable Direction direction) {
         return true;
-    }
-
-    @Override
-    public boolean canExtractEnergy(@Nullable Direction direction) {
-        return false;
     }
 
     @Override
