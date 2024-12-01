@@ -63,7 +63,7 @@ public interface EnergyConsumer extends EnergyHandler {
         int receivedPower = (int) (voltage * Math.min(amperage, getMaxInputAmperage(direction)));
         int unusedPower = receivedPower - addEnergy(receivedPower);
 
-        // Return the used amperage to the precision of 3 decimal places
+        // Return the used amperage
         return (double) (receivedPower - unusedPower) / voltage;
     }
 }

@@ -5,6 +5,7 @@ import net.danygames2014.nyalib.energy.EnergySource;
 import net.danygames2014.nyalib.network.*;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,7 +59,7 @@ public class EnergyNetwork extends Network {
             // Check if the consumer can even accept more energy
             if (consumer.getRemainingCapacity() > 0) {
                 // Insert Energy into the consumers
-                double usedAmperage = consumer.receiveEnergy(path.endFace, voltage, Math.min(remainingAmperage, consumer.getMaxInputAmperage(path.endFace)));
+                double usedAmperage = traverseEnergy(consumer, path.endFace, voltage, remainingAmperage);
 
                 // Reduce the remaining amount
                 remainingAmperage -= usedAmperage;
@@ -73,6 +74,10 @@ public class EnergyNetwork extends Network {
 
         System.out.println("REMAINING AMPS:" + remainingAmperage);
         return amperage - remainingAmperage;
+    }
+    
+    private double traverseEnergy(EnergyConsumer consumer, Direction consumerFace, int voltage, double remainingAmperage){
+        return consumer.receiveEnergy(consumerFace, voltage, Math.min(remainingAmperage, consumer.getMaxInputAmperage(consumerFace)));
     }
 
     /**
