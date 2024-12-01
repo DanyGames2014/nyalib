@@ -46,11 +46,11 @@ public class EnergyNetwork extends Network {
      * @param source    The source of energy
      * @param sourcePos The position of the source
      * @param voltage   The voltage provided
-     * @param amperage  The amperage provided
-     * @return The amperage used
+     * @param power  The amperage provided
+     * @return The power used
      */
-    public double provideEnergy(EnergySource source, Vec3i sourcePos, int voltage, double amperage) {
-        double remainingAmperage = amperage;
+    public int provideEnergy(EnergySource source, Vec3i sourcePos, int voltage, int power) {
+        int remainingPower = power;
 
         for (ConsumerPath consumerPath : getValidConsumers(sourcePos)) {
             EnergyConsumer consumer = consumerPath.consumer;
@@ -59,25 +59,25 @@ public class EnergyNetwork extends Network {
             // Check if the consumer can even accept more energy
             if (consumer.getRemainingCapacity() > 0) {
                 // Insert Energy into the consumers
-                double usedAmperage = traverseEnergy(consumer, path.endFace, voltage, remainingAmperage);
+                int usedPower = traverseEnergy(consumer, path.endFace, voltage, remainingPower);
 
                 // Reduce the remaining amount
-                remainingAmperage -= usedAmperage;
+                remainingPower -= usedPower;
 
                 // If there are 0 amps remaining, end it
-                if (remainingAmperage <= 0) {
-                    return amperage;
+                if (remainingPower <= 0) {
+                    return power;
                 }
             }
 
         }
 
-        System.out.println("REMAINING AMPS:" + remainingAmperage);
-        return amperage - remainingAmperage;
+        System.out.println("REMAINING POWAH:" + remainingPower);
+        return power - remainingPower;
     }
     
-    private double traverseEnergy(EnergyConsumer consumer, Direction consumerFace, int voltage, double remainingAmperage){
-        return consumer.receiveEnergy(consumerFace, voltage, Math.min(remainingAmperage, consumer.getMaxInputAmperage(consumerFace)));
+    private int traverseEnergy(EnergyConsumer consumer, Direction consumerFace, int voltage, int remainingPower){
+        return consumer.receiveEnergy(consumerFace, voltage, remainingPower);
     }
 
     /**

@@ -43,26 +43,16 @@ public interface EnergySource extends EnergyHandler {
      * The voltage is the output of {@link #getOutputVoltage(Direction)}
      *
      * @param direction         The direction to extract from
-     * @param requestedAmperage The amperage requested from the machine
+     * @param requestedPower The amperage requested from the machine
      * @return The actual amperage provided
      */
-    default double extractEnergy(@Nullable Direction direction, double requestedAmperage) {
+    default int extractEnergy(@Nullable Direction direction, int requestedPower) {
         // If there is no energy, skip the calculations
         if(getEnergyStored() <= 0){
             return 0;
         }
 
-        // Calculate output power
-        int outputVoltage = getOutputVoltage(direction);
-        double outputAmperage = Math.min(requestedAmperage, getMaxOutputAmperage(direction));
-
-        // Calculate the energy output
-        int outputEnergy = (int) Math.floor(Math.min(outputVoltage * outputAmperage, getEnergyStored()) * 1000) / 1000;
-
-        // Get the actual energy extracted
-        int extractedEnergy = this.removeEnergy(outputEnergy);
-
-        // Return the extracted amperage to the precision of 3 decimal places
-        return Math.floor(((double) extractedEnergy / outputVoltage) * 1000) / 1000;
+        // Return the extracted energy
+        return this.removeEnergy(Math.min(requestedPower, (int)(getMaxOutputAmperage(direction) * getOutputVoltage(direction))));
     }
 }

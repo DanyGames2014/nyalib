@@ -19,7 +19,7 @@ public class MachineBlockEntity extends BlockEntity implements EnergyConsumer {
 
     @Override
     public int getMaxInputVoltage(@Nullable Direction direction) {
-        return 220;
+        return 12;
     }
 
     @Override

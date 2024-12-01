@@ -22,9 +22,8 @@ public class GeneratorBlockEntity extends BlockEntity implements EnergySource {
 
         if (energy > 0) {
             for (EnergyNetwork energyNet : energyNets) {
-                double usedAmps = energyNet.provideEnergy(this, new Vec3i(this.x, this.y, this.z), getOutputVoltage(null), (double) energy / getOutputVoltage(null));
-                System.out.println(usedAmps);
-                removeEnergy((int) (usedAmps * getOutputVoltage(null)));
+                int usedPower = energyNet.provideEnergy(this, new Vec3i(this.x, this.y, this.z), getOutputVoltage(null), energy);
+                removeEnergy(usedPower);
             }
         }
     }
@@ -53,12 +52,12 @@ public class GeneratorBlockEntity extends BlockEntity implements EnergySource {
 
     @Override
     public int getOutputVoltage(@Nullable Direction direction) {
-        return 220;
+        return 12;
     }
 
     @Override
     public int getMaxOutputVoltage(@Nullable Direction direction) {
-        return 220;
+        return 12;
     }
 
     @Override

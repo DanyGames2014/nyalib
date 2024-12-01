@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 
 public interface EnergyConsumer extends EnergyHandler {
     // Input Parameters
+
     /**
      * Get the maximum input voltage that this machine can handle
      *
@@ -22,6 +23,7 @@ public interface EnergyConsumer extends EnergyHandler {
     double getMaxInputAmperage(@Nullable Direction direction);
 
     // Receiving Energy
+
     /**
      * Query if this machine can accept energy
      *
@@ -35,21 +37,20 @@ public interface EnergyConsumer extends EnergyHandler {
      *
      * @param direction The face to provide the energy on
      * @param voltage   The voltage level provided
-     * @param amperage  The amperage provided
-     * @return The amperage actually used by the machine
+     * @param power     The power provided
+     * @return The power actually used by the machine
      */
-    default double receiveEnergy(@Nullable Direction direction, int voltage, double amperage) {
+    default int receiveEnergy(@Nullable Direction direction, int voltage, int power) {
         // If we cannot receive energy in this direction, dont care, return zero
         if (!canReceiveEnergy(direction)) {
             return 0;
         }
 
-        if (amperage <= 0.0) {
+        if (power <= 0) {
             return 0;
         }
 
-        // The lowest receive current we will care about is 10mA
-        if (getRemainingCapacity() < (voltage * 0.01)) {
+        if (getRemainingCapacity() <= 0) {
             return 0;
         }
 
@@ -60,10 +61,9 @@ public interface EnergyConsumer extends EnergyHandler {
         }
 
         // Calculate the received and unused power
-        int receivedPower = (int) (voltage * Math.min(amperage, getMaxInputAmperage(direction)));
-        int unusedPower = receivedPower - addEnergy(receivedPower);
+        int unusedPower = power - addEnergy(Math.min(power, (int) (voltage * getMaxInputAmperage(direction))));
 
         // Return the used amperage
-        return (double) (receivedPower - unusedPower) / voltage;
+        return power - unusedPower;
     }
 }
