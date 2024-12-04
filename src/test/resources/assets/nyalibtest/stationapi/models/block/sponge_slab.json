@@ -1,0 +1,6 @@
+{
+  "parent": "nyalib:block/slab",
+  "textures": {
+    "all": "minecraft:block/sponge"
+  }
+}

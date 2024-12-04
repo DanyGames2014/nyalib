@@ -1,0 +1,44 @@
+{
+  "variants": {
+    "facing=south,open=false": {
+      "model": "nyalibtest:block/sponge_fence_gate_closed",
+      "uvlock": true,
+      "y": 270
+    },
+    "facing=west,open=false": {
+      "model": "nyalibtest:block/sponge_fence_gate_closed",
+      "uvlock": true,
+      "y": 0
+    },
+    "facing=north,open=false": {
+      "model": "nyalibtest:block/sponge_fence_gate_closed",
+      "uvlock": true,
+      "y": 90
+    },
+    "facing=east,open=false": {
+      "model": "nyalibtest:block/sponge_fence_gate_closed",
+      "uvlock": true,
+      "y": 180
+    },
+    "facing=south,open=true": {
+      "model": "nyalibtest:block/sponge_fence_gate_open",
+      "uvlock": true,
+      "y": 270
+    },
+    "facing=west,open=true": {
+      "model": "nyalibtest:block/sponge_fence_gate_open",
+      "uvlock": true,
+      "y": 0
+    },
+    "facing=north,open=true": {
+      "model": "nyalibtest:block/sponge_fence_gate_open",
+      "uvlock": true,
+      "y": 90
+    },
+    "facing=east,open=true": {
+      "model": "nyalibtest:block/sponge_fence_gate_open",
+      "uvlock": true,
+      "y": 180
+    }
+  }
+}

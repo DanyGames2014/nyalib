@@ -1,5 +1,9 @@
 package net.danygames2014.nyalibtest;
 
+import net.danygames2014.nyalib.block.FenceBlockTemplate;
+import net.danygames2014.nyalib.block.FenceGateBlockTemplate;
+import net.danygames2014.nyalib.block.SlabBlockTemplate;
+import net.danygames2014.nyalib.block.StairsBlockTemplate;
 import net.danygames2014.nyalib.event.NetworkTypeRegistryEvent;
 import net.danygames2014.nyalib.network.NetworkType;
 import net.danygames2014.nyalibtest.block.energy.GeneratorBlock;
@@ -23,6 +27,7 @@ import net.danygames2014.nyalibtest.block.simpleenergy.entity.SimpleEnergyReceiv
 import net.danygames2014.nyalibtest.network.BasicNetworkType;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.modificationstation.stationapi.api.event.block.entity.BlockEntityRegisterEvent;
 import net.modificationstation.stationapi.api.event.registry.BlockRegistryEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
@@ -49,6 +54,11 @@ public class NyaLibTest {
     
     public static Block fluidTankBlock;
     public static Block infiniteWaterBlock;
+    
+    public static Block spongeStairs;
+    public static Block spongeSlab;
+    public static Block spongeFence;
+    public static Block spongeFenceGate;
 
     public static NetworkType basicNetworkType;
 
@@ -65,6 +75,10 @@ public class NyaLibTest {
         generatorBlock = new GeneratorBlock(NAMESPACE.id("generator")).setTranslationKey(NAMESPACE, "generator");
         machineBlock = new MachineBlock(NAMESPACE.id("machine")).setTranslationKey(NAMESPACE, "machine");
         wireBlock = new WireBlock(NAMESPACE.id("wire")).setTranslationKey(NAMESPACE, "wire");
+        spongeStairs = new StairsBlockTemplate(NAMESPACE.id("sponge_stairs"), Block.SPONGE).setTranslationKey(NAMESPACE, "sponge_stairs");
+        spongeSlab = new SlabBlockTemplate(NAMESPACE.id("sponge_slab"), Block.SPONGE).setTranslationKey(NAMESPACE, "sponge_slab");
+        spongeFence = new FenceBlockTemplate(NAMESPACE.id("sponge_fence"), Block.SPONGE).setTranslationKey(NAMESPACE, "sponge_fence");
+        spongeFenceGate = new FenceGateBlockTemplate(NAMESPACE.id("sponge_fence_gate"), Block.SPONGE).setTranslationKey(NAMESPACE, "sponge_fence_gate");
     }
 
     @EventListener

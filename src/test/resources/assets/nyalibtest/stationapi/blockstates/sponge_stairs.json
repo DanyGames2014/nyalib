@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "nyalibtest:block/sponge_stairs"
+    },
+    "facing=east": {
+      "model": "nyalibtest:block/sponge_stairs",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "nyalibtest:block/sponge_stairs",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "nyalibtest:block/sponge_stairs",
+      "y": 270
+    }
+  }
+}

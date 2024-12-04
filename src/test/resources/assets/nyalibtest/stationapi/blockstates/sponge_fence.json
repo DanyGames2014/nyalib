@@ -1,0 +1,49 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "nyalibtest:block/sponge_fence_post"
+      }
+    },
+    {
+      "apply": {
+        "model": "nyalibtest:block/sponge_fence_side",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "north": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "nyalibtest:block/sponge_fence_side",
+        "uvlock": true,
+        "y": 0
+      },
+      "when": {
+        "east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "nyalibtest:block/sponge_fence_side",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "south": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "nyalibtest:block/sponge_fence_side",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "west": "true"
+      }
+    }
+  ]
+}

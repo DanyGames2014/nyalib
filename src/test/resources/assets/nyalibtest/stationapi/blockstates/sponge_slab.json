@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "slab_type=bottom": {
+      "model": "nyalibtest:block/sponge_slab"
+    },
+
+    "slab_type=top": {
+      "model": "nyalibtest:block/sponge_slab",
+      "x": 180
+    },
+
+    "slab_type=double": {
+      "model": "nyalibtest:block/diverlmoment"
+    }
+  }
+}
