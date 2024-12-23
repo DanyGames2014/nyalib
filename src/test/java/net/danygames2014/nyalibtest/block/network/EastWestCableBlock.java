@@ -50,7 +50,7 @@ public class EastWestCableBlock extends TemplateBlock implements NetworkNodeComp
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
         Network net = NetworkManager.getAt(world.dimension, x, y, z, this.getNetworkTypes().get(0).getIdentifier());
         if (net != null) {
-            player.method_490("NET " + net.getId() + " HASHCODE: " + net.hashCode());
+            player.sendMessage("NET " + net.getId() + " HASHCODE: " + net.hashCode());
         }
         return true;
     }

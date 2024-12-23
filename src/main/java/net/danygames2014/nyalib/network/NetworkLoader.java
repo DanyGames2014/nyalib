@@ -25,7 +25,7 @@ public class NetworkLoader {
         }
 
         try {
-            File file = event.world.dimensionData.method_1736("nyalib_networks");
+            File file = event.world.dimensionData.getWorldPropertiesFile("nyalib_networks");
 
             NbtCompound tag = new NbtCompound();
             if (file.exists()) {
@@ -46,7 +46,7 @@ public class NetworkLoader {
     public void loadNetworks(WorldEvent.Init event) {
         NyaLib.LOGGER.debug("Loading NyaLib networks");
         try {
-            File file = event.world.dimensionData.method_1736("nyalib_networks");
+            File file = event.world.dimensionData.getWorldPropertiesFile("nyalib_networks");
             if (file.exists()) {
                 NbtCompound tag = NbtIo.readCompressed(new FileInputStream(file));
 

@@ -55,7 +55,7 @@ public class GeneratorBlock extends TemplateBlockWithEntity implements NetworkEd
                 generator.addEnergy(50);
             }
             
-            player.method_490(generator.getEnergyStored() + "/" + generator.getEnergyCapacity());
+            player.sendMessage(generator.getEnergyStored() + "/" + generator.getEnergyCapacity());
             return true;
         }
         return false;

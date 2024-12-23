@@ -39,7 +39,7 @@ public class SideHopperBlock extends TemplateBlockWithEntity {
     @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
         if(world.getBlockEntity(x,y,z) instanceof SideHopperBlockEntity hopper){
-            player.method_490("Counter : " + hopper.tickCounter + " | Buffer : " + hopper.internalBuffer);
+            player.sendMessage("Counter : " + hopper.tickCounter + " | Buffer : " + hopper.internalBuffer);
             return true;
         }
         return false;

@@ -53,9 +53,9 @@ public class NetworkEdgeBlock extends TemplateBlock implements NetworkEdgeCompon
     @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
         ArrayList<Network> networks = NetworkManager.getAt(world.dimension, x, y, z, this.getNetworkTypes());
-        player.method_490("This block is in networks:");
+        player.sendMessage("This block is in networks:");
         for (var net : networks){
-            player.method_490("NET " + net.getId() + " HASHCODE: " + net.hashCode());
+            player.sendMessage("NET " + net.getId() + " HASHCODE: " + net.hashCode());
         }
         return true;
     }

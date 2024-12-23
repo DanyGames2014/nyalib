@@ -21,9 +21,9 @@ public class FluidTankBlock extends TemplateBlockWithEntity {
     @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
         if (world.getBlockEntity(x, y, z) instanceof FluidTankBlockEntity tank) {
-            player.method_490("Fluid Tank Contents: ");
+            player.sendMessage("Fluid Tank Contents: ");
             for (int i = 0; i < tank.getFluidSlots(null); i++) {
-                player.method_490(i + ": " + tank.getFluidInSlot(i, null));
+                player.sendMessage(i + ": " + tank.getFluidInSlot(i, null));
             }
         }
         return false;
