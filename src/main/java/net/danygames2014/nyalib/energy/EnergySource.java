@@ -22,12 +22,12 @@ public interface EnergySource extends EnergyHandler {
     int getMaxOutputVoltage(@Nullable Direction direction);
 
     /**
-     * Get the maximum output amperage this machine can supply
+     * Get the maximum output power this machine can supply in one tick
      *
      * @param direction The direction to query from
-     * @return The maximum output current this machine can supply
+     * @return The maximum output power this machine can supply in one tick
      */
-    double getMaxOutputAmperage(@Nullable Direction direction);
+    int getMaxEnergyOutput(@Nullable Direction direction);
 
     // Extracting Energy
     /**
@@ -43,16 +43,16 @@ public interface EnergySource extends EnergyHandler {
      * The voltage is the output of {@link #getOutputVoltage(Direction)}
      *
      * @param direction         The direction to extract from
-     * @param requestedPower The amperage requested from the machine
-     * @return The actual amperage provided
+     * @param requestedEnergy   The energy requested from the machine
+     * @return The actual energy provided
      */
-    default int extractEnergy(@Nullable Direction direction, int requestedPower) {
+    default int extractEnergy(@Nullable Direction direction, int requestedEnergy) {
         // If there is no energy, skip the calculations
         if(getEnergyStored() <= 0){
             return 0;
         }
 
         // Return the extracted energy
-        return this.removeEnergy(Math.min(requestedPower, (int)(getMaxOutputAmperage(direction) * getOutputVoltage(direction))));
+        return this.removeEnergy(Math.min(requestedEnergy, getMaxEnergyOutput(direction)));
     }
 }

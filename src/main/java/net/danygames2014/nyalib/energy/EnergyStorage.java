@@ -4,7 +4,7 @@ package net.danygames2014.nyalib.energy;
  * A base EnergyStorage that can be implemented on blocks, items and entities
  * It can be shared between normal Energy and Simple Energy
  */
-@SuppressWarnings({"unused", "ManualMinMaxCalculation"})
+@SuppressWarnings({"unused", "ManualMinMaxCalculation", "UnusedReturnValue"})
 public interface EnergyStorage {
     /**
      * Get the energy stored in the internal buffer.

@@ -14,7 +14,7 @@ public class MachineBlockEntity extends BlockEntity implements EnergyConsumer {
 
     @Override
     public void tick() {
-        super.tick();
+        
     }
 
     @Override
@@ -23,8 +23,8 @@ public class MachineBlockEntity extends BlockEntity implements EnergyConsumer {
     }
 
     @Override
-    public double getMaxInputAmperage(@Nullable Direction direction) {
-        return 1;
+    public int getMaxEnergyInput(@Nullable Direction direction) {
+        return 12;
     }
 
     @Override

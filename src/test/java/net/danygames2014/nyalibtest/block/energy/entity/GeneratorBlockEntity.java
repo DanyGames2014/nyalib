@@ -1,5 +1,6 @@
 package net.danygames2014.nyalibtest.block.energy.entity;
 
+import net.danygames2014.nyalib.energy.EnergyConsumer;
 import net.danygames2014.nyalib.energy.EnergySource;
 import net.danygames2014.nyalib.network.Network;
 import net.danygames2014.nyalib.network.energy.EnergyNetwork;
@@ -18,9 +19,14 @@ public class GeneratorBlockEntity extends BlockEntity implements EnergySource {
 
     @Override
     public void tick() {
-        super.tick();
-
         if (energy > 0) {
+            for (Direction side : Direction.values()) {
+                if (world.getBlockEntity(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ()) instanceof EnergyConsumer consumer) {
+                    int usedPower = consumer.receiveEnergy(side.getOpposite(), getOutputVoltage(side), energy);
+                    removeEnergy(usedPower);
+                }
+            }
+
             for (EnergyNetwork energyNet : energyNets) {
                 int usedPower = energyNet.provideEnergy(this, new Vec3i(this.x, this.y, this.z), getOutputVoltage(null), energy);
                 removeEnergy(usedPower);
@@ -61,8 +67,8 @@ public class GeneratorBlockEntity extends BlockEntity implements EnergySource {
     }
 
     @Override
-    public double getMaxOutputAmperage(@Nullable Direction direction) {
-        return 2;
+    public int getMaxEnergyOutput(@Nullable Direction direction) {
+        return 12;
     }
 
     @Override

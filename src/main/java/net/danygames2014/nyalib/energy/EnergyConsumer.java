@@ -15,12 +15,12 @@ public interface EnergyConsumer extends EnergyHandler {
     int getMaxInputVoltage(@Nullable Direction direction);
 
     /**
-     * Get the maximum input amperage this machine can consume
+     * Get the maximum input power this machine can consume in one tick
      *
      * @param direction The direction to query from
-     * @return The maximum input amperage this machine can consume
+     * @return The maximum input power this machine can consume in one tick
      */
-    double getMaxInputAmperage(@Nullable Direction direction);
+    int getMaxEnergyInput(@Nullable Direction direction);
 
     // Receiving Energy
 
@@ -37,33 +37,36 @@ public interface EnergyConsumer extends EnergyHandler {
      *
      * @param direction The face to provide the energy on
      * @param voltage   The voltage level provided
-     * @param power     The power provided
-     * @return The power actually used by the machine
+     * @param energy    The energy provided
+     * @return The energy actually used by the machine
      */
-    default int receiveEnergy(@Nullable Direction direction, int voltage, int power) {
+    default int receiveEnergy(@Nullable Direction direction, int voltage, int energy) {
         // If we cannot receive energy in this direction, dont care, return zero
         if (!canReceiveEnergy(direction)) {
             return 0;
         }
 
-        if (power <= 0) {
+        // If the received power is zero or negative, return zero
+        if (energy <= 0) {
             return 0;
         }
 
+        // If we wouldn't be able to store any power anyway, dont bother calculating and return zero
         if (getRemainingCapacity() <= 0) {
             return 0;
         }
 
         // Check if the voltage is higher than the maximum input voltage
         if (voltage > getMaxInputVoltage(direction)) {
+            // If the voltage is higher, trigger an overvoltage event and return zero
             this.onOvervoltage(direction, voltage);
             return 0;
         }
 
         // Calculate the received and unused power
-        int unusedPower = power - addEnergy(Math.min(power, (int) (voltage * getMaxInputAmperage(direction))));
+        int unusedPower = energy - addEnergy(Math.min(energy, voltage));
 
-        // Return the used amperage
-        return power - unusedPower;
+        // Return the used power
+        return energy - unusedPower;
     }
 }
