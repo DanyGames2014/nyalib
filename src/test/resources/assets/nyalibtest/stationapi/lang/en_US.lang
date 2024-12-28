@@ -1,2 +1,15 @@
-tile.nyalibtest.infinite_energy.name=Infinite Energy
-tile.nyalibtest.energy_receiver.name=Energy Receiver
+tile.nyalibtest.simple_infinite_energy.name=Simple Energy Source
+tile.nyalibtest.simple_energy_receiver.name=Simple Energy Receiver
+tile.nyalibtest.side_hopper.name=Side Hopper
+tile.nyalibtest.network_node_block.name=Network Node Block
+tile.nyalibtest.east_west_network_node.name=East/West Network Node Block
+tile.nyalibtest.network_edge.name=Network Edge
+tile.nyalibtest.fluid_tank.name=Fluid Tank
+tile.nyalibtest.infinite_water_tank.name=Infinite Water Source
+tile.nyalibtest.energy_generator.name=Energy Generator
+tile.nyalibtest.energy_consumer.name=Energy Consumer
+tile.nyalibtest.energy_wire.name=Energy Wire
+tile.nyalibtest.sponge_stairs.name=Sponge Stairs
+tile.nyalibtest.sponge_slab.name=Sponge Slab
+tile.nyalibtest.sponge_fence.name=Sponge Fence
+tile.nyalibtest.sponge_fence_gate.name=Sponge Fence Gate

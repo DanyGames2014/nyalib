@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "nyalibtest:block/infinite_energy"
+    "all": "nyalibtest:block/energy_generator"
   }
 }

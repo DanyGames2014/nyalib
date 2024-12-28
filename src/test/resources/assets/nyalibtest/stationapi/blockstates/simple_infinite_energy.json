@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "nyalibtest:block/simple_infinite_energy" }
+  }
+}

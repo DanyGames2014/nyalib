@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "nyalibtest:block/energy_consumer" }
+  }
+}

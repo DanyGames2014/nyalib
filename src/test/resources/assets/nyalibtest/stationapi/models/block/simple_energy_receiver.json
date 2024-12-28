@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "nyalibtest:block/simple_energy_receiver"
+  }
+}

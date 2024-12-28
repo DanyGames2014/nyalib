@@ -27,7 +27,6 @@ import net.danygames2014.nyalibtest.block.simpleenergy.entity.SimpleEnergyReceiv
 import net.danygames2014.nyalibtest.network.BasicNetworkType;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.modificationstation.stationapi.api.event.block.entity.BlockEntityRegisterEvent;
 import net.modificationstation.stationapi.api.event.registry.BlockRegistryEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
@@ -44,13 +43,13 @@ public class NyaLibTest {
     
     public static Block sideHopper;
     
-    public static Block cableBlock;
-    public static Block eastWestCableBlock;
+    public static Block networkNodeBlock;
+    public static Block eastWestNetworkNodeBlock;
     public static Block networkEdgeBlock;
     
-    public static Block generatorBlock;
-    public static Block machineBlock;
-    public static Block wireBlock;
+    public static Block energyGeneratorBlock;
+    public static Block energyConsumerBlock;
+    public static Block energyWireBlock;
     
     public static Block fluidTankBlock;
     public static Block infiniteWaterBlock;
@@ -64,17 +63,28 @@ public class NyaLibTest {
 
     @EventListener
     public void registerBlock(BlockRegistryEvent event){
+        // Simple Energy
         simpleInfiniteEnergyBlock = new SimpleInfiniteEnergyBlock(NAMESPACE.id("simple_infinite_energy")).setTranslationKey(NAMESPACE, "simple_infinite_energy");
         simpleEnergyReceiverBlock = new SimpleEnergyReceiverBlock(NAMESPACE.id("simple_energy_receiver")).setTranslationKey(NAMESPACE, "simple_energy_receiver");
+        
+        // Item
         sideHopper = new SideHopperBlock(NAMESPACE.id("side_hopper")).setTranslationKey(NAMESPACE, "side_hopper");
-        cableBlock = new CableBlock(NAMESPACE.id("cable_block")).setTranslationKey(NAMESPACE, "cable_block");
-        eastWestCableBlock = new EastWestCableBlock(NAMESPACE.id("east_west_cable")).setTranslationKey(NAMESPACE, "east_west_cable");
+        
+        // Block Networks
+        networkNodeBlock = new CableBlock(NAMESPACE.id("network_node_block")).setTranslationKey(NAMESPACE, "network_node_block");
+        eastWestNetworkNodeBlock = new EastWestCableBlock(NAMESPACE.id("east_west_network_node")).setTranslationKey(NAMESPACE, "east_west_network_node");
         networkEdgeBlock = new NetworkEdgeBlock(NAMESPACE.id("network_edge")).setTranslationKey(NAMESPACE, "network_edge");
+        
+        // Fluid
         fluidTankBlock = new FluidTankBlock(NAMESPACE.id("fluid_tank")).setTranslationKey(NAMESPACE, "fluid_tank");
-        infiniteWaterBlock = new InfiniteWaterBlock(NAMESPACE.id("infinite_water_block")).setTranslationKey(NAMESPACE, "infinite_water_block");
-        generatorBlock = new GeneratorBlock(NAMESPACE.id("generator")).setTranslationKey(NAMESPACE, "generator");
-        machineBlock = new MachineBlock(NAMESPACE.id("machine")).setTranslationKey(NAMESPACE, "machine");
-        wireBlock = new WireBlock(NAMESPACE.id("wire")).setTranslationKey(NAMESPACE, "wire");
+        infiniteWaterBlock = new InfiniteWaterBlock(NAMESPACE.id("infinite_water_tank")).setTranslationKey(NAMESPACE, "infinite_water_tank");
+        
+        // Energy
+        energyGeneratorBlock = new GeneratorBlock(NAMESPACE.id("energy_generator")).setTranslationKey(NAMESPACE, "energy_generator");
+        energyConsumerBlock = new MachineBlock(NAMESPACE.id("energy_consumer")).setTranslationKey(NAMESPACE, "energy_consumer");
+        energyWireBlock = new WireBlock(NAMESPACE.id("energy_wire")).setTranslationKey(NAMESPACE, "energy_wire");
+        
+        // Block Templates
         spongeStairs = new StairsBlockTemplate(NAMESPACE.id("sponge_stairs"), Block.SPONGE).setTranslationKey(NAMESPACE, "sponge_stairs");
         spongeSlab = new SlabBlockTemplate(NAMESPACE.id("sponge_slab"), Block.SPONGE).setTranslationKey(NAMESPACE, "sponge_slab");
         spongeFence = new FenceBlockTemplate(NAMESPACE.id("sponge_fence"), Block.SPONGE).setTranslationKey(NAMESPACE, "sponge_fence");
