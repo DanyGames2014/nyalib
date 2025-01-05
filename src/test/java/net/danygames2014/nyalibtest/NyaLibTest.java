@@ -6,11 +6,11 @@ import net.danygames2014.nyalib.block.SlabBlockTemplate;
 import net.danygames2014.nyalib.block.StairsBlockTemplate;
 import net.danygames2014.nyalib.event.NetworkTypeRegistryEvent;
 import net.danygames2014.nyalib.network.NetworkType;
-import net.danygames2014.nyalibtest.block.energy.GeneratorBlock;
-import net.danygames2014.nyalibtest.block.energy.MachineBlock;
+import net.danygames2014.nyalibtest.block.energy.EnergyConsumerBlock;
+import net.danygames2014.nyalibtest.block.energy.EnergySourceBlock;
 import net.danygames2014.nyalibtest.block.energy.WireBlock;
-import net.danygames2014.nyalibtest.block.energy.entity.GeneratorBlockEntity;
-import net.danygames2014.nyalibtest.block.energy.entity.MachineBlockEntity;
+import net.danygames2014.nyalibtest.block.energy.entity.EnergyConsumerBlockEntity;
+import net.danygames2014.nyalibtest.block.energy.entity.EnergySourceBlockEntity;
 import net.danygames2014.nyalibtest.block.fluid.FluidTankBlock;
 import net.danygames2014.nyalibtest.block.fluid.InfiniteWaterBlock;
 import net.danygames2014.nyalibtest.block.item.SideHopperBlock;
@@ -27,6 +27,7 @@ import net.danygames2014.nyalibtest.block.simpleenergy.entity.SimpleEnergyReceiv
 import net.danygames2014.nyalibtest.network.BasicNetworkType;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.modificationstation.stationapi.api.event.block.entity.BlockEntityRegisterEvent;
 import net.modificationstation.stationapi.api.event.registry.BlockRegistryEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
@@ -80,8 +81,8 @@ public class NyaLibTest {
         infiniteWaterBlock = new InfiniteWaterBlock(NAMESPACE.id("infinite_water_tank")).setTranslationKey(NAMESPACE, "infinite_water_tank");
         
         // Energy
-        energyGeneratorBlock = new GeneratorBlock(NAMESPACE.id("energy_generator")).setTranslationKey(NAMESPACE, "energy_generator");
-        energyConsumerBlock = new MachineBlock(NAMESPACE.id("energy_consumer")).setTranslationKey(NAMESPACE, "energy_consumer");
+        energyGeneratorBlock = new EnergySourceBlock(NAMESPACE.id("energy_source"), Material.METAL).setTranslationKey(NAMESPACE, "energy_source");
+        energyConsumerBlock = new EnergyConsumerBlock(NAMESPACE.id("energy_consumer"), Material.METAL).setTranslationKey(NAMESPACE, "energy_consumer");
         energyWireBlock = new WireBlock(NAMESPACE.id("energy_wire")).setTranslationKey(NAMESPACE, "energy_wire");
         
         // Block Templates
@@ -98,8 +99,8 @@ public class NyaLibTest {
         event.register(SideHopperBlockEntity.class, "side_hopper");
         event.register(FluidTankBlockEntity.class, "fluid_tank");
         event.register(InfiniteWaterBlockEntity.class, "infinite_water_block");
-        event.register(GeneratorBlockEntity.class, "generator");
-        event.register(MachineBlockEntity.class, "machine");
+        event.register(EnergySourceBlockEntity.class, "energy_source");
+        event.register(EnergyConsumerBlockEntity.class, "energy_consumer");
     }
 
     @EventListener

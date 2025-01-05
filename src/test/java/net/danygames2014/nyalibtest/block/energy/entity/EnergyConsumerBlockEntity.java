@@ -1,20 +1,26 @@
 package net.danygames2014.nyalibtest.block.energy.entity;
 
-import net.danygames2014.nyalib.energy.EnergyConsumer;
-import net.danygames2014.nyalib.network.Network;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.world.World;
+import net.danygames2014.nyalib.energy.template.block.entity.EnergyConsumerBlockEntityTemplate;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
+public class EnergyConsumerBlockEntity extends EnergyConsumerBlockEntityTemplate {
 
-public class MachineBlockEntity extends BlockEntity implements EnergyConsumer {
-    public int energy;
-
+    boolean powered = false;
+    
     @Override
     public void tick() {
+        for (Direction side : Direction.values()) {
+            if (world.isEmittingRedstonePower(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ())) {
+                powered = true;
+            }
+        }
         
+        if (powered) {
+            removeEnergy(1);
+        }
+
+        super.tick();
     }
 
     @Override
@@ -24,7 +30,7 @@ public class MachineBlockEntity extends BlockEntity implements EnergyConsumer {
 
     @Override
     public int getMaxEnergyInput(@Nullable Direction direction) {
-        return 12;
+        return 2;
     }
 
     @Override
@@ -43,23 +49,7 @@ public class MachineBlockEntity extends BlockEntity implements EnergyConsumer {
     }
 
     @Override
-    public int getEnergyStored() {
-        return energy;
-    }
-
-    @Override
     public int getEnergyCapacity() {
-        return 500;
-    }
-
-    @Override
-    public int setEnergy(int value) {
-        this.energy = value;
-
-        if (energy > getEnergyCapacity()) {
-            energy = getEnergyCapacity();
-        }
-
-        return energy;
+        return 24;
     }
 }
