@@ -1,25 +1,18 @@
 package net.danygames2014.nyalibtest.block.energy;
 
+import net.danygames2014.nyalib.energy.template.block.EnergyWireBlockTemplate;
 import net.danygames2014.nyalib.network.Network;
 import net.danygames2014.nyalib.network.NetworkManager;
-import net.danygames2014.nyalib.network.NetworkNodeComponent;
-import net.danygames2014.nyalib.network.NetworkType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
-import net.modificationstation.stationapi.api.template.block.TemplateBlock;
 import net.modificationstation.stationapi.api.util.Identifier;
 
 import java.util.ArrayList;
 
-public class WireBlock extends TemplateBlock implements NetworkNodeComponent {
+public class WireBlock extends EnergyWireBlockTemplate {
     public WireBlock(Identifier identifier) {
-        super(identifier, Material.METAL);
-    }
-
-    @Override
-    public NetworkType getNetworkType() {
-        return NetworkType.ENERGY;
+        super(identifier, Material.WOOL);
     }
 
     @Override
