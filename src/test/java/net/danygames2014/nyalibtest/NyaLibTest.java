@@ -24,6 +24,7 @@ import net.danygames2014.nyalibtest.block.fluid.entity.InfiniteWaterBlockEntity;
 import net.danygames2014.nyalibtest.block.item.entity.SideHopperBlockEntity;
 import net.danygames2014.nyalibtest.block.simpleenergy.entity.InfiniteSimpleEnergyBlockEntity;
 import net.danygames2014.nyalibtest.block.simpleenergy.entity.SimpleEnergyReceiverBlockEntity;
+import net.danygames2014.nyalibtest.block.sound.ServerSoundBlock;
 import net.danygames2014.nyalibtest.network.BasicNetworkType;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
@@ -59,6 +60,8 @@ public class NyaLibTest {
     public static Block spongeSlab;
     public static Block spongeFence;
     public static Block spongeFenceGate;
+    
+    public static Block serverSoundBlock;
 
     public static NetworkType basicNetworkType;
 
@@ -90,6 +93,9 @@ public class NyaLibTest {
         spongeSlab = new SlabBlockTemplate(NAMESPACE.id("sponge_slab"), Block.SPONGE).setTranslationKey(NAMESPACE, "sponge_slab");
         spongeFence = new FenceBlockTemplate(NAMESPACE.id("sponge_fence"), Block.SPONGE).setTranslationKey(NAMESPACE, "sponge_fence");
         spongeFenceGate = new FenceGateBlockTemplate(NAMESPACE.id("sponge_fence_gate"), Block.SPONGE).setTranslationKey(NAMESPACE, "sponge_fence_gate");
+        
+        // Sound
+        serverSoundBlock = new ServerSoundBlock(NAMESPACE.id("server_sound_block"), Material.WOOL).setTranslationKey(NAMESPACE, "server_sound_block");
     }
 
     @EventListener
