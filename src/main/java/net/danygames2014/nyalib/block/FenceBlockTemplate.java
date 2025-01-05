@@ -89,6 +89,10 @@ public class FenceBlockTemplate extends TemplateBlock {
         if (state.isAir()) {
             return false;
         }
+        
+        if (state.isOf(Block.GLOWSTONE)) {
+            return false;
+        }
 
         if (state.getBlock() instanceof FenceBlockTemplate || state.getBlock() instanceof FenceGateBlockTemplate) {
             return true;
