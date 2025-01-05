@@ -3,16 +3,9 @@ package net.danygames2014.nyalib.energy;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * A common interface for blocks capable of storing energy and connecting with other energy devices
+ */
 @SuppressWarnings({"unused", "UnusedReturnValue"})
 public interface EnergyHandler extends EnergyCapable, EnergyStorage {
-
-    // Events
-
-    /**
-     * Triggered when a voltage higher than maximum is received on a given side
-     * @param direction The side on which overvoltage happened
-     *
-     * @param voltage The voltage
-     */
-    void onOvervoltage(@Nullable Direction direction, double voltage);
 }

@@ -72,7 +72,6 @@ public class EnergyNetwork extends Network {
 
         }
 
-        System.out.println("REMAINING POWAH:" + remainingPower);
         return power - remainingPower;
     }
     

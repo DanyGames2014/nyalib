@@ -5,6 +5,7 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 /**
  * A base energy block, capable of interacting with other {@link EnergyCapable} devices
  */
+@SuppressWarnings("unused")
 public interface EnergyCapable {
     /**
      * If this block can connect with the block in the supplied direction

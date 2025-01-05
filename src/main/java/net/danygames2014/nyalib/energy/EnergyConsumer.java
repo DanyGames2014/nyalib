@@ -3,6 +3,13 @@ package net.danygames2014.nyalib.energy;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * An interface to be implemented on a block entity of an Energy Consumer block
+ * <p>
+ * <p>See {@link net.danygames2014.nyalib.energy.template.block.entity.EnergyConsumerBlockEntityTemplate} for a proper implementation
+ * <p>    
+ * <p>NOTE: While the {@link #receiveEnergy(Direction, int, int)} method does contain basic logic for accepting energy, it does not contain the logic to respect the maximum energy input per tick
+ */
 public interface EnergyConsumer extends EnergyHandler {
     // Input Parameters
 
@@ -69,4 +76,14 @@ public interface EnergyConsumer extends EnergyHandler {
         // Return the used power
         return energy - unusedPower;
     }
+
+    // Events
+
+    /**
+     * Triggered when a voltage higher than maximum is received on a given side
+     * @param direction The side on which overvoltage happened
+     *
+     * @param voltage The voltage
+     */
+    void onOvervoltage(@Nullable Direction direction, double voltage);
 }

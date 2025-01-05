@@ -3,16 +3,9 @@ package net.danygames2014.nyalib.energy;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("unused")
 public interface EnergySource extends EnergyHandler {
     // Output Parameters
-    /**
-     * Get the current output voltage of this machine
-     *
-     * @param direction The direction to query from
-     * @return The current output voltage of this machine
-     */
-    int getOutputVoltage(@Nullable Direction direction);
-
     /**
      * Get the maximum output voltage that this machine can supply
      *
@@ -20,6 +13,14 @@ public interface EnergySource extends EnergyHandler {
      * @return The maximum output voltage this machine can supply
      */
     int getMaxOutputVoltage(@Nullable Direction direction);
+
+    /**
+     * Get the current output voltage of this machine
+     *
+     * @param direction The direction to query from
+     * @return The current output voltage of this machine
+     */
+    int getOutputVoltage(@Nullable Direction direction);
 
     /**
      * Get the maximum output power this machine can supply in one tick
@@ -47,6 +48,11 @@ public interface EnergySource extends EnergyHandler {
      * @return The actual energy provided
      */
     default int extractEnergy(@Nullable Direction direction, int requestedEnergy) {
+        // If energy cannot be extracted on this side, return zero
+        if(!canExtractEnergy(direction)) {
+            return 0;
+        }
+        
         // If there is no energy, skip the calculations
         if(getEnergyStored() <= 0){
             return 0;
