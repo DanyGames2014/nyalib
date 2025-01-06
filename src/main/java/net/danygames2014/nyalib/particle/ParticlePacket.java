@@ -1,4 +1,4 @@
-package net.danygames2014.nyalib.packet;
+package net.danygames2014.nyalib.particle;
 
 import net.danygames2014.nyalib.NyaLib;
 import net.fabricmc.api.EnvType;

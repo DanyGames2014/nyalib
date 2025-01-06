@@ -1,7 +1,7 @@
 package net.danygames2014.nyalibtest.block.sound;
 
-import net.danygames2014.nyalib.util.ParticleHelper;
-import net.danygames2014.nyalib.util.SoundHelper;
+import net.danygames2014.nyalib.particle.ParticleHelper;
+import net.danygames2014.nyalib.sound.SoundHelper;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;

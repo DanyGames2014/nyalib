@@ -1,6 +1,5 @@
-package net.danygames2014.nyalib.util;
+package net.danygames2014.nyalib.particle;
 
-import net.danygames2014.nyalib.packet.ParticlePacket;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;

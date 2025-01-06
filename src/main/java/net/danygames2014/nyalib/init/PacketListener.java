@@ -1,9 +1,9 @@
 package net.danygames2014.nyalib.init;
 
 import net.danygames2014.nyalib.NyaLib;
-import net.danygames2014.nyalib.packet.MusicPacket;
-import net.danygames2014.nyalib.packet.ParticlePacket;
-import net.danygames2014.nyalib.packet.SoundPacket;
+import net.danygames2014.nyalib.sound.MusicPacket;
+import net.danygames2014.nyalib.particle.ParticlePacket;
+import net.danygames2014.nyalib.sound.SoundPacket;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.modificationstation.stationapi.api.event.network.packet.PacketRegisterEvent;
 import net.modificationstation.stationapi.api.registry.PacketTypeRegistry;

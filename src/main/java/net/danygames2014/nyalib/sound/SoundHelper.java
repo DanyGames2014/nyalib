@@ -1,7 +1,5 @@
-package net.danygames2014.nyalib.util;
+package net.danygames2014.nyalib.sound;
 
-import net.danygames2014.nyalib.packet.MusicPacket;
-import net.danygames2014.nyalib.packet.SoundPacket;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.network.packet.PacketHelper;

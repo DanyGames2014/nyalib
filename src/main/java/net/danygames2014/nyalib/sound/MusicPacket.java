@@ -1,4 +1,4 @@
-package net.danygames2014.nyalib.packet;
+package net.danygames2014.nyalib.sound;
 
 import net.danygames2014.nyalib.NyaLib;
 import net.fabricmc.api.EnvType;
@@ -14,53 +14,45 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class SoundPacket extends Packet implements ManagedPacket<SoundPacket> {
-    public static final PacketType<SoundPacket> TYPE = PacketType.builder(true, false, SoundPacket::new).build();
+public class MusicPacket extends Packet implements ManagedPacket<MusicPacket> {
+    public static final PacketType<MusicPacket> TYPE = PacketType.builder(true, false, MusicPacket::new).build();
     
-    double x;
-    double y;
-    double z;
-    float volume;
-    float pitch;
+    int x;
+    int y;
+    int z;
     String name;
     
-    public SoundPacket() {
+    public MusicPacket() {
     }
 
-    public SoundPacket(double x, double y, double z, float volume, float pitch, String name) {
+    public MusicPacket(int x, int y, int z, String name) {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.volume = volume;
-        this.pitch = pitch;
         this.name = name;
     }
 
     @Override
     public void read(DataInputStream stream) {
         try {
-            x = stream.readDouble();
-            y = stream.readDouble();
-            z = stream.readDouble();
-            volume = stream.readFloat();
-            pitch = stream.readFloat();
+            x = stream.readInt();
+            y = stream.readInt();
+            z = stream.readInt();
             name = stream.readUTF();
         } catch (IOException e) {
-            NyaLib.LOGGER.warn("Error reading sound packet", e);
+            NyaLib.LOGGER.warn("Error reading music packet", e);
         }
     }
 
     @Override
     public void write(DataOutputStream stream) {
         try {
-            stream.writeDouble(x);
-            stream.writeDouble(y);
-            stream.writeDouble(z);
-            stream.writeFloat(volume);
-            stream.writeFloat(pitch);
+            stream.writeInt(x);
+            stream.writeInt(y);
+            stream.writeInt(z);
             stream.writeUTF(name);
         } catch (IOException e) {
-            NyaLib.LOGGER.warn("Error writing sound packet", e);
+            NyaLib.LOGGER.warn("Error writing music packet", e);
         }
     }
 
@@ -70,16 +62,20 @@ public class SoundPacket extends Packet implements ManagedPacket<SoundPacket> {
             return;
         }
 
-        Minecraft.INSTANCE.world.playSound(x,y,z,name,volume,pitch);
+        if(name.isEmpty()) {
+            name = null;
+        }
+        
+        Minecraft.INSTANCE.world.playStreaming(name, x,y,z);
     }
 
     @Override
     public int size() {
-        return 32 + name.length();
+        return 12 + name.length();
     }
 
     @Override
-    public @NotNull PacketType<SoundPacket> getType() {
+    public @NotNull PacketType<MusicPacket> getType() {
         return TYPE;
     }
 }
