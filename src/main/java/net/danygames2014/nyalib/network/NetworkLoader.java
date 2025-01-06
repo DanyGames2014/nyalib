@@ -4,7 +4,9 @@ import net.danygames2014.nyalib.NyaLib;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtIo;
+import net.minecraft.world.ClientWorld;
 import net.modificationstation.stationapi.api.event.world.WorldEvent;
+import net.modificationstation.stationapi.api.util.SideUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,10 +17,15 @@ import java.util.HashMap;
 public class NetworkLoader {
 
     public static boolean readOnly = false;
+    public static boolean isRemote = false;
 
     @EventListener
     public void saveNetworks(WorldEvent.Save event) {
         NyaLib.LOGGER.debug("Saving NyaLib networks");
+
+        if (isRemote) {
+            return;
+        }
 
         if (readOnly) {
             NyaLib.LOGGER.warn("Saving NyaLib networks prevented as they are read-only due to error when loading.");
@@ -45,6 +52,18 @@ public class NetworkLoader {
     @EventListener
     public void loadNetworks(WorldEvent.Init event) {
         NyaLib.LOGGER.debug("Loading NyaLib networks");
+
+        if (event.world == null) {
+            return;
+        }
+
+        isRemote = SideUtil.get(() -> event.world instanceof ClientWorld, () -> false);
+
+        if (isRemote) {
+            NyaLib.LOGGER.info("Skipping loading NyaLib networks because of the world being remote");
+            return;
+        }
+
         try {
             File file = event.world.dimensionData.getWorldPropertiesFile("nyalib_networks");
             if (file.exists()) {
