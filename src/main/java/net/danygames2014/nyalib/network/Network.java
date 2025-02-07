@@ -77,20 +77,24 @@ public class Network {
         return true;
     }
 
-    public void addBlock(int x, int y, int z, Block block) {
+    public void addBlock(int x, int y, int z, Block block, boolean notify) {
         if (block instanceof NetworkComponent component) {
             Vec3i pos = new Vec3i(x, y, z);
             components.put(pos, new NetworkComponentEntry(pos, block, component, new NbtCompound()));
-            component.onAddedToNet(world, x, y, z, this);
+            if (notify) {
+                component.onAddedToNet(world, x, y, z, this);
+            }
         }
     }
 
-    public boolean removeBlock(int x, int y, int z) {
+    public boolean removeBlock(int x, int y, int z, boolean notify) {
         Vec3i pos = new Vec3i(x, y, z);
         if (components.containsKey(pos)) {
 
-            if (components.get(pos).block() instanceof NetworkComponent component) {
-                component.onRemovedFromNet(world, x, y, z, this);
+            if(notify) {
+                if (components.get(pos).block() instanceof NetworkComponent component) {
+                    component.onRemovedFromNet(world, x, y, z, this);
+                }
             }
 
             components.remove(pos);
@@ -251,7 +255,7 @@ public class Network {
                         pos,
                         new NetworkComponentEntry(pos, block, component, blockNbt.getCompound("entryData"))
                 );
-                
+
                 component.onAddedToNet(world, pos.x, pos.y, pos.z, network);
             }
         }
