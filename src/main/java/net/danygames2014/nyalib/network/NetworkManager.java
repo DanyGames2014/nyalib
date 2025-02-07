@@ -275,7 +275,7 @@ public class NetworkManager {
                     case 0 -> {
                         Network network = createNetwork(world.dimension, networkType);
                         if (network != null) {
-                            network.addBlock(x, y, z, component);
+                            network.addBlock(x, y, z, component, true);
                             network.update();
                         }
                     }
@@ -284,7 +284,7 @@ public class NetworkManager {
                     default -> {
                         for (PotentialNeighbor neighbor : nodeNeighbors) {
                             if (neighbor.entry.component() instanceof NetworkNodeComponent) {
-                                neighbor.network.addBlock(x, y, z, component);
+                                neighbor.network.addBlock(x, y, z, component, true);
                                 neighbor.network.update();
                             }
                         }
@@ -334,7 +334,7 @@ public class NetworkManager {
 
                         // If the neighbor is not a stub, add it to the network, but also leave it in its own network
                     } else if (neighbor.network.components.size() > 1 && networkToJoin != null) {
-                        networkToJoin.addBlock(neighbor.position.x, neighbor.position.y, neighbor.position.z, neighbor.entry.block());
+                        networkToJoin.addBlock(neighbor.position.x, neighbor.position.y, neighbor.position.z, neighbor.entry.block(), true);
                         networkToJoin.update();
                     }
 
@@ -342,7 +342,7 @@ public class NetworkManager {
 
                 // Add to the network
                 if (networkToJoin != null) {
-                    networkToJoin.addBlock(x, y, z, component);
+                    networkToJoin.addBlock(x, y, z, component, true);
                     networkToJoin.update();
                 }
             }
@@ -365,7 +365,7 @@ public class NetworkManager {
                 // There are no neighbors, which should mean that this is the last block in the network and the network can be removed
                 case 0 -> {
                     NyaLib.LOGGER.debug("Last block in network, removing network with ID {}", net.getId());
-                    net.removeBlock(x, y, z);
+                    net.removeBlock(x, y, z, true);
 
                     if (net.components.isEmpty()) {
                         removeNetwork(net);
@@ -377,11 +377,11 @@ public class NetworkManager {
 
                 case 1 -> {
                     NyaLib.LOGGER.debug("Only one neighbor, its a stump and can be removed normally");
-                    net.removeBlock(x, y, z);
+                    net.removeBlock(x, y, z, true);
                 }
 
                 default -> {
-                    net.removeBlock(x, y, z);
+                    net.removeBlock(x, y, z, true);
 
                     ArrayList<ArrayList<Vec3i>> potentialNetworks = new ArrayList<>(4);
                     // Walk thru all the sides
@@ -460,12 +460,13 @@ public class NetworkManager {
                                         // 3.1 Check if we are moving a node or an edge
                                         // 3.2 If we are moving a node, remove it from the current netowrk
                                         if (isNode(world, pos.x, pos.y, pos.z)) {
-                                            net.removeBlock(pos.x, pos.y, pos.z);
+                                            net.removeBlock(pos.x, pos.y, pos.z, false);
                                             newNetwork.addBlock(
                                                     pos.x,
                                                     pos.y,
                                                     pos.z,
-                                                    world.getBlockState(pos.x, pos.y, pos.z).getBlock()
+                                                    world.getBlockState(pos.x, pos.y, pos.z).getBlock(),
+                                                    false
                                             );
 
                                             // If we are moving an edge, check if it also has been discoevered by the largest network and if yes, dont remove it and add it to both
@@ -474,11 +475,12 @@ public class NetworkManager {
                                                     pos.x,
                                                     pos.y,
                                                     pos.z,
-                                                    world.getBlockState(pos.x, pos.y, pos.z).getBlock()
+                                                    world.getBlockState(pos.x, pos.y, pos.z).getBlock(),
+                                                    false
                                             );
 
                                             if (!potentialNetworks.get(largestNetworkIndex).contains(pos)) {
-                                                net.removeBlock(pos.x, pos.y, pos.z);
+                                                net.removeBlock(pos.x, pos.y, pos.z, false);
                                             }
                                         }
                                     }

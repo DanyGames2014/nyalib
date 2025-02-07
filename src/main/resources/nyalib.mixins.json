@@ -9,6 +9,7 @@
     "item.FurnaceBlockEntityMixin",
     "network.BlockMixin",
     "network.BlockWithEntityMixin",
+    "network.FlattenedChunkMixin",
     "network.WorldMixin"
   ],
   "server": [
