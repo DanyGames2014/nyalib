@@ -156,7 +156,7 @@ public class Network {
                 Vec3i side = new Vec3i(pos.x + dir.getOffsetX(), pos.y + dir.getOffsetY(), pos.z + dir.getOffsetZ());
                 if (components.containsKey(side) && !closed.contains(side)) {
                     // Check if the side block can connect to this block and reverse
-                    if (getEntry(side).component().canConnectTo(world, pos.x, pos.y, pos.z, this, dir) && getEntry(pos).component().canConnectTo(world, side.x, side.y, side.z, this, dir)) {
+                    if (getEntry(pos).component().canConnectTo(world, pos.x, pos.y, pos.z, this, dir) && getEntry(side).component().canConnectTo(world, side.x, side.y, side.z, this, dir.getOpposite())) {
                         // Check if the component is an edge, or a node
                         NetworkComponent component = getEntry(side).component();
                         if (component instanceof NetworkNodeComponent) {
