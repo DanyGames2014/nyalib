@@ -1,8 +1,10 @@
 package net.danygames2014.nyalib.network.energy;
 
+import net.danygames2014.nyalib.NyaLib;
 import net.danygames2014.nyalib.energy.EnergyConsumer;
 import net.danygames2014.nyalib.energy.EnergySource;
 import net.danygames2014.nyalib.network.*;
+import net.danygames2014.nyalib.particle.ParticleHelper;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
@@ -24,10 +26,9 @@ public class EnergyNetwork extends Network {
 
     @Override
     public void update() {
-        super.update();
-
         consumers.clear();
         consumerCache.clear();
+
         for (NetworkComponentEntry componentEntry : components.values()) {
             if (componentEntry.component() instanceof NetworkEdgeComponent) {
                 if (world.getBlockEntity(componentEntry.pos().x, componentEntry.pos().y, componentEntry.pos().z) instanceof EnergyConsumer consumer) {
@@ -35,6 +36,8 @@ public class EnergyNetwork extends Network {
                 }
             }
         }
+
+        super.update();
     }
 
     //long time = System.nanoTime();
@@ -46,7 +49,7 @@ public class EnergyNetwork extends Network {
      * @param source    The source of energy
      * @param sourcePos The position of the source
      * @param voltage   The voltage provided
-     * @param power  The amperage provided
+     * @param power     The amperage provided
      * @return The power used
      */
     public int provideEnergy(EnergySource source, Vec3i sourcePos, int voltage, int power) {
@@ -59,7 +62,7 @@ public class EnergyNetwork extends Network {
             // Check if the consumer can even accept more energy
             if (consumer.getRemainingCapacity() > 0) {
                 // Insert Energy into the consumers
-                int usedPower = traverseEnergy(consumer, path.endFace, voltage, remainingPower);
+                int usedPower = traverseEnergy(consumer, path.endFace, path, voltage, remainingPower);
 
                 // Reduce the remaining amount
                 remainingPower -= usedPower;
@@ -74,8 +77,12 @@ public class EnergyNetwork extends Network {
 
         return power - remainingPower;
     }
-    
-    private int traverseEnergy(EnergyConsumer consumer, Direction consumerFace, int voltage, int remainingPower){
+
+    private int traverseEnergy(EnergyConsumer consumer, Direction consumerFace, NetworkPath path, int voltage, int remainingPower) {
+        for (Vec3i node : path.path) {
+            ParticleHelper.addParticle(world, "flame", node.x + 0.5D, node.y + 1, node.z + 0.5D, 0, 0.1D, 0);
+        }
+
         return consumer.receiveEnergy(consumerFace, voltage, remainingPower);
     }
 
@@ -95,8 +102,14 @@ public class EnergyNetwork extends Network {
                 if (consumer.getKey().equals(source)) {
                     continue;
                 }
-
+                
                 NetworkPath path = this.getPath(source, consumer.getKey());
+                
+                if (path == null) {
+                    NyaLib.LOGGER.debug("Path was null when getting valid consumers");
+                    continue;
+                }
+
                 if (consumer.getValue().consumer.canReceiveEnergy(path.endFace)) {
                     consumers.add(new ConsumerPath(consumer.getValue().consumer, path));
                 }

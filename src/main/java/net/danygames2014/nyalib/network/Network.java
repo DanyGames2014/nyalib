@@ -58,10 +58,24 @@ public class Network {
         return components.get(pos);
     }
 
+    /**
+     * Get the shortest path between points
+     *
+     * @param from The point from which to calculate path
+     * @param to   The point to which the path should be calculated
+     * @return The NetworkPath if it was found. <code>null</code> if it was now
+     */
     public NetworkPath getPath(Vec3i from, Vec3i to) {
         return pathManager.getPath(from, to);
     }
 
+    /**
+     * Get the shortest path between network components
+     *
+     * @param from The component from which to calculate path
+     * @param to   The component to which the path should be calculated
+     * @return The NetworkPath if it was found. <code>null</code> if it was now
+     */
     public NetworkPath getPath(NetworkComponentEntry from, NetworkComponentEntry to) {
         return getPath(from.pos(), to.pos());
     }
@@ -91,7 +105,7 @@ public class Network {
         Vec3i pos = new Vec3i(x, y, z);
         if (components.containsKey(pos)) {
 
-            if(notify) {
+            if (notify) {
                 if (components.get(pos).block() instanceof NetworkComponent component) {
                     component.onRemovedFromNet(world, x, y, z, this);
                 }
@@ -128,6 +142,8 @@ public class Network {
      * Called when there is a change to the network physical topology
      */
     public void update() {
+        pathManager.clearCache();
+        
         for (Map.Entry<Vec3i, NetworkComponentEntry> block : components.entrySet()) {
             Vec3i pos = block.getKey();
 

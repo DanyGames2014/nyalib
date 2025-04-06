@@ -18,6 +18,7 @@ public class NetworkLoader {
 
     public static boolean readOnly = false;
     public static boolean isRemote = false;
+    // TODO: Propagate isRemote to NetworkManager and stop most of its functions on client
 
     @EventListener
     public void saveNetworks(WorldEvent.Save event) {

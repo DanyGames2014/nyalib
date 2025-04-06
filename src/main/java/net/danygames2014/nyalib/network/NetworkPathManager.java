@@ -18,6 +18,10 @@ public class NetworkPathManager {
         pathCache = new HashMap<>();
     }
 
+    public void clearCache() {
+        pathCache.clear();
+    }
+    
     public NetworkPath getPath(Vec3i from, Vec3i to) {
         // If there isnt a hashmap to the source component, create it
         if (!pathCache.containsKey(from)) {
@@ -26,7 +30,13 @@ public class NetworkPathManager {
 
         // If the destination path isnt cached, compute it. If it is cached, validate it
         if (!pathCache.get(from).containsKey(to) || !validatePath(pathCache.get(from).get(to))) {
-            pathCache.get(from).put(to, computePath(from, to));
+            NetworkPath path = computePath(from, to);
+
+            if (path != null) {
+                pathCache.get(from).put(to, path);
+            } else {
+                return null;
+            }
         }
 
         // Return the path
@@ -35,7 +45,7 @@ public class NetworkPathManager {
 
     public boolean validatePath(NetworkPath path) {
         for (Vec3i point : path.path) {
-            if(!network.components.containsKey(point)) {
+            if (!network.components.containsKey(point)) {
                 return false;
             }
         }
@@ -47,7 +57,11 @@ public class NetworkPathManager {
         // Calculate Path
         AStar aStar = new AStar(from, to, network.components.keySet().toArray(new Vec3i[0]));
         Vec3i[] path = aStar.calculate();
-        
+
+        if (path == null || path.length == 0) {
+            return null;
+        }
+
         // Calculate Path Cost
         int cost = 0;
         for (Vec3i pos : path) {
@@ -68,18 +82,18 @@ public class NetworkPathManager {
         }
 
         Direction startFace = null;
-        
-        if(path.length >= 2){
+
+        if (path.length >= 2) {
             Vec3i start = path[0];
             Vec3i afterStart = path[1];
-            
+
             for (Direction dir : Direction.values()) {
                 if (start.x + dir.getOffsetX() == afterStart.x && start.y + dir.getOffsetY() == afterStart.y && start.z + dir.getOffsetZ() == afterStart.z) {
                     startFace = dir;
                 }
             }
         }
-        
+
 
         // Return path
         return new NetworkPath(from, startFace, to, endFace, path, cost);

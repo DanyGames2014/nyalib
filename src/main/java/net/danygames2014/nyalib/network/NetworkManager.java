@@ -426,6 +426,7 @@ public class NetworkManager {
 
                         case 1 -> {
                             // This is fine
+                            net.update();
                         }
 
                         // 2 or more networks

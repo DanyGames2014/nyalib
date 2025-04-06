@@ -28,6 +28,13 @@ public class ParticleHelper {
         addParticle(world, particle, x, y, z, velocityX, velocityY, velocityZ, 32);
     }
 
+    /**
+     * Spawn a particle for all players in a range of 32 blocks with no velocity
+     */
+    public static void addParticle(World world, String particle, double x, double y, double z) {
+        addParticle(world, particle, x, y, z, 0.0D, 0.0D, 0.0D);
+    }
+
 
     /**
      * Spawn a particle for the given player at the given coordinates

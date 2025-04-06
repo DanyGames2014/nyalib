@@ -1,5 +1,6 @@
 package net.danygames2014.nyalib.util;
 
+import net.danygames2014.nyalib.NyaLib;
 import net.minecraft.util.math.Vec3i;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
@@ -31,9 +32,15 @@ public class AStar {
 
     public Vec3i[] calculate() {
         AStarNode endNode = null;
-        
+
         while (endNode == null) {
             AStarNode current = getLowestFCost();
+
+            if (current == null) {
+                NyaLib.LOGGER.debug("Current node is null. No path found.");
+                return null;
+            }
+
             open.remove(current.position);
             closed.put(current.position, current);
 
@@ -50,11 +57,11 @@ public class AStar {
                 AStarNode neighborNode = validNodes.get(neighbor);
                 double neighborCost = neighborNode.fCost;
                 double newCost = neighborNode.calculateCost(start, end);
-                
-                if(newCost < neighborCost || !open.containsKey(neighbor)) {
+
+                if (newCost < neighborCost || !open.containsKey(neighbor)) {
                     neighborNode.fCost = newCost;
                     neighborNode.parent = current;
-                    if(!open.containsKey(neighbor)) {
+                    if (!open.containsKey(neighbor)) {
                         open.put(neighbor, neighborNode);
                     }
                 }
@@ -64,8 +71,8 @@ public class AStar {
 
         AStarNode traversedNode = endNode;
         ArrayList<Vec3i> path = new ArrayList<>();
-        
-        while(traversedNode != null) {
+
+        while (traversedNode != null) {
             path.add(traversedNode.position);
             traversedNode = traversedNode.parent;
         }
@@ -78,6 +85,11 @@ public class AStar {
     AStarNode getLowestFCost() {
         double lowestCost = Double.MAX_VALUE;
         AStarNode bestNode = null;
+
+        if (open.isEmpty()) {
+            NyaLib.LOGGER.debug("Lowest F cost requested for empty path.");
+            return null;
+        }
 
         for (Map.Entry<Vec3i, AStarNode> nodeEntry : open.entrySet()) {
             AStarNode node = nodeEntry.getValue();
