@@ -14,8 +14,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EnergyNetwork extends Network {
+    // Energy consumers on the network
     public HashMap<Vec3i, ConsumerEntry> consumers;
 
+    // Cache of paths to energy consumers
     public HashMap<Vec3i, ArrayList<ConsumerPath>> consumerCache;
 
     public EnergyNetwork(World world, NetworkType type) {
@@ -78,12 +80,12 @@ public class EnergyNetwork extends Network {
         return power - remainingPower;
     }
 
-    private int traverseEnergy(EnergyConsumer consumer, Direction consumerFace, NetworkPath path, int voltage, int remainingPower) {
+    private int traverseEnergy(EnergyConsumer consumer, Direction consumerFace, NetworkPath path, int voltage, int power) {
         for (Vec3i node : path.path) {
             ParticleHelper.addParticle(world, "flame", node.x + 0.5D, node.y + 1, node.z + 0.5D, 0, 0.1D, 0);
         }
 
-        return consumer.receiveEnergy(consumerFace, voltage, remainingPower);
+        return consumer.receiveEnergy(consumerFace, voltage, power);
     }
 
     /**
