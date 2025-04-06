@@ -17,11 +17,17 @@ public class WireBlock extends EnergyWireBlockTemplate {
 
     @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
-        ArrayList<Network> networks = NetworkManager.getAt(world.dimension, x, y, z, this.getNetworkTypes());
-        player.sendMessage("This block is in networks:");
-        for (var net : networks){
-            player.sendMessage("NET " + net.getId() + " HASHCODE: " + net.hashCode());
+        if (!player.isSneaking()) {
+            ArrayList<Network> networks = NetworkManager.getAt(world.dimension, x, y, z, this.getNetworkTypes());
+            StringBuilder sb = new StringBuilder();
+            sb.append("This block (x:" + x + " y:" + y + " z:" + z + ") is in networks:");
+            for (var net : networks) {
+                sb.append(" " + net.getId());
+            }
+            player.sendMessage(sb.toString());
+            return true;
         }
-        return true;
+
+        return super.onUse(world, x, y, z, player);
     }
 }

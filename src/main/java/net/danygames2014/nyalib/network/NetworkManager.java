@@ -434,8 +434,7 @@ public class NetworkManager {
                         // `net` is the first network here
                         default -> {
 
-                            // 1.Determine the largest and current from potential networks
-                            // 2.Identify which discoveredNetwork is the current network
+                            // 1.Determine the largest of potential networks
 
                             int largestNetworkIndex = 0;
                             int largestNetworkSize = 0;
@@ -447,7 +446,7 @@ public class NetworkManager {
                                 }
                             }
 
-                            // 3.  Loop thru the other networks and create new networks for them
+                            // 2.  Loop thru the other networks and create new networks for them
                             for (int i = 0; i < potentialNetworks.size(); i++) {
                                 if (i != largestNetworkIndex) {
                                     Network newNetwork = createNetwork(world.dimension, net.type);
@@ -458,8 +457,8 @@ public class NetworkManager {
                                     }
 
                                     for (Vec3i pos : potentialNetworks.get(i)) {
-                                        // 3.1 Check if we are moving a node or an edge
-                                        // 3.2 If we are moving a node, remove it from the current netowrk
+                                        // 2.1 Check if we are moving a node or an edge
+                                        // 2.2 If we are moving a node, remove it from the current netowrk
                                         if (isNode(world, pos.x, pos.y, pos.z)) {
                                             net.removeBlock(pos.x, pos.y, pos.z, false);
                                             newNetwork.addBlock(
@@ -491,7 +490,7 @@ public class NetworkManager {
                             }
 
 
-                            // 4.  Update all the networks
+                            // 3.  Update all the networks
                             net.update();
                         }
                     }
