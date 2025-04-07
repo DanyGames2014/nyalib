@@ -20,6 +20,7 @@
       "net.danygames2014.nyalib.init.FluidListener",
       "net.danygames2014.nyalib.init.NetworkTypeListener",
       "net.danygames2014.nyalib.init.PacketListener",
+      "net.danygames2014.nyalib.init.BlockCapabilityListener",
       "net.danygames2014.nyalib.NyaLib",
       "net.danygames2014.nyalib.network.NetworkLoader"
     ],
