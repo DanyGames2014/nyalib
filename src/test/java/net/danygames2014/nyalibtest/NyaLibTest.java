@@ -7,6 +7,7 @@ import net.danygames2014.nyalib.block.StairsBlockTemplate;
 import net.danygames2014.nyalib.event.NetworkTypeRegistryEvent;
 import net.danygames2014.nyalib.network.NetworkType;
 import net.danygames2014.nyalibtest.block.energy.EnergyConsumerBlock;
+import net.danygames2014.nyalibtest.block.energy.MultimeterItem;
 import net.danygames2014.nyalibtest.block.energy.EnergySourceBlock;
 import net.danygames2014.nyalibtest.block.energy.WireBlock;
 import net.danygames2014.nyalibtest.block.energy.entity.EnergyConsumerBlockEntity;
@@ -29,6 +30,7 @@ import net.danygames2014.nyalibtest.network.BasicNetworkType;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.item.Item;
 import net.modificationstation.stationapi.api.event.block.entity.BlockEntityRegisterEvent;
 import net.modificationstation.stationapi.api.event.registry.BlockRegistryEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
@@ -51,6 +53,7 @@ public class NyaLibTest {
     public static Block energyGeneratorBlock;
     public static Block energyConsumerBlock;
     public static Block energyWireBlock;
+    public static Item multimeter;
     
     public static Block fluidTankBlock;
     public static Block infiniteWaterBlock;
@@ -86,6 +89,7 @@ public class NyaLibTest {
         energyGeneratorBlock = new EnergySourceBlock(NAMESPACE.id("energy_source"), Material.METAL).setTranslationKey(NAMESPACE, "energy_source");
         energyConsumerBlock = new EnergyConsumerBlock(NAMESPACE.id("energy_consumer"), Material.METAL).setTranslationKey(NAMESPACE, "energy_consumer");
         energyWireBlock = new WireBlock(NAMESPACE.id("energy_wire")).setTranslationKey(NAMESPACE, "energy_wire");
+        multimeter = new MultimeterItem(NAMESPACE.id("multimeter")).setTranslationKey(NAMESPACE, "multimeter");
         
         // Block Templates
         spongeStairs = new StairsBlockTemplate(NAMESPACE.id("sponge_stairs"), Block.SPONGE).setTranslationKey(NAMESPACE, "sponge_stairs");

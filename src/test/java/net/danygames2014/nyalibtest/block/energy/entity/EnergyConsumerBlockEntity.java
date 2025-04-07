@@ -10,6 +10,9 @@ public class EnergyConsumerBlockEntity extends EnergyConsumerBlockEntityTemplate
     
     @Override
     public void tick() {
+        
+        powered = false;
+        
         for (Direction side : Direction.values()) {
             if (world.isEmittingRedstonePower(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ())) {
                 powered = true;

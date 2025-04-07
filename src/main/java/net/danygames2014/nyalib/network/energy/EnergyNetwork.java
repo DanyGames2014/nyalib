@@ -1,12 +1,14 @@
 package net.danygames2014.nyalib.network.energy;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.danygames2014.nyalib.NyaLib;
+import net.danygames2014.nyalib.energy.EnergyConductor;
 import net.danygames2014.nyalib.energy.EnergyConsumer;
 import net.danygames2014.nyalib.energy.EnergySource;
 import net.danygames2014.nyalib.network.*;
-import net.danygames2014.nyalib.particle.ParticleHelper;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.util.API;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.ArrayList;
@@ -15,31 +17,54 @@ import java.util.Map;
 
 public class EnergyNetwork extends Network {
     // Energy consumers on the network
-    public HashMap<Vec3i, ConsumerEntry> consumers;
+    private final HashMap<Vec3i, ConsumerEntry> consumers;
 
     // Cache of paths to energy consumers
-    public HashMap<Vec3i, ArrayList<ConsumerPath>> consumerCache;
+    private final HashMap<Vec3i, ArrayList<ConsumerPath>> consumerCache;
+
+    // The energy flow values in the last tick
+    private final Object2ObjectOpenHashMap<Vec3i, EnergyFlowEntry> energyFlow;
 
     public EnergyNetwork(World world, NetworkType type) {
         super(world, type);
         consumers = new HashMap<>();
         consumerCache = new HashMap<>();
+        energyFlow = new Object2ObjectOpenHashMap<>();
     }
 
     @Override
     public void update() {
+        // Clear Caches
         consumers.clear();
         consumerCache.clear();
+        energyFlow.clear();
 
+        // Build Caches
         for (NetworkComponentEntry componentEntry : components.values()) {
+            // For network edges, check if theyre valid consumers
             if (componentEntry.component() instanceof NetworkEdgeComponent) {
                 if (world.getBlockEntity(componentEntry.pos().x, componentEntry.pos().y, componentEntry.pos().z) instanceof EnergyConsumer consumer) {
                     consumers.put(componentEntry.pos(), new ConsumerEntry(componentEntry, consumer));
+                }
+
+            // For nodes, check if theyre valid conductors
+            } else if (componentEntry.component() instanceof NetworkNodeComponent) {
+                if (componentEntry.block() instanceof EnergyConductor conductor) {
+                    energyFlow.put(componentEntry.pos(), new EnergyFlowEntry(componentEntry, conductor, 0));
                 }
             }
         }
 
         super.update();
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        for (EnergyFlowEntry entry : energyFlow.values()) {
+            entry.energyFlow = 0;
+        }
     }
 
     //long time = System.nanoTime();
@@ -81,8 +106,26 @@ public class EnergyNetwork extends Network {
     }
 
     private int traverseEnergy(EnergyConsumer consumer, Direction consumerFace, NetworkPath path, int voltage, int power) {
+        // Traverse all the nodes the energy will go thru
         for (Vec3i node : path.path) {
-            ParticleHelper.addParticle(world, "flame", node.x + 0.5D, node.y + 1, node.z + 0.5D, 0, 0.1D, 0);
+            // Get the flow entry for the given node
+            EnergyFlowEntry flowEntry = energyFlow.get(node);
+
+            // If ithe entry is null, the block doesnt have a EnergyConductor implemented on it
+            if (flowEntry != null) {
+                // Add the energyFlow
+                flowEntry.energyFlow += power;
+
+                // Check for breakdown voltage
+                if (voltage > flowEntry.conductor.getBreakdownVoltage(world, flowEntry.componentEntry)) {
+                    flowEntry.conductor.onBreakdownVoltage(world, flowEntry.componentEntry, voltage);
+                }
+
+                // Check for breakdown power
+                if (flowEntry.energyFlow > flowEntry.conductor.getBreakdownPower(world, flowEntry.componentEntry)) {
+                    flowEntry.conductor.onBreakdownPower(world, flowEntry.componentEntry, voltage, flowEntry.energyFlow);
+                }
+            }
         }
 
         return consumer.receiveEnergy(consumerFace, voltage, power);
@@ -104,9 +147,9 @@ public class EnergyNetwork extends Network {
                 if (consumer.getKey().equals(source)) {
                     continue;
                 }
-                
+
                 NetworkPath path = this.getPath(source, consumer.getKey());
-                
+
                 if (path == null) {
                     NyaLib.LOGGER.debug("Path was null when getting valid consumers");
                     continue;
@@ -121,10 +164,30 @@ public class EnergyNetwork extends Network {
             return consumers;
         }
     }
+    
+    public EnergyFlowEntry getFlowEntry(int x, int y, int z) {
+        return getFlowEntry(new Vec3i(x, y, z));
+    }
+    
+    public EnergyFlowEntry getFlowEntry(Vec3i pos) {
+        return energyFlow.get(pos);
+    }
 
     public record ConsumerPath(EnergyConsumer consumer, NetworkPath path) {
     }
 
     public record ConsumerEntry(NetworkComponentEntry componentEntry, EnergyConsumer consumer) {
+    }
+
+    public static final class EnergyFlowEntry {
+        public final NetworkComponentEntry componentEntry;
+        public final EnergyConductor conductor;
+        public int energyFlow;
+
+        public EnergyFlowEntry(NetworkComponentEntry componentEntry, EnergyConductor conductor, int energyFlow) {
+            this.componentEntry = componentEntry;
+            this.conductor = conductor;
+            this.energyFlow = energyFlow;
+        }
     }
 }

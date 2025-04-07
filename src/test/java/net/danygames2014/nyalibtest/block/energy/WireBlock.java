@@ -2,6 +2,7 @@ package net.danygames2014.nyalibtest.block.energy;
 
 import net.danygames2014.nyalib.energy.template.block.EnergyWireBlockTemplate;
 import net.danygames2014.nyalib.network.Network;
+import net.danygames2014.nyalib.network.NetworkComponentEntry;
 import net.danygames2014.nyalib.network.NetworkManager;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,7 +18,7 @@ public class WireBlock extends EnergyWireBlockTemplate {
 
     @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
-        if (!player.isSneaking()) {
+        if (player.isSneaking()) {
             ArrayList<Network> networks = NetworkManager.getAt(world.dimension, x, y, z, this.getNetworkTypes());
             StringBuilder sb = new StringBuilder();
             sb.append("This block (x:" + x + " y:" + y + " z:" + z + ") is in networks:");
@@ -29,5 +30,25 @@ public class WireBlock extends EnergyWireBlockTemplate {
         }
 
         return super.onUse(world, x, y, z, player);
+    }
+
+    @Override
+    public int getBreakdownVoltage(World world, NetworkComponentEntry entry) {
+        return 500;
+    }
+
+    @Override
+    public int getBreakdownPower(World world, NetworkComponentEntry entry) {
+        return 3;
+    }
+
+    @Override
+    public void onBreakdownVoltage(World world, NetworkComponentEntry entry, int voltage) {
+        
+    }
+
+    @Override
+    public void onBreakdownPower(World world, NetworkComponentEntry entry, int voltage, int power) {
+        
     }
 }

@@ -11,6 +11,9 @@ public class EnergySourceBlockEntity extends EnergySourceBlockEntityTemplate {
     @Override
     public void tick() {
         super.tick();
+        
+        powered = false;
+        
         for (Direction side : Direction.values()) {
             if (world.isEmittingRedstonePower(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ())) {
                 powered = true;
