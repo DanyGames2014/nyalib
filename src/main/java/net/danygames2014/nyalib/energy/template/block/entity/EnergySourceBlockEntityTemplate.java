@@ -1,5 +1,7 @@
 package net.danygames2014.nyalib.energy.template.block.entity;
 
+import it.unimi.dsi.fastutil.Pair;
+import it.unimi.dsi.fastutil.objects.ObjectObjectMutablePair;
 import net.danygames2014.nyalib.energy.EnergyConsumer;
 import net.danygames2014.nyalib.energy.EnergySource;
 import net.danygames2014.nyalib.network.Network;
@@ -11,6 +13,7 @@ import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,15 +22,20 @@ import java.util.Map;
  */
 public abstract class EnergySourceBlockEntityTemplate extends BlockEntity implements EnergySource {
     public int energy;
-    public HashMap<EnergyNetwork, Direction> energyNets = new HashMap<>(2);
+    
+    private final HashMap<EnergyNetwork, Direction> energyNets = new HashMap<>(2);
+    
+    // TODO: Solve this without queues
+    private final ArrayList<EnergyNetwork> energyNetRemoveQueue = new ArrayList<>(2);
+    private final ArrayList<ObjectObjectMutablePair<EnergyNetwork, Direction>> energyNetAddQueue = new ArrayList<>(2);
 
     @Override
     public void tick() {
         // We are using a push system, so the machine is responsible for sending the energy
-        
+
         // Reset the extracted counter
         extracted = 0;
-        
+
         // First check if we have anything to actually send
         if (energy > 0) {
             // If we do, first try to send to adjacent energy consumers
@@ -46,33 +54,45 @@ public abstract class EnergySourceBlockEntityTemplate extends BlockEntity implem
                 extracted += usedPower;
             }
         }
+
+        // Remove queued energy nets
+        for (EnergyNetwork energyNet : energyNetRemoveQueue) {
+            energyNets.remove(energyNet);
+        }
+        energyNetRemoveQueue.clear();
+        
+        // Add queued energy nets
+        for (ObjectObjectMutablePair<EnergyNetwork, Direction> entry : energyNetAddQueue) {
+            energyNets.put(entry.left(), entry.right());
+        }
+        energyNetAddQueue.clear();
     }
 
     public void addedToNet(World world, int x, int y, int z, Network network) {
         if (network instanceof EnergyNetwork energyNet) {
             if (!energyNets.containsKey(energyNet)) {
-                energyNets.put(energyNet, getNetSide(x,y,z,network));
+                energyNetAddQueue.add(new ObjectObjectMutablePair<>(energyNet, getNetSide(x, y, z, network)));
             }
         }
     }
 
     public void removedFromNet(World world, int x, int y, int z, Network network) {
         if (network instanceof EnergyNetwork energyNet) {
-            energyNets.remove(energyNet);
+            energyNetRemoveQueue.add(energyNet);
         }
     }
 
     public void update(World world, int x, int y, int z, Network network) {
         if (network instanceof EnergyNetwork energyNet) {
             if (!energyNets.containsKey(energyNet)) {
-                energyNets.put(energyNet, getNetSide(x,y,z,network));
+                energyNetAddQueue.add(new ObjectObjectMutablePair<>(energyNet, getNetSide(x, y, z, network)));
             }
         }
     }
-    
+
     public @Nullable Direction getNetSide(int x, int y, int z, Network network) {
         for (Direction side : Direction.values()) {
-            if(network.isAt(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ())) {
+            if (network.isAt(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ())) {
                 return side;
             }
         }
@@ -114,32 +134,33 @@ public abstract class EnergySourceBlockEntityTemplate extends BlockEntity implem
     }
 
     public int extracted = 0;
+
     @Override
     public int extractEnergy(@Nullable Direction direction, int requestedEnergy) {
         // If energy cannot be extracted on this side, return zero
-        if(!canExtractEnergy(direction)) {
+        if (!canExtractEnergy(direction)) {
             return 0;
         }
-        
+
         // If there is no energy, skip the calculations
-        if(getEnergyStored() <= 0){
+        if (getEnergyStored() <= 0) {
             return 0;
         }
-        
+
         // Cap the requested energy at the max this machine will be able to provide
         requestedEnergy = Math.min(requestedEnergy, getMaxEnergyOutput(direction) - extracted);
-        
+
         // If no or negative energy is requested, return zero
-        if(requestedEnergy <= 0){
+        if (requestedEnergy <= 0) {
             return 0;
         }
 
         // Return the extracted energy
         int extractedEnergy = removeEnergy(requestedEnergy);
-        
+
         // Increment the extracted value
         extracted += extractedEnergy;
-        
+
         // Return the extracted energy
         return extractedEnergy;
     }

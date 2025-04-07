@@ -79,11 +79,8 @@ public abstract class EnergyConsumerBlockEntityTemplate extends BlockEntity impl
             return 0;
         }
 
-        // Calculate the received and unused power
-        int unusedPower = energy - addEnergy(Math.min(energy, voltage));
-
         // Return the used power
-        int consumedPower = energy - unusedPower;
+        int consumedPower = addEnergy(Math.min(energy, getMaxEnergyInput(direction)));
         
         // Increase the consumed last tick value
         consumed += consumedPower;

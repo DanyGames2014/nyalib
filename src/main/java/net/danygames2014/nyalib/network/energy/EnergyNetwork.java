@@ -76,11 +76,11 @@ public class EnergyNetwork extends Network {
      * @param source    The source of energy
      * @param sourcePos The position of the source
      * @param voltage   The voltage provided
-     * @param power     The amperage provided
-     * @return The power used
+     * @param energy     The amperage provided
+     * @return The energy used
      */
-    public int provideEnergy(EnergySource source, Vec3i sourcePos, int voltage, int power) {
-        int remainingPower = power;
+    public int provideEnergy(EnergySource source, Vec3i sourcePos, int voltage, int energy) {
+        int remainingEnergy = energy;
 
         for (ConsumerPath consumerPath : getValidConsumers(sourcePos)) {
             EnergyConsumer consumer = consumerPath.consumer;
@@ -89,23 +89,25 @@ public class EnergyNetwork extends Network {
             // Check if the consumer can even accept more energy
             if (consumer.getRemainingCapacity() > 0) {
                 // Insert Energy into the consumers
-                int usedPower = traverseEnergy(consumer, path.endFace, path, voltage, remainingPower);
+                int usedEnergy = traverseEnergy(consumer, path.endFace, path, voltage, remainingEnergy);
 
                 // Reduce the remaining amount
-                remainingPower -= usedPower;
+                remainingEnergy -= usedEnergy;
 
-                // If there are 0 amps remaining, end it
-                if (remainingPower <= 0) {
-                    return power;
+                // If there is now energy remaining, end it
+                if (remainingEnergy <= 0) {
+                    return energy;
                 }
             }
 
         }
 
-        return power - remainingPower;
+        return energy - remainingEnergy;
     }
 
-    private int traverseEnergy(EnergyConsumer consumer, Direction consumerFace, NetworkPath path, int voltage, int power) {
+    private int traverseEnergy(EnergyConsumer consumer, Direction consumerFace, NetworkPath path, int voltage, int energy) {
+        int providedEnergy = consumer.receiveEnergy(consumerFace, voltage, energy);
+        
         // Traverse all the nodes the energy will go thru
         for (Vec3i node : path.path) {
             // Get the flow entry for the given node
@@ -114,7 +116,7 @@ public class EnergyNetwork extends Network {
             // If ithe entry is null, the block doesnt have a EnergyConductor implemented on it
             if (flowEntry != null) {
                 // Add the energyFlow
-                flowEntry.energyFlow += power;
+                flowEntry.energyFlow += providedEnergy;
 
                 // Check for breakdown voltage
                 if (voltage > flowEntry.conductor.getBreakdownVoltage(world, flowEntry.componentEntry)) {
@@ -128,7 +130,7 @@ public class EnergyNetwork extends Network {
             }
         }
 
-        return consumer.receiveEnergy(consumerFace, voltage, power);
+        return providedEnergy;
     }
 
     /**

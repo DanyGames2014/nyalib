@@ -70,11 +70,8 @@ public interface EnergyConsumer extends EnergyHandler {
             return 0;
         }
 
-        // Calculate the received and unused power
-        int unusedPower = energy - addEnergy(Math.min(energy, voltage));
-
         // Return the used power
-        return energy - unusedPower;
+        return addEnergy(Math.min(energy, getMaxEnergyInput(direction)));
     }
 
     // Events
