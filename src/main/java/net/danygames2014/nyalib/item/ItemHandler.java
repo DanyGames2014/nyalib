@@ -36,7 +36,7 @@ public interface ItemHandler extends ItemCapable {
      */
     default ItemStack extractItem(@Nullable Direction direction) {
         for (int i = 0; i < getItemSlots(direction); i++) {
-            if(getItemInSlot(i, direction) != null) {
+            if (getItemInSlot(i, direction) != null) {
                 return extractItem(i, Integer.MAX_VALUE, direction);
             }
         }
@@ -132,66 +132,4 @@ public interface ItemHandler extends ItemCapable {
      * @return An array of all the ItemStacks
      */
     ItemStack[] getInventory(@Nullable Direction direction);
-
-    /**
-     * Attempts to send {@link ItemStack} to the given side
-     *
-     * @param world     The world this device is in
-     * @param x         The x-position of this device
-     * @param y         The y-position of this device
-     * @param z         The z-position of this device
-     * @param direction The direction you want to send power in
-     * @return The remainder of the {@link ItemStack} (null if it was inserted entirely). If there is no neighbor in that direction, returns the same {@link ItemStack}
-     */
-    default ItemStack sendItem(World world, int x, int y, int z, ItemStack stack, Direction direction) {
-        ItemHandler neighbor = getNeighborItemHandler(world, x, y, z, direction);
-
-        if (neighbor == null) {
-            return stack;
-        }
-
-        return neighbor.insertItem(stack, direction.getOpposite());
-    }
-
-    /**
-     * Attempts to send {@link ItemStack} to the given side into a given slot
-     *
-     * @param world     The world this device is in
-     * @param x         The x-position of this device
-     * @param y         The y-position of this device
-     * @param z         The z-position of this device
-     * @param direction The direction you want to send power in
-     * @return The remainder of the {@link ItemStack} (null if it was inserted entirely). If there is no neighbor in that direction, returns the same {@link ItemStack}
-     */
-    default ItemStack sendItem(World world, int x, int y, int z, ItemStack stack, int slot, Direction direction) {
-        ItemHandler neighbor = getNeighborItemHandler(world, x, y, z, direction);
-
-        if (neighbor == null) {
-            return stack;
-        }
-
-        return neighbor.insertItem(stack, slot, direction.getOpposite());
-    }
-
-    /**
-     * Attempts to get a neighboring {@link ItemHandler}
-     *
-     * @param world     The world this device is in
-     * @param x         The x-position of this device
-     * @param y         The y-position of this device
-     * @param z         The z-position of this device
-     * @param direction The direction you want to look for the neighbor in
-     * @return The neighbor's {@link ItemHandler}, if there is not a neighboring {@link ItemHandler} then returns <code>null</code>
-     */
-    default ItemHandler getNeighborItemHandler(World world, int x, int y, int z, Direction direction) {
-        if (direction == null) {
-            return null;
-        }
-
-        if (world.getBlockEntity(x + direction.getOffsetX(), y + direction.getOffsetY(), z + direction.getOffsetZ()) instanceof ItemHandler handler) {
-            return handler;
-        }
-
-        return null;
-    }
 }
