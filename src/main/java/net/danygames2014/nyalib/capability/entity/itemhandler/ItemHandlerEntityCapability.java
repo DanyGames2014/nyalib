@@ -2,6 +2,7 @@ package net.danygames2014.nyalib.capability.entity.itemhandler;
 
 import net.danygames2014.nyalib.capability.entity.EntityCapability;
 import net.danygames2014.nyalib.item.ItemHandler;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
@@ -10,6 +11,14 @@ public abstract class ItemHandlerEntityCapability extends EntityCapability imple
     public abstract boolean canExtractItem();
 
     public abstract ItemStack extractItem(int slot, int amount);
+
+    public ItemStack extractItem() {
+        return this.extractItem(null);
+    }
+    
+    public ItemStack extractItem(Item item, int amount) {
+        return this.extractItem(item, amount, null);
+    }
 
     public abstract boolean canInsertItem();
 
@@ -22,10 +31,6 @@ public abstract class ItemHandlerEntityCapability extends EntityCapability imple
     public abstract int getItemSlots();
 
     public abstract ItemStack[] getInventory();
-
-    public ItemStack extractItem() {
-        return this.extractItem(null);
-    }
 
     // The underlying interface
     @Override
