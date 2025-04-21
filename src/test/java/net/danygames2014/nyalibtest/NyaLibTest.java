@@ -6,6 +6,8 @@ import net.danygames2014.nyalib.block.SlabBlockTemplate;
 import net.danygames2014.nyalib.block.StairsBlockTemplate;
 import net.danygames2014.nyalib.event.NetworkTypeRegistryEvent;
 import net.danygames2014.nyalib.network.NetworkType;
+import net.danygames2014.nyalibtest.block.capability.block.ItemHandlerBlockCapabilityTesterBlock;
+import net.danygames2014.nyalibtest.block.capability.item.YoinkerItem;
 import net.danygames2014.nyalibtest.block.energy.EnergyConsumerBlock;
 import net.danygames2014.nyalibtest.block.energy.MultimeterItem;
 import net.danygames2014.nyalibtest.block.energy.EnergySourceBlock;
@@ -31,8 +33,10 @@ import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.event.block.entity.BlockEntityRegisterEvent;
 import net.modificationstation.stationapi.api.event.registry.BlockRegistryEvent;
+import net.modificationstation.stationapi.api.event.registry.ItemRegistryEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.util.Namespace;
 
@@ -64,6 +68,9 @@ public class NyaLibTest {
     public static Block spongeFenceGate;
     
     public static Block serverSoundBlock;
+    
+    public static Block itemHandlerBlockCapabilityTester;
+    public static Item itemYoinker;
 
     public static NetworkType basicNetworkType;
 
@@ -89,7 +96,6 @@ public class NyaLibTest {
         energyGeneratorBlock = new EnergySourceBlock(NAMESPACE.id("energy_source"), Material.METAL).setTranslationKey(NAMESPACE, "energy_source");
         energyConsumerBlock = new EnergyConsumerBlock(NAMESPACE.id("energy_consumer"), Material.METAL).setTranslationKey(NAMESPACE, "energy_consumer");
         energyWireBlock = new WireBlock(NAMESPACE.id("energy_wire")).setTranslationKey(NAMESPACE, "energy_wire");
-        multimeter = new MultimeterItem(NAMESPACE.id("multimeter")).setTranslationKey(NAMESPACE, "multimeter");
         
         // Block Templates
         spongeStairs = new StairsBlockTemplate(NAMESPACE.id("sponge_stairs"), Block.SPONGE).setTranslationKey(NAMESPACE, "sponge_stairs");
@@ -99,6 +105,15 @@ public class NyaLibTest {
         
         // Sound
         serverSoundBlock = new ServerSoundBlock(NAMESPACE.id("server_sound_block"), Material.WOOL).setTranslationKey(NAMESPACE, "server_sound_block");
+        
+        // Capability
+        itemHandlerBlockCapabilityTester = new ItemHandlerBlockCapabilityTesterBlock(NAMESPACE.id("item_handler_block_capability")).setTranslationKey(NAMESPACE, "item_handler_block_capability");
+    }
+    
+    @EventListener
+    public void registerItems(ItemRegistryEvent event){
+        multimeter = new MultimeterItem(NAMESPACE.id("multimeter")).setTranslationKey(NAMESPACE, "multimeter");
+        itemYoinker = new YoinkerItem(NAMESPACE.id("item_yoinker")).setTranslationKey(NAMESPACE, "item_yoinker");
     }
 
     @EventListener

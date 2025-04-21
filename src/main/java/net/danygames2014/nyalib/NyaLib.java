@@ -2,8 +2,10 @@ package net.danygames2014.nyalib;
 
 import net.danygames2014.nyalib.config.Config;
 import net.glasslauncher.mods.gcapi3.api.ConfigRoot;
+import net.modificationstation.stationapi.api.event.datafixer.DataFixerRegisterEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.util.Namespace;
+import net.modificationstation.stationapi.api.vanillafix.datafixer.schema.StationFlatteningItemStackSchema;
 import org.apache.logging.log4j.Logger;
 
 public class NyaLib {
