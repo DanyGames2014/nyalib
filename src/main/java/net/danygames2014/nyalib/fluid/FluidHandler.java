@@ -5,16 +5,16 @@ import org.jetbrains.annotations.Nullable;
 
 public interface FluidHandler extends FluidCapable {
     /**
-     * Check if the block supports extracting fluid on this side, if this returns false there
+     * Check if the handler supports extracting fluid on this side, if this returns false there
      * should be no point in trying to use {@link #extractFluid(int, int, Direction)}
      *
      * @param direction Direction to check
-     * @return <code>true</code> if the device supports fluid extraction from the given direction
+     * @return <code>true</code> if the handler supports fluid extraction from the given direction
      */
     boolean canExtractFluid(@Nullable Direction direction);
 
     /**
-     * Extract a fluid in the given slot from the block
+     * Extract a fluid in the given slot from the handler
      *
      * @param slot      The slot to extract from
      * @param amount    The amount in mB to extract
@@ -25,7 +25,7 @@ public interface FluidHandler extends FluidCapable {
 
 
     /**
-     * Extract the given fluid in any slot from the block
+     * Extract the given fluid in any slot from the handler
      *
      * @param fluid     The Fluid to extract
      * @param amount    The amount in mB to extract
@@ -58,7 +58,7 @@ public interface FluidHandler extends FluidCapable {
     }
 
     /**
-     * Check if the block supports inserting fluids on this side, if this returns false there
+     * Check if the handler supports inserting fluids on this side, if this returns false there
      * should be no point in trying to use {@link #insertFluid(FluidStack, Direction)} or {@link #insertFluid(FluidStack, int, Direction)}
      *
      * @param direction Direction to check
@@ -96,10 +96,10 @@ public interface FluidHandler extends FluidCapable {
     FluidStack getFluidInSlot(int slot, @Nullable Direction direction);
 
     /**
-     * Get the size of the block inventory
+     * Get the size of the handler inventory
      *
      * @param direction The direction to get the size from
-     * @return The number of slots this block has
+     * @return The number of slots this handler has
      */
     int getFluidSlots(@Nullable Direction direction);
 
@@ -113,7 +113,7 @@ public interface FluidHandler extends FluidCapable {
     int getFluidCapacity(int slot, @Nullable Direction direction);
 
     /**
-     * Get the entire inventory of the block
+     * Get the entire inventory of the handler
      *
      * @param direction The direction to get the inventory from
      * @return An array of all the FluidStacks

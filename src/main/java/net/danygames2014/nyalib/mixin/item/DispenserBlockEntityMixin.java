@@ -95,4 +95,9 @@ public abstract class DispenserBlockEntityMixin extends BlockEntity implements I
     public int getItemSlots(Direction direction) {
         return this.size();
     }
+
+    @Override
+    public boolean canConnectItem(Direction direction) {
+        return true;
+    }
 }

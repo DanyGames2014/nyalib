@@ -1,6 +1,5 @@
 package net.danygames2014.nyalib.energy.template.block.entity;
 
-import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.objects.ObjectObjectMutablePair;
 import net.danygames2014.nyalib.energy.EnergyConsumer;
 import net.danygames2014.nyalib.energy.EnergySource;

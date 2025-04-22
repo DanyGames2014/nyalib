@@ -75,6 +75,6 @@ public abstract class ItemHandlerEntityCapability extends EntityCapability imple
 
     @Override
     public boolean canConnectItem(Direction direction) {
-        return false;
+        return true;
     }
 }

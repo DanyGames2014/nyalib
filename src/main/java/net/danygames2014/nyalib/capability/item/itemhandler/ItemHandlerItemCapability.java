@@ -75,6 +75,6 @@ public abstract class ItemHandlerItemCapability extends ItemCapability implement
 
     @Override
     public boolean canConnectItem(Direction direction) {
-        return false;
+        return true;
     }
 }

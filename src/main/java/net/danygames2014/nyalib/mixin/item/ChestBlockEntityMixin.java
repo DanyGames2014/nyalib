@@ -169,4 +169,8 @@ public abstract class ChestBlockEntityMixin extends BlockEntity implements ItemH
         return world.getBlockId(x, y, z) == Block.CHEST.id;
     }
 
+    @Override
+    public boolean canConnectItem(Direction direction) {
+        return true;
+    }
 }
