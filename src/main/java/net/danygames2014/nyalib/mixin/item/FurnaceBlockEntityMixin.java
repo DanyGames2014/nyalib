@@ -149,4 +149,9 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Ite
     public int getItemSlots(Direction direction) {
         return this.size();
     }
+
+    @Override
+    public boolean canConnectItem(Direction direction) {
+        return true;
+    }
 }

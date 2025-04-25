@@ -2,14 +2,13 @@ package net.danygames2014.nyalib.item;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unused")
 public interface ItemHandler extends ItemCapable {
     /**
-     * Check if the block supports extracting items on this side, if this returns false there
+     * Check if the handler supports extracting items on this side, if this returns false there
      * should be no point in trying to use {@link #extractItem(int, int, Direction)}
      *
      * @param direction Direction to check
@@ -18,7 +17,7 @@ public interface ItemHandler extends ItemCapable {
     boolean canExtractItem(@Nullable Direction direction);
 
     /**
-     * Extract an item in the given slot from the block
+     * Extract an item in the given slot from the handler
      *
      * @param slot      The slot to extract from
      * @param amount    The amount to extract (can be larger than the maximum stack size)
@@ -45,7 +44,7 @@ public interface ItemHandler extends ItemCapable {
 
 
     /**
-     * Extract the given item in any slot from the block
+     * Extract the given item in any slot from the handler
      *
      * @param item      The Item to extract
      * @param amount    The amount to extract (can be larger than the maximum stack size)
@@ -80,7 +79,7 @@ public interface ItemHandler extends ItemCapable {
     }
 
     /**
-     * Check if the block supports inserting items on this side, if this returns false there
+     * Check if the handler supports inserting items on this side, if this returns false there
      * should be no point in trying to use {@link #insertItem(ItemStack, Direction)} or {@link #insertItem(ItemStack, int, Direction)}
      *
      * @param direction Direction to check
@@ -116,17 +115,20 @@ public interface ItemHandler extends ItemCapable {
      * @return The {@link ItemStack} in the slot
      */
     ItemStack getItemInSlot(int slot, @Nullable Direction direction);
-
+    // TODO: rename to getItem ?
+    
+    // TODO: setItem
+    
     /**
-     * Get the size of the block inventory
+     * Get the size of the handler inventory
      *
      * @param direction The direction to get the size from
-     * @return The number of slots this block has
+     * @return The number of slots this handler has
      */
     int getItemSlots(@Nullable Direction direction);
 
     /**
-     * Get the entire inventory of the block
+     * Get the entire inventory of the handler
      *
      * @param direction The direction to get the inventory from
      * @return An array of all the ItemStacks

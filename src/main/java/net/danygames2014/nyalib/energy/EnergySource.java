@@ -3,7 +3,14 @@ package net.danygames2014.nyalib.energy;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
-@SuppressWarnings("unused")
+/**
+ * An interface to be implemented on a block entity of an Energy Source block
+ * <p>
+ * <p>See {@link net.danygames2014.nyalib.energy.template.block.entity.EnergySourceBlockEntityTemplate} for a proper implementation
+ * <p>    
+ * <p>NOTE: While the {@link #extractEnergy(Direction, int)} (Direction, int, int)} method does contain basic logic for supplying energy, it does not contain the logic to respect the maximum energy input per tick
+ */
+@SuppressWarnings({"unused", "BooleanMethodIsAlwaysInverted"})
 public interface EnergySource extends EnergyHandler {
     // Output Parameters
     /**

@@ -3,7 +3,7 @@ package net.danygames2014.nyalib.fluid;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 /**
- * A base fluid block, capable of interacting with other {@link FluidCapable} devices
+ * A base fluid device, capable of interacting with other {@link FluidCapable} devices
  */
 public interface FluidCapable {
     /**

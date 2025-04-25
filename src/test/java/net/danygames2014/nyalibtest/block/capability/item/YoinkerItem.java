@@ -4,8 +4,8 @@ import net.danygames2014.nyalib.NyaLib;
 import net.danygames2014.nyalib.capability.entity.EntityCapability;
 import net.danygames2014.nyalib.capability.entity.EntityCapabilityRegistry;
 import net.danygames2014.nyalib.capability.entity.itemhandler.ItemHandlerEntityCapability;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.template.item.TemplateItem;
 import net.modificationstation.stationapi.api.util.Identifier;
@@ -16,19 +16,26 @@ public class YoinkerItem extends TemplateItem {
     }
 
     @Override
+    public int getAttackDamage(Entity attackedEntity) {
+        yoink(attackedEntity);
+        return 0;
+    }
+
+    @Override
     public void useOnEntity(ItemStack stack, LivingEntity entity) {
-        if(!entity.world.isRemote && entity instanceof PlayerEntity player) {
-            EntityCapability cap = EntityCapabilityRegistry.getCapability(entity, NyaLib.NAMESPACE.id("item_handler"));
-            if(cap instanceof ItemHandlerEntityCapability itemHandler) {
+        yoink(entity);
+    }
+
+    public void yoink(Entity entity) {
+        if (!entity.world.isRemote) {
+            EntityCapability capability = EntityCapabilityRegistry.getCapability(entity, NyaLib.NAMESPACE.id("item_handler"));
+            if (capability instanceof ItemHandlerEntityCapability itemHandler) {
                 ItemStack yoinkedStack = itemHandler.extractItem();
-                
-                if(yoinkedStack != null) {
+
+                if (yoinkedStack != null) {
                     entity.dropItem(yoinkedStack, 1.0F);
                 }
-                
-                return;
             }
         }
-        super.useOnEntity(stack, entity);
     }
 }
