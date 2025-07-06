@@ -1,7 +1,5 @@
 package net.danygames2014.nyalib.util;
 
-import net.danygames2014.nyalib.capability.block.BlockCapability;
-
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 

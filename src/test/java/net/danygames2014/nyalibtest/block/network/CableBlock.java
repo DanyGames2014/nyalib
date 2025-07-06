@@ -1,7 +1,6 @@
 package net.danygames2014.nyalibtest.block.network;
 
 import net.danygames2014.nyalib.network.*;
-import net.danygames2014.nyalibtest.NyaLibTest;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.BlockView;
