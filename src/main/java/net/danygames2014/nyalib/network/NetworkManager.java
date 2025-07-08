@@ -29,6 +29,11 @@ public class NetworkManager {
 
     // Getting Networks
     public static ArrayList<Network> getNetworks(Dimension dimension, Identifier networkTypeIdentifier) {
+        if (NetworkLoader.isRemote) {
+            NyaLib.LOGGER.warn("NetworkManager.getNetworks called on client but the world is remote!");
+            return new ArrayList<>();
+        }
+
         HashMap<Identifier, ArrayList<Network>> netDims = NETWORKS.get(dimension);
 
         if (netDims == null) {
@@ -40,12 +45,22 @@ public class NetworkManager {
     }
 
     public static HashMap<Identifier, ArrayList<Network>> getNetworks(Dimension dimension) {
+        if (NetworkLoader.isRemote) {
+            NyaLib.LOGGER.warn("NetworkManager.getNetworks called on client but the world is remote!");
+            return new HashMap<>();
+        }
+        
         return NETWORKS.get(dimension);
     }
 
     // Adding a network
     @SuppressWarnings("Java8MapApi")
     public static void addNetwork(Dimension dimension, Network network) {
+        if (NetworkLoader.isRemote) {
+            NyaLib.LOGGER.warn("NetworkManager.addNetwork called on client but the world is remote!");
+            return;
+        }
+        
         HashMap<Identifier, ArrayList<Network>> dimNetworks = NETWORKS.get(dimension);
 
         if (network == null) {
@@ -67,6 +82,11 @@ public class NetworkManager {
     }
 
     public static Network createNetwork(Dimension dimension, NetworkType networkType) {
+        if (NetworkLoader.isRemote) {
+            NyaLib.LOGGER.warn("NetworkManager.createNetwork called on client but the world is remote!");
+            return null;
+        }
+        
         Network network;
 
         try {
@@ -82,12 +102,22 @@ public class NetworkManager {
     }
 
     public static void removeNetwork(Network network) {
+        if (NetworkLoader.isRemote) {
+            NyaLib.LOGGER.warn("NetworkManager.removeNetwork called on client but the world is remote!");
+            return;
+        }
+        
         if (!removeQueue.contains(network)) {
             removeQueue.add(network);
         }
     }
 
     public static void removeQueuedNetworks() {
+        if (NetworkLoader.isRemote) {
+            NyaLib.LOGGER.warn("NetworkManager.removeQueuedNetworks called on client but the world is remote!");
+            return;
+        }
+        
         for (Network toremove : removeQueue) {
             removeNetworkInternal(toremove);
         }
@@ -118,6 +148,11 @@ public class NetworkManager {
      * @return A network if it exists on the coordinates. null if there is no network on the given coordinates.
      */
     public static Network getAt(Dimension dimension, int x, int y, int z, Identifier networkTypeIdentifier) {
+        if (NetworkLoader.isRemote) {
+            NyaLib.LOGGER.warn("NetworkManager.getAt called on client but the world is remote!");
+            return null;
+        }
+        
         for (Network net : getNetworks(dimension, networkTypeIdentifier)) {
             if (net.isAt(x, y, z)) {
                 return net;
@@ -137,6 +172,11 @@ public class NetworkManager {
      * @return Network if they exists on the coordinates.
      */
     public static ArrayList<Network> getAt(Dimension dimension, int x, int y, int z, ArrayList<NetworkType> networkTypes) {
+        if (NetworkLoader.isRemote) {
+            NyaLib.LOGGER.warn("NetworkManager.getAt called on client but the world is remote!");
+            return new ArrayList<>();
+        }
+        
         ArrayList<Network> networks = new ArrayList<>();
 
         for (NetworkType networkType : networkTypes) {
@@ -160,6 +200,11 @@ public class NetworkManager {
      * @return Networks if any exist on the coordinates.
      */
     public static ArrayList<Network> getAt(Dimension dimension, int x, int y, int z) {
+        if (NetworkLoader.isRemote) {
+            NyaLib.LOGGER.warn("NetworkManager.getAt called on client but the world is remote!");
+            return new ArrayList<>();
+        }
+        
         ArrayList<Network> networks = new ArrayList<>();
 
         for (ArrayList<Network> netsOfType : getNetworks(dimension).values()) {
@@ -183,6 +228,11 @@ public class NetworkManager {
      * @return An ArrayList of networks neighboring this block
      */
     public static ArrayList<Network> getNeighbors(World world, int x, int y, int z) {
+        if (NetworkLoader.isRemote) {
+            NyaLib.LOGGER.warn("NetworkManager.getNeighbors called on client but the world is remote!");
+            return new ArrayList<>();
+        }
+        
         ArrayList<Network> neighborNets = new ArrayList<>();
 
         for (var networksOfType : getNetworks(world.dimension).values()) {
@@ -209,6 +259,11 @@ public class NetworkManager {
      * @return An ArrayList of networks neighboring this block
      */
     public static ArrayList<Network> getNeighbors(World world, int x, int y, int z, Identifier networkTypeIdentifier) {
+        if (NetworkLoader.isRemote) {
+            NyaLib.LOGGER.warn("NetworkManager.getNeighbors called on client but the world is remote!");
+            return new ArrayList<>();
+        }
+        
         ArrayList<Network> neighborNets = new ArrayList<>();
 
         for (Network network : getNetworks(world.dimension, networkTypeIdentifier)) {
@@ -229,6 +284,11 @@ public class NetworkManager {
     // Adding and Removing Blocks
     @SuppressWarnings("RedundantLabeledSwitchRuleCodeBlock")
     public static <T extends Block & NetworkComponent> void addBlock(World world, int x, int y, int z, T component) {
+        if (NetworkLoader.isRemote) {
+            NyaLib.LOGGER.warn("NetworkManager.addBlock called on client but the world is remote!");
+            return;
+        }
+        
         // If the component is null, don't bother
         if (component == null) {
             return;
@@ -350,6 +410,11 @@ public class NetworkManager {
     }
 
     public static <T extends Block & NetworkComponent> void removeBlock(World world, int x, int y, int z, T component) {
+        if (NetworkLoader.isRemote) {
+            NyaLib.LOGGER.warn("NetworkManager.removeBlock called on client but the world is remote!");
+            return;
+        }
+        
         for (Network net : getAt(world.dimension, x, y, z, component.getNetworkTypes())) {
             ArrayList<Vec3i> neighborBlocks = new ArrayList<>();
             for (Direction direction : Direction.values()) {
@@ -509,6 +574,11 @@ public class NetworkManager {
 
     // Load & Save
     public static void writeNbt(World world, NbtCompound nbt) {
+        if (NetworkLoader.isRemote) {
+            NyaLib.LOGGER.warn("NetworkManager.writeNbt called on client but the world is remote!");
+            return;
+        }
+        
         Dimension dim = world.dimension;
         Optional<Identifier> dimIdentifierO = DimensionRegistry.INSTANCE.getIdByLegacyId(dim.id);
         Identifier dimIdentifier;
@@ -553,6 +623,11 @@ public class NetworkManager {
     }
 
     public static void readNbt(World world, NbtCompound nbt) {
+        if (NetworkLoader.isRemote) {
+            NyaLib.LOGGER.warn("NetworkManager.readNbt called on client but the world is remote!");
+            return;
+        }
+        
         Dimension dim = world.dimension;
         Optional<Identifier> dimIdentifierO = DimensionRegistry.INSTANCE.getIdByLegacyId(dim.id);
         Identifier dimIdentifier;
@@ -578,9 +653,9 @@ public class NetworkManager {
                 for (Object networksO : networksOfType.values()) {
                     if (networksO instanceof NbtCompound networks) {
                         Network loadedNet = Network.fromNbt(networks, world, Identifier.of(networksOfType.getKey()));
-                        
+
                         addNetwork(dim, loadedNet);
-                        
+
                         if (loadedNet != null) {
                             loadedNet.update();
                         }

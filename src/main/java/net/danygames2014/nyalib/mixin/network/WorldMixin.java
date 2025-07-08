@@ -1,6 +1,7 @@
 package net.danygames2014.nyalib.mixin.network;
 
 import net.danygames2014.nyalib.network.Network;
+import net.danygames2014.nyalib.network.NetworkLoader;
 import net.danygames2014.nyalib.network.NetworkManager;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.Dimension;
@@ -17,12 +18,20 @@ import java.util.HashMap;
 
 @Mixin(World.class)
 public class WorldMixin {
-    @Shadow @Final public Dimension dimension;
+    @Shadow
+    @Final
+    public Dimension dimension;
+
+    @Shadow public boolean isRemote;
 
     @Inject(method = "tickEntities", at = @At(value = "HEAD"))
-    public void tickNetworks_preEntity(CallbackInfo ci){
+    public void tickNetworks_preEntity(CallbackInfo ci) {
+        if (isRemote) {
+            return;
+        }
+
         HashMap<Identifier, ArrayList<Network>> networks = NetworkManager.getNetworks(this.dimension);
-        if(networks != null){
+        if (networks != null) {
             for (ArrayList<Network> networkTypes : networks.values()) {
                 for (Network network : networkTypes) {
                     network.tick();
@@ -30,11 +39,15 @@ public class WorldMixin {
             }
         }
     }
-    
+
     @Inject(method = "tickEntities", at = @At(value = "TAIL"))
     public void tickNetworks_postEntity(CallbackInfo ci) {
+        if (isRemote) {
+            return;
+        }
+        
         HashMap<Identifier, ArrayList<Network>> networks = NetworkManager.getNetworks(this.dimension);
-        if(networks != null){
+        if (networks != null) {
             for (ArrayList<Network> networkTypes : networks.values()) {
                 for (Network network : networkTypes) {
                     network.postEntityTick();
@@ -44,9 +57,13 @@ public class WorldMixin {
     }
 
     @Inject(method = "tick", at = @At(value = "TAIL"))
-    public void tickNetworks_worldTick(CallbackInfo ci){
+    public void tickNetworks_worldTick(CallbackInfo ci) {
+        if (isRemote) {
+            return;
+        }
+        
         HashMap<Identifier, ArrayList<Network>> networks = NetworkManager.getNetworks(this.dimension);
-        if(networks != null){
+        if (networks != null) {
             for (ArrayList<Network> networkTypes : networks.values()) {
                 for (Network network : networkTypes) {
                     network.worldTick();
