@@ -11,6 +11,7 @@ import net.modificationstation.stationapi.api.util.SideUtil;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @SuppressWarnings("unused")
@@ -30,6 +31,7 @@ public class NetworkLoader {
 
         if (readOnly) {
             NyaLib.LOGGER.warn("Saving NyaLib networks prevented as they are read-only due to error when loading.");
+            return;
         }
 
         try {
@@ -71,6 +73,7 @@ public class NetworkLoader {
                 NbtCompound tag = NbtIo.readCompressed(new FileInputStream(file));
 
                 NetworkManager.NETWORKS = new HashMap<>();
+                NetworkManager.removeQueue = new ArrayList<>();
                 NetworkManager.NEXT_ID.set(tag.getInt("next_id"));
                 NetworkManager.readNbt(event.world, tag);
 
