@@ -2,7 +2,6 @@ package net.danygames2014.nyalib.energy.simple;
 
 import net.danygames2014.nyalib.energy.EnergyCapable;
 import net.danygames2014.nyalib.energy.EnergyStorage;
-import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
  * see {@link #canInsertEnergy(Direction)} and {@link #canExtractEnergy(Direction)} for the exact capabilities of a given device
  */
 @SuppressWarnings({"UnusedReturnValue", "unused"})
+@Deprecated(forRemoval = true)
 public interface SimpleEnergyHandler extends EnergyStorage, EnergyCapable {
 
     /**
