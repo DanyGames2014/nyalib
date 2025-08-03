@@ -1,15 +1,14 @@
 package net.danygames2014.nyalib.energy;
 
 /**
- * A base EnergyStorage that can be implemented on blocks, items and entities
- * It can be shared between normal Energy and Simple Energy
+ * A base interface to implement on a Block Entity which can store energy
  */
 @SuppressWarnings({"unused", "ManualMinMaxCalculation", "UnusedReturnValue"})
 public interface EnergyStorage {
     /**
      * Get the energy stored in the internal buffer.
      *
-     * @return The energy stored in Wt
+     * @return The amount of energy stored
      */
     // Energy Buffer
     int getEnergyStored();
@@ -17,14 +16,14 @@ public interface EnergyStorage {
     /**
      * Get the internal energy buffer capacity
      *
-     * @return The internal energy buffer capacity in Wt
+     * @return The internal energy buffer capacity
      */
     int getEnergyCapacity();
 
     /**
      * Get the remaining capacity of the internal energy buffer
      *
-     * @return The remaining capacity of the buffer in Wt
+     * @return The remaining capacity of the buffer
      */
     default int getRemainingCapacity() {
         return getEnergyCapacity() - getEnergyStored();

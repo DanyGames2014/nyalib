@@ -22,7 +22,7 @@ public interface EnergyConsumer extends EnergyHandler {
     int getMaxInputVoltage(@Nullable Direction direction);
 
     /**
-     * Get the maximum input power this machine can consume in one tick
+     * Get the maximum input power this accept can consume in one tick
      *
      * @param direction The direction to query from
      * @return The maximum input power this machine can consume in one tick
@@ -44,8 +44,8 @@ public interface EnergyConsumer extends EnergyHandler {
      *
      * @param direction The face to provide the energy on
      * @param voltage   The voltage level provided
-     * @param energy    The energy provided
-     * @return The energy actually used by the machine
+     * @param energy    The amount of energy provided
+     * @return The energy actually accepted by the machine
      */
     default int receiveEnergy(@Nullable Direction direction, int voltage, int energy) {
         // If we cannot receive energy in this direction, dont care, return zero

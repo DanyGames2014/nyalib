@@ -30,10 +30,10 @@ public interface EnergySource extends EnergyHandler {
     int getOutputVoltage(@Nullable Direction direction);
 
     /**
-     * Get the maximum output power this machine can supply in one tick
+     * Get the maximum amount of energy this machine can supply in one tick
      *
      * @param direction The direction to query from
-     * @return The maximum output power this machine can supply in one tick
+     * @return The maximum amount of energy this machine can supply in one tick
      */
     int getMaxEnergyOutput(@Nullable Direction direction);
 
@@ -52,7 +52,7 @@ public interface EnergySource extends EnergyHandler {
      *
      * @param direction         The direction to extract from
      * @param requestedEnergy   The energy requested from the machine
-     * @return The actual energy provided
+     * @return The actual amount energy extracted from the machine
      */
     default int extractEnergy(@Nullable Direction direction, int requestedEnergy) {
         // If energy cannot be extracted on this side, return zero
