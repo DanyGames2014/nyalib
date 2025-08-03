@@ -62,7 +62,7 @@ public interface NetworkComponent {
     default HashMap<Network, NetworkComponentEntry> getEntries(World world, int x, int y, int z) {
         var validNetworkTypes = getNetworkTypes();
         HashMap<Network, NetworkComponentEntry> entries = new HashMap<>();
-        
+
         // Loop thru all of the networks of all types
         for (var networkTypes : NetworkManager.getNetworks(world.dimension).entrySet()) {
             // Check if the network has the type that this component can participate in
@@ -96,13 +96,13 @@ public interface NetworkComponent {
     }
 
     /**
-     * Gets the path finding cost of this component 
+     * Gets the path finding cost of this component
      *
-     * @param world     The world this component is in
-     * @param x         The x-position of this component
-     * @param y         The y-position of this component
-     * @param z         The z-position of this component
-     * @param network   The network the component is in
+     * @param world   The world this component is in
+     * @param x       The x-position of this component
+     * @param y       The y-position of this component
+     * @param z       The z-position of this component
+     * @param network The network the component is in
      * @return The pathing cost of this component
      */
     default int getPathingCost(World world, int x, int y, int z, @Nullable Network network) {
@@ -160,7 +160,9 @@ public interface NetworkComponent {
      * @param <T>       {@link Block} implementing a {@link NetworkComponent}
      */
     default <T extends Block & NetworkComponent> void addToNet(World world, int x, int y, int z, T component) {
-        NetworkManager.addBlock(world, x, y, z, component);
+        if (!world.isRemote) {
+            NetworkManager.addBlock(world, x, y, z, component);
+        }
     }
 
     /**
@@ -174,7 +176,9 @@ public interface NetworkComponent {
      * @param <T>       {@link Block} implementing a {@link NetworkComponent}
      */
     default <T extends Block & NetworkComponent> void removeFromNet(World world, int x, int y, int z, T component) {
-        NetworkManager.removeBlock(world, x, y, z, component);
+        if (!world.isRemote) {
+            NetworkManager.removeBlock(world, x, y, z, component);
+        }
     }
 
     /**

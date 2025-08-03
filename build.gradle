@@ -1,7 +1,11 @@
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection GroovyUnusedAssignment
+//file:noinspection ForeignDelegate
 plugins {
-	id 'maven-publish'
-	id 'fabric-loom' version '1.10.1'
-	id 'babric-loom-extension' version '1.10.1'
+    id 'maven-publish'
+    id 'fabric-loom' version '1.10.5'
+    id 'babric-loom-extension' version '1.10.1'
+    id "com.modrinth.minotaur" version "2.+"
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -12,165 +16,187 @@ version = project.mod_version
 group = project.maven_group
 
 loom {
-	accessWidenerPath = file("src/main/resources/nyalib.accesswidener")
+    accessWidenerPath = file("src/main/resources/nyalib.accesswidener")
 }
 
 repositories {
-	// Used for the fabric toolchain in this project.
-	maven {
-		name = 'Babric'
-		url = 'https://maven.glass-launcher.net/babric'
-	}
+    // Used for Babric Loom Extensions
+    maven {
+        name = 'Babric'
+        url = 'https://maven.glass-launcher.net/babric'
+    }
 
-	// Used for mappings.
-	maven {
-		name = 'Glass Releases'
-		url = 'https://maven.glass-launcher.net/releases'
-	}
+    // Used for many dependencies
+    maven {
+        name = 'Glass Releases'
+        url = 'https://maven.glass-launcher.net/releases'
+    }
 
-	// Used for StationAPI and HowManyItems.
-	maven {
-		name = 'Glass Snapshots'
-		url = 'https://maven.glass-launcher.net/snapshots'
-	}
+    // Used for Snapshots
+    maven {
+        name = 'Glass Snapshots'
+        url = 'https://maven.glass-launcher.net/snapshots'
+    }
 
-	// NyaRepo
-	maven {
-		name = "nyarepo"
-		url = "https://maven.fildand.cz/releases"
-	}
+    // NyaRepo
+    maven {
+        name = "nyarepo"
+        url = "https://maven.fildand.cz/releases"
+    }
 
-	// Used for a StationAPI dependency.
-	maven {
-		name = 'Froge'
-		url 'https://maven.minecraftforge.net/'
-	}
+    // Used for a StationAPI dependency.
+    maven {
+        name = 'Froge'
+        url 'https://maven.minecraftforge.net/'
+    }
 
-	// Used for projects that do not have a maven repository, but do have a GitHub repository with working build scripts.
-	maven {
-		name = 'Jitpack'
-		url = 'https://jitpack.io'
-	}
+    // Used for projects that do not have a maven repository, but do have a GitHub repository with working build scripts.
+    maven {
+        name = 'Jitpack'
+        url = 'https://jitpack.io'
+    }
 
-	// Used for another StationAPI dependency
-	exclusiveContent {
-		forRepository {
-			maven {
-				name = "Modrinth"
-				url = "https://api.modrinth.com/maven"
-			}
-		}
-		filter {
-			includeGroup "maven.modrinth"
-		}
-	}
+    // Modrinth Maven
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url = "https://api.modrinth.com/maven"
+            }
+        }
+        filter {
+            includeGroup "maven.modrinth"
+        }
+    }
 
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.glasslauncher:biny:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.glasslauncher:biny:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	implementation "org.slf4j:slf4j-api:1.8.0-beta4"
-	implementation 'org.apache.logging.log4j:log4j-slf4j18-impl:2.17.2'
-	implementation "me.carleslc:Simple-Yaml:1.8.4"
+    implementation "org.slf4j:slf4j-api:1.8.0-beta4"
+    implementation "org.apache.logging.log4j:log4j-slf4j18-impl:2.17.2"
+    implementation "me.carleslc:Simple-Yaml:1.8.4"
 
-	modImplementation "net.modificationstation:StationAPI:${project.stapi_version}"
+    modImplementation "net.modificationstation:StationAPI:${project.stapi_version}"
 
-	modImplementation("net.glasslauncher.mods:ModMenu:${project.modmenu_version}") {
-		transitive false
-	}
+    modImplementation("net.glasslauncher.mods:ModMenu:${project.modmenu_version}") {
+        transitive false
+    }
 
-	modImplementation("net.glasslauncher.mods:glass-networking:${project.glass_networking_version}") {
-		transitive false
-	}
+    modImplementation("net.glasslauncher.mods:glass-networking:${project.glass_networking_version}") {
+        transitive false
+    }
 
-	modImplementation("net.glasslauncher.mods:GlassConfigAPI:${project.gcapi_version}") {
-		transitive false
-	}
+    modImplementation("net.glasslauncher.mods:GlassConfigAPI:${project.gcapi_version}") {
+        transitive false
+    }
 
-	modImplementation("net.glasslauncher.mods:AlwaysMoreItems:${project.alwaysmoreitems_version}") {
-		transitive false
-	}
+    modImplementation("net.glasslauncher.mods:AlwaysMoreItems:${project.alwaysmoreitems_version}") {
+        transitive false
+    }
 
-	modImplementation("com.github.matthewperiut:retrocommands:${project.retrocommands_version}") {
-		transitive false
-	}
+    modImplementation("maven.modrinth:retrocommands:${project.retrocommands_version}-b1.7.3") {
+        transitive false
+    }
 
-	modImplementation("net.danygames2014:spawneggs:${project.spawneggs_version}") {
-		transitive false
-	}
+    modImplementation("net.danygames2014:spawneggs:${project.spawneggs_version}") {
+        transitive false
+    }
 
-	modImplementation("maven.modrinth:bh-creative:${project.bhcreative_version}-fabric,b1.7.3") {
-		transitive false
-	}
+    modImplementation("maven.modrinth:bh-creative:${project.bhcreative_version}-b1.7.3") {
+        transitive false
+    }
 
-	modRuntimeOnly("maven.modrinth:retroauth:${project.retroauth_version}-fabric,b1.7.3") {
-		transitive false
-	}
+    modRuntimeOnly("maven.modrinth:retroauth:${project.retroauth_version}-b1.7.3") {
+        transitive false
+    }
 
-	modRuntimeOnly("maven.modrinth:fast-stapi-intro:2.0.0-fabric,b1.7.3") {
-		transitive false
-	}
+    modRuntimeOnly("maven.modrinth:unitweaks:${project.unitweaks_version}-b1.7.3") {
+        transitive false
+    }
+
+    modRuntimeOnly("maven.modrinth:fast-stapi-intro:2.0.0-b1.7.3") {
+        transitive false
+    }
 }
 
 processResources {
-	inputs.property "version", project.version
+    inputs.property "version", project.version
 
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
-	}
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 17
+    it.options.release = 17
 }
 
 java {
-	// If you remove this line, sources will not be generated.
-	withSourcesJar()
+    withSourcesJar()
 }
 
 jar {
-	from("LICENSE") {
-		rename { "${it}_${project.archivesBaseName}"}
-	}
+    from("LICENSE") {
+        rename { "${it}_${project.archivesBaseName}" }
+    }
 }
 
 // Maven Publishing
 publishing {
-	repositories {
-		mavenLocal()
+    repositories {
+        mavenLocal()
 
-		// Glass Maven
-		if(project.hasProperty("calmilamsy_secret_publishing_cave_username")){
-			maven {
-				url = "https://maven.glass-launcher.net/releases"
-				credentials {
-					username "${project.calmilamsy_secret_publishing_cave_username}"
-					password "${project.calmilamsy_secret_publishing_cave_password}"
-				}
-			}
-		}
+        // Glass Maven
+        if (project.hasProperty("calmilamsy_secret_publishing_cave_username")) {
+            maven {
+                url = "https://maven.glass-launcher.net/releases"
+                credentials {
+                    username "${project.calmilamsy_secret_publishing_cave_username}"
+                    password "${project.calmilamsy_secret_publishing_cave_password}"
+                }
+            }
+        }
 
-		// NyaRepo
-		if(project.hasProperty("nyarepo_publishing_cave_username")){
-			maven {
-				url = "https://maven.fildand.cz/releases"
-				credentials {
-					username "${project.nyarepo_publishing_cave_username}"
-					password "${project.nyarepo_publishing_cave_password}"
-				}
-			}
-		}
-	}
+        // NyaRepo
+        if (project.hasProperty("nyarepo_publishing_cave_username")) {
+            maven {
+                url = "https://maven.fildand.cz/releases"
+                credentials {
+                    username "${project.nyarepo_publishing_cave_username}"
+                    password "${project.nyarepo_publishing_cave_password}"
+                }
+            }
+        }
+    }
 
-	publications {
-		mavenJava(MavenPublication) {
-			artifactId = project.archivesBaseName
-			from components.java
-		}
-	}
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = project.archivesBaseName
+            from components.java
+        }
+    }
+}
+
+// Modrinth Publishing
+modrinth {
+    if (project.hasProperty("modrinth_publishing_cave")) {
+        token = project.modrinth_publishing_cave
+        projectId = project.modrinth_slug
+        versionNumber = project.mod_version
+        versionName = "${project.modrinth_version_name} ${project.mod_version}"
+        changelog = rootProject.file("CHANGELOG.md").text
+        versionType = "release"
+        uploadFile = remapJar
+        gameVersions = ["b1.7.3"]
+        loaders = ["fabric", "babric"]
+        dependencies {
+            required.project "stationapi"
+            required.project "glass-config-api"
+        }
+    }
 }

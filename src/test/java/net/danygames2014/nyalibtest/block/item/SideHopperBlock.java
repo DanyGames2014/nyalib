@@ -16,8 +16,8 @@ import net.modificationstation.stationapi.api.util.Identifier;
 public class SideHopperBlock extends TemplateBlockWithEntity {
     public SideHopperBlock(Identifier identifier) {
         super(identifier, Material.METAL);
-        this.setHardness(1.0F);
-        this.setResistance(1.0F);
+        this.setHardness(0.1F);
+        this.setResistance(0.1F);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class SideHopperBlock extends TemplateBlockWithEntity {
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext context) {
-        return getDefaultState().with(Properties.HORIZONTAL_FACING, context.getHorizontalPlayerFacing());
+        return getDefaultState().with(Properties.HORIZONTAL_FACING, context.getHorizontalPlayerFacing().getOpposite());
     }
 
     @Override
@@ -38,7 +38,7 @@ public class SideHopperBlock extends TemplateBlockWithEntity {
 
     @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
-        if(world.getBlockEntity(x,y,z) instanceof SideHopperBlockEntity hopper){
+        if (world.getBlockEntity(x, y, z) instanceof SideHopperBlockEntity hopper) {
             player.sendMessage("Counter : " + hopper.tickCounter + " | Buffer : " + hopper.internalBuffer);
             return true;
         }

@@ -2,19 +2,19 @@
   "variants": {
     "facing=south": {
       "model": "nyalibtest:block/side_hopper",
-      "y": 0
+      "y": 180
     },
     "facing=west": {
       "model": "nyalibtest:block/side_hopper",
-      "y": 90
+      "y": 270
     },
     "facing=north": {
       "model": "nyalibtest:block/side_hopper",
-      "y": 180
+      "y": 0
     },
     "facing=east": {
       "model": "nyalibtest:block/side_hopper",
-      "y": 270
+      "y": 90
     }
   }
 }

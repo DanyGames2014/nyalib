@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
  * see {@link #canInsertEnergy(Direction)} and {@link #canExtractEnergy(Direction)} for the exact capabilities of a given device
  */
 @SuppressWarnings({"UnusedReturnValue", "unused"})
-@Deprecated(forRemoval = true)
+@Deprecated(forRemoval = true, since = "0.13.0")
 public interface SimpleEnergyHandler extends EnergyStorage, EnergyCapable {
 
     /**
