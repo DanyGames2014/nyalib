@@ -1,6 +1,7 @@
 package net.danygames2014.nyalib.capability.entity.itemhandler;
 
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
@@ -20,6 +21,44 @@ public class ItemHandlerPlayerEntityCapability extends ItemHandlerEntityCapabili
     @Override
     public ItemStack extractItem(int slot, int amount) {
         return player.inventory.removeStack(slot, amount);
+    }
+
+    @Override
+    public ItemStack extractItem() {
+        for (int i = 0; i < getItemSlots(); i++) {
+            if (getItemInSlot(i) != null) {
+                return extractItem(i, Integer.MAX_VALUE);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public ItemStack extractItem(Item item, int amount) {
+        ItemStack currentStack = null;
+        int remaining = amount;
+
+        for (int i = 0; i < getItemSlots(); i++) {
+            if (remaining <= 0) {
+                break;
+            }
+
+            if (currentStack != null) {
+                if (this.getItemInSlot(i).isItemEqual(currentStack)) {
+                    ItemStack extractedStack = extractItem(i, remaining);
+                    remaining -= extractedStack.count;
+                    currentStack.count += extractedStack.count;
+                }
+            } else {
+                if (getItemInSlot(i).isOf(item)) {
+                    ItemStack extractedStack = extractItem(i, remaining);
+                    remaining -= extractedStack.count;
+                    currentStack = extractedStack;
+                }
+            }
+        }
+
+        return currentStack;
     }
 
     @Override
@@ -99,11 +138,11 @@ public class ItemHandlerPlayerEntityCapability extends ItemHandlerEntityCapabili
     @Override
     public ItemStack[] getInventory() {
         ArrayList<ItemStack> inventory = new ArrayList<ItemStack>(player.inventory.size());
-        
+
         for (int i = 0; i < player.inventory.size(); i++) {
             inventory.add(player.inventory.getStack(i));
         }
-        
+
         return inventory.toArray(new ItemStack[0]);
     }
 }

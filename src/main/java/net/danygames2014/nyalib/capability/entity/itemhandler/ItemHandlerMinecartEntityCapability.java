@@ -1,6 +1,7 @@
 package net.danygames2014.nyalib.capability.entity.itemhandler;
 
 import net.minecraft.entity.vehicle.MinecartEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class ItemHandlerMinecartEntityCapability extends ItemHandlerEntityCapability {
@@ -18,6 +19,44 @@ public class ItemHandlerMinecartEntityCapability extends ItemHandlerEntityCapabi
     @Override
     public ItemStack extractItem(int slot, int amount) {
         return minecart.removeStack(slot, amount);
+    }
+
+    @Override
+    public ItemStack extractItem() {
+        for (int i = 0; i < getItemSlots(); i++) {
+            if (getItemInSlot(i) != null) {
+                return extractItem(i, Integer.MAX_VALUE);
+            }
+        }
+        return null;
+    }
+    
+    @Override
+    public ItemStack extractItem(Item item, int amount) {
+        ItemStack currentStack = null;
+        int remaining = amount;
+
+        for (int i = 0; i < getItemSlots(); i++) {
+            if (remaining <= 0) {
+                break;
+            }
+
+            if (currentStack != null) {
+                if (this.getItemInSlot(i).isItemEqual(currentStack)) {
+                    ItemStack extractedStack = extractItem(i, remaining);
+                    remaining -= extractedStack.count;
+                    currentStack.count += extractedStack.count;
+                }
+            } else {
+                if (getItemInSlot(i).isOf(item)) {
+                    ItemStack extractedStack = extractItem(i, remaining);
+                    remaining -= extractedStack.count;
+                    currentStack = extractedStack;
+                }
+            }
+        }
+
+        return currentStack;
     }
 
     @Override
