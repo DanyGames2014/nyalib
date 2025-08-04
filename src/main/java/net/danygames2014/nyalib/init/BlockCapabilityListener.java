@@ -1,6 +1,10 @@
 package net.danygames2014.nyalib.init;
 
 import net.danygames2014.nyalib.NyaLib;
+import net.danygames2014.nyalib.capability.block.energyhandler.EnergyHandlerBlockCapability;
+import net.danygames2014.nyalib.capability.block.energyhandler.EnergyHandlerInterfaceBlockCapabilityProvider;
+import net.danygames2014.nyalib.capability.block.energyhandler.EnergyStorageBlockCapability;
+import net.danygames2014.nyalib.capability.block.energyhandler.EnergyStorageInterfaceBlockCapabilityProvider;
 import net.danygames2014.nyalib.capability.block.itemhandler.ItemHandlerBlockCapability;
 import net.danygames2014.nyalib.capability.block.itemhandler.ItemHandlerInterfaceBlockCapabilityProvider;
 import net.danygames2014.nyalib.capability.block.itemhandler.ItemHandlerInventoryBlockCapabilityProvider;
@@ -13,15 +17,23 @@ public class BlockCapabilityListener {
     @EventListener
     public void registerBlockCapabilityClass(BlockCapabilityClassRegisterEvent event) {
         event.register(NyaLib.NAMESPACE.id("item_handler"), ItemHandlerBlockCapability.class);
+        event.register(NyaLib.NAMESPACE.id("energy_storage"), EnergyStorageBlockCapability.class);
+        event.register(NyaLib.NAMESPACE.id("energy_handler"), EnergyHandlerBlockCapability.class);
     }
 
     @EventListener(priority = ListenerPriority.LOWEST)
-    public void registerItemHandlerInventoryBlockCapabilityProvider(BlockCapabilityProviderRegisterEvent event) {
+    public void registerBlockCapabilitiesLowewstPriority(BlockCapabilityProviderRegisterEvent event) {
         event.register(NyaLib.NAMESPACE.id("item_handler"), new ItemHandlerInventoryBlockCapabilityProvider());
     }
 
+    @EventListener
+    public void registerBlockCapabilities(BlockCapabilityProviderRegisterEvent event) {
+        event.register(NyaLib.NAMESPACE.id("energy_storage"), new EnergyStorageInterfaceBlockCapabilityProvider());
+        event.register(NyaLib.NAMESPACE.id("energy_handler"), new EnergyHandlerInterfaceBlockCapabilityProvider());
+    }
+
     @EventListener(priority = ListenerPriority.HIGHEST)
-    public void registerItemHandlerInterfaceBlockCapabilityProvider(BlockCapabilityProviderRegisterEvent event) {
+    public void registerBlockCapabilitiesHighestPriority(BlockCapabilityProviderRegisterEvent event) {
         event.register(NyaLib.NAMESPACE.id("item_handler"), new ItemHandlerInterfaceBlockCapabilityProvider());
     }
 }
