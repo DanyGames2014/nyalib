@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 
-public class ItemHandlerPlayerEntityCapability extends ItemHandlerEntityCapability {
+class ItemHandlerPlayerEntityCapability extends ItemHandlerEntityCapability {
     private final PlayerEntity player;
 
     public ItemHandlerPlayerEntityCapability(PlayerEntity player) {

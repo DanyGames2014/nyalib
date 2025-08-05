@@ -6,7 +6,7 @@ import net.danygames2014.nyalib.energy.EnergySource;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
-public class EnergyHandlerInterfaceBlockCapability extends EnergyHandlerBlockCapability{
+class EnergyHandlerInterfaceBlockCapability extends EnergyHandlerBlockCapability{
     private final EnergyHandler energyHandler;
     private final EnergyConsumer energyConsumer;
     private final EnergySource energySource;

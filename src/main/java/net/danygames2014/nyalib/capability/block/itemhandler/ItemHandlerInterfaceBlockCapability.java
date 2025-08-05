@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
-public class ItemHandlerInterfaceBlockCapability extends ItemHandlerBlockCapability {
+class ItemHandlerInterfaceBlockCapability extends ItemHandlerBlockCapability {
     private final ItemHandler itemHandler;
     
     public ItemHandlerInterfaceBlockCapability(ItemHandler itemHandler) {

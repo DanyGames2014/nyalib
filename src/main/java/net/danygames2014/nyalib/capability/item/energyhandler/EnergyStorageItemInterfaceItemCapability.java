@@ -3,7 +3,7 @@ package net.danygames2014.nyalib.capability.item.energyhandler;
 import net.danygames2014.nyalib.energy.EnergyStorageItem;
 import net.minecraft.item.ItemStack;
 
-public class EnergyStorageItemInterfaceItemCapability extends EnergyStorageItemCapability {
+class EnergyStorageItemInterfaceItemCapability extends EnergyStorageItemCapability {
     private final EnergyStorageItem energyStorageItem;
     private final ItemStack stack;
 

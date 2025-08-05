@@ -4,7 +4,7 @@ import net.danygames2014.nyalib.item.ItemHandlerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class ItemHandlerEntityInterfaceEntityCapability extends ItemHandlerEntityCapability {
+class ItemHandlerEntityInterfaceEntityCapability extends ItemHandlerEntityCapability {
     private final ItemHandlerEntity itemHandler;
 
     public ItemHandlerEntityInterfaceEntityCapability(ItemHandlerEntity itemHandler) {

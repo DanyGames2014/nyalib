@@ -8,9 +8,9 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class EnergyHandlerInterfaceBlockCapabilityProvider extends BlockCapabilityProvider<EnergyHandlerInterfaceBlockCapability> {
+public class EnergyHandlerInterfaceBlockCapabilityProvider extends BlockCapabilityProvider<EnergyHandlerBlockCapability> {
     @Override
-    public @Nullable EnergyHandlerInterfaceBlockCapability getCapability(World world, int x, int y, int z) {
+    public @Nullable EnergyHandlerBlockCapability getCapability(World world, int x, int y, int z) {
         BlockEntity blockEntity = world.getBlockEntity(x, y, z);
         
         if (blockEntity instanceof EnergyHandler energyHandler) {

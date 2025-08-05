@@ -2,7 +2,7 @@ package net.danygames2014.nyalib.capability.block.energyhandler;
 
 import net.danygames2014.nyalib.energy.EnergyStorage;
 
-public class EnergyStorageInterfaceBlockCapability extends EnergyStorageBlockCapability {
+class EnergyStorageInterfaceBlockCapability extends EnergyStorageBlockCapability {
     private final EnergyStorage energyStorage;
     
     public EnergyStorageInterfaceBlockCapability(EnergyStorage energyStorage) {

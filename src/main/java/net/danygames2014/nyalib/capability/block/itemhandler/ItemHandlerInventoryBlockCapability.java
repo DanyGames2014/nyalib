@@ -6,7 +6,7 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("DuplicatedCode")
-public class ItemHandlerInventoryBlockCapability extends ItemHandlerBlockCapability {
+class ItemHandlerInventoryBlockCapability extends ItemHandlerBlockCapability {
     private final Inventory inventory;
     
     public ItemHandlerInventoryBlockCapability(Inventory inventory) {
