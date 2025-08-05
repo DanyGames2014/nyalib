@@ -200,3 +200,65 @@ modrinth {
         }
     }
 }
+
+tasks.register("update") {
+    doLast {
+        def propsFile = file("gradle.properties")
+
+        List<String> lines = propsFile.readLines()
+
+        updateDependency(lines, "BINY", "yarn_mappings", "https://maven.glass-launcher.net/releases/net/glasslauncher/biny")
+        updateDependency(lines, "Fabric Loader", "loader_version", "https://maven.fabricmc.net/net/fabricmc/fabric-loader/")
+        updateDependency(lines, "StationAPI", "stapi_version", "https://maven.glass-launcher.net/releases/net/modificationstation/StationAPI")
+        updateDependency(lines, "Glass Networking", "glass_networking_version", "https://maven.glass-launcher.net/releases/net/glasslauncher/mods/glass-networking")
+        updateDependency(lines, "Glass Config API", "gcapi_version", "https://maven.glass-launcher.net/releases/net/glasslauncher/mods/GlassConfigAPI")
+        updateDependency(lines, "Always More Items", "alwaysmoreitems_version", "https://maven.glass-launcher.net/releases/net/glasslauncher/mods/AlwaysMoreItems")
+        updateDependency(lines, "ModMenu", "modmenu_version", "https://maven.glass-launcher.net/releases/net/glasslauncher/mods/ModMenu")
+        updateDependency(lines, "BH Creative", "bhcreative_version", "https://api.modrinth.com/maven/maven/modrinth/bh-creative")
+        updateDependency(lines, "Spawn Eggs", "spawneggs_version", "https://maven.glass-launcher.net/releases/net/danygames2014/spawneggs")
+        updateDependency(lines, "Retro Commands", "retrocommands_version", "https://api.modrinth.com/maven/maven/modrinth/retrocommands")
+        updateDependency(lines, "RetroAuth", "retroauth_version", "https://api.modrinth.com/maven/maven/modrinth/retroauth")
+        updateDependency(lines, "UniTweaks", "unitweaks_version", "https://api.modrinth.com/maven/maven/modrinth/unitweaks")
+
+        propsFile.text = lines.join(System.lineSeparator())
+        println("Finished updating dependencies, please reload your Gradle Project")
+    }
+}
+
+def updateDependency(List<String> lines, String name, String property, String artifactUrl) {
+    println("Updating Dependency " + name)
+
+    if (!project.hasProperty(property)) {
+        println("Project does not have property " + property)
+    }
+
+    String latestVersion = fetchLatestVersion(artifactUrl)
+
+    if (latestVersion == null) {
+        println("Error while fetching latest version")
+    }
+
+    for (int i = 0; i < lines.size(); i++) {
+        if (lines[i].contains(property)){
+            lines[i] = lines[i].split("=")[0] + "=" + latestVersion
+            break
+        }
+    }
+
+    println("Dependency " + name + " updated to " + latestVersion)
+}
+
+static def fetchLatestVersion(String artifactUrl) {
+    String latestVersion = null
+
+    try {
+        String artifactMeta = new URL(artifactUrl + "/maven-metadata.xml").text
+        latestVersion = artifactMeta.split("<latest>")[1].split("</latest>")[0]
+    } catch (Exception e) {
+        println("Error while updating dependency " + artifactUrl)
+        println(e.message)
+        return null
+    }
+
+    return latestVersion;
+}
