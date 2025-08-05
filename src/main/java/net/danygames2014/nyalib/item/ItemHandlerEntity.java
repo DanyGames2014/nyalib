@@ -3,6 +3,9 @@ package net.danygames2014.nyalib.item;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+/**
+ * An Item Handler interface to be implemented on entities
+ */
 @SuppressWarnings("unused")
 public interface ItemHandlerEntity extends ItemCapable {
     /**

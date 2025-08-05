@@ -5,6 +5,9 @@ import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * An Item Handler interface to be implemented on blocks
+ */
 @SuppressWarnings("unused")
 public interface ItemHandler extends ItemCapable {
     /**
