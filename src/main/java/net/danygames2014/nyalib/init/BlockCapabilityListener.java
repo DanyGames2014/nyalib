@@ -21,19 +21,15 @@ public class BlockCapabilityListener {
         event.register(NyaLib.NAMESPACE.id("energy_handler"), EnergyHandlerBlockCapability.class);
     }
 
-    @EventListener(priority = ListenerPriority.LOWEST)
-    public void registerBlockCapabilitiesLowewstPriority(BlockCapabilityProviderRegisterEvent event) {
-        event.register(NyaLib.NAMESPACE.id("item_handler"), new ItemHandlerInventoryBlockCapabilityProvider());
-    }
-
     @EventListener
     public void registerBlockCapabilities(BlockCapabilityProviderRegisterEvent event) {
         event.register(NyaLib.NAMESPACE.id("energy_storage"), new EnergyStorageInterfaceBlockCapabilityProvider());
         event.register(NyaLib.NAMESPACE.id("energy_handler"), new EnergyHandlerInterfaceBlockCapabilityProvider());
+        event.register(NyaLib.NAMESPACE.id("item_handler"), new ItemHandlerInterfaceBlockCapabilityProvider());
     }
 
-    @EventListener(priority = ListenerPriority.HIGHEST)
-    public void registerBlockCapabilitiesHighestPriority(BlockCapabilityProviderRegisterEvent event) {
-        event.register(NyaLib.NAMESPACE.id("item_handler"), new ItemHandlerInterfaceBlockCapabilityProvider());
+    @EventListener(priority = ListenerPriority.LOWEST)
+    public void registerBlockCapabilitiesLowewstPriority(BlockCapabilityProviderRegisterEvent event) {
+        event.register(NyaLib.NAMESPACE.id("item_handler"), new ItemHandlerInventoryBlockCapabilityProvider());
     }
 }

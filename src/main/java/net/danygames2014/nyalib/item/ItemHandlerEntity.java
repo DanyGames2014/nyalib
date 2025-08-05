@@ -9,7 +9,7 @@ public interface ItemHandlerEntity extends ItemCapable {
      * Check if the handler supports extracting items, if this returns false there
      * should be no point in trying to use {@link #extractItem(int, int)}
      *
-     * @return <code>true</code> if the device supports item extraction
+     * @return <code>true</code> if the entity supports item extraction
      */
     boolean canExtractItem();
 
@@ -24,7 +24,7 @@ public interface ItemHandlerEntity extends ItemCapable {
 
 
     /**
-     * Extract any item from the given direction
+     * Extract any item
      *
      * @return The extracted ItemStack
      */
@@ -39,7 +39,7 @@ public interface ItemHandlerEntity extends ItemCapable {
 
 
     /**
-     * Extract the given item in any slot from the handler
+     * Extract the given item in any slot
      *
      * @param item   The Item to extract
      * @param amount The amount to extract (can be larger than the maximum stack size)
@@ -76,7 +76,7 @@ public interface ItemHandlerEntity extends ItemCapable {
      * Check if the handler supports inserting items, if this returns false there
      * should be no point in trying to use {@link #insertItem(ItemStack)} or {@link #insertItem(ItemStack, int)}
      *
-     * @return <code>true</code> if the device supports item insertion
+     * @return <code>true</code> if the entity supports item insertion
      */
     boolean canInsertItem();
 

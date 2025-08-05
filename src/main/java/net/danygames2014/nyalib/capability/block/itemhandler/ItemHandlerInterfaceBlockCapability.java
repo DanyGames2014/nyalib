@@ -6,7 +6,7 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
 public class ItemHandlerInterfaceBlockCapability extends ItemHandlerBlockCapability {
-    ItemHandler itemHandler;
+    private final ItemHandler itemHandler;
     
     public ItemHandlerInterfaceBlockCapability(ItemHandler itemHandler) {
         this.itemHandler = itemHandler;

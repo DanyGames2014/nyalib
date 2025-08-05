@@ -5,7 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class ItemHandlerMinecartEntityCapability extends ItemHandlerEntityCapability {
-    MinecartEntity minecart;
+    private final MinecartEntity minecart;
 
     public ItemHandlerMinecartEntityCapability(MinecartEntity minecart) {
         this.minecart = minecart;

@@ -6,7 +6,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.MinecartEntity;
 import org.jetbrains.annotations.Nullable;
 
-public class ItemHandlerEntityCapabilityProvider extends EntityCapabilityProvider<ItemHandlerEntityCapability> {
+public class ItemHandlerVanillaEntityCapabilityProvider extends EntityCapabilityProvider<ItemHandlerEntityCapability> {
     @Override
     public @Nullable ItemHandlerEntityCapability getCapability(Entity entity) {
         if (entity instanceof PlayerEntity player) {

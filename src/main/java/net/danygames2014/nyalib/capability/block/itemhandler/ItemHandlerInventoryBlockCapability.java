@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("DuplicatedCode")
 public class ItemHandlerInventoryBlockCapability extends ItemHandlerBlockCapability {
-    Inventory inventory;
+    private final Inventory inventory;
     
     public ItemHandlerInventoryBlockCapability(Inventory inventory) {
         this.inventory = inventory;
