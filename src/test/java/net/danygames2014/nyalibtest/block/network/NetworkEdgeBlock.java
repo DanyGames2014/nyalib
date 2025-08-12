@@ -4,7 +4,6 @@ import net.danygames2014.nyalib.network.Network;
 import net.danygames2014.nyalib.network.NetworkEdgeComponent;
 import net.danygames2014.nyalib.network.NetworkManager;
 import net.danygames2014.nyalib.network.NetworkType;
-import net.danygames2014.nyalibtest.NyaLibTest;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.BlockView;

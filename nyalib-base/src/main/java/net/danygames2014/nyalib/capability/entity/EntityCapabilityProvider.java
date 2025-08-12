@@ -1,6 +1,5 @@
 package net.danygames2014.nyalib.capability.entity;
 
-import net.danygames2014.nyalib.capability.block.BlockCapability;
 import net.minecraft.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 

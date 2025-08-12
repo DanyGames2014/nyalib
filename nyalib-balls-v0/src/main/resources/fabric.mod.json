@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "id": "nyalib",
+  "id": "nyalib-balls",
   "version": "${version}",
 
-  "name": "NyaLib",
+  "name": "NyaLib Balls",
   "description": "A pretty uwu library mod :3",
   "authors": [
     "DanyGames2014"
   ],
 
   "license": "MIT",
-  "icon": "assets/nyalib/icon.png",
+  "icon": "assets/nyalib-balls/icon.png",
 
   "environment": "*",
   "entrypoints": {
@@ -21,6 +21,9 @@
     "stationapi:event_bus_server": [
     ]
   },
+  "mixins": [
+    "nyalib-balls.mixins.json"
+  ],
   "depends": {
     "minecraft": "1.0.0-beta.7.3"
   }

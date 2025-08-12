@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "nyalib-base",
+  "version": "${version}",
+
+  "name": "NyaLib Base",
+  "description": "A base of a pretty UwU library mod :3~",
+  "authors": [
+    "DanyGames2014"
+  ],
+
+  "license": "MIT",
+  "icon": "assets/nyalib-base/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "stationapi:event_bus": [
+      "net.danygames2014.nyalib.NyaLib",
+      "net.danygames2014.nyalib.init.InitListener",
+      "net.danygames2014.nyalib.init.AfterBlockAndItemListener",
+      "net.danygames2014.nyalib.init.FluidListener",
+      "net.danygames2014.nyalib.init.NetworkTypeListener",
+      "net.danygames2014.nyalib.init.PacketListener",
+      "net.danygames2014.nyalib.network.NetworkLoader",
+      "net.danygames2014.nyalib.init.BlockCapabilityListener",
+      "net.danygames2014.nyalib.init.EntityCapabilityListener",
+      "net.danygames2014.nyalib.init.ItemCapabilityListener"
+    ],
+    "stationapi:event_bus_client": [
+    ],
+    "stationapi:event_bus_server": [
+    ]
+  },
+  "mixins": [
+    "nyalib-base.mixins.json"
+  ],
+  "accessWidener": "nyalib-base.accessWidener",
+  "depends": {
+    "minecraft": "1.0.0-beta.7.3"
+  }
+}

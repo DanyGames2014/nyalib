@@ -3,8 +3,6 @@ package net.danygames2014.nyalib.fluid;
 import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.util.Identifier;
 
-import java.util.Objects;
-
 @SuppressWarnings("unused")
 public class FluidStack {
     /**

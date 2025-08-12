@@ -12,3 +12,7 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+rootProject.name = "NyaLib"
+
+include 'nyalib-base'
+include 'nyalib-balls-v0'

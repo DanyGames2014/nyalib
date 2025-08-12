@@ -1,0 +1,8 @@
+import static net.modificationstation.stationapi.gradle.SubprojectHelpers.getSubprojectVersion
+
+archives_base_name = "nyalib-base"
+version = getSubprojectVersion(project, "1.0.0")
+
+loom {
+    accessWidenerPath = file("src/main/resources/nyalib-base.accesswidener")
+}

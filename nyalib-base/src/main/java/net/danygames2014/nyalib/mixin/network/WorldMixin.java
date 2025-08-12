@@ -1,7 +1,6 @@
 package net.danygames2014.nyalib.mixin.network;
 
 import net.danygames2014.nyalib.network.Network;
-import net.danygames2014.nyalib.network.NetworkLoader;
 import net.danygames2014.nyalib.network.NetworkManager;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.Dimension;
