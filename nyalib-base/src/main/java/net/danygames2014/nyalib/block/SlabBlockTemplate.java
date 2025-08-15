@@ -20,11 +20,17 @@ public class SlabBlockTemplate extends TemplateBlock {
 
     public static final EnumProperty<SlabType> SLAB_TYPE = EnumProperty.of("slab_type", SlabType.class);
 
-
     public SlabBlockTemplate(Identifier identifier, Block baseBlock) {
+        this(identifier, baseBlock, null);
+    }
+    
+    public SlabBlockTemplate(Identifier identifier, Block baseBlock, Identifier texture) {
         super(identifier, baseBlock.material);
         this.setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
         this.setOpacity(0);
+        if (texture != null) {
+            TemplateBlockRegistry.registerSlab(identifier, texture);
+        }
     }
 
     @Override

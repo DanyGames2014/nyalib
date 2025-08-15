@@ -37,6 +37,7 @@ import net.modificationstation.stationapi.api.event.block.entity.BlockEntityRegi
 import net.modificationstation.stationapi.api.event.registry.BlockRegistryEvent;
 import net.modificationstation.stationapi.api.event.registry.ItemRegistryEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
+import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.Namespace;
 
 @SuppressWarnings("unused")
@@ -65,6 +66,9 @@ public class NyaLibTest {
     public static Block spongeSlab;
     public static Block spongeFence;
     public static Block spongeFenceGate;
+    
+    public static Block tntStairs;
+    public static Block tntSlab;
     
     public static Block serverSoundBlock;
     
@@ -101,6 +105,9 @@ public class NyaLibTest {
         spongeSlab = new SlabBlockTemplate(NAMESPACE.id("sponge_slab"), Block.SPONGE).setTranslationKey(NAMESPACE, "sponge_slab");
         spongeFence = new FenceBlockTemplate(NAMESPACE.id("sponge_fence"), Block.SPONGE).setTranslationKey(NAMESPACE, "sponge_fence");
         spongeFenceGate = new FenceGateBlockTemplate(NAMESPACE.id("sponge_fence_gate"), Block.SPONGE).setTranslationKey(NAMESPACE, "sponge_fence_gate");
+        
+        tntStairs = new StairsBlockTemplate(NAMESPACE.id("tnt_stairs"), Block.TNT, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE, "tnt_stairs");
+        tntSlab = new SlabBlockTemplate(NAMESPACE.id("tnt_slab"), Block.TNT, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE, "tnt_slab");
         
         // Sound
         serverSoundBlock = new ServerSoundBlock(NAMESPACE.id("server_sound_block"), Material.WOOL).setTranslationKey(NAMESPACE, "server_sound_block");

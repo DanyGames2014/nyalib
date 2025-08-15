@@ -18,8 +18,15 @@ public class FenceGateBlockTemplate extends TemplateBlock {
     public static final DirectionProperty FACING = DirectionProperty.of("facing", Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
 
     public FenceGateBlockTemplate(Identifier identifier, Block baseBlock) {
+        this(identifier, baseBlock, null);
+    }
+    
+    public FenceGateBlockTemplate(Identifier identifier, Block baseBlock, Identifier texture) {
         super(identifier, baseBlock.material);
         this.setOpacity(0);
+        if (texture != null) {
+            TemplateBlockRegistry.registerFenceGate(identifier, texture);
+        }
     }
 
     @Override

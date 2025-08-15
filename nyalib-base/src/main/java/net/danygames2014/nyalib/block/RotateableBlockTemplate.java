@@ -14,8 +14,15 @@ public class RotateableBlockTemplate extends TemplateBlock {
     public static final EnumProperty<Direction.Axis> AXIS = EnumProperty.of("axis", Direction.Axis.class);
 
     public RotateableBlockTemplate(Identifier identifier, Material material) {
+        this(identifier, material, null, null);
+    }
+    
+    public RotateableBlockTemplate(Identifier identifier, Material material, Identifier endTexture, Identifier sideTexture) {
         super(identifier, material);
         setDefaultState(getDefaultState().with(AXIS, Direction.Axis.Y));
+        if (endTexture != null && sideTexture != null) {
+            TemplateBlockRegistry.registerRotateableBlock(identifier, endTexture, sideTexture);
+        }
     }
 
     @Override

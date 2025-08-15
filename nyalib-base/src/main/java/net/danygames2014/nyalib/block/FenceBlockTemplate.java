@@ -16,8 +16,15 @@ public class FenceBlockTemplate extends TemplateBlock {
     public static final BooleanProperty WEST = BooleanProperty.of("west"); // Z++
 
     public FenceBlockTemplate(Identifier identifier, Block baseBlock) {
+        this(identifier, baseBlock, null);
+    }
+    
+    public FenceBlockTemplate(Identifier identifier, Block baseBlock, Identifier texture) {
         super(identifier, baseBlock.material);
         this.setOpacity(0);
+        if (texture != null) {
+            TemplateBlockRegistry.registerFence(identifier, texture);
+        }
     }
 
     @Override

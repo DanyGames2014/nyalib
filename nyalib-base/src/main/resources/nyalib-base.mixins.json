@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "block.BlockWithEntityMixin",
+    "block.JsonUnbakedModelAccessor",
     "item.ChestBlockEntityMixin",
     "item.DispenserBlockEntityMixin",
     "item.FurnaceBlockEntityMixin",
@@ -16,6 +17,7 @@
   "server": [
   ],
   "client": [
+    "block.BakedModelManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

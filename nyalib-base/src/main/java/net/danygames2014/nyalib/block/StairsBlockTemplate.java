@@ -18,11 +18,18 @@ public class StairsBlockTemplate extends TemplateBlock {
 
     public static final EnumProperty<Direction> FACING = EnumProperty.of("facing", Direction.class, dir -> dir.getAxis().isHorizontal());
 
-    Block block;
+    Block baseBlock;
 
-    public StairsBlockTemplate(Identifier identifier, Block block) {
-        super(identifier, block.material);
-        this.block = block;
+    public StairsBlockTemplate(Identifier identifier, Block baseBlock) {
+        this(identifier, baseBlock, null);
+    }
+
+    public StairsBlockTemplate(Identifier identifier, Block baseBlock, Identifier texture) {
+        super(identifier, baseBlock.material);
+        this.baseBlock = baseBlock;
+        if (texture != null) {
+            TemplateBlockRegistry.registerStairs(identifier, texture);
+        }
     }
 
     @Override
