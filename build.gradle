@@ -1,3 +1,5 @@
+import static net.modificationstation.stationapi.gradle.SubprojectHelpers.addDependencyXML
+
 plugins {
     id 'maven-publish'
     id 'fabric-loom' version '1.10.5'
@@ -171,15 +173,15 @@ allprojects {
             mavenLocal()
 
             // Glass Maven
-            if (project.hasProperty("calmilamsy_secret_publishing_cave_username")) {
-                maven {
-                    url = "https://maven.glass-launcher.net/releases"
-                    credentials {
-                        username "${project.calmilamsy_secret_publishing_cave_username}"
-                        password "${project.calmilamsy_secret_publishing_cave_password}"
-                    }
-                }
-            }
+//            if (project.hasProperty("calmilamsy_secret_publishing_cave_username")) {
+//                maven {
+//                    url = "https://maven.glass-launcher.net/releases"
+//                    credentials {
+//                        username "${project.calmilamsy_secret_publishing_cave_username}"
+//                        password "${project.calmilamsy_secret_publishing_cave_password}"
+//                    }
+//                }
+//            }
 
             // NyaRepo
             if (project.hasProperty("nyarepo_publishing_cave_username")) {
@@ -203,7 +205,7 @@ allprojects {
 }
 
 group = project.properties['maven_group']
-base.archivesName.set(project.properties['archives_base_name'])
+base.archivesName.set(project.archives_base_name)
 version = project.hasProperty('override_version') ? project.properties['override_version'].substring(0, 7) : project.properties['mod_version']
 
 subprojects {
@@ -353,7 +355,7 @@ def updateDependency(List<String> lines, String name, String property, String ar
     }
 
     for (int i = 0; i < lines.size(); i++) {
-        if (lines[i].contains(property)){
+        if (lines[i].contains(property)) {
             lines[i] = lines[i].split("=")[0] + "=" + latestVersion
             break
         }
