@@ -1,5 +1,5 @@
 {
-  "parent": "nyalib:block/fence_inventory",
+  "parent": "nyalib-base:block/fence_inventory",
   "textures": {
     "texture": "minecraft:block/sponge"
   }
