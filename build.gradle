@@ -82,7 +82,9 @@ allprojects {
         implementation "org.apache.logging.log4j:log4j-slf4j18-impl:2.17.2"
         implementation "me.carleslc:Simple-Yaml:1.8.4"
 
-        modImplementation "net.modificationstation:StationAPI:${project.stapi_version}"
+        modImplementation ("net.modificationstation:StationAPI:${project.stapi_version}") {
+            exclude group: "babric", module: "fabric-loader"
+        }
 
         modImplementation("net.glasslauncher.mods:ModMenu:${project.modmenu_version}") {
             transitive false
