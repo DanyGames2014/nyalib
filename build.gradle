@@ -2,8 +2,8 @@ import static net.modificationstation.stationapi.gradle.SubprojectHelpers.addDep
 
 plugins {
     id 'maven-publish'
-    id 'fabric-loom' version '1.10.5'
-    id 'babric-loom-extension' version '1.10.1'
+    id 'fabric-loom' version '1.9.2'
+    id 'babric-loom-extension' version '1.9.2'
     id "com.modrinth.minotaur" version "2.+"
 }
 
@@ -245,16 +245,6 @@ subprojects {
         testImplementation project(path: ":$name", configuration: "test")
         include project(path: ":$name", configuration: "out")
     }
-
-    rootProject.publishing {
-        publications {
-            mavenJava {
-                pom.withXml {
-                    addDependencyXML(asNode(), "compile", project)
-                }
-            }
-        }
-    }
 }
 
 tasks.named('compileJava', JavaCompile) {
@@ -267,6 +257,20 @@ publishing {
     publications {
         mavenJava {
             artifactId = project.properties['archives_base_name']
+
+            pom.withXml { XmlProvider xml ->
+                println("Wiping the POM file dependencies")
+                Node dependenciesNode = net.fabricmc.loom.util.GroovyXmlUtil.getOrCreateNode(xml.asNode(), "dependencies")
+                if (dependenciesNode) {
+                    xml.asNode().remove(dependenciesNode)
+                }
+                
+                project.subprojects.each { subproject ->
+                    println("Adding subproject as a dependency: ${subproject.name}")
+                    
+                    addDependencyXML(xml.asNode(), "compile", subproject)
+                }
+            }
         }
     }
 }
