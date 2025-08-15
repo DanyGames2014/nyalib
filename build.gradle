@@ -211,7 +211,7 @@ version = project.hasProperty('override_version') ? project.properties['override
 subprojects {
     group = rootProject.hasProperty('override_version') ?
             project.properties['maven_group'] + ".NyaLib." + project.properties['override_version'].substring(0, 7) :
-            project.properties['maven_group'] + ".NyaLib.submodule." + project.properties['archivesBaseName']
+            project.properties['maven_group'] + ".NyaLib.submodule"
 
     configurations {
         out {
@@ -244,6 +244,20 @@ subprojects {
         implementation project(path: ":$name", configuration: "dev")
         testImplementation project(path: ":$name", configuration: "test")
         include project(path: ":$name", configuration: "out")
+    }
+
+    publishing {
+        publications {
+            mavenJava {
+                pom.withXml { XmlProvider xml ->
+                    println("Wiping the POM file dependencies for submodule " + this.rootProject)
+                    Node dependenciesNode = net.fabricmc.loom.util.GroovyXmlUtil.getOrCreateNode(xml.asNode(), "dependencies")
+                    if (dependenciesNode) {
+                        xml.asNode().remove(dependenciesNode)
+                    }
+                }
+            }
+        }
     }
 }
 
