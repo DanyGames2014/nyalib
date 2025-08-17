@@ -1,9 +1,6 @@
 package net.danygames2014.nyalibtest;
 
-import net.danygames2014.nyalib.block.FenceBlockTemplate;
-import net.danygames2014.nyalib.block.FenceGateBlockTemplate;
-import net.danygames2014.nyalib.block.SlabBlockTemplate;
-import net.danygames2014.nyalib.block.StairsBlockTemplate;
+import net.danygames2014.nyalib.block.*;
 import net.danygames2014.nyalib.event.NetworkTypeRegistryEvent;
 import net.danygames2014.nyalib.network.NetworkType;
 import net.danygames2014.nyalibtest.block.capability.block.ItemHandlerBlockCapabilityTesterBlock;
@@ -71,6 +68,7 @@ public class NyaLibTest {
     public static Block tntSlab;
     public static Block tntFence;
     public static Block tntFenceGate;
+    public static Block tntButton;
     
     public static Block serverSoundBlock;
     
@@ -112,6 +110,7 @@ public class NyaLibTest {
         tntSlab = new SlabBlockTemplate(NAMESPACE.id("tnt_slab"), Block.TNT, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE, "tnt_slab");
         tntFence = new FenceBlockTemplate(NAMESPACE.id("tnt_fence"), Block.TNT, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE, "tnt_fence");
         tntFenceGate = new FenceGateBlockTemplate(NAMESPACE.id("tnt_fence_gate"), Block.TNT, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE.id("tnt_fence_gate"));
+        tntButton = new ButtonBlockTemplate(NAMESPACE.id("tnt_button"), Block.TNT, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE, "tnt_button");
         
         // Sound
         serverSoundBlock = new ServerSoundBlock(NAMESPACE.id("server_sound_block"), Material.WOOL).setTranslationKey(NAMESPACE, "server_sound_block");

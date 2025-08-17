@@ -20,10 +20,15 @@ public class TemplateBlockRegistry {
 
     // Block Identifier -> Texture Identifier
     public static HashMap<Identifier, Identifier> fenceGates = new HashMap<>();
-
+    
+    // Block Identifier -> Texture Identifier
+    public static HashMap<Identifier, Identifier> buttons = new HashMap<>();
+    
+    // TODO: TemplateButton, TemplatePressurePlate, TemplateLadder, TemplateDoor, TemplateTrapdoor, TemplateFlowerPot, TemplateWall, TemplateThinSometing(glasspane, iron bars), TemplateCarpet, TemplateSign, TemplateTorch
+    
     // Block Identifier -> End Texture Identifier, Side Texture Identifier
     public static HashMap<Identifier, Pair<Identifier, Identifier>> rotateableBlockTemplate = new HashMap<>();
-
+    
     public static void registerStairs(Identifier blockIdentifier, Identifier texture) {
         stairs.put(blockIdentifier, texture);
 
@@ -102,6 +107,32 @@ public class TemplateBlockRegistry {
         fenceGateState = fenceGateState.replace("OPEN", getBlockModelPath(blockIdentifier + "_open"));
         fenceGateState = fenceGateState.replace("CLOSED", getBlockModelPath(blockIdentifier + "_closed"));
         JsonOverrideRegistry.registerBlockstateOverride(blockIdentifier, fenceGateState);
+    }
+    
+    public static void registerButton(Identifier blockIdentifier, Identifier texture) {
+        buttons.put(blockIdentifier, texture);
+        
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+            return;
+        }
+        
+        JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_inventory", buttonInventoryJson);
+        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_inventory", "texture", texture);
+        
+        JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_normal", buttonJson);
+        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_normal", "texture", texture);
+        
+        JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_pressed", buttonPressedJson);
+        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_pressed", "texture", texture);
+
+        JsonOverrideRegistry.registerItemModelOverride(blockIdentifier, buttonInventoryJson);
+        JsonOverrideRegistry.registerItemModelTextureOverride(blockIdentifier, "texture", texture);
+        
+        String buttonState = buttonStateJson;
+        buttonState = buttonState.replace("NORMAL", getBlockModelPath(blockIdentifier + "_normal"));
+        buttonState = buttonState.replace("PRESSED", getBlockModelPath(blockIdentifier + "_pressed"));
+        JsonOverrideRegistry.registerBlockstateOverride(blockIdentifier, buttonState);
+        
     }
 
     public static void registerRotateableBlock(Identifier blockIdentifier, Identifier endTexture, Identifier sideTexture) {
@@ -335,5 +366,157 @@ public class TemplateBlockRegistry {
               }
             }
             """
+    );
+    
+    // Button
+    public static final String buttonInventoryJson = ("""
+            {
+              "parent": "nyalib-base:block/button_inventory",
+              "textures": {
+              }
+            }"""
+    );
+    
+    public static final String buttonJson = ("""
+            {
+              "parent": "nyalib-base:block/button",
+              "textures": {
+              }
+            }"""
+    );
+    
+    public static final String buttonPressedJson = ("""
+            {
+              "parent": "nyalib-base:block/button_pressed",
+              "textures": {
+              }
+            }"""
+    );
+    
+    public static final String buttonStateJson = ("""
+            {
+              "variants": {
+                "type=ceiling,facing=east,powered=false": {
+                  "model": "NORMAL",
+                  "x": 180,
+                  "y": 180
+                },
+                "type=ceiling,facing=east,powered=true": {
+                  "model": "PRESSED",
+                  "x": 180,
+                  "y": 180
+                },
+                "type=ceiling,facing=north,powered=false": {
+                  "model": "NORMAL",
+                  "x": 180,
+                  "y": 90
+                },
+                "type=ceiling,facing=north,powered=true": {
+                  "model": "PRESSED",
+                  "x": 180,
+                  "y": 90
+                },
+                "type=ceiling,facing=south,powered=false": {
+                  "model": "NORMAL",
+                  "x": 180,
+                  "y": 270
+                },
+                "type=ceiling,facing=south,powered=true": {
+                  "model": "PRESSED",
+                  "x": 180,
+                  "y": 270
+                },
+                "type=ceiling,facing=west,powered=false": {
+                  "model": "NORMAL",
+                  "x": 180,
+                  "y": 0
+                },
+                "type=ceiling,facing=west,powered=true": {
+                  "model": "PRESSED",
+                  "x": 180,
+                  "y": 0
+                },
+                "type=floor,facing=east,powered=false": {
+                  "model": "NORMAL",
+                  "y": 0
+                },
+                "type=floor,facing=east,powered=true": {
+                  "model": "PRESSED",
+                  "y": 0
+                },
+                "type=floor,facing=north,powered=false": {
+                  "model": "NORMAL",
+                  "y": 270
+                },
+                "type=floor,facing=north,powered=true": {
+                  "model": "PRESSED",
+                  "y": 270
+                },
+                "type=floor,facing=south,powered=false": {
+                  "model": "NORMAL",
+                  "y": 90
+                },
+                "type=floor,facing=south,powered=true": {
+                  "model": "PRESSED",
+                  "y": 90
+                },
+                "type=floor,facing=west,powered=false": {
+                  "model": "NORMAL",
+                  "y": 180
+                },
+                "type=floor,facing=west,powered=true": {
+                  "model": "PRESSED",
+                  "y": 180
+                },
+                "type=wall,facing=east,powered=false": {
+                  "model": "NORMAL",
+                  "uvlock": true,
+                  "x": 90,
+                  "y": 0
+                },
+                "type=wall,facing=east,powered=true": {
+                  "model": "PRESSED",
+                  "uvlock": true,
+                  "x": 90,
+                  "y": 0
+                },
+                "type=wall,facing=north,powered=false": {
+                  "model": "NORMAL",
+                  "uvlock": true,
+                  "x": 90,
+                  "y": 270
+                },
+                "type=wall,facing=north,powered=true": {
+                  "model": "PRESSED",
+                  "uvlock": true,
+                  "x": 90,
+                  "y": 270
+                },
+                "type=wall,facing=south,powered=false": {
+                  "model": "NORMAL",
+                  "uvlock": true,
+                  "x": 90,
+                  "y": 90
+                },
+                "type=wall,facing=south,powered=true": {
+                  "model": "PRESSED",
+                  "uvlock": true,
+                  "x": 90,
+                  "y": 90
+                },
+                "type=wall,facing=west,powered=false": {
+                  "model": "NORMAL",
+                  "uvlock": true,
+                  "x": 90,
+                  "y": 180
+                },
+                "type=wall,facing=west,powered=true": {
+                  "model": "PRESSED",
+                  "uvlock": true,
+                  "x": 90,
+                  "y": 180
+                }
+              }
+            }"""
     );
 }
