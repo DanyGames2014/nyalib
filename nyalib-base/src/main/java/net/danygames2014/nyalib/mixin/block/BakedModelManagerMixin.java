@@ -3,6 +3,8 @@ package net.danygames2014.nyalib.mixin.block;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.datafixers.util.Pair;
 import net.danygames2014.nyalib.block.JsonOverrideRegistry;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.modificationstation.stationapi.api.client.render.model.BakedModelManager;
 import net.modificationstation.stationapi.api.client.render.model.ModelLoader;
 import net.modificationstation.stationapi.api.util.Identifier;
@@ -21,6 +23,7 @@ import java.util.concurrent.Executor;
 
 import static net.modificationstation.stationapi.impl.client.texture.StationRenderImpl.LOGGER;
 
+@Environment(EnvType.CLIENT)
 @Mixin(value = BakedModelManager.class, remap = false)
 public class BakedModelManagerMixin {
     @Inject(method = "lambda$reloadBlockStates$15(Ljava/util/concurrent/Executor;Ljava/util/Map;)Ljava/util/concurrent/CompletionStage;", at = @At(value = "INVOKE", target = "Ljava/util/Map;entrySet()Ljava/util/Set;"))

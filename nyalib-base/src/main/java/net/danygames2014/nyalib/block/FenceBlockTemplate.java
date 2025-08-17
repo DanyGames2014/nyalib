@@ -89,7 +89,7 @@ public class FenceBlockTemplate extends TemplateBlock {
         state = state.with(EAST, canConnectTo(world.getBlockState(x, y, z - 1)));
         state = state.with(WEST, canConnectTo(world.getBlockState(x, y, z + 1)));
 
-        world.setBlockState(x, y, z, state);
+        world.setBlockStateWithNotify(x, y, z, state);
     }
 
     public boolean canConnectTo(BlockState state) {

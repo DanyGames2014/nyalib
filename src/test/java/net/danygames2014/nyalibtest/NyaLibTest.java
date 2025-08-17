@@ -69,6 +69,8 @@ public class NyaLibTest {
     
     public static Block tntStairs;
     public static Block tntSlab;
+    public static Block tntFence;
+    public static Block tntFenceGate;
     
     public static Block serverSoundBlock;
     
@@ -108,6 +110,8 @@ public class NyaLibTest {
         
         tntStairs = new StairsBlockTemplate(NAMESPACE.id("tnt_stairs"), Block.TNT, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE, "tnt_stairs");
         tntSlab = new SlabBlockTemplate(NAMESPACE.id("tnt_slab"), Block.TNT, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE, "tnt_slab");
+        tntFence = new FenceBlockTemplate(NAMESPACE.id("tnt_fence"), Block.TNT, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE, "tnt_fence");
+        tntFenceGate = new FenceGateBlockTemplate(NAMESPACE.id("tnt_fence_gate"), Block.TNT, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE.id("tnt_fence_gate"));
         
         // Sound
         serverSoundBlock = new ServerSoundBlock(NAMESPACE.id("server_sound_block"), Material.WOOL).setTranslationKey(NAMESPACE, "server_sound_block");

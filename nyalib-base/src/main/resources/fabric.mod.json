@@ -27,6 +27,7 @@
       "net.danygames2014.nyalib.init.ItemCapabilityListener"
     ],
     "stationapi:event_bus_client": [
+      "net.danygames2014.nyalib.init.UnbakedModelListener"
     ],
     "stationapi:event_bus_server": [
     ]

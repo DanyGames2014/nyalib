@@ -2,6 +2,8 @@ package net.danygames2014.nyalib.block;
 
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.objects.ObjectObjectImmutablePair;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.modificationstation.stationapi.api.util.Identifier;
 
 import java.util.HashMap;
@@ -24,38 +26,94 @@ public class TemplateBlockRegistry {
 
     public static void registerStairs(Identifier blockIdentifier, Identifier texture) {
         stairs.put(blockIdentifier, texture);
+
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+            return;
+        }
+        
         JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier, stairsJson);
         JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier, "all", texture);
+
         JsonOverrideRegistry.registerItemModelOverride(blockIdentifier, itemJson.replace("PATH", getBlockModelPath(blockIdentifier)));
+
         JsonOverrideRegistry.registerBlockstateOverride(blockIdentifier, stairsStateJson.replace("PATH", getBlockModelPath(blockIdentifier)));
     }
 
     public static void registerSlab(Identifier blockIdentifier, Identifier texture) {
         slabs.put(blockIdentifier, texture);
-        JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier, slabJson);
-        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier, "all", texture);
 
-        JsonOverrideRegistry.registerBlockModelOverride(Identifier.of(blockIdentifier + "_double"), doubleSlabJson);
-        JsonOverrideRegistry.registerBlockModelTextureOverride(Identifier.of(blockIdentifier + "_double"), "all", texture);
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+            return;
+        }
+        
+        JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_single", slabJson);
+        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_single", "all", texture);
 
-        JsonOverrideRegistry.registerItemModelOverride(blockIdentifier, itemJson.replace("PATH", getBlockModelPath(blockIdentifier)));
+        JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_double", doubleSlabJson);
+        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_double", "all", texture);
+
+        JsonOverrideRegistry.registerItemModelOverride(blockIdentifier, itemJson.replace("PATH", getBlockModelPath(blockIdentifier) + "_single"));
 
         String slabState = slabStateJson;
-        slabState = slabState.replace("SINGLE", getBlockModelPath(blockIdentifier));
-        slabState = slabState.replace("DOUBLE", getBlockModelPath(Identifier.of(blockIdentifier + "_double")));
+        slabState = slabState.replace("SINGLE", getBlockModelPath(blockIdentifier + "_single"));
+        slabState = slabState.replace("DOUBLE", getBlockModelPath(blockIdentifier + "_double"));
         JsonOverrideRegistry.registerBlockstateOverride(blockIdentifier, slabState);
     }
 
     public static void registerFence(Identifier blockIdentifier, Identifier texture) {
         fences.put(blockIdentifier, texture);
+
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+            return;
+        }
+        
+        JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_post", fencePostJson);
+        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_post", "side", texture);
+        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_post", "end", texture);
+
+        JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_side", fenceSideJson);
+        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_side", "texture", texture);
+
+        JsonOverrideRegistry.registerItemModelOverride(blockIdentifier, fenceInventoryJson);
+        JsonOverrideRegistry.registerItemModelTextureOverride(blockIdentifier, "texture", texture);
+
+        String fenceState = fenceStateJson;
+        fenceState = fenceState.replace("POST", getBlockModelPath(blockIdentifier + "_post"));
+        fenceState = fenceState.replace("SIDE", getBlockModelPath(blockIdentifier + "_side"));
+        JsonOverrideRegistry.registerBlockstateOverride(blockIdentifier, fenceState);
     }
 
     public static void registerFenceGate(Identifier blockIdentifier, Identifier texture) {
         fenceGates.put(blockIdentifier, texture);
+
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+            return;
+        }
+        
+        JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_open", fenceGateOpenJson);
+        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_open", "texture", texture);
+
+        JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_closed", fenceGateCloseJson);
+        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_closed", "texture", texture);
+
+        JsonOverrideRegistry.registerItemModelOverride(blockIdentifier, itemJson.replace("PATH", getBlockModelPath(blockIdentifier + "_closed")));
+
+        String fenceGateState = fenceGateStateJson;
+        fenceGateState = fenceGateState.replace("OPEN", getBlockModelPath(blockIdentifier + "_open"));
+        fenceGateState = fenceGateState.replace("CLOSED", getBlockModelPath(blockIdentifier + "_closed"));
+        JsonOverrideRegistry.registerBlockstateOverride(blockIdentifier, fenceGateState);
     }
 
     public static void registerRotateableBlock(Identifier blockIdentifier, Identifier endTexture, Identifier sideTexture) {
         rotateableBlockTemplate.put(blockIdentifier, new ObjectObjectImmutablePair<>(endTexture, sideTexture));
+
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+            return;
+        }
+    }
+
+    public static String getBlockModelPath(String blockIdentifier) {
+        return getBlockModelPath(Identifier.of(blockIdentifier));
     }
 
     public static String getBlockModelPath(Identifier blockIdentifier) {
@@ -137,41 +195,145 @@ public class TemplateBlockRegistry {
     );
 
     // Fence
-    String fenceSideJson = ("""
+    public static final String fenceInventoryJson = ("""
+            {
+              "parent": "nyalib-base:block/fence_inventory",
+              "textures": {
+              }
+            }
+            """
+    );
+
+    public static final String fenceSideJson = ("""
             {
               "parent": "nyalib-base:block/fence_side",
               "textures": {
-                "texture": "minecraft:block/sponge"
               }
             }"""
     );
 
-    String fencePostJson = ("""
+    public static final String fencePostJson = ("""
             {
               "parent": "nyalib-base:block/fence_post",
               "textures": {
-                "side": "minecraft:block/sponge",
-                "end": "minecraft:block/sponge"
               }
+            }"""
+    );
+
+    public static final String fenceStateJson = ("""
+            {
+              "multipart": [
+                {
+                  "apply": {
+                    "model": "POST"
+                  }
+                },
+                {
+                  "apply": {
+                    "model": "SIDE",
+                    "uvlock": true,
+                    "y": 270
+                  },
+                  "when": {
+                    "north": "true"
+                  }
+                },
+                {
+                  "apply": {
+                    "model": "SIDE",
+                    "uvlock": true,
+                    "y": 0
+                  },
+                  "when": {
+                    "east": "true"
+                  }
+                },
+                {
+                  "apply": {
+                    "model": "SIDE",
+                    "uvlock": true,
+                    "y": 90
+                  },
+                  "when": {
+                    "south": "true"
+                  }
+                },
+                {
+                  "apply": {
+                    "model": "SIDE",
+                    "uvlock": true,
+                    "y": 180
+                  },
+                  "when": {
+                    "west": "true"
+                  }
+                }
+              ]
             }"""
     );
 
     // Fence Gate
-    String fenceGateOpenJson = ("""
+    public static final String fenceGateOpenJson = ("""
             {
               "parent": "nyalib-base:block/fence_gate_open",
               "textures": {
-                "texture": "minecraft:block/sponge"
               }
             }"""
     );
 
-    String fenceGateCloseJson = ("""
+    public static final String fenceGateCloseJson = ("""
             {
               "parent": "nyalib-base:block/fence_gate_closed",
               "textures": {
-                "texture": "minecraft:block/sponge"
               }
             }"""
+    );
+
+    public static final String fenceGateStateJson = ("""
+            {
+              "variants": {
+                "facing=south,open=false": {
+                  "model": "CLOSED",
+                  "uvlock": true,
+                  "y": 270
+                },
+                "facing=west,open=false": {
+                  "model": "CLOSED",
+                  "uvlock": true,
+                  "y": 0
+                },
+                "facing=north,open=false": {
+                  "model": "CLOSED",
+                  "uvlock": true,
+                  "y": 90
+                },
+                "facing=east,open=false": {
+                  "model": "CLOSED",
+                  "uvlock": true,
+                  "y": 180
+                },
+                "facing=south,open=true": {
+                  "model": "OPEN",
+                  "uvlock": true,
+                  "y": 270
+                },
+                "facing=west,open=true": {
+                  "model": "OPEN",
+                  "uvlock": true,
+                  "y": 0
+                },
+                "facing=north,open=true": {
+                  "model": "OPEN",
+                  "uvlock": true,
+                  "y": 90
+                },
+                "facing=east,open=true": {
+                  "model": "OPEN",
+                  "uvlock": true,
+                  "y": 180
+                }
+              }
+            }
+            """
     );
 }
