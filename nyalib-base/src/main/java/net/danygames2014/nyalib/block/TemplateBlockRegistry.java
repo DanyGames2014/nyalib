@@ -24,6 +24,9 @@ public class TemplateBlockRegistry {
     // Block Identifier -> Texture Identifier
     public static HashMap<Identifier, Identifier> buttons = new HashMap<>();
     
+    // Block Identifier -> Texture Identifier
+    public static HashMap<Identifier, Identifier> walls = new HashMap<>();
+    
     // TODO: TemplatePressurePlate, TemplateLadder, TemplateDoor, TemplateTrapdoor, TemplateFlowerPot, TemplateWall, TemplateThinSometing(glasspane, iron bars), TemplateCarpet, TemplateSign, TemplateTorch
     
     // Block Identifier -> End Texture Identifier, Side Texture Identifier
@@ -133,6 +136,35 @@ public class TemplateBlockRegistry {
         buttonState = buttonState.replace("PRESSED", getBlockModelPath(blockIdentifier + "_pressed"));
         JsonOverrideRegistry.registerBlockstateOverride(blockIdentifier, buttonState);
         
+    }
+    
+    public static void registerWall(Identifier blockIdentifier, Identifier texture) {
+        walls.put(blockIdentifier, texture);
+        
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+            return;
+        }
+        
+        JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_inventory", wallInventoryJson);
+        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_inventory", "texture", texture);
+        
+        JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_post", wallPostJson);
+        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_post", "texture", texture);
+        
+        JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_side", wallSideJson);
+        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_side", "texture", texture);
+        
+        JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_side_tall", wallSideTallJson);
+        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_side_tall", "texture", texture);
+        
+        JsonOverrideRegistry.registerItemModelOverride(blockIdentifier, wallInventoryJson);
+        JsonOverrideRegistry.registerItemModelTextureOverride(blockIdentifier, "texture", texture);
+        
+        String wallState = wallStateJson;
+        wallState = wallState.replace("POST", getBlockModelPath(blockIdentifier + "_post"));
+        wallState = wallState.replace("SIDE", getBlockModelPath(blockIdentifier + "_side"));
+        wallState = wallState.replace("TALL", getBlockModelPath(blockIdentifier + "_side_tall"));
+        JsonOverrideRegistry.registerBlockstateOverride(blockIdentifier, wallState);
     }
 
     public static void registerRotateableBlock(Identifier blockIdentifier, Identifier endTexture, Identifier sideTexture) {
@@ -517,6 +549,132 @@ public class TemplateBlockRegistry {
                   "y": 180
                 }
               }
+            }"""
+    );
+    
+    // Wall
+    public static final String wallInventoryJson = ("""
+            {
+              "parent": "nyalib-base:block/wall_inventory",
+              "textures": {
+              }
+            }"""
+    );
+    
+    public static final String wallPostJson = ("""
+            {
+              "parent": "nyalib-base:block/wall_post",
+              "textures": {
+              }
+            }"""
+    );
+
+    public static final String wallSideJson = ("""
+            {
+              "parent": "nyalib-base:block/wall_side",
+              "textures": {
+              }
+            }"""
+    );
+
+    public static final String wallSideTallJson = ("""
+            {
+              "parent": "nyalib-base:block/wall_side_tall",
+              "textures": {
+              }
+            }"""
+    );
+    
+    public static final String wallStateJson = ("""
+            {
+              "multipart": [
+                {
+                  "apply": {
+                    "model": "POST"
+                  },
+                  "when": {
+                    "up": "true"
+                  }
+                },
+                {
+                  "apply": {
+                    "model": "SIDE",
+                    "uvlock": true
+                  },
+                  "when": {
+                    "north": "low"
+                  }
+                },
+                {
+                  "apply": {
+                    "model": "SIDE",
+                    "uvlock": true,
+                    "y": 90
+                  },
+                  "when": {
+                    "east": "low"
+                  }
+                },
+                {
+                  "apply": {
+                    "model": "SIDE",
+                    "uvlock": true,
+                    "y": 180
+                  },
+                  "when": {
+                    "south": "low"
+                  }
+                },
+                {
+                  "apply": {
+                    "model": "SIDE",
+                    "uvlock": true,
+                    "y": 270
+                  },
+                  "when": {
+                    "west": "low"
+                  }
+                },
+                {
+                  "apply": {
+                    "model": "TALL",
+                    "uvlock": true
+                  },
+                  "when": {
+                    "north": "tall"
+                  }
+                },
+                {
+                  "apply": {
+                    "model": "TALL",
+                    "uvlock": true,
+                    "y": 90
+                  },
+                  "when": {
+                    "east": "tall"
+                  }
+                },
+                {
+                  "apply": {
+                    "model": "TALL",
+                    "uvlock": true,
+                    "y": 180
+                  },
+                  "when": {
+                    "south": "tall"
+                  }
+                },
+                {
+                  "apply": {
+                    "model": "TALL",
+                    "uvlock": true,
+                    "y": 270
+                  },
+                  "when": {
+                    "west": "tall"
+                  }
+                }
+              ]
             }"""
     );
 }
