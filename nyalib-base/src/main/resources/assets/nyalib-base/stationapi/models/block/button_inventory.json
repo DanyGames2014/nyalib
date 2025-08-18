@@ -14,5 +14,16 @@
                 "east":  { "uv": [ 6, 12, 10, 16 ], "texture": "#texture" }
             }
         }
-    ]
+    ],
+    "display": {
+        "thirdperson_righthand": {
+            "rotation": [75, -45, 0],
+            "translation": [0, 2.5, 0],
+            "scale": [0.375, 0.375, 0.375]
+        },
+        "gui": {
+            "rotation": [-65, -180, 35],
+            "scale": [0.625, 0.625, 0.625]
+        }
+    }
 }
