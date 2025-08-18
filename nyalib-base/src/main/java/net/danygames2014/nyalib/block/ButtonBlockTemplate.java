@@ -52,13 +52,22 @@ public class ButtonBlockTemplate extends TemplateBlock {
     public BlockState getPlacementState(ItemPlacementContext context) {
         BlockState state = getDefaultState();
 
-        state = switch (context.getSide()) {
-            case UP -> state.with(BUTTON_TYPE, ButtonType.FLOOR);
-            case DOWN -> state.with(BUTTON_TYPE, ButtonType.CEILING);
-            default -> state.with(BUTTON_TYPE, ButtonType.WALL);
-        };
-
-        state = state.with(Properties.HORIZONTAL_FACING, context.getHorizontalPlayerFacing().getOpposite());
+        switch (context.getSide()) {
+            case UP -> {
+                state = state.with(BUTTON_TYPE, ButtonType.FLOOR);
+                state = state.with(Properties.HORIZONTAL_FACING, context.getHorizontalPlayerFacing().getOpposite());
+            }
+            
+            case DOWN -> {
+                state = state.with(BUTTON_TYPE, ButtonType.CEILING);
+                state = state.with(Properties.HORIZONTAL_FACING, context.getHorizontalPlayerFacing().getOpposite());
+            }
+            
+            case NORTH, SOUTH, EAST, WEST -> {
+                state = state.with(BUTTON_TYPE, ButtonType.WALL);
+                state = state.with(Properties.HORIZONTAL_FACING, context.getSide());
+            } 
+        }
 
         state = state.with(Properties.POWERED, false);
 
