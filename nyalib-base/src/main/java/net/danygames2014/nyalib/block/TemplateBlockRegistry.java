@@ -119,9 +119,6 @@ public class TemplateBlockRegistry {
             return;
         }
         
-        JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_inventory", buttonInventoryJson);
-        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_inventory", "texture", texture);
-        
         JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_normal", buttonJson);
         JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_normal", "texture", texture);
         
@@ -144,9 +141,6 @@ public class TemplateBlockRegistry {
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
             return;
         }
-        
-        JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_inventory", wallInventoryJson);
-        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_inventory", "texture", texture);
         
         JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_post", wallPostJson);
         JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_post", "texture", texture);
@@ -599,7 +593,8 @@ public class TemplateBlockRegistry {
                 {
                   "apply": {
                     "model": "SIDE",
-                    "uvlock": true
+                    "uvlock": true,
+                    "y": 270
                   },
                   "when": {
                     "north": "low"
@@ -609,7 +604,7 @@ public class TemplateBlockRegistry {
                   "apply": {
                     "model": "SIDE",
                     "uvlock": true,
-                    "y": 90
+                    "y": 0
                   },
                   "when": {
                     "east": "low"
@@ -619,7 +614,7 @@ public class TemplateBlockRegistry {
                   "apply": {
                     "model": "SIDE",
                     "uvlock": true,
-                    "y": 180
+                    "y": 90
                   },
                   "when": {
                     "south": "low"
@@ -629,7 +624,7 @@ public class TemplateBlockRegistry {
                   "apply": {
                     "model": "SIDE",
                     "uvlock": true,
-                    "y": 270
+                    "y": 180
                   },
                   "when": {
                     "west": "low"
@@ -638,7 +633,8 @@ public class TemplateBlockRegistry {
                 {
                   "apply": {
                     "model": "TALL",
-                    "uvlock": true
+                    "uvlock": true,
+                    "y": 270
                   },
                   "when": {
                     "north": "tall"
@@ -648,7 +644,7 @@ public class TemplateBlockRegistry {
                   "apply": {
                     "model": "TALL",
                     "uvlock": true,
-                    "y": 90
+                    "y": 0
                   },
                   "when": {
                     "east": "tall"
@@ -658,7 +654,7 @@ public class TemplateBlockRegistry {
                   "apply": {
                     "model": "TALL",
                     "uvlock": true,
-                    "y": 180
+                    "y": 90
                   },
                   "when": {
                     "south": "tall"
@@ -668,7 +664,7 @@ public class TemplateBlockRegistry {
                   "apply": {
                     "model": "TALL",
                     "uvlock": true,
-                    "y": 270
+                    "y": 180
                   },
                   "when": {
                     "west": "tall"

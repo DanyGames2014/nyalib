@@ -69,6 +69,7 @@ public class NyaLibTest {
     public static Block tntFence;
     public static Block tntFenceGate;
     public static Block tntButton;
+    public static Block tntWall;
     
     public static Block serverSoundBlock;
     
@@ -106,11 +107,12 @@ public class NyaLibTest {
         spongeFence = new FenceBlockTemplate(NAMESPACE.id("sponge_fence"), Block.SPONGE).setTranslationKey(NAMESPACE, "sponge_fence");
         spongeFenceGate = new FenceGateBlockTemplate(NAMESPACE.id("sponge_fence_gate"), Block.SPONGE).setTranslationKey(NAMESPACE, "sponge_fence_gate");
         
-        tntStairs = new StairsBlockTemplate(NAMESPACE.id("tnt_stairs"), Block.TNT, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE, "tnt_stairs");
-        tntSlab = new SlabBlockTemplate(NAMESPACE.id("tnt_slab"), Block.TNT, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE, "tnt_slab");
-        tntFence = new FenceBlockTemplate(NAMESPACE.id("tnt_fence"), Block.TNT, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE, "tnt_fence");
-        tntFenceGate = new FenceGateBlockTemplate(NAMESPACE.id("tnt_fence_gate"), Block.TNT, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE.id("tnt_fence_gate"));
+        tntStairs = new StairsBlockTemplate(NAMESPACE.id("tnt_stairs"), Block.TNT, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE, "tnt_stairs").setHardness(0.5F);
+        tntSlab = new SlabBlockTemplate(NAMESPACE.id("tnt_slab"), Block.TNT, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE, "tnt_slab").setHardness(0.5F);
+        tntFence = new FenceBlockTemplate(NAMESPACE.id("tnt_fence"), Block.TNT, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE, "tnt_fence").setHardness(0.5F);
+        tntFenceGate = new FenceGateBlockTemplate(NAMESPACE.id("tnt_fence_gate"), Block.TNT, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE.id("tnt_fence_gate")).setHardness(0.5F);
         tntButton = new ButtonBlockTemplate(NAMESPACE.id("tnt_button"), Block.TNT, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE, "tnt_button").setHardness(0.5F);
+        tntWall = new WallBlockTemplate(NAMESPACE.id("tnt_wall"), Block.TNT, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE, "tnt_wall").setHardness(0.5F);
         
         // Sound
         serverSoundBlock = new ServerSoundBlock(NAMESPACE.id("server_sound_block"), Material.WOOL).setTranslationKey(NAMESPACE, "server_sound_block");
