@@ -24,7 +24,7 @@ public class TemplateBlockRegistry {
     // Block Identifier -> Texture Identifier
     public static HashMap<Identifier, Identifier> buttons = new HashMap<>();
     
-    // TODO: TemplateButton, TemplatePressurePlate, TemplateLadder, TemplateDoor, TemplateTrapdoor, TemplateFlowerPot, TemplateWall, TemplateThinSometing(glasspane, iron bars), TemplateCarpet, TemplateSign, TemplateTorch
+    // TODO: TemplatePressurePlate, TemplateLadder, TemplateDoor, TemplateTrapdoor, TemplateFlowerPot, TemplateWall, TemplateThinSometing(glasspane, iron bars), TemplateCarpet, TemplateSign, TemplateTorch
     
     // Block Identifier -> End Texture Identifier, Side Texture Identifier
     public static HashMap<Identifier, Pair<Identifier, Identifier>> rotateableBlockTemplate = new HashMap<>();
