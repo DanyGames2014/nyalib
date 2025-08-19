@@ -2,6 +2,7 @@
     "textures": {
         "particle": "#texture"
     },
+    "ambientocclusion": true,
     "elements": [
         {   "from": [ 5, 0, 0 ],
             "to": [ 11, 14, 8 ],
