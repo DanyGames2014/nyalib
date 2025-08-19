@@ -77,7 +77,7 @@ public class WallBlockTemplate extends TemplateBlock {
         state = getWallState(world, x, y, z, state, Direction.WEST, WEST);
         state = getWallState(world, x, y, z, state, Direction.NORTH, NORTH);
         state = getWallState(world, x, y, z, state, Direction.SOUTH, SOUTH);
-        
+
         state = state.with(UP, true);
 
         if (state.get(EAST) == WallType.NONE && state.get(WEST) == WallType.NONE && state.get(NORTH) != WallType.NONE && state.get(SOUTH) != WallType.NONE) {
@@ -116,7 +116,8 @@ public class WallBlockTemplate extends TemplateBlock {
             return false;
         }
 
-        if (state.getBlock() instanceof WallBlockTemplate || state.getBlock() instanceof FenceBlockTemplate) {
+        Block block = state.getBlock();
+        if (block instanceof WallBlockTemplate || block instanceof FenceBlockTemplate || block instanceof FenceGateBlockTemplate || block instanceof FenceBlock) {
             return true;
         }
 
@@ -174,7 +175,7 @@ public class WallBlockTemplate extends TemplateBlock {
     public Box getBoundingBox(World world, int x, int y, int z) {
         return generateBox(world, x, y, z, false);
     }
-    
+
     // Rendering
     @Override
     public boolean isOpaque() {

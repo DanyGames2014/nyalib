@@ -103,12 +103,20 @@ public class TemplateBlockRegistry {
 
         JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_closed", fenceGateCloseJson);
         JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_closed", "texture", texture);
+        
+        JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_wall_open", fenceGateWallOpenJson);
+        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_wall_open", "texture", texture);
+        
+        JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_wall_closed", fenceGateWallCloseJson);
+        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_wall_closed", "texture", texture);
 
         JsonOverrideRegistry.registerItemModelOverride(blockIdentifier, itemJson.replace("PATH", getBlockModelPath(blockIdentifier + "_closed")));
 
         String fenceGateState = fenceGateStateJson;
         fenceGateState = fenceGateState.replace("OPEN", getBlockModelPath(blockIdentifier + "_open"));
         fenceGateState = fenceGateState.replace("CLOSED", getBlockModelPath(blockIdentifier + "_closed"));
+        fenceGateState = fenceGateState.replace("WALL_OP", getBlockModelPath(blockIdentifier + "_wall_open"));
+        fenceGateState = fenceGateState.replace("WALL_CL", getBlockModelPath(blockIdentifier + "_wall_closed"));
         JsonOverrideRegistry.registerBlockstateOverride(blockIdentifier, fenceGateState);
     }
     
@@ -346,46 +354,103 @@ public class TemplateBlockRegistry {
             }"""
     );
 
+    public static final String fenceGateWallOpenJson = ("""
+            {
+              "parent": "nyalib-base:block/fence_gate_wall_open",
+              "textures": {
+              }
+            }"""
+    );
+
+    public static final String fenceGateWallCloseJson = ("""
+            {
+              "parent": "nyalib-base:block/fence_gate_wall_closed",
+              "textures": {
+              }
+            }"""
+    );
+
     public static final String fenceGateStateJson = ("""
             {
               "variants": {
-                "facing=south,open=false": {
+                "facing=south,open=false,in_wall=false": {
                   "model": "CLOSED",
                   "uvlock": true,
                   "y": 270
                 },
-                "facing=west,open=false": {
+                "facing=west,open=false,in_wall=false": {
                   "model": "CLOSED",
                   "uvlock": true,
                   "y": 0
                 },
-                "facing=north,open=false": {
+                "facing=north,open=false,in_wall=false": {
                   "model": "CLOSED",
                   "uvlock": true,
                   "y": 90
                 },
-                "facing=east,open=false": {
+                "facing=east,open=false,in_wall=false": {
                   "model": "CLOSED",
                   "uvlock": true,
                   "y": 180
                 },
-                "facing=south,open=true": {
+                "facing=south,open=true,in_wall=false": {
                   "model": "OPEN",
                   "uvlock": true,
                   "y": 270
                 },
-                "facing=west,open=true": {
+                "facing=west,open=true,in_wall=false": {
                   "model": "OPEN",
                   "uvlock": true,
                   "y": 0
                 },
-                "facing=north,open=true": {
+                "facing=north,open=true,in_wall=false": {
                   "model": "OPEN",
                   "uvlock": true,
                   "y": 90
                 },
-                "facing=east,open=true": {
+                "facing=east,open=true,in_wall=false": {
                   "model": "OPEN",
+                  "uvlock": true,
+                  "y": 180
+                },
+            
+                "facing=south,open=false,in_wall=true": {
+                  "model": "WALL_CL",
+                  "uvlock": true,
+                  "y": 270
+                },
+                "facing=west,open=false,in_wall=true": {
+                  "model": "WALL_CL",
+                  "uvlock": true,
+                  "y": 0
+                },
+                "facing=north,open=false,in_wall=true": {
+                  "model": "WALL_CL",
+                  "uvlock": true,
+                  "y": 90
+                },
+                "facing=east,open=false,in_wall=true": {
+                  "model": "WALL_CL",
+                  "uvlock": true,
+                  "y": 180
+                },
+                "facing=south,open=true,in_wall=true": {
+                  "model": "WALL_OP",
+                  "uvlock": true,
+                  "y": 270
+                },
+                "facing=west,open=true,in_wall=true": {
+                  "model": "WALL_OP",
+                  "uvlock": true,
+                  "y": 0
+                },
+                "facing=north,open=true,in_wall=true": {
+                  "model": "WALL_OP",
+                  "uvlock": true,
+                  "y": 90
+                },
+                "facing=east,open=true,in_wall=true": {
+                  "model": "WALL_OP",
                   "uvlock": true,
                   "y": 180
                 }

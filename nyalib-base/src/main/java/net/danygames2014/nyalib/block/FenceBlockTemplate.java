@@ -1,6 +1,7 @@
 package net.danygames2014.nyalib.block;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.FenceBlock;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.block.BlockState;
@@ -100,8 +101,9 @@ public class FenceBlockTemplate extends TemplateBlock {
         if (state.isOf(Block.GLOWSTONE)) {
             return false;
         }
-
-        if (state.getBlock() instanceof FenceBlockTemplate || state.getBlock() instanceof FenceGateBlockTemplate) {
+        
+        Block block = state.getBlock();
+        if (block instanceof WallBlockTemplate || block instanceof FenceBlockTemplate || block instanceof FenceGateBlockTemplate || block instanceof FenceBlock) {
             return true;
         }
 

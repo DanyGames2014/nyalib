@@ -16,11 +16,12 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 public class FenceGateBlockTemplate extends TemplateBlock {
     public static final BooleanProperty OPEN = BooleanProperty.of("open");
     public static final DirectionProperty FACING = DirectionProperty.of("facing", Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
+    public static final BooleanProperty IN_WALL = BooleanProperty.of("in_wall");
 
     public FenceGateBlockTemplate(Identifier identifier, Block baseBlock) {
         this(identifier, baseBlock, null);
     }
-    
+
     public FenceGateBlockTemplate(Identifier identifier, Block baseBlock, Identifier texture) {
         super(identifier, baseBlock.material);
         this.setOpacity(0);
@@ -34,19 +35,49 @@ public class FenceGateBlockTemplate extends TemplateBlock {
         super.appendProperties(builder);
         builder.add(OPEN);
         builder.add(FACING);
+        builder.add(IN_WALL);
     }
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext context) {
-        return this.getDefaultState().with(FACING, context.getHorizontalPlayerFacing()).with(OPEN, false);
+        return this.getDefaultState().with(FACING, context.getHorizontalPlayerFacing()).with(OPEN, false).with(IN_WALL, false);
     }
 
     @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
         BlockState state = world.getBlockState(x, y, z);
-        world.setBlockState(x, y, z, state.with(OPEN, !state.get(OPEN)));
+        world.setBlockStateWithNotify(x, y, z, state.cycle(OPEN));
         world.setBlockDirty(x, y, z);
         return true;
+    }
+
+    @Override
+    public void neighborUpdate(World world, int x, int y, int z, int id) {
+        super.neighborUpdate(world, x, y, z, id);
+        updateInWall(world, x, y, z);
+    }
+
+    @Override
+    public void onPlaced(World world, int x, int y, int z) {
+        super.onPlaced(world, x, y, z);
+        updateInWall(world, x, y, z);
+    }
+
+    public void updateInWall(World world, int x, int y, int z) {
+        BlockState state = world.getBlockState(x, y, z);
+        state = state.with(IN_WALL, false);
+
+        for (Direction side : Direction.values()) {
+            if (side.getHorizontal() != -1) {
+                if (world.getBlockState(x + side.getOffsetX(), y, z + side.getOffsetZ()).getBlock() instanceof WallBlockTemplate) {
+                    state = state.with(IN_WALL, true);
+                    world.setBlockStateWithNotify(x, y, z, state);
+                    return;
+                }
+            }
+        }
+        
+        world.setBlockStateWithNotify(x, y, z, state);
     }
 
     public Box generateBox(World world, int x, int y, int z, boolean collider) {
