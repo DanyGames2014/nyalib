@@ -1,5 +1,6 @@
 package net.danygames2014.nyalib.block;
 
+import net.danygames2014.nyalib.sound.SoundHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
@@ -108,26 +109,28 @@ public class ButtonBlockTemplate extends TemplateBlock {
 
     @Override
     public void onTick(World world, int x, int y, int z, Random random) {
-        if (!world.isRemote) {
-            BlockState state = world.getBlockState(x, y, z);
-            if (state.get(Properties.POWERED)) {
-                world.setBlockStateWithNotify(x, y, z, state.with(Properties.POWERED, false));
+        if (world.isRemote) {
+            return;
+        }
 
-                switch (state.get(BUTTON_TYPE)) {
-                    case CEILING -> {
-                        world.notifyNeighbors(x, y + 1, z, this.id);
-                    }
-                    case FLOOR -> {
-                        world.notifyNeighbors(x, y - 1, z, this.id);
-                    }
-                    case WALL -> {
-                        Direction dir = state.get(Properties.HORIZONTAL_FACING).getOpposite();
-                        world.notifyNeighbors(x + dir.getOffsetX(), y + dir.getOffsetY(), z + dir.getOffsetZ(), this.id);
-                    }
+        BlockState state = world.getBlockState(x, y, z);
+        if (state.get(Properties.POWERED)) {
+            world.setBlockStateWithNotify(x, y, z, state.with(Properties.POWERED, false));
+
+            switch (state.get(BUTTON_TYPE)) {
+                case CEILING -> {
+                    world.notifyNeighbors(x, y + 1, z, this.id);
                 }
-
-                world.playSound((double) x + (double) 0.5F, (double) y + (double) 0.5F, (double) z + (double) 0.5F, "random.click", 0.3F, 0.5F);
+                case FLOOR -> {
+                    world.notifyNeighbors(x, y - 1, z, this.id);
+                }
+                case WALL -> {
+                    Direction dir = state.get(Properties.HORIZONTAL_FACING).getOpposite();
+                    world.notifyNeighbors(x + dir.getOffsetX(), y + dir.getOffsetY(), z + dir.getOffsetZ(), this.id);
+                }
             }
+
+            SoundHelper.playSound(world, x + 0.5D, y + 0.5D, z + 0.5D, "random.click", 0.3F, 0.5F);
         }
     }
 
@@ -150,7 +153,7 @@ public class ButtonBlockTemplate extends TemplateBlock {
     @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
         if (world.isRemote) {
-            return super.onUse(world, x, y, z, player);
+            return true;
         }
 
         BlockState state = world.getBlockState(x, y, z);
@@ -162,8 +165,10 @@ public class ButtonBlockTemplate extends TemplateBlock {
 
         // If the button isn't already pressed, press it
         if (!state.get(Properties.POWERED)) {
+            SoundHelper.playSound(world, x + 0.5D, y + 0.5D, z + 0.5D, "random.click", 0.3F, 0.6F);
+
             world.setBlockStateWithNotify(x, y, z, state.cycle(Properties.POWERED));
-            world.playSound((double) x + (double) 0.5F, (double) y + (double) 0.5F, (double) z + (double) 0.5F, "random.click", 0.3F, 0.6F);
+
             switch (state.get(BUTTON_TYPE)) {
                 case CEILING -> {
                     world.notifyNeighbors(x, y + 1, z, this.id);
@@ -176,6 +181,7 @@ public class ButtonBlockTemplate extends TemplateBlock {
                     world.notifyNeighbors(x + dir.getOffsetX(), y + dir.getOffsetY(), z + dir.getOffsetZ(), this.id);
                 }
             }
+
             world.scheduleBlockUpdate(x, y, z, this.id, this.getTickRate());
         }
 
