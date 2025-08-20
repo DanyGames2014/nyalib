@@ -1,6 +1,7 @@
 package net.danygames2014.nyalib.init;
 
 import com.mojang.datafixers.util.Either;
+import net.danygames2014.nyalib.NyaLib;
 import net.danygames2014.nyalib.block.JsonOverrideRegistry;
 import net.danygames2014.nyalib.mixin.block.JsonUnbakedModelAccessor;
 import net.fabricmc.api.EnvType;
@@ -17,25 +18,22 @@ import java.util.Map;
 
 @Environment(EnvType.CLIENT)
 public class UnbakedModelListener {
+    @SuppressWarnings("StringConcatenationArgumentToLogCall")
     @EventListener
     public void painAndSuffering(PreLoadUnbakedModelEvent event) {
         BlockRegistry.INSTANCE.get(event.identifier);
 
-        if (event.identifier.toString().contains("tnt_stairs")) {
-            System.err.println(event.identifier);
-        }
-
         if (JsonOverrideRegistry.modelOverrides.containsKey(event.identifier)) {
             JsonUnbakedModel model = JsonUnbakedModel.deserialize(JsonOverrideRegistry.modelOverrides.get(event.identifier));
 
-            System.out.println("Loaded model override for " + event.identifier);
+            NyaLib.LOGGER.debug("Loaded model override for " + event.identifier);
 
             if (JsonOverrideRegistry.modelTextureOverrides.containsKey(event.identifier)) {
                 Map<String, Either<SpriteIdentifier, String>> textureMap = ((JsonUnbakedModelAccessor) (Object) model).getTextureMap();
 
                 for (Map.Entry<String, Identifier> entry : JsonOverrideRegistry.modelTextureOverrides.get(event.identifier).entrySet()) {
                     textureMap.put(entry.getKey(), Either.left(SpriteIdentifier.of(Atlases.GAME_ATLAS_TEXTURE, entry.getValue())));
-                    System.out.println("Loaded texture override for " + event.identifier + "(" + entry.getKey() + " -> " + entry.getValue() + ")");
+                    NyaLib.LOGGER.debug("Loaded texture override for " + event.identifier + "(" + entry.getKey() + " -> " + entry.getValue() + ")");
                 }
             }
 
