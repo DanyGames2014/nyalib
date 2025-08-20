@@ -204,6 +204,12 @@ allprojects {
             }
         }
     }
+
+    tasks.withType(GenerateModuleMetadata).tap {
+        configureEach {
+            enabled = false
+        }
+    }
 }
 
 group = project.properties['maven_group']
@@ -310,7 +316,7 @@ tasks.register('testJar', Jar) {
     archiveClassifier.set('test')
 }
 
-tasks.withType(GenerateModuleMetadata) {
+tasks.withType(GenerateModuleMetadata).configureEach {
     enabled = false
 }
 
