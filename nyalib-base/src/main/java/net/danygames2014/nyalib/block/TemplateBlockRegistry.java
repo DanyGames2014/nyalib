@@ -171,6 +171,20 @@ public class TemplateBlockRegistry {
             return;
         }
         
+        JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_up", pressutePlateUpJson);
+        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_up", "texture", texture);
+        
+        JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_down", pressutePlateDownJson);
+        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_down", "texture", texture);
+        
+        JsonOverrideRegistry.registerItemModelOverride(blockIdentifier, pressutePlateUpJson);
+        JsonOverrideRegistry.registerItemModelTextureOverride(blockIdentifier, "texture", texture);
+        
+        String pressurePlateState = pressurePlateStateJson;
+        pressurePlateState = pressurePlateState.replace("UP", getBlockModelPath(blockIdentifier + "_up"));
+        pressurePlateState = pressurePlateState.replace("DOWN", getBlockModelPath(blockIdentifier + "_down"));
+        JsonOverrideRegistry.registerBlockstateOverride(blockIdentifier, pressurePlateState);
+        
         // TODO: Pressure Plates
     }
     
@@ -238,6 +252,9 @@ public class TemplateBlockRegistry {
 
         JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_noside_alt", paneNosideAltJson);
         JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_noside_alt", "pane", texture);
+        
+        JsonOverrideRegistry.registerItemModelOverride(blockIdentifier, paneInventoryJson);
+        JsonOverrideRegistry.registerItemModelTextureOverride(blockIdentifier, "layer0", texture);
 
         String paneState = paneStateJson;
         paneState = paneState.replace("POST", getBlockModelPath(blockIdentifier + "_post"));
@@ -851,6 +868,14 @@ public class TemplateBlockRegistry {
     );
     
     // Pane
+    public static final String paneInventoryJson = ("""
+            {
+              "parent": "minecraft:item/generated",
+              "textures": {
+              }
+            }"""
+    );
+    
     public static final String paneNosideJson = ("""
             {
               "parent": "nyalib-base:block/pane_noside",
@@ -972,6 +997,36 @@ public class TemplateBlockRegistry {
                   }
                 }
               ]
+            }"""
+    );
+
+    // Pressure Plate
+    public static final String pressutePlateUpJson = ("""
+            {
+              "parent": "nyalib-base:block/pressure_plate_up",
+              "textures": {
+              }
+            }"""
+    );
+
+    public static final String pressutePlateDownJson = ("""
+            {
+              "parent": "nyalib-base:block/pressure_plate_down",
+              "textures": {
+              }
+            }"""
+    );
+    
+    public static final String pressurePlateStateJson = ("""
+            {
+              "variants": {
+                "powered=false": {
+                  "model": "UP"
+                },
+                "powered=true": {
+                  "model": "DOWN"
+                }
+              }
             }"""
     );
 }

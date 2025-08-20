@@ -14,6 +14,8 @@ import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 public class PaneBlockTemplate extends TemplateBlock {
+    // TODO: Proper bounding & collision Box
+    
     public PaneBlockTemplate(Identifier identifier, Block baseBlock, Material material, Identifier texture, Identifier edgeTexture) {
         super(identifier, material);
         if(texture != null) {

@@ -28,6 +28,7 @@ import net.danygames2014.nyalibtest.block.sound.ServerSoundBlock;
 import net.danygames2014.nyalibtest.network.BasicNetworkType;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
+import net.minecraft.block.PressurePlateActivationRule;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.modificationstation.stationapi.api.event.block.entity.BlockEntityRegisterEvent;
@@ -72,6 +73,8 @@ public class NyaLibTest {
     public static Block tntWall;
     public static Block tntPane;
     public static Block glassPane;
+    public static Block tntPressurePlate;
+    public static Block obsidianPressurePlate;
     
     public static Block serverSoundBlock;
     
@@ -117,6 +120,8 @@ public class NyaLibTest {
         tntWall = new WallBlockTemplate(NAMESPACE.id("tnt_wall"), Block.TNT, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE, "tnt_wall").setHardness(0.5F);
         tntPane = new PaneBlockTemplate(NAMESPACE.id("tnt_pane"), Block.TNT, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE, "tnt_pane").setHardness(0.5F);
         glassPane = new PaneBlockTemplate(NAMESPACE.id("glass_pane"), Block.GLASS, Identifier.of("minecraft:block/glass")).setTranslationKey(NAMESPACE, "glass_pane").setHardness(0.5F);
+        tntPressurePlate = new PressurePlateBlockTemplate(NAMESPACE.id("tnt_pressure_plate"), Block.TNT, PressurePlateActivationRule.EVERYTHING, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE, "tnt_pressure_plate").setHardness(0.2F);
+        obsidianPressurePlate = new PressurePlateBlockTemplate(NAMESPACE.id("obsidian_pressure_plate"), Block.TNT, PressurePlateActivationRule.PLAYERS, Identifier.of("minecraft:block/obsidian")).setTranslationKey(NAMESPACE, "obsidian_pressure_plate").setHardness(0.2F);
         
         // Sound
         serverSoundBlock = new ServerSoundBlock(NAMESPACE.id("server_sound_block"), Material.WOOL).setTranslationKey(NAMESPACE, "server_sound_block");
