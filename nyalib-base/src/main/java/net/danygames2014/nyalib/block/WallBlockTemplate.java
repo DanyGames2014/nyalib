@@ -126,7 +126,7 @@ public class WallBlockTemplate extends TemplateBlock {
         if (canConnectTo(world.getBlockState(x + side.getOffsetX(), y, z + side.getOffsetZ()))) {
             state = state.with(property, WallType.LOW);
 
-            if (world.getBlockState(x, y + 1, z).isOf(this) && world.getBlockState(x + side.getOffsetX(), y + 1, z + side.getOffsetZ()).isOf(this)) {
+            if (canConnectTo(world.getBlockState(x, y + 1, z)) && canConnectTo(world.getBlockState(x + side.getOffsetX(), y + 1, z + side.getOffsetZ()))) {
                 state = state.with(property, WallType.TALL);
             }
         } else {
