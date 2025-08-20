@@ -11,25 +11,20 @@ import java.util.HashMap;
 public class TemplateBlockRegistry {
     // Block Identifier -> Texture Identifier
     public static HashMap<Identifier, Identifier> stairs = new HashMap<>();
-
-    // Block Identifier -> Texture Identifier
     public static HashMap<Identifier, Identifier> slabs = new HashMap<>();
-
-    // Block Identifier -> Texture Identifier
     public static HashMap<Identifier, Identifier> fences = new HashMap<>();
-
-    // Block Identifier -> Texture Identifier
     public static HashMap<Identifier, Identifier> fenceGates = new HashMap<>();
-    
-    // Block Identifier -> Texture Identifier
     public static HashMap<Identifier, Identifier> buttons = new HashMap<>();
-    
-    // Block Identifier -> Texture Identifier
     public static HashMap<Identifier, Identifier> walls = new HashMap<>();
-    
-    // TODO: TemplatePressurePlate, TemplateLadder, TemplateDoor, TemplateTrapdoor, TemplateFlowerPot, TemplateWall, TemplateThinSometing(glasspane, iron bars), TemplateCarpet, TemplateSign, TemplateTorch
-    
-    // Block Identifier -> End Texture Identifier, Side Texture Identifier
+    public static HashMap<Identifier, Identifier> pressurePlates = new HashMap<>();
+    public static HashMap<Identifier, Identifier> ladders = new HashMap<>();
+    public static HashMap<Identifier, Identifier> doors = new HashMap<>();
+    public static HashMap<Identifier, Identifier> trapdoors = new HashMap<>();
+    public static HashMap<Identifier, Identifier> flowerPots = new HashMap<>();
+    public static HashMap<Identifier, Pair<Identifier, Identifier>> panes = new HashMap<>();
+    public static HashMap<Identifier, Identifier> carpets = new HashMap<>();
+    public static HashMap<Identifier, Identifier> signs = new HashMap<>();
+    public static HashMap<Identifier, Identifier> torches = new HashMap<>();
     public static HashMap<Identifier, Pair<Identifier, Identifier>> rotateableBlockTemplate = new HashMap<>();
     
     public static void registerStairs(Identifier blockIdentifier, Identifier texture) {
@@ -168,6 +163,120 @@ public class TemplateBlockRegistry {
         wallState = wallState.replace("TALL", getBlockModelPath(blockIdentifier + "_side_tall"));
         JsonOverrideRegistry.registerBlockstateOverride(blockIdentifier, wallState);
     }
+    
+    public static void registerPressurePlate(Identifier blockIdentifier, Identifier texture) {
+        pressurePlates.put(blockIdentifier, texture);
+
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+            return;
+        }
+        
+        // TODO: Pressure Plates
+    }
+    
+    public static void registerLadder(Identifier blockIdentifier, Identifier texture) {
+        ladders.put(blockIdentifier, texture);
+        
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+            return;
+        }
+        
+        // TODO: Ladders
+    }
+    
+    public static void registerDoor(Identifier blockIdentifier, Identifier texture) {
+        doors.put(blockIdentifier, texture);
+        
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+            return;
+        }
+        
+        // TODO: Doors
+    }
+    
+    public static void registerTrapdoor(Identifier blockIdentifier, Identifier texture) {
+        trapdoors.put(blockIdentifier, texture);
+        
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+            return;
+        }
+        
+        // TODO: Trapdoors
+    }
+    
+    public static void registerFlowerPot(Identifier blockIdentifier, Identifier texture) {
+        flowerPots.put(blockIdentifier, texture);
+        
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+            return;
+        }
+        
+        // TODO: Flower Pots
+    }
+    
+    public static void registerPane(Identifier blockIdentifier, Identifier texture, Identifier edgeTexture) {
+        panes.put(blockIdentifier, new ObjectObjectImmutablePair<>(texture, edgeTexture));
+        
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+            return;
+        }
+        
+        JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_post", panePostJson);
+        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_post", "pane", texture);
+        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_post", "edge", edgeTexture);
+        
+        JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_side", paneSideJson);
+        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_side", "pane", texture);
+        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_side", "edge", edgeTexture);
+
+        JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_side_alt", paneSideAltJson);
+        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_side_alt", "pane", texture);
+        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_side_alt", "edge", edgeTexture);
+
+        JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_noside", paneNosideJson);
+        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_noside", "pane", texture);
+
+        JsonOverrideRegistry.registerBlockModelOverride(blockIdentifier + "_noside_alt", paneNosideAltJson);
+        JsonOverrideRegistry.registerBlockModelTextureOverride(blockIdentifier + "_noside_alt", "pane", texture);
+
+        String paneState = paneStateJson;
+        paneState = paneState.replace("POST", getBlockModelPath(blockIdentifier + "_post"));
+        paneState = paneState.replace("SIDE", getBlockModelPath(blockIdentifier + "_side"));
+        paneState = paneState.replace("A_SID", getBlockModelPath(blockIdentifier + "_side_alt"));
+        paneState = paneState.replace("N_SID", getBlockModelPath(blockIdentifier + "_noside"));
+        paneState = paneState.replace("ANS_SID", getBlockModelPath(blockIdentifier + "_noside_alt"));
+        JsonOverrideRegistry.registerBlockstateOverride(blockIdentifier, paneState);
+    }
+    
+    public static void registerCarpet(Identifier blockIdentifier, Identifier texture) {
+        carpets.put(blockIdentifier, texture);
+        
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+            return;
+        }
+        
+        // TODO: Carpet
+    }
+    
+    public static void registerSign(Identifier blockIdentifier, Identifier texture) {
+        signs.put(blockIdentifier, texture);
+        
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+            return;
+        }
+        
+        // TODO: Signs
+    }
+    
+    public static void registerTorch(Identifier blockIdentifier, Identifier texture) {
+        torches.put(blockIdentifier, texture);
+        
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+            return;
+        }
+        
+        // TODO: Torch
+    }
 
     public static void registerRotateableBlock(Identifier blockIdentifier, Identifier endTexture, Identifier sideTexture) {
         rotateableBlockTemplate.put(blockIdentifier, new ObjectObjectImmutablePair<>(endTexture, sideTexture));
@@ -175,6 +284,8 @@ public class TemplateBlockRegistry {
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
             return;
         }
+        
+        // TODO: Rotateable Block
     }
 
     public static String getBlockModelPath(String blockIdentifier) {
@@ -733,6 +844,131 @@ public class TemplateBlockRegistry {
                   },
                   "when": {
                     "west": "tall"
+                  }
+                }
+              ]
+            }"""
+    );
+    
+    // Pane
+    public static final String paneNosideJson = ("""
+            {
+              "parent": "nyalib-base:block/pane_noside",
+              "textures": {
+              }
+            }"""
+    );
+
+    public static final String paneNosideAltJson = ("""
+            {
+              "parent": "nyalib-base:block/pane_noside_alt",
+              "textures": {
+              }
+            }"""
+    );
+
+    public static final String panePostJson = ("""
+            {
+              "parent": "nyalib-base:block/pane_post",
+              "textures": {
+              }
+            }"""
+    );
+
+    public static final String paneSideJson = ("""
+            {
+              "parent": "nyalib-base:block/pane_side",
+              "textures": {
+              }
+            }"""
+    );
+
+    public static final String paneSideAltJson = ("""
+            {
+              "parent": "nyalib-base:block/pane_side_alt",
+              "textures": {
+              }
+            }"""
+    );
+    
+    public static final String paneStateJson = ("""
+            {
+              "multipart": [
+                {
+                  "apply": {
+                    "model": "POST"
+                  }
+                },
+                {
+                  "apply": {
+                    "model": "SIDE",
+                    "y": 270
+                  },
+                  "when": {
+                    "north": "true"
+                  }
+                },
+                {
+                  "apply": {
+                    "model": "SIDE",
+                    "y": 0
+                  },
+                  "when": {
+                    "east": "true"
+                  }
+                },
+                {
+                  "apply": {
+                    "model": "A_SID",
+                    "y": 270
+                  },
+                  "when": {
+                    "south": "true"
+                  }
+                },
+                {
+                  "apply": {
+                    "model": "A_SID",
+                    "y": 0
+                  },
+                  "when": {
+                    "west": "true"
+                  }
+                },
+                {
+                  "apply": {
+                    "model": "N_SID",
+                    "y": 270
+                  },
+                  "when": {
+                    "north": "false"
+                  }
+                },
+                {
+                  "apply": {
+                    "model": "ANS_SID",
+                    "y": 270
+                  },
+                  "when": {
+                    "east": "false"
+                  }
+                },
+                {
+                  "apply": {
+                    "model": "ANS_SID",
+                    "y": 0
+                  },
+                  "when": {
+                    "south": "false"
+                  }
+                },
+                {
+                  "apply": {
+                    "model": "N_SID",
+                    "y": 180
+                  },
+                  "when": {
+                    "west": "false"
                   }
                 }
               ]

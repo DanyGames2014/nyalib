@@ -26,7 +26,7 @@ import static net.modificationstation.stationapi.impl.client.texture.StationRend
 @Environment(EnvType.CLIENT)
 @Mixin(value = BakedModelManager.class, remap = false)
 public class BakedModelManagerMixin {
-    @Inject(method = "lambda$reloadBlockStates$15(Ljava/util/concurrent/Executor;Ljava/util/Map;)Ljava/util/concurrent/CompletionStage;", at = @At(value = "INVOKE", target = "Ljava/util/Map;entrySet()Ljava/util/Set;"))
+    @Inject(method = "lambda$reloadBlockStates$15(Ljava/util/concurrent/Executor;Ljava/util/Map;)Ljava/util/concurrent/CompletionStage;", at = @At(value = "INVOKE", target = "Ljava/util/Map;entrySet()Ljava/util/Set;", remap = false), remap = false)
     private static void evenMorePain(Executor executor, Map blockStates2, CallbackInfoReturnable<CompletionStage> cir, @Local List<CompletableFuture<Pair<Identifier, List<ModelLoader.SourceTrackedData>>>> states){
         for (Map.Entry<Identifier, ArrayList<String>> pedroEntry : JsonOverrideRegistry.blockstateOverrides.entrySet()) {
             states.add(CompletableFuture.supplyAsync(() -> {

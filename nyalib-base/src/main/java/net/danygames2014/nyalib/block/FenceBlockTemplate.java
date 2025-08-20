@@ -98,10 +98,6 @@ public class FenceBlockTemplate extends TemplateBlock {
             return false;
         }
         
-        if (state.isOf(Block.GLOWSTONE)) {
-            return false;
-        }
-        
         Block block = state.getBlock();
         if (block instanceof WallBlockTemplate || block instanceof FenceBlockTemplate || block instanceof FenceGateBlockTemplate || block instanceof FenceBlock) {
             return true;

@@ -70,6 +70,8 @@ public class NyaLibTest {
     public static Block tntFenceGate;
     public static Block tntButton;
     public static Block tntWall;
+    public static Block tntPane;
+    public static Block glassPane;
     
     public static Block serverSoundBlock;
     
@@ -113,6 +115,8 @@ public class NyaLibTest {
         tntFenceGate = new FenceGateBlockTemplate(NAMESPACE.id("tnt_fence_gate"), Block.TNT, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE.id("tnt_fence_gate")).setHardness(0.5F);
         tntButton = new ButtonBlockTemplate(NAMESPACE.id("tnt_button"), Block.TNT, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE, "tnt_button").setHardness(0.5F);
         tntWall = new WallBlockTemplate(NAMESPACE.id("tnt_wall"), Block.TNT, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE, "tnt_wall").setHardness(0.5F);
+        tntPane = new PaneBlockTemplate(NAMESPACE.id("tnt_pane"), Block.TNT, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE, "tnt_pane").setHardness(0.5F);
+        glassPane = new PaneBlockTemplate(NAMESPACE.id("glass_pane"), Block.GLASS, Identifier.of("minecraft:block/glass")).setTranslationKey(NAMESPACE, "glass_pane").setHardness(0.5F);
         
         // Sound
         serverSoundBlock = new ServerSoundBlock(NAMESPACE.id("server_sound_block"), Material.WOOL).setTranslationKey(NAMESPACE, "server_sound_block");

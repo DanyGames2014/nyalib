@@ -71,8 +71,6 @@ public class WallBlockTemplate extends TemplateBlock {
     public void updateConnections(World world, int x, int y, int z) {
         BlockState state = world.getBlockState(x, y, z);
 
-        Direction side;
-        // East
         state = getWallState(world, x, y, z, state, Direction.EAST, EAST);
         state = getWallState(world, x, y, z, state, Direction.WEST, WEST);
         state = getWallState(world, x, y, z, state, Direction.NORTH, NORTH);
@@ -112,12 +110,8 @@ public class WallBlockTemplate extends TemplateBlock {
             return false;
         }
 
-        if (state.isOf(Block.GLOWSTONE)) {
-            return false;
-        }
-
         Block block = state.getBlock();
-        if (block instanceof WallBlockTemplate || block instanceof FenceBlockTemplate || block instanceof FenceGateBlockTemplate || block instanceof FenceBlock) {
+        if (block instanceof WallBlockTemplate || block instanceof FenceBlockTemplate || block instanceof FenceGateBlockTemplate || block instanceof FenceBlock || block instanceof PaneBlockTemplate) {
             return true;
         }
 
