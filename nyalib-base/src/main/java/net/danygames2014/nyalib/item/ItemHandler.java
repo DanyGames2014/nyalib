@@ -37,9 +37,20 @@ public interface ItemHandler extends ItemCapable {
      * @return The extracted ItemStack
      */
     default ItemStack extractItem(@Nullable Direction direction) {
+        return extractItem(Integer.MAX_VALUE, direction);
+    }
+
+    /**
+     * Extract a specified amount of any item from the given direction
+     *
+     * @param amount The amount of items to extract
+     * @param direction The direction to extract from
+     * @return The extracted ItemStack
+     */
+    default ItemStack extractItem(int amount, @Nullable Direction direction) {
         for (int i = 0; i < getItemSlots(direction); i++) {
             if (getItemInSlot(i, direction) != null) {
-                return extractItem(i, Integer.MAX_VALUE, direction);
+                return extractItem(i, amount, direction);
             }
         }
         return null;

@@ -29,69 +29,65 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Ite
     @Shadow
     private ItemStack[] inventory;
 
+    // Slots
+    // 0 - Input
+    // 1 - Fuel
+    // 2 - Output
+
+    // Sides
+    // Top - Input Insert / Input Extract
+    // Sides - Fuel Insert / Output Extract
+    // Bottom - Fuel Insert / Output Extract
+
     @Override
     public boolean canExtractItem(@Nullable Direction direction) {
-        // Simplified Handling
-        if (NyaLib.ITEM_CONFIG.simplifiedFurnaceHandling) {
-            return true;
+        return true;
+    }
+
+    @Override
+    public ItemStack extractItem(int amount, @Nullable Direction direction) {
+        if (!canExtractItem(direction)) {
+            return null;
+        }
+        
+        if (!NyaLib.ITEM_CONFIG.simplifiedFurnaceHandling && direction != null) {
+            switch (direction) {
+                // Extract from UP -> Input Slot
+                case UP -> {
+                    if (getItemInSlot(0, direction) != null) {
+                        return extractItem(0, amount, direction);
+                    }
+                }
+
+                // Extract from any other side -> Output Slot
+                case DOWN, NORTH, SOUTH, EAST, WEST -> {
+                    if (getItemInSlot(2, direction) != null) {
+                        return extractItem(2, amount, direction);
+                    }
+                }
+            }
         }
 
-        // Normal Hnadling
-        if (direction == null) {
-            return false;
-        }
-
-        return direction != Direction.DOWN && direction != Direction.UP;
+        // If direction is null, keep super behavior
+        return ItemHandler.super.extractItem(amount, direction);
     }
 
     @Override
     public ItemStack extractItem(int slot, int amount, @Nullable Direction direction) {
-        // Simplified Handling
-        if (NyaLib.ITEM_CONFIG.simplifiedFurnaceHandling) {
+        if (slot >= 0 && slot < inventory.length) {
             return this.removeStack(slot, amount);
         }
 
-        // Normal Handling
-        if (canExtractItem(direction) && slot == 2) {
-            return this.removeStack(slot, amount);
-        } else {
-            return null;
-        }
+        return null;
     }
 
     @Override
     public boolean canInsertItem(@Nullable Direction direction) {
-        // Simplified Handling
-        if (NyaLib.ITEM_CONFIG.simplifiedFurnaceHandling) {
-            return true;
-        }
-
-        // Normal Handling
-        if (direction == null) {
-            return false;
-        }
-
-        return direction == Direction.DOWN || direction == Direction.UP;
+        return true;
     }
 
     @Override
     public ItemStack insertItem(ItemStack stack, int slot, @Nullable Direction direction) {
-        if (!NyaLib.ITEM_CONFIG.simplifiedFurnaceHandling) {
-            if (direction == null) {
-                return stack;
-            }
-
-            // Disallow inserting into Input from Bottom
-            if (slot == 0 && direction == Direction.DOWN) {
-                return stack;
-            }
-
-            // Disallow inserting Fuel from Top
-            if (slot == 1 && direction == Direction.UP) {
-                return stack;
-            }
-        }
-
         // Only allow fuels into the fuel slot
         if (slot == 1 && FuelRegistry.getFuelTime(stack) <= 0) {
             return stack;
@@ -125,10 +121,35 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Ite
     public ItemStack insertItem(ItemStack stack, @Nullable Direction direction) {
         ItemStack insertedStack = stack.copy();
 
-        for (int i = 0; i < this.getItemSlots(direction); ++i) {
-            insertedStack = insertItem(insertedStack, i, direction);
-            if (insertedStack == null) {
-                return insertedStack;
+        if (!NyaLib.ITEM_CONFIG.simplifiedFurnaceHandling && direction != null) {
+            switch (direction) {
+                case UP -> {
+                    // Insert into input
+                    insertedStack = insertItem(insertedStack, 0, direction);
+                }
+                
+                case NORTH, SOUTH, EAST, WEST -> {
+                    if (FuelRegistry.getFuelTime(insertedStack) >= 0) {
+                        // If the item has a fuel value, insert into fuel slot
+                        insertedStack = insertItem(insertedStack, 1, direction);
+                    } else {
+                        // If the item does not have fuel value, insert into input
+                        insertedStack = insertItem(insertedStack, 0, direction);
+                    }
+                }
+                
+                case DOWN -> {
+                    // Insert into fuel
+                    insertedStack = insertItem(insertedStack, 1, direction);
+                }
+            }
+        } else {
+            // If direction is not specified, use default behavior
+            for (int i = 0; i < this.getItemSlots(direction); ++i) {
+                insertedStack = insertItem(insertedStack, i, direction);
+                if (insertedStack == null) {
+                    return insertedStack;
+                }
             }
         }
 
