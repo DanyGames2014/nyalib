@@ -142,6 +142,16 @@ public abstract class FluidHandlerBlockCapability extends BlockCapability implem
     public abstract int getFluidCapacity(int slot, @Nullable Direction direction);
 
     /**
+     * Get the remaining capacity of the given slot
+     *
+     * @param slot      The slot to query for remaining capacity
+     * @param direction The direction to query from
+     * @return The remaining capacity of the slot
+     */
+    @Override
+    public abstract int getRemainingFluidCapacity(int slot, @Nullable Direction direction);
+
+    /**
      * Get the entire inventory of the handler
      *
      * @param direction The direction to get the inventory from

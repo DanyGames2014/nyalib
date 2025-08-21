@@ -28,4 +28,9 @@ public class FluidTankBlock extends TemplateBlockWithEntity {
         }
         return false;
     }
+
+    @Override
+    public boolean isOpaque() {
+        return false;
+    }
 }

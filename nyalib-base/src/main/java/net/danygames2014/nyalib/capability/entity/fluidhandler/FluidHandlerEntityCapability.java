@@ -118,6 +118,15 @@ public abstract class FluidHandlerEntityCapability extends EntityCapability impl
     public abstract int getFluidCapacity(int slot);
 
     /**
+     * Get the remaining capacity of the given slot
+     *
+     * @param slot The slot to query for remaining capacity
+     * @return The remaining capacity of the slot
+     */
+    @Override
+    public abstract int getRemainingFluidCapacity(int slot);
+
+    /**
      * Get the entire fluid inventory of the entity
      *
      * @return An array of all the FluidStacks

@@ -25,6 +25,21 @@ public class FluidHandlerInterfaceBlockCapability extends FluidHandlerBlockCapab
     }
 
     @Override
+    public FluidStack extractFluid(@Nullable Direction direction) {
+        return fluidHandler.extractFluid(direction);
+    }
+
+    @Override
+    public FluidStack extractFluid(int amount, @Nullable Direction direction) {
+        return fluidHandler.extractFluid(amount, direction);
+    }
+
+    @Override
+    public FluidStack extractFluid(Fluid fluid, int amount, @Nullable Direction direction) {
+        return fluidHandler.extractFluid(fluid, amount, direction);
+    }
+
+    @Override
     public boolean canInsertFluid(@Nullable Direction direction) {
         return fluidHandler.canInsertFluid(direction);
     }
@@ -60,6 +75,11 @@ public class FluidHandlerInterfaceBlockCapability extends FluidHandlerBlockCapab
     }
 
     @Override
+    public int getRemainingFluidCapacity(int slot, @Nullable Direction direction) {
+        return fluidHandler.getRemainingFluidCapacity(slot, direction);
+    }
+
+    @Override
     public FluidStack[] getFluids(@Nullable Direction direction) {
         return fluidHandler.getFluids(direction);
     }
@@ -67,20 +87,5 @@ public class FluidHandlerInterfaceBlockCapability extends FluidHandlerBlockCapab
     @Override
     public boolean canConnectFluid(Direction direction) {
         return fluidHandler.canConnectFluid(direction);
-    }
-
-    @Override
-    public FluidStack extractFluid(@Nullable Direction direction) {
-        return fluidHandler.extractFluid(direction);
-    }
-
-    @Override
-    public FluidStack extractFluid(int amount, @Nullable Direction direction) {
-        return fluidHandler.extractFluid(amount, direction);
-    }
-
-    @Override
-    public FluidStack extractFluid(Fluid fluid, int amount, @Nullable Direction direction) {
-        return fluidHandler.extractFluid(fluid, amount, direction);
     }
 }

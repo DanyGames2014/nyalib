@@ -1,6 +1,5 @@
 package net.danygames2014.nyalib.fluid;
 
-import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
@@ -151,6 +150,21 @@ public interface FluidHandler extends FluidCapable {
      * @return The capacity of the slot
      */
     int getFluidCapacity(int slot, @Nullable Direction direction);
+
+    /**
+     * Get the remaining capacity of the given slot
+     *
+     * @param slot      The slot to query for remaining capacity
+     * @param direction The direction to query from
+     * @return The remaining capacity of the slot
+     */
+    default int getRemainingFluidCapacity(int slot, @Nullable Direction direction) {
+        if (slot >= getFluidSlots(direction)) {
+            return 0;
+        }
+        
+        return getFluidCapacity(slot, direction) - getFluid(slot, direction).amount;
+    }
 
     /**
      * Get the entire inventory of the handler

@@ -71,6 +71,11 @@ public class FluidHandlerInterfaceEntityCapability extends FluidHandlerEntityCap
     }
 
     @Override
+    public int getRemainingFluidCapacity(int slot) {
+        return fluidHandler.getRemainingFluidCapacity(slot);
+    }
+
+    @Override
     public FluidStack[] getFluids() {
         return fluidHandler.getFluids();
     }

@@ -4,7 +4,7 @@ import net.minecraft.item.ItemStack;
 
 /**
  * A fluid handler interface to be implemented on {@link net.minecraft.item.Item}
- *  The first parameter is always the ItemStack of the Item on which this code is called on
+ * The first parameter is always the ItemStack of the Item on which this code is called on
  */
 public interface FluidHandlerItem {
     /**
@@ -19,9 +19,9 @@ public interface FluidHandlerItem {
     /**
      * Extract a fluid in the given slot from the entity
      *
-     * @param thiz The ItemStack this is called on
-     * @param slot      The slot to extract from
-     * @param amount    The amount in mB to extract
+     * @param thiz   The ItemStack this is called on
+     * @param slot   The slot to extract from
+     * @param amount The amount in mB to extract
      * @return The FluidStack extracted, null if nothing is extracted
      */
     FluidStack extractFluid(ItemStack thiz, int slot, int amount);
@@ -39,8 +39,8 @@ public interface FluidHandlerItem {
     /**
      * Extract a specified amount of any fluid from the entity
      *
-     * @param thiz The ItemStack this is called on
-     * @param amount    The amount of fluid in mB to extract
+     * @param thiz   The ItemStack this is called on
+     * @param amount The amount of fluid in mB to extract
      * @return The extracted {@link FluidStack}
      */
     default FluidStack extractFluid(ItemStack thiz, int amount) {
@@ -55,9 +55,9 @@ public interface FluidHandlerItem {
     /**
      * Extract the given fluid in any slot from the handler
      *
-     * @param thiz The ItemStack this is called on
-     * @param fluid     The Fluid to extract
-     * @param amount    The amount in mB to extract
+     * @param thiz   The ItemStack this is called on
+     * @param fluid  The Fluid to extract
+     * @param amount The amount in mB to extract
      * @return The FluidStack extracted, null if nothing is extracted
      */
     default FluidStack extractFluid(ItemStack thiz, Fluid fluid, int amount) {
@@ -70,13 +70,13 @@ public interface FluidHandlerItem {
             }
 
             if (currentStack != null) {
-                if (this.getFluid(thiz,i).isFluidEqual(currentStack)) {
-                    FluidStack extractedStack = extractFluid(thiz,i, remaining);
+                if (this.getFluid(thiz, i).isFluidEqual(currentStack)) {
+                    FluidStack extractedStack = extractFluid(thiz, i, remaining);
                     remaining -= extractedStack.amount;
                     currentStack.amount += extractedStack.amount;
                 }
             } else {
-                FluidStack extractedStack = extractFluid(thiz,i, remaining);
+                FluidStack extractedStack = extractFluid(thiz, i, remaining);
                 remaining -= extractedStack.amount;
                 currentStack = extractedStack;
             }
@@ -97,9 +97,9 @@ public interface FluidHandlerItem {
     /**
      * Insert fluid into the given slot and return the remainder
      *
-     * @param thiz The ItemStack this is called on
-     * @param stack     The {@link FluidStack} to insert
-     * @param slot      Slot to insert into
+     * @param thiz  The ItemStack this is called on
+     * @param stack The {@link FluidStack} to insert
+     * @param slot  Slot to insert into
      * @return The remainder of the FluidStack (null if it was inserted entirely), this should be a new FluidStack, however it can be the same if it was not modified
      */
     FluidStack insertFluid(ItemStack thiz, FluidStack stack, int slot);
@@ -107,8 +107,8 @@ public interface FluidHandlerItem {
     /**
      * Insert fluid into any slot and return the remainder
      *
-     * @param thiz The ItemStack this is called on
-     * @param stack     The {@link FluidStack} to insert
+     * @param thiz  The ItemStack this is called on
+     * @param stack The {@link FluidStack} to insert
      * @return The remainder of the FluidStack (null if it was inserted entirely), this should be a new FluidStack, however it can be the same if it was not modified
      */
     FluidStack insertFluid(ItemStack thiz, FluidStack stack);
@@ -118,7 +118,7 @@ public interface FluidHandlerItem {
      * <p>
      *
      * @param thiz The ItemStack this is called on
-     * @param slot      The slot to get the {@link FluidStack} from
+     * @param slot The slot to get the {@link FluidStack} from
      * @return The {@link FluidStack} in the slot
      */
     FluidStack getFluid(ItemStack thiz, int slot);
@@ -126,13 +126,13 @@ public interface FluidHandlerItem {
     /**
      * Sets a {@link FluidStack} into the given slot
      *
-     * @param thiz The ItemStack this is called on
-     * @param slot      The slot to set the {@link FluidStack} into
-     * @param stack     The {@link FluidStack} to set into the slot
+     * @param thiz  The ItemStack this is called on
+     * @param slot  The slot to set the {@link FluidStack} into
+     * @param stack The {@link FluidStack} to set into the slot
      * @return Whether the action was succesfull
      */
     boolean setFluid(ItemStack thiz, int slot, FluidStack stack);
-    
+
     /**
      * Get the size of the entity fluid inventory
      *
@@ -145,10 +145,25 @@ public interface FluidHandlerItem {
      * Get the capacity of the given slot
      *
      * @param thiz The ItemStack this is called on
-     * @param slot      The slot to query for capacity
+     * @param slot The slot to query for capacity
      * @return The capacity of the slot
      */
     int getFluidCapacity(ItemStack thiz, int slot);
+
+    /**
+     * Get the remaining capacity of the given slot
+     *
+     * @param thiz The ItemStack this is called on
+     * @param slot The slot to query for remaining capacity
+     * @return The remaining capacity of the slot
+     */
+    default int getRemainingFluidCapacity(ItemStack thiz, int slot) {
+        if (slot >= getFluidSlots(thiz)) {
+            return 0;
+        }
+
+        return getFluidCapacity(thiz, slot) - getFluid(thiz, slot).amount;
+    }
 
     /**
      * Get the entire fluid inventory of the entity
