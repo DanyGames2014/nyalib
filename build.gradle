@@ -2,8 +2,8 @@ import static net.modificationstation.stationapi.gradle.SubprojectHelpers.addDep
 
 plugins {
     id 'maven-publish'
-    id 'fabric-loom' version '1.9.2'
-    id 'babric-loom-extension' version '1.9.2'
+    id 'fabric-loom' version '1.10.5'
+    id 'babric-loom-extension' version '1.10.2'
     id "com.modrinth.minotaur" version "2.+"
 }
 
@@ -15,6 +15,10 @@ allprojects {
     java.sourceCompatibility = JavaVersion.VERSION_17
     java.targetCompatibility = JavaVersion.VERSION_17
 
+    babric {
+        disablePomOverride.set(true)
+    }
+    
     repositories {
         // Used for Babric Loom Extensions
         maven {
@@ -175,15 +179,17 @@ allprojects {
             mavenLocal()
 
             // Glass Maven
-//            if (project.hasProperty("calmilamsy_secret_publishing_cave_username")) {
-//                maven {
-//                    url = "https://maven.glass-launcher.net/releases"
-//                    credentials {
-//                        username "${project.calmilamsy_secret_publishing_cave_username}"
-//                        password "${project.calmilamsy_secret_publishing_cave_password}"
-//                    }
-//                }
-//            }
+            if (project.publish_to_glass_maven.equalsIgnoreCase("true")) {
+                if (project.hasProperty("calmilamsy_secret_publishing_cave_username")) {
+                    maven {
+                        url = "https://maven.glass-launcher.net/releases"
+                        credentials {
+                            username "${project.calmilamsy_secret_publishing_cave_username}"
+                            password "${project.calmilamsy_secret_publishing_cave_password}"
+                        }
+                    }
+                }
+            }
 
             // NyaRepo
             if (project.hasProperty("nyarepo_publishing_cave_username")) {
@@ -295,6 +301,10 @@ publishing {
             }
         }
     }
+}
+
+babric {
+    disablePomOverride.set(true)
 }
 
 loom {
