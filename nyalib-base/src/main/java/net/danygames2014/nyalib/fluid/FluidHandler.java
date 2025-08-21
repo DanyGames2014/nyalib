@@ -163,6 +163,10 @@ public interface FluidHandler extends FluidCapable {
             return 0;
         }
         
+        if (getFluid(slot, direction) == null) {
+            return getFluidCapacity(slot, direction);
+        }
+        
         return getFluidCapacity(slot, direction) - getFluid(slot, direction).amount;
     }
 

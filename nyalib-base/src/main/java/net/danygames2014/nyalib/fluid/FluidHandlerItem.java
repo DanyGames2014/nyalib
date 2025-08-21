@@ -162,6 +162,10 @@ public interface FluidHandlerItem {
             return 0;
         }
 
+        if (getFluid(thiz, slot) == null) {
+            return getFluidCapacity(thiz, slot);
+        }
+
         return getFluidCapacity(thiz, slot) - getFluid(thiz, slot).amount;
     }
 

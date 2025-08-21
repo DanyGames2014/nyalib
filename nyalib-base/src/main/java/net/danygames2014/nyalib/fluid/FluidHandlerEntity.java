@@ -146,6 +146,10 @@ public interface FluidHandlerEntity {
             return 0;
         }
 
+        if (getFluid(slot) == null) {
+            return getFluidCapacity(slot);
+        }
+
         return getFluidCapacity(slot) - getFluid(slot).amount;
     }
 
