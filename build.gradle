@@ -2,7 +2,7 @@ import static net.modificationstation.stationapi.gradle.SubprojectHelpers.addDep
 
 plugins {
     id 'maven-publish'
-    id 'fabric-loom' version '1.10.5'
+    id 'fabric-loom' version '1.11.7'
     id 'babric-loom-extension' version '1.10.2'
     id "com.modrinth.minotaur" version "2.+"
 }
@@ -115,6 +115,10 @@ allprojects {
         }
 
         modImplementation("maven.modrinth:bh-creative:${project.bhcreative_version}-b1.7.3") {
+            transitive false
+        }
+        
+        modImplementation("net.danygames2014:WhatsThis:${project.whatsthis_version}") {
             transitive false
         }
 

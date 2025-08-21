@@ -1,7 +1,7 @@
 import static net.modificationstation.stationapi.gradle.SubprojectHelpers.addModuleDependencies
 import static net.modificationstation.stationapi.gradle.SubprojectHelpers.getSubprojectVersion
 
-archives_base_name = "nyalib-balls-v0"
+archives_base_name = "nyalib-compat"
 version = getSubprojectVersion(project, "1.0.0")
 
 addModuleDependencies(project,

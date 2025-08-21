@@ -15,4 +15,5 @@ pluginManagement {
 rootProject.name = "NyaLib"
 
 include 'nyalib-base'
-include 'nyalib-balls-v0'
+
+include 'nyalib-compat'

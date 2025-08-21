@@ -1,20 +1,21 @@
 {
   "schemaVersion": 1,
-  "id": "nyalib-balls",
+  "id": "nyalib-compat",
   "version": "${version}",
 
-  "name": "NyaLib Balls",
-  "description": "A pretty uwu library mod :3",
+  "name": "NyaLib Compat",
+  "description": "A module providing compatibility with other mods",
   "authors": [
     "DanyGames2014"
   ],
 
   "license": "MIT",
-  "icon": "assets/nyalib-balls/icon.png",
+  "icon": "assets/nyalib-compat/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "stationapi:event_bus": [
+      "net.danygames2014.nyalib.NyaLibCompat"
     ],
     "stationapi:event_bus_client": [
     ],
@@ -22,7 +23,7 @@
     ]
   },
   "mixins": [
-    "nyalib-balls.mixins.json"
+    "nyalib-compat.mixins.json"
   ],
   "depends": {
     "minecraft": "1.0.0-beta.7.3"
