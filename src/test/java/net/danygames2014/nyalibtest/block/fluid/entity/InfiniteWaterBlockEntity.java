@@ -57,6 +57,11 @@ public class InfiniteWaterBlockEntity extends BlockEntity implements FluidHandle
     }
 
     @Override
+    public boolean setFluid(int slot, FluidStack stack, @Nullable Direction direction) {
+        return false;
+    }
+
+    @Override
     public int getFluidSlots(@Nullable Direction direction) {
         return 1;
     }
