@@ -2,7 +2,7 @@ import static net.modificationstation.stationapi.gradle.SubprojectHelpers.addDep
 
 plugins {
     id 'maven-publish'
-    id 'fabric-loom' version '1.11.7'
+    id 'fabric-loom' version '1.12.0-alpha.10'
     id 'babric-loom-extension' version '1.10.2'
     id "com.modrinth.minotaur" version "2.+"
 }
@@ -315,6 +315,12 @@ publishing {
 
 babric {
     disablePomOverride.set(true)
+}
+
+loom {
+    mixin {
+        useLegacyMixinAp = false
+    }
 }
 
 loom {
