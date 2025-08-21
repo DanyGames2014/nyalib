@@ -19,6 +19,12 @@ allprojects {
         disablePomOverride.set(true)
     }
     
+    loom {
+        mixin {
+            useLegacyMixinAp = false
+        }
+    }
+    
     repositories {
         // Used for Babric Loom Extensions
         maven {
