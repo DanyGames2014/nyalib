@@ -5,12 +5,17 @@
     * Energy Storage
     * Energy Handler
     * Item Handler
+    * Fluid Handler
   * Item Capabilities
     * Energy Storage
     * Item Handler
+    * Fluid Handler
   * Entity Capabilities
     * Energy Storage
     * Item Handler
+    * Fluid Handler
+* Add FluidHandler interfaces for entities and items
+* Improve block FluidHandler interface
 * Removed unnecessary methods in ItemHandler
 * Improved documentation
 * DropInventoryOnBreak interface

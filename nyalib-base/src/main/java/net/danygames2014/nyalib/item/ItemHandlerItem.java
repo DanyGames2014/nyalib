@@ -2,6 +2,8 @@ package net.danygames2014.nyalib.item;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.modificationstation.stationapi.api.util.math.Direction;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An Item Handler interface to be implemented on {@link Item}
@@ -19,7 +21,7 @@ public interface ItemHandlerItem {
     boolean canExtractItem(ItemStack thiz);
 
     /**
-     * Extract an item in the given slot from the handler
+     * Extract an item in the given slot
      *
      * @param thiz   The stack, on which this action is called on
      * @param slot   The slot to extract from
@@ -28,17 +30,26 @@ public interface ItemHandlerItem {
      */
     ItemStack extractItem(ItemStack thiz, int slot, int amount);
 
-
     /**
-     * Extract any item from the given direction
+     * Extract any item
+     *
+     * @param thiz   The stack, on which this action is called on
+     * @return The extracted ItemStack
+     */
+    default ItemStack extractItem(ItemStack thiz) {
+        return extractItem(thiz, Integer.MAX_VALUE);
+    }
+    
+    /**
+     * Extract a specified amount of any item
      *
      * @param thiz The stack, on which this action is called on
      * @return The extracted ItemStack
      */
-    default ItemStack extractItem(ItemStack thiz) {
+    default ItemStack extractItem(ItemStack thiz, int amount) {
         for (int i = 0; i < getItemSlots(thiz); i++) {
             if (getItem(thiz, i) != null) {
-                return extractItem(thiz, i, Integer.MAX_VALUE);
+                return extractItem(thiz, i, amount);
             }
         }
         return null;
