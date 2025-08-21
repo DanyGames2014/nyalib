@@ -1,6 +1,7 @@
 package net.danygames2014.nyalib.capability.block.itemhandler;
 
 import net.danygames2014.nyalib.item.ItemHandler;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
@@ -28,6 +29,21 @@ class ItemHandlerInterfaceBlockCapability extends ItemHandlerBlockCapability {
     }
 
     @Override
+    public ItemStack extractItem(@Nullable Direction direction) {
+        return itemHandler.extractItem(direction);
+    }
+
+    @Override
+    public ItemStack extractItem(Item item, int amount, @Nullable Direction direction) {
+        return itemHandler.extractItem(item, amount, direction);
+    }
+
+    @Override
+    public ItemStack extractItem(int amount, @Nullable Direction direction) {
+        return itemHandler.extractItem(amount, direction);
+    }
+
+    @Override
     public boolean canInsertItem(@Nullable Direction direction) {
         return itemHandler.canInsertItem(direction);
     }
@@ -43,8 +59,13 @@ class ItemHandlerInterfaceBlockCapability extends ItemHandlerBlockCapability {
     }
 
     @Override
-    public ItemStack getItemInSlot(int slot, @Nullable Direction direction) {
-        return itemHandler.getItemInSlot(slot, direction);
+    public ItemStack getItem(int slot, @Nullable Direction direction) {
+        return itemHandler.getItem(slot, direction);
+    }
+
+    @Override
+    public boolean setItem(ItemStack stack, int slot, @Nullable Direction direction) {
+        return itemHandler.setItem(stack, slot, direction);
     }
 
     @Override

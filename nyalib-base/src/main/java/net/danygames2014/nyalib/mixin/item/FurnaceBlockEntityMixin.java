@@ -54,14 +54,14 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Ite
             switch (direction) {
                 // Extract from UP -> Input Slot
                 case UP -> {
-                    if (getItemInSlot(0, direction) != null) {
+                    if (getItem(0, direction) != null) {
                         return extractItem(0, amount, direction);
                     }
                 }
 
                 // Extract from any other side -> Output Slot
                 case DOWN, NORTH, SOUTH, EAST, WEST -> {
-                    if (getItemInSlot(2, direction) != null) {
+                    if (getItem(2, direction) != null) {
                         return extractItem(2, amount, direction);
                     }
                 }
@@ -157,7 +157,7 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Ite
     }
 
     @Override
-    public ItemStack getItemInSlot(int slot, @Nullable Direction direction) {
+    public ItemStack getItem(int slot, @Nullable Direction direction) {
         return this.getStack(slot);
     }
 

@@ -18,19 +18,28 @@ class ItemHandlerMinecartEntityCapability extends ItemHandlerEntityCapability {
 
     @Override
     public ItemStack extractItem(int slot, int amount) {
+        if (slot >= getItemSlots() || slot < 0) {
+            return null;
+        }
+
         return minecart.removeStack(slot, amount);
     }
 
     @Override
     public ItemStack extractItem() {
+        return extractItem(Integer.MAX_VALUE);
+    }
+
+    @Override
+    public ItemStack extractItem(int amount) {
         for (int i = 0; i < getItemSlots(); i++) {
-            if (getItemInSlot(i) != null) {
-                return extractItem(i, Integer.MAX_VALUE);
+            if (getItem(i) != null) {
+                return extractItem(i, amount);
             }
         }
         return null;
     }
-    
+
     @Override
     public ItemStack extractItem(Item item, int amount) {
         ItemStack currentStack = null;
@@ -42,13 +51,13 @@ class ItemHandlerMinecartEntityCapability extends ItemHandlerEntityCapability {
             }
 
             if (currentStack != null) {
-                if (this.getItemInSlot(i).isItemEqual(currentStack)) {
+                if (this.getItem(i).isItemEqual(currentStack)) {
                     ItemStack extractedStack = extractItem(i, remaining);
                     remaining -= extractedStack.count;
                     currentStack.count += extractedStack.count;
                 }
             } else {
-                if (getItemInSlot(i).isOf(item)) {
+                if (getItem(i).isOf(item)) {
                     ItemStack extractedStack = extractItem(i, remaining);
                     remaining -= extractedStack.count;
                     currentStack = extractedStack;
@@ -66,6 +75,10 @@ class ItemHandlerMinecartEntityCapability extends ItemHandlerEntityCapability {
 
     @Override
     public ItemStack insertItem(ItemStack stack, int slot) {
+        if (slot >= getItemSlots() || slot < 0) {
+            return stack;
+        }
+
         // Check if the current stack is null
         if (minecart.getStack(slot) == null) {
             if (stack.count <= minecart.getMaxCountPerStack()) {
@@ -113,7 +126,7 @@ class ItemHandlerMinecartEntityCapability extends ItemHandlerEntityCapability {
 
         for (int i = 0; i < minecart.size(); i++) {
             insertedStack = insertItem(insertedStack, i);
-            
+
             // If its null, it was inserted entirely, no need to loop furthers
             if (insertedStack == null) {
                 return null;
@@ -124,8 +137,22 @@ class ItemHandlerMinecartEntityCapability extends ItemHandlerEntityCapability {
     }
 
     @Override
-    public ItemStack getItemInSlot(int slot) {
+    public ItemStack getItem(int slot) {
+        if (slot >= getItemSlots() || slot < 0) {
+            return null;
+        }
+
         return minecart.getStack(slot);
+    }
+
+    @Override
+    public boolean setItem(ItemStack stack, int slot) {
+        if (slot >= getItemSlots() || slot < 0) {
+            return false;
+        }
+
+        minecart.setStack(slot, stack);
+        return true;
     }
 
     @Override

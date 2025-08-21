@@ -2,12 +2,14 @@ package net.danygames2014.nyalib.item;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.modificationstation.stationapi.api.util.math.Direction;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An Item Handler interface to be implemented on entities
  */
 @SuppressWarnings("unused")
-public interface ItemHandlerEntity extends ItemCapable {
+public interface ItemHandlerEntity {
     /**
      * Check if the handler supports extracting items, if this returns false there
      * should be no point in trying to use {@link #extractItem(int, int)}
@@ -27,19 +29,33 @@ public interface ItemHandlerEntity extends ItemCapable {
 
 
     /**
-     * Extract any item
+     * Extract any item from any slot
      *
      * @return The extracted ItemStack
      */
     default ItemStack extractItem() {
         for (int i = 0; i < getItemSlots(); i++) {
-            if (getItemInSlot(i) != null) {
+            if (getItem(i) != null) {
                 return extractItem(i, Integer.MAX_VALUE);
             }
         }
         return null;
     }
 
+    /**
+     * Extract a specified amount of any item
+     *
+     * @param amount    The amount of items to extract
+     * @return The extracted ItemStack
+     */
+    default ItemStack extractItem(int amount) {
+        for (int i = 0; i < getItemSlots(); i++) {
+            if (getItem(i) != null) {
+                return extractItem(i, amount);
+            }
+        }
+        return null;
+    }
 
     /**
      * Extract the given item in any slot
@@ -58,13 +74,13 @@ public interface ItemHandlerEntity extends ItemCapable {
             }
 
             if (currentStack != null) {
-                if (this.getItemInSlot(i).isItemEqual(currentStack)) {
+                if (this.getItem(i).isItemEqual(currentStack)) {
                     ItemStack extractedStack = extractItem(i, remaining);
                     remaining -= extractedStack.count;
                     currentStack.count += extractedStack.count;
                 }
             } else {
-                if (getItemInSlot(i).isOf(item)) {
+                if (getItem(i).isOf(item)) {
                     ItemStack extractedStack = extractItem(i, remaining);
                     remaining -= extractedStack.count;
                     currentStack = extractedStack;
@@ -86,8 +102,8 @@ public interface ItemHandlerEntity extends ItemCapable {
     /**
      * Insert item into the given slot and return the remainder
      *
-     * @param stack     The {@link ItemStack} to insert
-     * @param slot      Slot to insert into
+     * @param stack The {@link ItemStack} to insert
+     * @param slot  Slot to insert into
      * @return The remainder of the ItemStack (null if it was inserted entirely), this should be a new ItemStack, however it can be the same if it was not modified
      */
     ItemStack insertItem(ItemStack stack, int slot);
@@ -95,7 +111,7 @@ public interface ItemHandlerEntity extends ItemCapable {
     /**
      * Insert item into any slot and return the remainder
      *
-     * @param stack     The {@link ItemStack} to insert
+     * @param stack The {@link ItemStack} to insert
      * @return The remainder of the ItemStack (null if it was inserted entirely), this should be a new ItemStack, however it can be the same if it was not modified
      */
     ItemStack insertItem(ItemStack stack);
@@ -107,7 +123,16 @@ public interface ItemHandlerEntity extends ItemCapable {
      * @param slot The slot to get the {@link ItemStack} from
      * @return The {@link ItemStack} in the slot
      */
-    ItemStack getItemInSlot(int slot);
+    ItemStack getItem(int slot);
+
+    /**
+     * Directly sets the given slot to the given ItemStack
+     *
+     * @param stack The {@link ItemStack} to set the slot to
+     * @param slot  The slot to put the stack into
+     * @return Whether the action was successfull
+     */
+    boolean setItem(ItemStack stack, int slot);
 
     /**
      * Get the size of the handler inventory

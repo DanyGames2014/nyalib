@@ -18,14 +18,13 @@ public abstract class ItemHandlerBlockCapability extends BlockCapability impleme
     public abstract ItemStack extractItem(int slot, int amount, @Nullable Direction direction);
 
     @Override
-    public ItemStack extractItem(@Nullable Direction direction) {
-        return ItemHandler.super.extractItem(direction);
-    }
+    public abstract ItemStack extractItem(@Nullable Direction direction);
 
     @Override
-    public ItemStack extractItem(Item item, int amount, @Nullable Direction direction) {
-        return ItemHandler.super.extractItem(item, amount, direction);
-    }
+    public abstract ItemStack extractItem(Item item, int amount, @Nullable Direction direction);
+
+    @Override
+    public abstract ItemStack extractItem(int amount, @Nullable Direction direction);
 
     @Override
     public abstract boolean canInsertItem(@Nullable Direction direction);
@@ -37,7 +36,10 @@ public abstract class ItemHandlerBlockCapability extends BlockCapability impleme
     public abstract ItemStack insertItem(ItemStack stack, @Nullable Direction direction);
 
     @Override
-    public abstract ItemStack getItemInSlot(int slot, @Nullable Direction direction);
+    public abstract ItemStack getItem(int slot, @Nullable Direction direction);
+
+    @Override
+    public abstract boolean setItem(ItemStack stack, int slot, @Nullable Direction direction);
 
     @Override
     public abstract int getItemSlots(@Nullable Direction direction);

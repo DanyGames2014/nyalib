@@ -8,11 +8,12 @@ import net.minecraft.item.ItemStack;
  * The first parameter is always the ItemStack of the Item on which this code is called on
  */
 @SuppressWarnings("unused")
-public interface ItemHandlerItem extends ItemCapable {
+public interface ItemHandlerItem {
     /**
      * Check if the handler supports extracting items, if this returns false there
      * should be no point in trying to use {@link #extractItem(ItemStack, int, int)}
      *
+     * @param thiz The stack, on which this action is called on
      * @return <code>true</code> if the device supports item extraction
      */
     boolean canExtractItem(ItemStack thiz);
@@ -20,6 +21,7 @@ public interface ItemHandlerItem extends ItemCapable {
     /**
      * Extract an item in the given slot from the handler
      *
+     * @param thiz   The stack, on which this action is called on
      * @param slot   The slot to extract from
      * @param amount The amount to extract (can be larger than the maximum stack size)
      * @return The ItemStack extracted, null if nothing is extracted
@@ -30,11 +32,12 @@ public interface ItemHandlerItem extends ItemCapable {
     /**
      * Extract any item from the given direction
      *
+     * @param thiz The stack, on which this action is called on
      * @return The extracted ItemStack
      */
     default ItemStack extractItem(ItemStack thiz) {
         for (int i = 0; i < getItemSlots(thiz); i++) {
-            if (getItemInSlot(thiz, i) != null) {
+            if (getItem(thiz, i) != null) {
                 return extractItem(thiz, i, Integer.MAX_VALUE);
             }
         }
@@ -45,6 +48,7 @@ public interface ItemHandlerItem extends ItemCapable {
     /**
      * Extract the given item in any slot from the handler
      *
+     * @param thiz   The stack, on which this action is called on
      * @param item   The Item to extract
      * @param amount The amount to extract (can be larger than the maximum stack size)
      * @return The ItemStack extracted, null if nothing is extracted
@@ -59,13 +63,13 @@ public interface ItemHandlerItem extends ItemCapable {
             }
 
             if (currentStack != null) {
-                if (this.getItemInSlot(thiz, i).isItemEqual(currentStack)) {
+                if (this.getItem(thiz, i).isItemEqual(currentStack)) {
                     ItemStack extractedStack = extractItem(thiz, i, remaining);
                     remaining -= extractedStack.count;
                     currentStack.count += extractedStack.count;
                 }
             } else {
-                if (getItemInSlot(thiz, i).isOf(item)) {
+                if (getItem(thiz, i).isOf(item)) {
                     ItemStack extractedStack = extractItem(thiz, i, remaining);
                     remaining -= extractedStack.count;
                     currentStack = extractedStack;
@@ -80,9 +84,10 @@ public interface ItemHandlerItem extends ItemCapable {
      * Check if the handler supports inserting items, if this returns false there
      * should be no point in trying to use {@link #insertItem(ItemStack, ItemStack)} or {@link #insertItem(ItemStack, ItemStack, int)}
      *
+     * @param thiz The stack, on which this action is called on
      * @return <code>true</code> if the device supports item insertion
      */
-    boolean canInsertItem();
+    boolean canInsertItem(ItemStack thiz);
 
     /**
      * Insert item into the given slot and return the remainder
@@ -97,6 +102,7 @@ public interface ItemHandlerItem extends ItemCapable {
     /**
      * Insert item into any slot and return the remainder
      *
+     * @param thiz  The stack, on which this action is called on
      * @param stack The {@link ItemStack} to insert
      * @return The remainder of the ItemStack (null if it was inserted entirely), this should be a new ItemStack, however it can be the same if it was not modified
      */
@@ -106,14 +112,26 @@ public interface ItemHandlerItem extends ItemCapable {
      * Get the {@link ItemStack} in the given slot, If there is no {@link ItemStack}, then return null
      * <p>
      *
+     * @param thiz The stack, on which this action is called on
      * @param slot The slot to get the {@link ItemStack} from
      * @return The {@link ItemStack} in the slot
      */
-    ItemStack getItemInSlot(ItemStack thiz, int slot);
+    ItemStack getItem(ItemStack thiz, int slot);
+
+    /**
+     * Directly sets the given slot to the given ItemStack
+     *
+     * @param thiz  The stack, on which this action is called on
+     * @param stack The {@link ItemStack} to set the slot to
+     * @param slot  The slot to put the stack into
+     * @return Whether the action was successfull
+     */
+    boolean setItem(ItemStack thiz, ItemStack stack, int slot);
 
     /**
      * Get the size of the handler inventory
      *
+     * @param thiz The stack, on which this action is called on
      * @return The number of slots this handler has
      */
     int getItemSlots(ItemStack thiz);
@@ -121,6 +139,7 @@ public interface ItemHandlerItem extends ItemCapable {
     /**
      * Get the entire inventory of the handler
      *
+     * @param thiz The stack, on which this action is called on
      * @return An array of all the ItemStacks
      */
     ItemStack[] getInventory(ItemStack thiz);

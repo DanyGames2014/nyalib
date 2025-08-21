@@ -20,14 +20,23 @@ class ItemHandlerPlayerEntityCapability extends ItemHandlerEntityCapability {
 
     @Override
     public ItemStack extractItem(int slot, int amount) {
+        if (slot >= getItemSlots() || slot < 0) {
+            return null;
+        }
+
         return player.inventory.removeStack(slot, amount);
     }
 
     @Override
     public ItemStack extractItem() {
+        return extractItem(Integer.MAX_VALUE);
+    }
+
+    @Override
+    public ItemStack extractItem(int amount) {
         for (int i = 0; i < getItemSlots(); i++) {
-            if (getItemInSlot(i) != null) {
-                return extractItem(i, Integer.MAX_VALUE);
+            if (getItem(i) != null) {
+                return extractItem(i, amount);
             }
         }
         return null;
@@ -44,13 +53,13 @@ class ItemHandlerPlayerEntityCapability extends ItemHandlerEntityCapability {
             }
 
             if (currentStack != null) {
-                if (this.getItemInSlot(i).isItemEqual(currentStack)) {
+                if (this.getItem(i).isItemEqual(currentStack)) {
                     ItemStack extractedStack = extractItem(i, remaining);
                     remaining -= extractedStack.count;
                     currentStack.count += extractedStack.count;
                 }
             } else {
-                if (getItemInSlot(i).isOf(item)) {
+                if (getItem(i).isOf(item)) {
                     ItemStack extractedStack = extractItem(i, remaining);
                     remaining -= extractedStack.count;
                     currentStack = extractedStack;
@@ -68,6 +77,10 @@ class ItemHandlerPlayerEntityCapability extends ItemHandlerEntityCapability {
 
     @Override
     public ItemStack insertItem(ItemStack stack, int slot) {
+        if (slot >= getItemSlots() || slot < 0) {
+            return stack;
+        }
+
         // Check if the current stack is null
         if (player.inventory.getStack(slot) == null) {
             if (stack.count <= player.inventory.getMaxCountPerStack()) {
@@ -126,8 +139,22 @@ class ItemHandlerPlayerEntityCapability extends ItemHandlerEntityCapability {
     }
 
     @Override
-    public ItemStack getItemInSlot(int slot) {
+    public ItemStack getItem(int slot) {
+        if (slot >= getItemSlots() || slot < 0) {
+            return null;
+        }
+
         return player.inventory.getStack(slot);
+    }
+
+    @Override
+    public boolean setItem(ItemStack stack, int slot) {
+        if (slot >= getItemSlots() || slot < 0) {
+            return false;
+        }
+
+        player.inventory.setStack(slot, stack);
+        return true;
     }
 
     @Override

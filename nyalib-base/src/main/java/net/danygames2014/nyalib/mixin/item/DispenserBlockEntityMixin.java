@@ -82,7 +82,7 @@ public abstract class DispenserBlockEntityMixin extends BlockEntity implements I
     }
 
     @Override
-    public ItemStack getItemInSlot(int slot, @Nullable Direction direction) {
+    public ItemStack getItem(int slot, @Nullable Direction direction) {
         return this.getStack(slot);
     }
 

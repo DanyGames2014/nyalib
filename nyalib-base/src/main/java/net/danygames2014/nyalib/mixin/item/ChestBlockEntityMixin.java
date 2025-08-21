@@ -102,7 +102,7 @@ public abstract class ChestBlockEntityMixin extends BlockEntity implements ItemH
     }
 
     @Override
-    public ItemStack getItemInSlot(int slot, @Nullable Direction direction) {
+    public ItemStack getItem(int slot, @Nullable Direction direction) {
         if (slot > 26 && isDoubleChest()) {
             return getSecondChest().getStack(slot - 27);
         }

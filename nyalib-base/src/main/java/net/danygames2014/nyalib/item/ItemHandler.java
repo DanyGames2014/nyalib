@@ -6,7 +6,7 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * An Item Handler interface to be implemented on blocks
+ * An Item Handler interface to be implemented on a {@link net.minecraft.block.entity.BlockEntity}
  */
 @SuppressWarnings("unused")
 public interface ItemHandler extends ItemCapable {
@@ -43,13 +43,13 @@ public interface ItemHandler extends ItemCapable {
     /**
      * Extract a specified amount of any item from the given direction
      *
-     * @param amount The amount of items to extract
+     * @param amount    The amount of items to extract
      * @param direction The direction to extract from
      * @return The extracted ItemStack
      */
     default ItemStack extractItem(int amount, @Nullable Direction direction) {
         for (int i = 0; i < getItemSlots(direction); i++) {
-            if (getItemInSlot(i, direction) != null) {
+            if (getItem(i, direction) != null) {
                 return extractItem(i, amount, direction);
             }
         }
@@ -75,13 +75,13 @@ public interface ItemHandler extends ItemCapable {
             }
 
             if (currentStack != null) {
-                if (this.getItemInSlot(i, direction).isItemEqual(currentStack)) {
+                if (this.getItem(i, direction).isItemEqual(currentStack)) {
                     ItemStack extractedStack = extractItem(i, remaining, direction);
                     remaining -= extractedStack.count;
                     currentStack.count += extractedStack.count;
                 }
             } else {
-                if (getItemInSlot(i, direction).isOf(item)) {
+                if (getItem(i, direction).isOf(item)) {
                     ItemStack extractedStack = extractItem(i, remaining, direction);
                     remaining -= extractedStack.count;
                     currentStack = extractedStack;
@@ -128,11 +128,18 @@ public interface ItemHandler extends ItemCapable {
      * @param direction The direction to query from
      * @return The {@link ItemStack} in the slot
      */
-    ItemStack getItemInSlot(int slot, @Nullable Direction direction);
-    // TODO: rename to getItem ?
-    
-    // TODO: setItem
-    
+    ItemStack getItem(int slot, @Nullable Direction direction);
+
+    /**
+     * Directly sets the given slot to the given ItemStack
+     *
+     * @param stack     The {@link ItemStack} to set the slot to
+     * @param slot      The slot to put the stack into
+     * @param direction The direction to set it from
+     * @return Whether the action was succesfull
+     */
+    boolean setItem(ItemStack stack, int slot, @Nullable Direction direction);
+
     /**
      * Get the size of the handler inventory
      *
