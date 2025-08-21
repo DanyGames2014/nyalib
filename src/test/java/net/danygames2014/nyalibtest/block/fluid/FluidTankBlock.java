@@ -23,7 +23,7 @@ public class FluidTankBlock extends TemplateBlockWithEntity {
         if (world.getBlockEntity(x, y, z) instanceof FluidTankBlockEntity tank) {
             player.sendMessage("Fluid Tank Contents: ");
             for (int i = 0; i < tank.getFluidSlots(null); i++) {
-                player.sendMessage(i + ": " + tank.getFluidInSlot(i, null));
+                player.sendMessage(i + ": " + tank.getFluid(i, null));
             }
         }
         return false;

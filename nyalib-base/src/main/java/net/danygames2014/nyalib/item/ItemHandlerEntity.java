@@ -6,7 +6,7 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * An Item Handler interface to be implemented on entities
+ * An Item Handler interface to be implemented on {@link net.minecraft.entity.Entity}
  */
 @SuppressWarnings("unused")
 public interface ItemHandlerEntity {

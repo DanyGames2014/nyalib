@@ -1,8 +1,12 @@
 package net.danygames2014.nyalib.fluid;
 
+import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * A fluid handler interface to be implemented on {@link net.minecraft.block.entity.BlockEntity}
+ */
 public interface FluidHandler extends FluidCapable {
     /**
      * Check if the handler supports extracting fluid on this side, if this returns false there
@@ -23,6 +27,31 @@ public interface FluidHandler extends FluidCapable {
      */
     FluidStack extractFluid(int slot, int amount, @Nullable Direction direction);
 
+    /**
+     * Extract any fluid from the given direction
+     *
+     * @param direction The direction to extract from
+     * @return The extracted {@link FluidStack}
+     */
+    default FluidStack extractFluid(@Nullable Direction direction) {
+        return extractFluid(Integer.MAX_VALUE, direction);
+    }
+
+    /**
+     * Extract a specified amount of any fluid from the given direction
+     *
+     * @param amount    The amount of fluid in mB to extract
+     * @param direction The direction to extract from
+     * @return The extracted {@link FluidStack}
+     */
+    default FluidStack extractFluid(int amount, @Nullable Direction direction) {
+        for (int i = 0; i < getFluidSlots(direction); i++) {
+            if (getFluid(i, direction) != null) {
+                return this.extractFluid(i, amount, direction);
+            }
+        }
+        return null;
+    }
 
     /**
      * Extract the given fluid in any slot from the handler
@@ -42,7 +71,7 @@ public interface FluidHandler extends FluidCapable {
             }
 
             if (currentStack != null) {
-                if (this.getFluidInSlot(i, direction).isFluidEqual(currentStack)) {
+                if (this.getFluid(i, direction).isFluidEqual(currentStack)) {
                     FluidStack extractedStack = extractFluid(i, remaining, direction);
                     remaining -= extractedStack.amount;
                     currentStack.amount += extractedStack.amount;
@@ -93,7 +122,18 @@ public interface FluidHandler extends FluidCapable {
      * @param direction The direction to query from
      * @return The {@link FluidStack} in the slot
      */
-    FluidStack getFluidInSlot(int slot, @Nullable Direction direction);
+    FluidStack getFluid(int slot, @Nullable Direction direction);
+
+
+    /**
+     * Sets a {@link FluidStack} into the given slot
+     *
+     * @param slot      The slot to set the {@link FluidStack} into
+     * @param stack     The fluidstack to set into the slot
+     * @param direction The direction to set from
+     * @return Whether the action was succesfull
+     */
+    boolean setFluid(int slot, FluidStack stack, @Nullable Direction direction);
 
     /**
      * Get the size of the handler inventory

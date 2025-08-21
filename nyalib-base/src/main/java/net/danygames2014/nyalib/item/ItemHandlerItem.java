@@ -4,7 +4,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 /**
- * An Item Handler interface to be implemented on items
+ * An Item Handler interface to be implemented on {@link Item}
  * The first parameter is always the ItemStack of the Item on which this code is called on
  */
 @SuppressWarnings("unused")

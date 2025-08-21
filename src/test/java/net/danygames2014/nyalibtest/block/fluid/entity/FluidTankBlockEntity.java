@@ -64,7 +64,7 @@ public class FluidTankBlockEntity extends BlockEntity implements FluidHandler {
     }
 
     @Override
-    public FluidStack getFluidInSlot(int slot, @Nullable Direction direction) {
+    public FluidStack getFluid(int slot, @Nullable Direction direction) {
         return fluidStacks[slot];
     }
 
