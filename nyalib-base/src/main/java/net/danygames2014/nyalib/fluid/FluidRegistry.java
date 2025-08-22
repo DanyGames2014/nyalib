@@ -1,6 +1,7 @@
 package net.danygames2014.nyalib.fluid;
 
 import net.danygames2014.nyalib.NyaLib;
+import net.minecraft.block.Block;
 import net.modificationstation.stationapi.api.util.Identifier;
 
 import java.util.HashMap;
@@ -36,6 +37,22 @@ public class FluidRegistry {
 
     public static Fluid get(Identifier identifier) {
         return getInstance().registry.getOrDefault(identifier, null);
+    }
+    
+    public static Fluid get(int fluidBlockId) {
+        for (Fluid fluid : getInstance().registry.values()) {
+            Block stillBlock = fluid.getStillBlock();
+            if (stillBlock != null && stillBlock.id == fluidBlockId) {
+                return fluid;
+            }
+            
+            Block flowingBlock = fluid.getFlowingBlock();
+            if (flowingBlock != null && flowingBlock.id == fluidBlockId) {
+                return fluid;
+            }
+        }
+        
+        return null;
     }
 
     public static HashMap<Identifier, Fluid> getRegistry() {

@@ -17,3 +17,4 @@ rootProject.name = "NyaLib"
 include 'nyalib-base'
 
 include 'nyalib-compat'
+include 'nyalib-fluid'

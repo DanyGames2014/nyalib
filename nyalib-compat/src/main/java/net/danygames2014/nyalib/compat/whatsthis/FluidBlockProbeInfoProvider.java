@@ -36,12 +36,14 @@ public class FluidBlockProbeInfoProvider implements IProbeInfoProvider {
 
         FluidHandlerBlockCapability fluidHandler = CapabilityHelper.getCapability(world, pos.x, pos.y, pos.z, FluidHandlerBlockCapability.class);
         if (fluidHandler != null) {
+            IProbeInfo vertical = probeInfo.vertical();
+            
             for (int i = 0; i < fluidHandler.getFluidSlots(data.getSideHit()); i++) {
                 FluidStack fluidStack = fluidHandler.getFluid(i, data.getSideHit());
                 int capacity = fluidHandler.getFluidCapacity(i, data.getSideHit());
 
                 if (fluidStack != null) {
-                    probeInfo.progress(
+                    vertical.progress(
                             fluidStack.amount,
                             capacity,
                             probeInfo.defaultProgressStyle()
@@ -52,7 +54,7 @@ public class FluidBlockProbeInfoProvider implements IProbeInfoProvider {
                                     .alternateFilledColor(alternateFilledColor)
                     );
                 } else {
-                    probeInfo.progress(
+                    vertical.progress(
                             0,
                             capacity,
                             probeInfo.defaultProgressStyle()

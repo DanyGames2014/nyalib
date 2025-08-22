@@ -9,11 +9,11 @@ import net.modificationstation.stationapi.impl.world.chunk.FlattenedChunk;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(FlattenedChunk.class)
+@Mixin(value = FlattenedChunk.class, remap = false)
 public class FlattenedChunkMixin {
     // This exists because StationAPI still calls the onBlockPlaced method even when setBlockState is used to update the current state's properties
     // That call results in onPlaced getting called on the Network Component, invoking the creation of a new network
-    @WrapWithCondition(method = "setBlockState", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;onBlockPlaced(Lnet/minecraft/world/World;IIILnet/modificationstation/stationapi/api/block/BlockState;)V"))
+    //@WrapWithCondition(method = "setBlockState", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;onBlockPlaced(Lnet/minecraft/world/World;IIILnet/modificationstation/stationapi/api/block/BlockState;)V"))
     public boolean aaa(Block block, World world, int x, int y, int z, BlockState oldState) {
         // If the block is a network component AND the old state is the same as the block
         //noinspection RedundantIfStatement

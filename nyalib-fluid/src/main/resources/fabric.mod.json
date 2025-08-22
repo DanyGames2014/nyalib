@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "nyalib-fluid",
+  "version": "${version}",
+
+  "name": "NyaLib Fluid",
+  "description": "A module providing a Fluid API",
+  "authors": [
+    "DanyGames2014"
+  ],
+
+  "license": "MIT",
+  "icon": "assets/nyalib-fluid/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "stationapi:event_bus": [
+    ],
+    "stationapi:event_bus_client": [
+    ],
+    "stationapi:event_bus_server": [
+    ]
+  },
+  "mixins": [
+    "nyalib-fluid.mixins.json"
+  ],
+  "depends": {
+    "minecraft": "1.0.0-beta.7.3"
+  }
+}
