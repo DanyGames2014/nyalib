@@ -214,8 +214,10 @@ allprojects {
         }
 
         publications {
+            //noinspection GroovyAssignabilityCheck
             mavenJava(MavenPublication) {
                 artifactId = project.archivesBaseName
+                //noinspection GroovyAssignabilityCheck
                 from components.java
             }
         }
@@ -259,8 +261,11 @@ subprojects {
     }
 
     artifacts {
+        //noinspection ConfigurationAvoidance
         add("out", tasks.getByName("remapJar"))
+        //noinspection ConfigurationAvoidance
         add("dev", tasks.getByName("jar"))
+        //noinspection ConfigurationAvoidance
         add("test", tasks.getByName("testJar"))
     }
 
@@ -420,7 +425,7 @@ static def fetchLatestVersion(String artifactUrl) {
     String latestVersion = null
 
     try {
-        String artifactMeta = new URL(artifactUrl + "/maven-metadata.xml").text
+        String artifactMeta = new URI(artifactUrl + "/maven-metadata.xml").toURL().text
         latestVersion = artifactMeta.split("<latest>")[1].split("</latest>")[0]
     } catch (Exception e) {
         println("Error while updating dependency " + artifactUrl)
