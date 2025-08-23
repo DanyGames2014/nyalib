@@ -9,5 +9,4 @@ loom {
 }
 
 addModuleDependencies(project,
-        "nyalib-fluid"
 )

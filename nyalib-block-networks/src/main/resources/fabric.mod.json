@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "nyalib-block-networks",
+  "version": "${version}",
+
+  "name": "NyaLib Block Networks",
+  "description": "A module providing the ability to create networks of blocks",
+  "authors": [
+    "DanyGames2014"
+  ],
+
+  "license": "MIT",
+  "icon": "assets/nyalib-block-networks/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "stationapi:event_bus": [
+      "net.danygames2014.nyalib.init.AfterBlockAndItemListener",
+      "net.danygames2014.nyalib.network.NetworkLoader"
+    ],
+    "stationapi:event_bus_client": [
+    ],
+    "stationapi:event_bus_server": [
+    ]
+  },
+  "mixins": [
+    "nyalib-block-networks.mixins.json"
+  ],
+  "accessWidener": "nyalib-block-networks.accessWidener",
+  "depends": {
+    "minecraft": "1.0.0-beta.7.3"
+  }
+}

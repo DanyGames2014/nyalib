@@ -1,0 +1,10 @@
+import static net.modificationstation.stationapi.gradle.SubprojectHelpers.addModuleDependencies
+import static net.modificationstation.stationapi.gradle.SubprojectHelpers.getSubprojectVersion
+
+archives_base_name = "nyalib-energy"
+version = getSubprojectVersion(project, "1.0.0")
+
+addModuleDependencies(project,
+        "nyalib-base",
+        "nyalib-block-networks"
+)

@@ -16,5 +16,10 @@ rootProject.name = "NyaLib"
 
 include 'nyalib-base'
 
-include 'nyalib-compat'
+include 'nyalib-block-networks'
 include 'nyalib-fluid'
+include 'nyalib-item'
+include 'nyalib-energy'
+include 'nyalib-capability'
+include 'nyalib-block-templates'
+include 'nyalib-compat'

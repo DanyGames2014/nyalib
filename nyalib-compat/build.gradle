@@ -5,5 +5,10 @@ archives_base_name = "nyalib-compat"
 version = getSubprojectVersion(project, "1.0.0")
 
 addModuleDependencies(project,
-        "nyalib-base"
+        "nyalib-base",
+        "nyalib-fluid",
+        "nyalib-item",
+        "nyalib-energy",
+        "nyalib-block-networks",
+        "nyalib-capability"
 )

@@ -17,14 +17,7 @@
     "stationapi:event_bus": [
       "net.danygames2014.nyalib.NyaLib",
       "net.danygames2014.nyalib.init.InitListener",
-      "net.danygames2014.nyalib.init.AfterBlockAndItemListener",
-      "net.danygames2014.nyalib.init.FluidListener",
-      "net.danygames2014.nyalib.init.NetworkTypeListener",
-      "net.danygames2014.nyalib.init.PacketListener",
-      "net.danygames2014.nyalib.network.NetworkLoader",
-      "net.danygames2014.nyalib.init.BlockCapabilityListener",
-      "net.danygames2014.nyalib.init.EntityCapabilityListener",
-      "net.danygames2014.nyalib.init.ItemCapabilityListener"
+      "net.danygames2014.nyalib.init.PacketListener"
     ],
     "stationapi:event_bus_client": [
       "net.danygames2014.nyalib.init.UnbakedModelListener"

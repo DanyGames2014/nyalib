@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.danygames2014.nyalib.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "item.BlockWithEntityMixin",
+    "item.ChestBlockEntityMixin",
+    "item.DispenserBlockEntityMixin",
+    "item.FurnaceBlockEntityMixin"
+  ],
+  "server": [
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -9,9 +9,7 @@ import net.danygames2014.whatsthis.api.*;
 import net.danygames2014.whatsthis.config.Config;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.modificationstation.stationapi.api.block.BlockState;
 
 public class FluidEntityProbeInfoProvider implements IProbeInfoEntityProvider {
     int borderColor;

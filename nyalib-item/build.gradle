@@ -1,0 +1,13 @@
+import static net.modificationstation.stationapi.gradle.SubprojectHelpers.addModuleDependencies
+import static net.modificationstation.stationapi.gradle.SubprojectHelpers.getSubprojectVersion
+
+archives_base_name = "nyalib-item"
+version = getSubprojectVersion(project, "1.0.0")
+
+loom {
+    accessWidenerPath = file("src/main/resources/nyalib-item.accesswidener")
+}
+
+addModuleDependencies(project,
+        "nyalib-base"
+)

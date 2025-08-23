@@ -3,7 +3,6 @@ package net.danygames2014.nyalibtest.block.item.entity;
 import net.danygames2014.nyalib.capability.Capability;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.block.itemhandler.ItemHandlerBlockCapability;
-import net.danygames2014.nyalib.item.ItemHandler;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.state.property.Properties;
