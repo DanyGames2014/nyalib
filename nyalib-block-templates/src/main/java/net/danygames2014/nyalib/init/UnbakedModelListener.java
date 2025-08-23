@@ -3,7 +3,7 @@ package net.danygames2014.nyalib.init;
 import com.mojang.datafixers.util.Either;
 import net.danygames2014.nyalib.NyaLib;
 import net.danygames2014.nyalib.block.JsonOverrideRegistry;
-import net.danygames2014.nyalib.mixin.JsonUnbakedModelAccessor;
+import net.danygames2014.nyalib.mixin.blocktemplates.JsonUnbakedModelAccessor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.mine_diver.unsafeevents.listener.EventListener;

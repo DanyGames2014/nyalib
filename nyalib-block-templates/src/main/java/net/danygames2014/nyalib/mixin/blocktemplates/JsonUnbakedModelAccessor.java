@@ -1,4 +1,4 @@
-package net.danygames2014.nyalib.mixin;
+package net.danygames2014.nyalib.mixin.blocktemplates;
 
 import com.mojang.datafixers.util.Either;
 import net.fabricmc.api.EnvType;

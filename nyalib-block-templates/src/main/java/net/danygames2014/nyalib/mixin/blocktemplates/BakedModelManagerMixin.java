@@ -1,4 +1,4 @@
-package net.danygames2014.nyalib.mixin;
+package net.danygames2014.nyalib.mixin.blocktemplates;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.datafixers.util.Pair;

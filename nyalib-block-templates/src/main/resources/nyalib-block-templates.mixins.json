@@ -8,8 +8,8 @@
   "server": [
   ],
   "client": [
-    "BakedModelManagerMixin",
-    "JsonUnbakedModelAccessor"
+    "blocktemplates.BakedModelManagerMixin",
+    "blocktemplates.JsonUnbakedModelAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
