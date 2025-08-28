@@ -1,5 +1,6 @@
 package net.danygames2014.nyalib.block;
 
+import net.danygames2014.nyalib.sound.SoundHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Box;
@@ -46,9 +47,25 @@ public class FenceGateBlockTemplate extends TemplateBlock {
     @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
         BlockState state = world.getBlockState(x, y, z);
-        world.setBlockStateWithNotify(x, y, z, state.cycle(OPEN));
+        
+        if (state.get(OPEN)) {
+            world.setBlockStateWithNotify(x, y, z, state.with(OPEN, false));
+            SoundHelper.playSound(world, x, y, z, getCloseSound(world, x, y, z), 1.0F, (world.random.nextFloat() * 0.1F) + 0.9F);
+        } else {
+            world.setBlockStateWithNotify(x, y, z, state.with(OPEN, true));
+            SoundHelper.playSound(world, x, y, z, getOpenSound(world, x, y, z), 1.0F, (world.random.nextFloat() * 0.1F) + 0.9F);
+        }
+        
         world.setBlockDirty(x, y, z);
         return true;
+    }
+
+    public String getOpenSound(World world, int x, int y, int z) {
+        return "random.door_open";
+    }
+
+    public String getCloseSound(World world, int x, int y, int z) {
+        return "random.door_close";
     }
 
     @Override
@@ -76,7 +93,7 @@ public class FenceGateBlockTemplate extends TemplateBlock {
                 }
             }
         }
-        
+
         world.setBlockStateWithNotify(x, y, z, state);
     }
 

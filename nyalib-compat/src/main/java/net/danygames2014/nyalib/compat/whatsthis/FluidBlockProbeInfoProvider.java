@@ -4,10 +4,7 @@ import net.danygames2014.nyalib.NyaLibCompat;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.block.fluidhandler.FluidHandlerBlockCapability;
 import net.danygames2014.nyalib.fluid.FluidStack;
-import net.danygames2014.whatsthis.api.IProbeHitData;
-import net.danygames2014.whatsthis.api.IProbeInfo;
-import net.danygames2014.whatsthis.api.IProbeInfoProvider;
-import net.danygames2014.whatsthis.api.ProbeMode;
+import net.danygames2014.whatsthis.api.*;
 import net.danygames2014.whatsthis.config.Config;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
@@ -59,10 +56,10 @@ public class FluidBlockProbeInfoProvider implements IProbeInfoProvider {
                             capacity,
                             probeInfo.defaultProgressStyle()
                                     .prefix("Empty ")
-                                    .suffix(" mB")
                                     .borderColor(borderColor)
                                     .filledColor(filledColor)
                                     .alternateFilledColor(alternateFilledColor)
+                                    .numberFormat(NumberFormat.NONE)
                     );
                 }
             }
