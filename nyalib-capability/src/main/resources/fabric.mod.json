@@ -29,6 +29,7 @@
   "mixins": [
     "nyalib-capability.mixins.json"
   ],
+  "accessWidener": "nyalib-capability.accesswidener",
   "depends": {
     "minecraft": "1.0.0-beta.7.3"
   }
