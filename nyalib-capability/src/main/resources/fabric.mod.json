@@ -3,7 +3,7 @@
   "id": "nyalib-capability",
   "version": "${version}",
 
-  "name": "NyaLib Compat",
+  "name": "NyaLib Capability",
   "description": "A module providing block, entity and item capabilities",
   "authors": [
     "DanyGames2014"

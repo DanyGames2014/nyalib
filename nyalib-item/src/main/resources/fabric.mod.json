@@ -3,7 +3,7 @@
   "id": "nyalib-item",
   "version": "${version}",
 
-  "name": "NyaLib Fluid",
+  "name": "NyaLib Item",
   "description": "A module providing an Item API",
   "authors": [
     "DanyGames2014"
