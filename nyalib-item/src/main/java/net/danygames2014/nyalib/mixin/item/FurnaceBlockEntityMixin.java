@@ -4,6 +4,7 @@ import net.danygames2014.nyalib.NyaLib;
 import net.danygames2014.nyalib.item.ItemHandler;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.FurnaceBlockEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.recipe.FuelRegistry;
 import net.modificationstation.stationapi.api.util.math.Direction;
@@ -79,6 +80,32 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Ite
         }
 
         return null;
+    }
+
+    @Override
+    public ItemStack extractItem(Item item, int meta, int amount, @Nullable Direction direction) {
+        if (!NyaLib.ITEM_CONFIG.simplifiedFurnaceHandling && direction != null) {
+            switch (direction) {
+                // Extract from UP -> Input Slot
+                case UP -> {
+                    if (getItem(0, direction) != null && getItem(0, direction).itemId == item.id && (meta == -1 || getItem(0, direction).getDamage() == meta)) {
+                        return extractItem(0, amount, direction);
+                    }
+                }
+
+                // Extract from any other side -> Output Slot
+                case DOWN, NORTH, SOUTH, EAST, WEST -> {
+                    if (getItem(2, direction) != null && getItem(2, direction).itemId == item.id && (meta == -1 || getItem(2, direction).getDamage() == meta)) {
+                        return extractItem(2, amount, direction);
+                    }
+                }
+            }
+            
+            return null;
+        }
+
+        // If direction is null, keep super behavior
+        return ItemHandler.super.extractItem(item, amount, direction);
     }
 
     @Override
