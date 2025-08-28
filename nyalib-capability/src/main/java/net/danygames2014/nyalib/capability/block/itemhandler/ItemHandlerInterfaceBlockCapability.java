@@ -34,6 +34,11 @@ class ItemHandlerInterfaceBlockCapability extends ItemHandlerBlockCapability {
     }
 
     @Override
+    public ItemStack extractItem(Item item, int meta, int amount, @Nullable Direction direction) {
+        return itemHandler.extractItem(item, meta, amount, direction);
+    }
+
+    @Override
     public ItemStack extractItem(Item item, int amount, @Nullable Direction direction) {
         return itemHandler.extractItem(item, amount, direction);
     }

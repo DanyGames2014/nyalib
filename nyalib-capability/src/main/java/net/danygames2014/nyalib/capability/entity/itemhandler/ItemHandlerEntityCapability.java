@@ -16,6 +16,8 @@ public abstract class ItemHandlerEntityCapability extends EntityCapability imple
 
     public abstract ItemStack extractItem(Item item, int amount);
 
+    public abstract ItemStack extractItem(Item item, int meta, int amount);
+
     public abstract boolean canInsertItem();
 
     public abstract ItemStack insertItem(ItemStack stack, int slot);

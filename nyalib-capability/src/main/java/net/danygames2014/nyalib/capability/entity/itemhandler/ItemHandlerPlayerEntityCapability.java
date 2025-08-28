@@ -44,6 +44,11 @@ class ItemHandlerPlayerEntityCapability extends ItemHandlerEntityCapability {
 
     @Override
     public ItemStack extractItem(Item item, int amount) {
+        return extractItem(item, -1, amount);
+    }
+
+    @Override
+    public ItemStack extractItem(Item item, int meta, int amount) {
         ItemStack currentStack = null;
         int remaining = amount;
 
@@ -59,7 +64,7 @@ class ItemHandlerPlayerEntityCapability extends ItemHandlerEntityCapability {
                     currentStack.count += extractedStack.count;
                 }
             } else {
-                if (getItem(i).isOf(item)) {
+                if (getItem(i).isOf(item) && (meta == -1 || getItem(i).getDamage() == meta)) {
                     ItemStack extractedStack = extractItem(i, remaining);
                     remaining -= extractedStack.count;
                     currentStack = extractedStack;

@@ -14,6 +14,8 @@ public abstract class ItemHandlerItemCapability extends ItemCapability {
     public abstract ItemStack extractItem(int amount);
 
     public abstract ItemStack extractItem(Item item, int amount);
+    
+    public abstract ItemStack extractItem(Item item, int meta, int amount);
 
     public abstract boolean canInsertItem();
 

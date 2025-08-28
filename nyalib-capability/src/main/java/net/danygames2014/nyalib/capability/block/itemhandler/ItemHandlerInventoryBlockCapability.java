@@ -40,6 +40,11 @@ class ItemHandlerInventoryBlockCapability extends ItemHandlerBlockCapability {
 
     @Override
     public ItemStack extractItem(Item item, int amount, @Nullable Direction direction) {
+        return extractItem(item, -1, amount, direction);
+    }
+
+    @Override
+    public ItemStack extractItem(Item item, int meta, int amount, @Nullable Direction direction) {
         ItemStack currentStack = null;
         int remaining = amount;
 
@@ -55,7 +60,7 @@ class ItemHandlerInventoryBlockCapability extends ItemHandlerBlockCapability {
                     currentStack.count += extractedStack.count;
                 }
             } else {
-                if (getItem(i, direction).isOf(item)) {
+                if (getItem(i, direction).isOf(item) && (meta == -1 || getItem(i, direction).getDamage() == meta)) {
                     ItemStack extractedStack = extractItem(i, remaining, direction);
                     remaining -= extractedStack.count;
                     currentStack = extractedStack;

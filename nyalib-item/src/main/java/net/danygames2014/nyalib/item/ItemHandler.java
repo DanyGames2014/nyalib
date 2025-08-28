@@ -56,7 +56,6 @@ public interface ItemHandler extends ItemCapable {
         return null;
     }
 
-
     /**
      * Extract the given item in any slot from the handler
      *
@@ -66,6 +65,20 @@ public interface ItemHandler extends ItemCapable {
      * @return The ItemStack extracted, null if nothing is extracted
      */
     default ItemStack extractItem(Item item, int amount, @Nullable Direction direction) {
+        return extractItem(item, -1, amount, direction);
+    }
+
+
+    /**
+     * Extract the given item with the given meta in any slot from the handler
+     *
+     * @param item      The Item to extract
+     * @param meta      The meta of the item to extract. -1 to not match meta.
+     * @param amount    The amount to extract (can be larger than the maximum stack size)
+     * @param direction The direction to extract from
+     * @return The ItemStack extracted, null if nothing is extracted
+     */
+    default ItemStack extractItem(Item item, int meta, int amount, @Nullable Direction direction) {
         ItemStack currentStack = null;
         int remaining = amount;
 
@@ -81,7 +94,7 @@ public interface ItemHandler extends ItemCapable {
                     currentStack.count += extractedStack.count;
                 }
             } else {
-                if (getItem(i, direction).isOf(item)) {
+                if (getItem(i, direction).isOf(item) && (meta == -1 || getItem(i, direction).getDamage() == meta)) {
                     ItemStack extractedStack = extractItem(i, remaining, direction);
                     remaining -= extractedStack.count;
                     currentStack = extractedStack;

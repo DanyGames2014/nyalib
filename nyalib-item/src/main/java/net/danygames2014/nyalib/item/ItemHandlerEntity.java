@@ -45,7 +45,7 @@ public interface ItemHandlerEntity {
     /**
      * Extract a specified amount of any item
      *
-     * @param amount    The amount of items to extract
+     * @param amount The amount of items to extract
      * @return The extracted ItemStack
      */
     default ItemStack extractItem(int amount) {
@@ -60,11 +60,23 @@ public interface ItemHandlerEntity {
     /**
      * Extract the given item in any slot
      *
-     * @param item   The Item to extract
-     * @param amount The amount to extract (can be larger than the maximum stack size)
+     * @param item      The Item to extract
+     * @param amount    The amount to extract (can be larger than the maximum stack size)
      * @return The ItemStack extracted, null if nothing is extracted
      */
     default ItemStack extractItem(Item item, int amount) {
+        return extractItem(item, -1, amount);
+    }
+    
+    /**
+     * Extract the given item with the give meta in any slot
+     *
+     * @param item   The Item to extract
+     * @param meta   The meta of the item to extract. -1 to not match meta.
+     * @param amount The amount to extract (can be larger than the maximum stack size)
+     * @return The ItemStack extracted, null if nothing is extracted
+     */
+    default ItemStack extractItem(Item item, int meta, int amount) {
         ItemStack currentStack = null;
         int remaining = amount;
 
@@ -80,7 +92,7 @@ public interface ItemHandlerEntity {
                     currentStack.count += extractedStack.count;
                 }
             } else {
-                if (getItem(i).isOf(item)) {
+                if (getItem(i).isOf(item) && (meta == -1 || getItem(i).getDamage() == meta)) {
                     ItemStack extractedStack = extractItem(i, remaining);
                     remaining -= extractedStack.count;
                     currentStack = extractedStack;

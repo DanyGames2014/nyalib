@@ -37,6 +37,11 @@ class ItemHandlerEntityInterfaceEntityCapability extends ItemHandlerEntityCapabi
     }
 
     @Override
+    public ItemStack extractItem(Item item, int meta, int amount) {
+        return itemHandler.extractItem(item, meta, amount);
+    }
+
+    @Override
     public boolean canInsertItem() {
         return itemHandler.canInsertItem();
     }

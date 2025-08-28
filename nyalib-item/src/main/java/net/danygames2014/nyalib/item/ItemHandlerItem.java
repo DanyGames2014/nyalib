@@ -2,8 +2,6 @@ package net.danygames2014.nyalib.item;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.modificationstation.stationapi.api.util.math.Direction;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * An Item Handler interface to be implemented on {@link Item}
@@ -33,13 +31,13 @@ public interface ItemHandlerItem {
     /**
      * Extract any item
      *
-     * @param thiz   The stack, on which this action is called on
+     * @param thiz The stack, on which this action is called on
      * @return The extracted ItemStack
      */
     default ItemStack extractItem(ItemStack thiz) {
         return extractItem(thiz, Integer.MAX_VALUE);
     }
-    
+
     /**
      * Extract a specified amount of any item
      *
@@ -55,16 +53,27 @@ public interface ItemHandlerItem {
         return null;
     }
 
-
     /**
      * Extract the given item in any slot from the handler
      *
-     * @param thiz   The stack, on which this action is called on
      * @param item   The Item to extract
      * @param amount The amount to extract (can be larger than the maximum stack size)
      * @return The ItemStack extracted, null if nothing is extracted
      */
     default ItemStack extractItem(ItemStack thiz, Item item, int amount) {
+        return extractItem(thiz, item, -1, amount);
+    }
+
+    /**
+     * Extract the given item with the given meta in any slot from the handler
+     *
+     * @param thiz   The stack, on which this action is called on
+     * @param item   The Item to extract
+     * @param meta   The meta of the item to extract. -1 to not match meta.
+     * @param amount The amount to extract (can be larger than the maximum stack size)
+     * @return The ItemStack extracted, null if nothing is extracted
+     */
+    default ItemStack extractItem(ItemStack thiz, Item item, int meta, int amount) {
         ItemStack currentStack = null;
         int remaining = amount;
 
@@ -80,7 +89,7 @@ public interface ItemHandlerItem {
                     currentStack.count += extractedStack.count;
                 }
             } else {
-                if (getItem(thiz, i).isOf(item)) {
+                if (getItem(thiz, i).isOf(item) && (meta == -1 || getItem(thiz, i).getDamage() == meta)) {
                     ItemStack extractedStack = extractItem(thiz, i, remaining);
                     remaining -= extractedStack.count;
                     currentStack = extractedStack;
