@@ -9,7 +9,7 @@ import net.modificationstation.stationapi.impl.world.chunk.FlattenedChunk;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(value = FlattenedChunk.class, remap = false)
+@Mixin(value = FlattenedChunk.class)
 public class FlattenedChunkMixin {
     // This exists because StationAPI still calls the onBlockPlaced method even when setBlockState is used to update the current state's properties
     // That call results in onPlaced getting called on the Network Component, invoking the creation of a new network
