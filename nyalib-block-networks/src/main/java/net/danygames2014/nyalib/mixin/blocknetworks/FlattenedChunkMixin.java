@@ -16,9 +16,8 @@ public class FlattenedChunkMixin {
     @ModifyExpressionValue(method = "setBlockState", at = @At(value = "FIELD", target = "Lnet/minecraft/world/World;isRemote:Z"))
     public boolean aaa(boolean original, @Local(argsOnly = true) BlockState state, @Local(ordinal = 1) BlockState oldState) {
         // If the block is a network component AND the old state is the same as the block
-        //noinspection RedundantIfStatement
         Block block = state.getBlock();
-        if (!(block instanceof NetworkComponent && oldState.isOf(block))) {
+        if (block instanceof NetworkComponent && oldState.isOf(block)) {
             // Supress the onBlockPlaced method call
             return true;
         }
