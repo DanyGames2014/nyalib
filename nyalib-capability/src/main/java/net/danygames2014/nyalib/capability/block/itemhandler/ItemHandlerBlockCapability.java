@@ -16,13 +16,13 @@ public abstract class ItemHandlerBlockCapability extends BlockCapability impleme
     public abstract boolean canExtractItem(@Nullable Direction side);
 
     @Override
-    public abstract ItemStack extractItem(int slot, int amount, @Nullable Direction side);
-
-    @Override
     public abstract ItemStack extractItem(@Nullable Direction side);
 
     @Override
     public abstract ItemStack extractItem(int amount, @Nullable Direction side);
+
+    @Override
+    public abstract ItemStack extractItem(int slot, int amount, @Nullable Direction side);
 
     @Override
     public abstract ItemStack extractItem(Item item, int amount, @Nullable Direction side);

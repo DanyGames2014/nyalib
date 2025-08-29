@@ -15,15 +15,6 @@ public abstract class ItemHandlerItemCapability extends ItemCapability {
     public abstract boolean canExtractItem();
 
     /**
-     * Extract an item in the given slot
-     *
-     * @param slot   The slot to extract from
-     * @param amount The amount to extract (can be larger than the maximum stack size)
-     * @return The extracted {@link ItemStack}, <code>null</code> if nothing is extracted
-     */
-    public abstract ItemStack extractItem(int slot, int amount);
-
-    /**
      * Extract any item from any slot
      *
      * @return The extracted ItemStack, <code>null</code> if nothing is extracted
@@ -37,6 +28,15 @@ public abstract class ItemHandlerItemCapability extends ItemCapability {
      * @return The extracted ItemStack, <code>null</code> if nothing is extracted
      */
     public abstract ItemStack extractItem(int amount);
+
+    /**
+     * Extract an item in the given slot
+     *
+     * @param slot   The slot to extract from
+     * @param amount The amount to extract (can be larger than the maximum stack size)
+     * @return The extracted {@link ItemStack}, <code>null</code> if nothing is extracted
+     */
+    public abstract ItemStack extractItem(int slot, int amount);
 
     /**
      * Extract the given {@link Item} with any meta from any slot

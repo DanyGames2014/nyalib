@@ -4,7 +4,7 @@ import net.danygames2014.nyalib.item.ItemHandlerItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class ItemHandlerInterfaceItemCapability extends ItemHandlerItemCapability{
+public class ItemHandlerInterfaceItemCapability extends ItemHandlerItemCapability {
     private final ItemHandlerItem itemHandler;
     private final ItemStack itemStack;
 
@@ -19,11 +19,6 @@ public class ItemHandlerInterfaceItemCapability extends ItemHandlerItemCapabilit
     }
 
     @Override
-    public ItemStack extractItem(int slot, int amount) {
-        return itemHandler.extractItem(itemStack, slot, amount);
-    }
-
-    @Override
     public ItemStack extractItem() {
         return itemHandler.extractItem(itemStack);
     }
@@ -31,6 +26,11 @@ public class ItemHandlerInterfaceItemCapability extends ItemHandlerItemCapabilit
     @Override
     public ItemStack extractItem(int amount) {
         return itemHandler.extractItem(itemStack, amount);
+    }
+
+    @Override
+    public ItemStack extractItem(int slot, int amount) {
+        return itemHandler.extractItem(itemStack, slot, amount);
     }
 
     @Override

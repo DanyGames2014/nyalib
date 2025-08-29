@@ -19,15 +19,6 @@ class ItemHandlerPlayerEntityCapability extends ItemHandlerEntityCapability {
     }
 
     @Override
-    public ItemStack extractItem(int slot, int amount) {
-        if (slot >= getItemSlots() || slot < 0) {
-            return null;
-        }
-
-        return player.inventory.removeStack(slot, amount);
-    }
-
-    @Override
     public ItemStack extractItem() {
         return extractItem(Integer.MAX_VALUE);
     }
@@ -40,6 +31,15 @@ class ItemHandlerPlayerEntityCapability extends ItemHandlerEntityCapability {
             }
         }
         return null;
+    }
+
+    @Override
+    public ItemStack extractItem(int slot, int amount) {
+        if (slot >= getItemSlots() || slot < 0) {
+            return null;
+        }
+
+        return player.inventory.removeStack(slot, amount);
     }
 
     @Override

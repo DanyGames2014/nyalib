@@ -20,16 +20,6 @@ public interface ItemHandlerItem {
     boolean canExtractItem(ItemStack thiz);
 
     /**
-     * Extract an item in the given slot
-     *
-     * @param thiz   The stack, on which this action is called on
-     * @param slot   The slot to extract from
-     * @param amount The amount to extract (can be larger than the maximum stack size)
-     * @return The extracted {@link ItemStack}, <code>null</code> if nothing is extracted
-     */
-    ItemStack extractItem(ItemStack thiz, int slot, int amount);
-
-    /**
      * Extract any item from any slot
      *
      * @param thiz The stack, on which this action is called on
@@ -54,6 +44,16 @@ public interface ItemHandlerItem {
         }
         return null;
     }
+
+    /**
+     * Extract an item in the given slot
+     *
+     * @param thiz   The stack, on which this action is called on
+     * @param slot   The slot to extract from
+     * @param amount The amount to extract (can be larger than the maximum stack size)
+     * @return The extracted {@link ItemStack}, <code>null</code> if nothing is extracted
+     */
+    ItemStack extractItem(ItemStack thiz, int slot, int amount);
 
     /**
      * Extract the given {@link Item} with any meta from any slot

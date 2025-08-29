@@ -17,15 +17,6 @@ class ItemHandlerMinecartEntityCapability extends ItemHandlerEntityCapability {
     }
 
     @Override
-    public ItemStack extractItem(int slot, int amount) {
-        if (slot >= getItemSlots() || slot < 0) {
-            return null;
-        }
-
-        return minecart.removeStack(slot, amount);
-    }
-
-    @Override
     public ItemStack extractItem() {
         return extractItem(Integer.MAX_VALUE);
     }
@@ -38,6 +29,15 @@ class ItemHandlerMinecartEntityCapability extends ItemHandlerEntityCapability {
             }
         }
         return null;
+    }
+
+    @Override
+    public ItemStack extractItem(int slot, int amount) {
+        if (slot >= getItemSlots() || slot < 0) {
+            return null;
+        }
+
+        return minecart.removeStack(slot, amount);
     }
 
     @Override

@@ -19,18 +19,6 @@ public interface ItemHandler extends ItemCapable {
      */
     boolean canExtractItem(@Nullable Direction side);
 
-    // TODO: extractItem(slot, side)
-    
-    /**
-     * Extract an item in the given slot
-     *
-     * @param slot   The slot to extract from
-     * @param amount The amount to extract (can be larger than the maximum stack size)
-     * @param side   The side to extract from
-     * @return The extracted {@link ItemStack}, <code>null</code> if nothing is extracted
-     */
-    ItemStack extractItem(int slot, int amount, @Nullable Direction side);
-
     /**
      * Extract any item from any slot
      *
@@ -56,6 +44,18 @@ public interface ItemHandler extends ItemCapable {
         }
         return null;
     }
+
+    // TODO: extractItem(slot, side)
+    
+    /**
+     * Extract an item in the given slot
+     *
+     * @param slot   The slot to extract from
+     * @param amount The amount to extract (can be larger than the maximum stack size)
+     * @param side   The side to extract from
+     * @return The extracted {@link ItemStack}, <code>null</code> if nothing is extracted
+     */
+    ItemStack extractItem(int slot, int amount, @Nullable Direction side);
 
     /**
      * Extract the given {@link Item} with any meta from any slot

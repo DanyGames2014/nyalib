@@ -25,15 +25,6 @@ class ItemHandlerInventoryBlockCapability extends ItemHandlerBlockCapability {
     }
 
     @Override
-    public ItemStack extractItem(int slot, int amount, @Nullable Direction side) {
-        if (slot >= getItemSlots(side) || slot < 0) {
-            return null;
-        }
-
-        return inventory.removeStack(slot, amount);
-    }
-
-    @Override
     public ItemStack extractItem(@Nullable Direction side) {
         return extractItem(Integer.MAX_VALUE, side);
     }
@@ -46,6 +37,15 @@ class ItemHandlerInventoryBlockCapability extends ItemHandlerBlockCapability {
             }
         }
         return null;
+    }
+
+    @Override
+    public ItemStack extractItem(int slot, int amount, @Nullable Direction side) {
+        if (slot >= getItemSlots(side) || slot < 0) {
+            return null;
+        }
+
+        return inventory.removeStack(slot, amount);
     }
 
     @Override

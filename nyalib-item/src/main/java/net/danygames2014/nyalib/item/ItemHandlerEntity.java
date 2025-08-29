@@ -17,16 +17,6 @@ public interface ItemHandlerEntity {
     boolean canExtractItem();
 
     /**
-     * Extract an item in the given slot
-     *
-     * @param slot   The slot to extract from
-     * @param amount The amount to extract (can be larger than the maximum stack size)
-     * @return The extracted {@link ItemStack}, <code>null</code> if nothing is extracted
-     */
-    ItemStack extractItem(int slot, int amount);
-
-
-    /**
      * Extract any item from any slot
      *
      * @return The extracted ItemStack, <code>null</code> if nothing is extracted
@@ -54,6 +44,15 @@ public interface ItemHandlerEntity {
         }
         return null;
     }
+
+    /**
+     * Extract an item in the given slot
+     *
+     * @param slot   The slot to extract from
+     * @param amount The amount to extract (can be larger than the maximum stack size)
+     * @return The extracted {@link ItemStack}, <code>null</code> if nothing is extracted
+     */
+    ItemStack extractItem(int slot, int amount);
 
     /**
      * Extract the given {@link Item} with any meta from any slot

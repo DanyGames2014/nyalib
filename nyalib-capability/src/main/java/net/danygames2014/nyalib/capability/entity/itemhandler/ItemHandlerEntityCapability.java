@@ -9,11 +9,11 @@ import net.minecraft.item.ItemStack;
 public abstract class ItemHandlerEntityCapability extends EntityCapability implements ItemHandlerEntity {
     public abstract boolean canExtractItem();
 
-    public abstract ItemStack extractItem(int slot, int amount);
-
     public abstract ItemStack extractItem();
 
     public abstract ItemStack extractItem(int amount);
+
+    public abstract ItemStack extractItem(int slot, int amount);
 
     public abstract ItemStack extractItem(Item item, int amount);
 

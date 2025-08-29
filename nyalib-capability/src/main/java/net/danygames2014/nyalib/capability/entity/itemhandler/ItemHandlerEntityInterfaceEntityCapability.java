@@ -17,11 +17,6 @@ class ItemHandlerEntityInterfaceEntityCapability extends ItemHandlerEntityCapabi
     }
 
     @Override
-    public ItemStack extractItem(int slot, int amount) {
-        return itemHandler.extractItem(slot, amount);
-    }
-
-    @Override
     public ItemStack extractItem() {
         return itemHandler.extractItem();
     }
@@ -29,6 +24,11 @@ class ItemHandlerEntityInterfaceEntityCapability extends ItemHandlerEntityCapabi
     @Override
     public ItemStack extractItem(int amount) {
         return itemHandler.extractItem(amount);
+    }
+
+    @Override
+    public ItemStack extractItem(int slot, int amount) {
+        return itemHandler.extractItem(slot, amount);
     }
 
     @Override
