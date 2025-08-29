@@ -27,22 +27,22 @@ public abstract class DispenserBlockEntityMixin extends BlockEntity implements I
     @Shadow private ItemStack[] inventory;
 
     @Override
-    public boolean canExtractItem(@Nullable Direction direction) {
+    public boolean canExtractItem(@Nullable Direction side) {
         return true;
     }
 
     @Override
-    public ItemStack extractItem(int slot, int amount, @Nullable Direction direction) {
+    public ItemStack extractItem(int slot, int amount, @Nullable Direction side) {
         return this.removeStack(slot, amount);
     }
 
     @Override
-    public boolean canInsertItem(@Nullable Direction direction) {
+    public boolean canInsertItem(@Nullable Direction side) {
         return true;
     }
 
     @Override
-    public ItemStack insertItem(ItemStack stack, int slot, @Nullable Direction direction) {
+    public ItemStack insertItem(ItemStack stack, int slot, @Nullable Direction side) {
         ItemStack slotStack;
 
         slotStack = this.getStack(slot);
@@ -68,11 +68,11 @@ public abstract class DispenserBlockEntityMixin extends BlockEntity implements I
     }
 
     @Override
-    public ItemStack insertItem(ItemStack stack, @Nullable Direction direction) {
+    public ItemStack insertItem(ItemStack stack, @Nullable Direction side) {
         ItemStack insertedStack = stack.copy();
 
-        for (int i = 0; i < this.getItemSlots(direction); ++i) {
-            insertedStack = insertItem(insertedStack, i, direction);
+        for (int i = 0; i < this.getItemSlots(side); ++i) {
+            insertedStack = insertItem(insertedStack, i, side);
             if (insertedStack == null) {
                 return insertedStack;
             }
@@ -82,22 +82,22 @@ public abstract class DispenserBlockEntityMixin extends BlockEntity implements I
     }
 
     @Override
-    public ItemStack getItem(int slot, @Nullable Direction direction) {
+    public ItemStack getItem(int slot, @Nullable Direction side) {
         return this.getStack(slot);
     }
 
     @Override
-    public ItemStack[] getInventory(@Nullable Direction direction) {
+    public ItemStack[] getInventory(@Nullable Direction side) {
         return this.inventory;
     }
 
     @Override
-    public int getItemSlots(Direction direction) {
+    public int getItemSlots(Direction side) {
         return this.size();
     }
 
     @Override
-    public boolean canConnectItem(Direction direction) {
+    public boolean canConnectItem(Direction side) {
         return true;
     }
 }

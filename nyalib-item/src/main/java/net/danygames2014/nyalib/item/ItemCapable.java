@@ -2,12 +2,15 @@ package net.danygames2014.nyalib.item;
 
 import net.modificationstation.stationapi.api.util.math.Direction;
 
+/**
+ * An interface to be implemented on a {@link net.minecraft.block.Block} to mark as capable of
+ * connecting with other {@link ItemCapable} blocks
+ */
 public interface ItemCapable {
     /**
-     * If this block can connect with the block in the supplied direction
-     * @param direction The direction to check from the block's perspective.
-     *                  Example: If a machine is to the West of a pipe, that cable should call this with East as a parameter because the piúe will be to the East of the machine
-     * @return <code>true</code> if the block can connect, <code>false</code> if it cannot connect
+     * If this block can connect with another {@link ItemCapable} block on the given side
+     * @param side The side to check from the block's perspective.
+     * @return <code>true</code> if the block can connect, <code>false</code> if it cannot
      */
-    boolean canConnectItem(Direction direction);
+    boolean canConnectItem(Direction side);
 }

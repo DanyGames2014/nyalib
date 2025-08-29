@@ -2,8 +2,6 @@ package net.danygames2014.nyalib.item;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.modificationstation.stationapi.api.util.math.Direction;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * An Item Handler interface to be implemented on {@link net.minecraft.entity.Entity}
@@ -11,19 +9,19 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("unused")
 public interface ItemHandlerEntity {
     /**
-     * Check if the handler supports extracting items, if this returns false there
-     * should be no point in trying to use {@link #extractItem(int, int)}
+     * Check if the entity supports extracting items, if this returns false there
+     * should be no point in trying to use any <code>extractItem</code> method.
      *
      * @return <code>true</code> if the entity supports item extraction
      */
     boolean canExtractItem();
 
     /**
-     * Extract an item in the given slot from the handler
+     * Extract an item in the given slot
      *
      * @param slot   The slot to extract from
      * @param amount The amount to extract (can be larger than the maximum stack size)
-     * @return The ItemStack extracted, null if nothing is extracted
+     * @return The extracted {@link ItemStack}, <code>null</code> if nothing is extracted
      */
     ItemStack extractItem(int slot, int amount);
 
@@ -31,7 +29,7 @@ public interface ItemHandlerEntity {
     /**
      * Extract any item from any slot
      *
-     * @return The extracted ItemStack
+     * @return The extracted ItemStack, <code>null</code> if nothing is extracted
      */
     default ItemStack extractItem() {
         for (int i = 0; i < getItemSlots(); i++) {
@@ -43,10 +41,10 @@ public interface ItemHandlerEntity {
     }
 
     /**
-     * Extract a specified amount of any item
+     * Extract a specified amount of any item from any slot
      *
-     * @param amount The amount of items to extract
-     * @return The extracted ItemStack
+     * @param amount The amount of items to extract (can be larger than the maximum stack size)
+     * @return The extracted ItemStack, <code>null</code> if nothing is extracted
      */
     default ItemStack extractItem(int amount) {
         for (int i = 0; i < getItemSlots(); i++) {
@@ -58,23 +56,23 @@ public interface ItemHandlerEntity {
     }
 
     /**
-     * Extract the given item in any slot
+     * Extract the given {@link Item} with any meta from any slot
      *
-     * @param item      The Item to extract
-     * @param amount    The amount to extract (can be larger than the maximum stack size)
-     * @return The ItemStack extracted, null if nothing is extracted
+     * @param item   The Item to extract
+     * @param amount The amount to extract (can be larger than the maximum stack size)
+     * @return The extracted ItemStack, <code>null</code> if nothing is extracted
      */
     default ItemStack extractItem(Item item, int amount) {
         return extractItem(item, -1, amount);
     }
-    
+
     /**
-     * Extract the given item with the give meta in any slot
+     * Extract the given {@link Item} with the specified meta from any slot
      *
      * @param item   The Item to extract
-     * @param meta   The meta of the item to extract. -1 to not match meta.
+     * @param meta   The meta of the item to extract (-1 to match any meta)
      * @param amount The amount to extract (can be larger than the maximum stack size)
-     * @return The ItemStack extracted, null if nothing is extracted
+     * @return The extracted ItemStack, <code>null</code> if nothing is extracted
      */
     default ItemStack extractItem(Item item, int meta, int amount) {
         ItemStack currentStack = null;
@@ -104,8 +102,8 @@ public interface ItemHandlerEntity {
     }
 
     /**
-     * Check if the handler supports inserting items, if this returns false there
-     * should be no point in trying to use {@link #insertItem(ItemStack)} or {@link #insertItem(ItemStack, int)}
+     * Check if the entity supports inserting items, if this returns false there
+     * should be no point in trying to use any <code>insertItem</code> method.
      *
      * @return <code>true</code> if the entity supports item insertion
      */
@@ -116,7 +114,7 @@ public interface ItemHandlerEntity {
      *
      * @param stack The {@link ItemStack} to insert
      * @param slot  Slot to insert into
-     * @return The remainder of the ItemStack (null if it was inserted entirely), this should be a new ItemStack, however it can be the same if it was not modified
+     * @return The remainder of the ItemStack (<code>null</code> if it was inserted entirely), this should be a new ItemStack, however it can be the same if it was not modified
      */
     ItemStack insertItem(ItemStack stack, int slot);
 
@@ -124,16 +122,17 @@ public interface ItemHandlerEntity {
      * Insert item into any slot and return the remainder
      *
      * @param stack The {@link ItemStack} to insert
-     * @return The remainder of the ItemStack (null if it was inserted entirely), this should be a new ItemStack, however it can be the same if it was not modified
+     * @return The remainder of the ItemStack (<code>null</code> if it was inserted entirely), this should be a new ItemStack, however it can be the same if it was not modified
      */
     ItemStack insertItem(ItemStack stack);
 
     /**
      * Get the {@link ItemStack} in the given slot, If there is no {@link ItemStack}, then return null
      * <p>
+     * <bold>DO NOT MODIFY THIS ITEMSTACK</bold>
      *
      * @param slot The slot to get the {@link ItemStack} from
-     * @return The {@link ItemStack} in the slot
+     * @return The {@link ItemStack} in the slot, <code>null</code> if the slot is empty
      */
     ItemStack getItem(int slot);
 
@@ -142,19 +141,19 @@ public interface ItemHandlerEntity {
      *
      * @param stack The {@link ItemStack} to set the slot to
      * @param slot  The slot to put the stack into
-     * @return Whether the action was successfull
+     * @return Whether the action was succesfull
      */
     boolean setItem(ItemStack stack, int slot);
 
     /**
-     * Get the size of the handler inventory
+     * Get the size of the entities's inventory
      *
-     * @return The number of slots this handler has
+     * @return The number of slots this entities's inventory has
      */
     int getItemSlots();
 
     /**
-     * Get the entire inventory of the handler
+     * Get the entire inventory of the entity
      *
      * @return An array of all the ItemStacks
      */

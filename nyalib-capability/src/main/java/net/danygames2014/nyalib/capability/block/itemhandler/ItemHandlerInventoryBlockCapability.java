@@ -15,18 +15,18 @@ class ItemHandlerInventoryBlockCapability extends ItemHandlerBlockCapability {
     }
 
     @Override
-    public boolean canConnectItem(Direction direction) {
+    public boolean canConnectItem(Direction side) {
         return true;
     }
 
     @Override
-    public boolean canExtractItem(@Nullable Direction direction) {
+    public boolean canExtractItem(@Nullable Direction side) {
         return true;
     }
 
     @Override
-    public ItemStack extractItem(int slot, int amount, @Nullable Direction direction) {
-        if (slot >= getItemSlots(direction) || slot < 0) {
+    public ItemStack extractItem(int slot, int amount, @Nullable Direction side) {
+        if (slot >= getItemSlots(side) || slot < 0) {
             return null;
         }
 
@@ -34,34 +34,44 @@ class ItemHandlerInventoryBlockCapability extends ItemHandlerBlockCapability {
     }
 
     @Override
-    public ItemStack extractItem(@Nullable Direction direction) {
-        return extractItem(Integer.MAX_VALUE, direction);
+    public ItemStack extractItem(@Nullable Direction side) {
+        return extractItem(Integer.MAX_VALUE, side);
     }
 
     @Override
-    public ItemStack extractItem(Item item, int amount, @Nullable Direction direction) {
-        return extractItem(item, -1, amount, direction);
+    public ItemStack extractItem(int amount, @Nullable Direction side) {
+        for (int i = 0; i < getItemSlots(side); i++) {
+            if (getItem(i, side) != null) {
+                return extractItem(i, amount, side);
+            }
+        }
+        return null;
     }
 
     @Override
-    public ItemStack extractItem(Item item, int meta, int amount, @Nullable Direction direction) {
+    public ItemStack extractItem(Item item, int amount, @Nullable Direction side) {
+        return extractItem(item, -1, amount, side);
+    }
+
+    @Override
+    public ItemStack extractItem(Item item, int meta, int amount, @Nullable Direction side) {
         ItemStack currentStack = null;
         int remaining = amount;
 
-        for (int i = 0; i < getItemSlots(direction); i++) {
+        for (int i = 0; i < getItemSlots(side); i++) {
             if (remaining <= 0) {
                 break;
             }
 
             if (currentStack != null) {
-                if (this.getItem(i, direction).isItemEqual(currentStack)) {
-                    ItemStack extractedStack = extractItem(i, remaining, direction);
+                if (this.getItem(i, side).isItemEqual(currentStack)) {
+                    ItemStack extractedStack = extractItem(i, remaining, side);
                     remaining -= extractedStack.count;
                     currentStack.count += extractedStack.count;
                 }
             } else {
-                if (getItem(i, direction).isOf(item) && (meta == -1 || getItem(i, direction).getDamage() == meta)) {
-                    ItemStack extractedStack = extractItem(i, remaining, direction);
+                if (getItem(i, side).isOf(item) && (meta == -1 || getItem(i, side).getDamage() == meta)) {
+                    ItemStack extractedStack = extractItem(i, remaining, side);
                     remaining -= extractedStack.count;
                     currentStack = extractedStack;
                 }
@@ -72,23 +82,13 @@ class ItemHandlerInventoryBlockCapability extends ItemHandlerBlockCapability {
     }
 
     @Override
-    public ItemStack extractItem(int amount, @Nullable Direction direction) {
-        for (int i = 0; i < getItemSlots(direction); i++) {
-            if (getItem(i, direction) != null) {
-                return extractItem(i, amount, direction);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public boolean canInsertItem(@Nullable Direction direction) {
+    public boolean canInsertItem(@Nullable Direction side) {
         return true;
     }
 
     @Override
-    public ItemStack insertItem(ItemStack stack, int slot, @Nullable Direction direction) {
-        if (slot >= getItemSlots(direction) || slot < 0) {
+    public ItemStack insertItem(ItemStack stack, int slot, @Nullable Direction side) {
+        if (slot >= getItemSlots(side) || slot < 0) {
             return stack;
         }
 
@@ -117,11 +117,11 @@ class ItemHandlerInventoryBlockCapability extends ItemHandlerBlockCapability {
     }
 
     @Override
-    public ItemStack insertItem(ItemStack stack, @Nullable Direction direction) {
+    public ItemStack insertItem(ItemStack stack, @Nullable Direction side) {
         ItemStack insertedStack = stack.copy();
 
-        for (int i = 0; i < this.getItemSlots(direction); ++i) {
-            insertedStack = insertItem(insertedStack, i, direction);
+        for (int i = 0; i < this.getItemSlots(side); ++i) {
+            insertedStack = insertItem(insertedStack, i, side);
             if (insertedStack == null) {
                 return insertedStack;
             }
@@ -131,8 +131,8 @@ class ItemHandlerInventoryBlockCapability extends ItemHandlerBlockCapability {
     }
 
     @Override
-    public ItemStack getItem(int slot, @Nullable Direction direction) {
-        if (slot >= getItemSlots(direction) || slot < 0) {
+    public ItemStack getItem(int slot, @Nullable Direction side) {
+        if (slot >= getItemSlots(side) || slot < 0) {
             return null;
         }
         
@@ -140,8 +140,8 @@ class ItemHandlerInventoryBlockCapability extends ItemHandlerBlockCapability {
     }
 
     @Override
-    public boolean setItem(ItemStack stack, int slot, @Nullable Direction direction) {
-        if (slot >= getItemSlots(direction) || slot < 0) {
+    public boolean setItem(ItemStack stack, int slot, @Nullable Direction side) {
+        if (slot >= getItemSlots(side) || slot < 0) {
             return false;
         }
 
@@ -150,12 +150,12 @@ class ItemHandlerInventoryBlockCapability extends ItemHandlerBlockCapability {
     }
 
     @Override
-    public int getItemSlots(@Nullable Direction direction) {
+    public int getItemSlots(@Nullable Direction side) {
         return inventory.size();
     }
 
     @Override
-    public ItemStack[] getInventory(@Nullable Direction direction) {
+    public ItemStack[] getInventory(@Nullable Direction side) {
         ItemStack[] stacks = new ItemStack[inventory.size()];
 
         for (int i = 0; i < inventory.size(); i++) {

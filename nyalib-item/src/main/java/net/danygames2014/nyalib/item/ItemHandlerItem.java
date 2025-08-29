@@ -5,16 +5,17 @@ import net.minecraft.item.ItemStack;
 
 /**
  * An Item Handler interface to be implemented on {@link Item}
- * The first parameter is always the ItemStack of the Item on which this code is called on
+ * <p>
+ * Note: The first parameter is always the ItemStack of the Item on which this code is called on
  */
 @SuppressWarnings("unused")
 public interface ItemHandlerItem {
     /**
-     * Check if the handler supports extracting items, if this returns false there
-     * should be no point in trying to use {@link #extractItem(ItemStack, int, int)}
+     * Check if the item supports extracting items, if this returns false there
+     * should be no point in trying to use any <code>extractItem</code> method.
      *
      * @param thiz The stack, on which this action is called on
-     * @return <code>true</code> if the device supports item extraction
+     * @return <code>true</code> if the item supports item extraction
      */
     boolean canExtractItem(ItemStack thiz);
 
@@ -24,25 +25,26 @@ public interface ItemHandlerItem {
      * @param thiz   The stack, on which this action is called on
      * @param slot   The slot to extract from
      * @param amount The amount to extract (can be larger than the maximum stack size)
-     * @return The ItemStack extracted, null if nothing is extracted
+     * @return The extracted {@link ItemStack}, <code>null</code> if nothing is extracted
      */
     ItemStack extractItem(ItemStack thiz, int slot, int amount);
 
     /**
-     * Extract any item
+     * Extract any item from any slot
      *
      * @param thiz The stack, on which this action is called on
-     * @return The extracted ItemStack
+     * @return The extracted ItemStack, <code>null</code> if nothing is extracted
      */
     default ItemStack extractItem(ItemStack thiz) {
         return extractItem(thiz, Integer.MAX_VALUE);
     }
 
     /**
-     * Extract a specified amount of any item
+     * Extract a specified amount of any item from any slot
      *
-     * @param thiz The stack, on which this action is called on
-     * @return The extracted ItemStack
+     * @param thiz   The stack, on which this action is called on
+     * @param amount The amount of items to extract (can be larger than the maximum stack size)
+     * @return The extracted ItemStack, <code>null</code> if nothing is extracted
      */
     default ItemStack extractItem(ItemStack thiz, int amount) {
         for (int i = 0; i < getItemSlots(thiz); i++) {
@@ -54,24 +56,25 @@ public interface ItemHandlerItem {
     }
 
     /**
-     * Extract the given item in any slot from the handler
+     * Extract the given {@link Item} with any meta from any slot
      *
+     * @param thiz   The stack, on which this action is called on
      * @param item   The Item to extract
      * @param amount The amount to extract (can be larger than the maximum stack size)
-     * @return The ItemStack extracted, null if nothing is extracted
+     * @return The extracted ItemStack, <code>null</code> if nothing is extracted
      */
     default ItemStack extractItem(ItemStack thiz, Item item, int amount) {
         return extractItem(thiz, item, -1, amount);
     }
 
     /**
-     * Extract the given item with the given meta in any slot from the handler
+     * Extract the given {@link Item} with the specified meta from any slot
      *
      * @param thiz   The stack, on which this action is called on
      * @param item   The Item to extract
-     * @param meta   The meta of the item to extract. -1 to not match meta.
+     * @param meta   The meta of the item to extract (-1 to match any meta)
      * @param amount The amount to extract (can be larger than the maximum stack size)
-     * @return The ItemStack extracted, null if nothing is extracted
+     * @return The extracted ItemStack, <code>null</code> if nothing is extracted
      */
     default ItemStack extractItem(ItemStack thiz, Item item, int meta, int amount) {
         ItemStack currentStack = null;
@@ -101,11 +104,11 @@ public interface ItemHandlerItem {
     }
 
     /**
-     * Check if the handler supports inserting items, if this returns false there
-     * should be no point in trying to use {@link #insertItem(ItemStack, ItemStack)} or {@link #insertItem(ItemStack, ItemStack, int)}
+     * Check if the item supports inserting items, if this returns false there
+     * should be no point in trying to use any <code>insertItem</code> method.
      *
      * @param thiz The stack, on which this action is called on
-     * @return <code>true</code> if the device supports item insertion
+     * @return <code>true</code> if the item supports item insertion
      */
     boolean canInsertItem(ItemStack thiz);
 
@@ -115,7 +118,7 @@ public interface ItemHandlerItem {
      * @param thiz  The stack, on which this action is called on
      * @param stack The {@link ItemStack} to insert
      * @param slot  Slot to insert into
-     * @return The remainder of the ItemStack (null if it was inserted entirely), this should be a new ItemStack, however it can be the same if it was not modified
+     * @return The remainder of the ItemStack (<code>null</code> if it was inserted entirely), this should be a new ItemStack, however it can be the same if it was not modified
      */
     ItemStack insertItem(ItemStack thiz, ItemStack stack, int slot);
 
@@ -124,17 +127,18 @@ public interface ItemHandlerItem {
      *
      * @param thiz  The stack, on which this action is called on
      * @param stack The {@link ItemStack} to insert
-     * @return The remainder of the ItemStack (null if it was inserted entirely), this should be a new ItemStack, however it can be the same if it was not modified
+     * @return The remainder of the ItemStack (<code>null</code> if it was inserted entirely), this should be a new ItemStack, however it can be the same if it was not modified
      */
     ItemStack insertItem(ItemStack thiz, ItemStack stack);
 
     /**
      * Get the {@link ItemStack} in the given slot, If there is no {@link ItemStack}, then return null
      * <p>
+     * <bold>DO NOT MODIFY THIS ITEMSTACK</bold>
      *
      * @param thiz The stack, on which this action is called on
      * @param slot The slot to get the {@link ItemStack} from
-     * @return The {@link ItemStack} in the slot
+     * @return The {@link ItemStack} in the slot, <code>null</code> if the slot is empty
      */
     ItemStack getItem(ItemStack thiz, int slot);
 
@@ -144,20 +148,20 @@ public interface ItemHandlerItem {
      * @param thiz  The stack, on which this action is called on
      * @param stack The {@link ItemStack} to set the slot to
      * @param slot  The slot to put the stack into
-     * @return Whether the action was successfull
+     * @return Whether the action was succesfull
      */
     boolean setItem(ItemStack thiz, ItemStack stack, int slot);
 
     /**
-     * Get the size of the handler inventory
+     * Get the size of the item's inventory
      *
      * @param thiz The stack, on which this action is called on
-     * @return The number of slots this handler has
+     * @return The number of slots this item's inventory has
      */
     int getItemSlots(ItemStack thiz);
 
     /**
-     * Get the entire inventory of the handler
+     * Get the entire inventory of the item
      *
      * @param thiz The stack, on which this action is called on
      * @return An array of all the ItemStacks

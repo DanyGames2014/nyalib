@@ -5,6 +5,7 @@ import net.danygames2014.nyalib.item.ItemHandlerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+@SuppressWarnings("unused")
 public abstract class ItemHandlerEntityCapability extends EntityCapability implements ItemHandlerEntity {
     public abstract boolean canExtractItem();
 

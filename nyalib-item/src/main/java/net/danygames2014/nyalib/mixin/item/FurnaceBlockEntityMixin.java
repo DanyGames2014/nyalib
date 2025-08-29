@@ -41,40 +41,40 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Ite
     // Bottom - Fuel Insert / Output Extract
 
     @Override
-    public boolean canExtractItem(@Nullable Direction direction) {
+    public boolean canExtractItem(@Nullable Direction side) {
         return true;
     }
 
     @Override
-    public ItemStack extractItem(int amount, @Nullable Direction direction) {
-        if (!canExtractItem(direction)) {
+    public ItemStack extractItem(int amount, @Nullable Direction side) {
+        if (!canExtractItem(side)) {
             return null;
         }
         
-        if (!NyaLib.ITEM_CONFIG.simplifiedFurnaceHandling && direction != null) {
-            switch (direction) {
+        if (!NyaLib.ITEM_CONFIG.simplifiedFurnaceHandling && side != null) {
+            switch (side) {
                 // Extract from UP -> Input Slot
                 case UP -> {
-                    if (getItem(0, direction) != null) {
-                        return extractItem(0, amount, direction);
+                    if (getItem(0, side) != null) {
+                        return extractItem(0, amount, side);
                     }
                 }
 
                 // Extract from any other side -> Output Slot
                 case DOWN, NORTH, SOUTH, EAST, WEST -> {
-                    if (getItem(2, direction) != null) {
-                        return extractItem(2, amount, direction);
+                    if (getItem(2, side) != null) {
+                        return extractItem(2, amount, side);
                     }
                 }
             }
         }
 
         // If direction is null, keep super behavior
-        return ItemHandler.super.extractItem(amount, direction);
+        return ItemHandler.super.extractItem(amount, side);
     }
 
     @Override
-    public ItemStack extractItem(int slot, int amount, @Nullable Direction direction) {
+    public ItemStack extractItem(int slot, int amount, @Nullable Direction side) {
         if (slot >= 0 && slot < inventory.length) {
             return this.removeStack(slot, amount);
         }
@@ -83,20 +83,20 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Ite
     }
 
     @Override
-    public ItemStack extractItem(Item item, int meta, int amount, @Nullable Direction direction) {
-        if (!NyaLib.ITEM_CONFIG.simplifiedFurnaceHandling && direction != null) {
-            switch (direction) {
+    public ItemStack extractItem(Item item, int meta, int amount, @Nullable Direction side) {
+        if (!NyaLib.ITEM_CONFIG.simplifiedFurnaceHandling && side != null) {
+            switch (side) {
                 // Extract from UP -> Input Slot
                 case UP -> {
-                    if (getItem(0, direction) != null && getItem(0, direction).itemId == item.id && (meta == -1 || getItem(0, direction).getDamage() == meta)) {
-                        return extractItem(0, amount, direction);
+                    if (getItem(0, side) != null && getItem(0, side).itemId == item.id && (meta == -1 || getItem(0, side).getDamage() == meta)) {
+                        return extractItem(0, amount, side);
                     }
                 }
 
                 // Extract from any other side -> Output Slot
                 case DOWN, NORTH, SOUTH, EAST, WEST -> {
-                    if (getItem(2, direction) != null && getItem(2, direction).itemId == item.id && (meta == -1 || getItem(2, direction).getDamage() == meta)) {
-                        return extractItem(2, amount, direction);
+                    if (getItem(2, side) != null && getItem(2, side).itemId == item.id && (meta == -1 || getItem(2, side).getDamage() == meta)) {
+                        return extractItem(2, amount, side);
                     }
                 }
             }
@@ -105,16 +105,16 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Ite
         }
 
         // If direction is null, keep super behavior
-        return ItemHandler.super.extractItem(item, amount, direction);
+        return ItemHandler.super.extractItem(item, amount, side);
     }
 
     @Override
-    public boolean canInsertItem(@Nullable Direction direction) {
+    public boolean canInsertItem(@Nullable Direction side) {
         return true;
     }
 
     @Override
-    public ItemStack insertItem(ItemStack stack, int slot, @Nullable Direction direction) {
+    public ItemStack insertItem(ItemStack stack, int slot, @Nullable Direction side) {
         // Only allow fuels into the fuel slot
         if (slot == 1 && FuelRegistry.getFuelTime(stack) <= 0) {
             return stack;
@@ -145,35 +145,35 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Ite
     }
 
     @Override
-    public ItemStack insertItem(ItemStack stack, @Nullable Direction direction) {
+    public ItemStack insertItem(ItemStack stack, @Nullable Direction side) {
         ItemStack insertedStack = stack.copy();
 
-        if (!NyaLib.ITEM_CONFIG.simplifiedFurnaceHandling && direction != null) {
-            switch (direction) {
+        if (!NyaLib.ITEM_CONFIG.simplifiedFurnaceHandling && side != null) {
+            switch (side) {
                 case UP -> {
                     // Insert into input
-                    insertedStack = insertItem(insertedStack, 0, direction);
+                    insertedStack = insertItem(insertedStack, 0, side);
                 }
                 
                 case NORTH, SOUTH, EAST, WEST -> {
                     if (FuelRegistry.getFuelTime(insertedStack) >= 0) {
                         // If the item has a fuel value, insert into fuel slot
-                        insertedStack = insertItem(insertedStack, 1, direction);
+                        insertedStack = insertItem(insertedStack, 1, side);
                     } else {
                         // If the item does not have fuel value, insert into input
-                        insertedStack = insertItem(insertedStack, 0, direction);
+                        insertedStack = insertItem(insertedStack, 0, side);
                     }
                 }
                 
                 case DOWN -> {
                     // Insert into fuel
-                    insertedStack = insertItem(insertedStack, 1, direction);
+                    insertedStack = insertItem(insertedStack, 1, side);
                 }
             }
         } else {
             // If direction is not specified, use default behavior
-            for (int i = 0; i < this.getItemSlots(direction); ++i) {
-                insertedStack = insertItem(insertedStack, i, direction);
+            for (int i = 0; i < this.getItemSlots(side); ++i) {
+                insertedStack = insertItem(insertedStack, i, side);
                 if (insertedStack == null) {
                     return insertedStack;
                 }
@@ -184,22 +184,22 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Ite
     }
 
     @Override
-    public ItemStack getItem(int slot, @Nullable Direction direction) {
+    public ItemStack getItem(int slot, @Nullable Direction side) {
         return this.getStack(slot);
     }
 
     @Override
-    public ItemStack[] getInventory(@Nullable Direction direction) {
+    public ItemStack[] getInventory(@Nullable Direction side) {
         return this.inventory;
     }
 
     @Override
-    public int getItemSlots(Direction direction) {
+    public int getItemSlots(Direction side) {
         return this.size();
     }
 
     @Override
-    public boolean canConnectItem(Direction direction) {
+    public boolean canConnectItem(Direction side) {
         return true;
     }
 }

@@ -34,12 +34,12 @@ public abstract class ChestBlockEntityMixin extends BlockEntity implements ItemH
     @Shadow private ItemStack[] inventory;
 
     @Override
-    public boolean canExtractItem(@Nullable Direction direction) {
+    public boolean canExtractItem(@Nullable Direction side) {
         return true;
     }
 
     @Override
-    public ItemStack extractItem(int slot, int amount, @Nullable Direction direction) {
+    public ItemStack extractItem(int slot, int amount, @Nullable Direction side) {
         if (slot > 26 && isDoubleChest()) {
             return getSecondChest().removeStack((slot - 27), amount);
         }
@@ -48,12 +48,12 @@ public abstract class ChestBlockEntityMixin extends BlockEntity implements ItemH
     }
 
     @Override
-    public boolean canInsertItem(@Nullable Direction direction) {
+    public boolean canInsertItem(@Nullable Direction side) {
         return true;
     }
 
     @Override
-    public ItemStack insertItem(ItemStack stack, int slot, @Nullable Direction direction) {
+    public ItemStack insertItem(ItemStack stack, int slot, @Nullable Direction side) {
         ItemStack slotStack;
 
         if (slot > 26 && isDoubleChest()) {
@@ -88,11 +88,11 @@ public abstract class ChestBlockEntityMixin extends BlockEntity implements ItemH
     }
 
     @Override
-    public ItemStack insertItem(ItemStack stack, @Nullable Direction direction) {
+    public ItemStack insertItem(ItemStack stack, @Nullable Direction side) {
         ItemStack insertedStack = stack.copy();
 
-        for (int i = 0; i < this.getItemSlots(direction); ++i) {
-            insertedStack = insertItem(insertedStack, i, direction);
+        for (int i = 0; i < this.getItemSlots(side); ++i) {
+            insertedStack = insertItem(insertedStack, i, side);
             if (insertedStack == null) {
                 return insertedStack;
             }
@@ -102,7 +102,7 @@ public abstract class ChestBlockEntityMixin extends BlockEntity implements ItemH
     }
 
     @Override
-    public ItemStack getItem(int slot, @Nullable Direction direction) {
+    public ItemStack getItem(int slot, @Nullable Direction side) {
         if (slot > 26 && isDoubleChest()) {
             return getSecondChest().getStack(slot - 27);
         }
@@ -111,7 +111,7 @@ public abstract class ChestBlockEntityMixin extends BlockEntity implements ItemH
     }
 
     @Override
-    public int getItemSlots(Direction direction) {
+    public int getItemSlots(Direction side) {
         if (isDoubleChest()) {
             return this.size() + getSecondChest().size();
         }
@@ -120,7 +120,7 @@ public abstract class ChestBlockEntityMixin extends BlockEntity implements ItemH
     }
 
     @Override
-    public ItemStack[] getInventory(@Nullable Direction direction) {
+    public ItemStack[] getInventory(@Nullable Direction side) {
         return this.inventory;
     }
 
@@ -170,7 +170,7 @@ public abstract class ChestBlockEntityMixin extends BlockEntity implements ItemH
     }
 
     @Override
-    public boolean canConnectItem(Direction direction) {
+    public boolean canConnectItem(Direction side) {
         return true;
     }
 }
