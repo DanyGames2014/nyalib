@@ -17,6 +17,7 @@ import net.danygames2014.nyalibtest.block.item.SideHopperBlock;
 import net.danygames2014.nyalibtest.block.network.CableBlock;
 import net.danygames2014.nyalibtest.block.network.EastWestCableBlock;
 import net.danygames2014.nyalibtest.block.network.NetworkEdgeBlock;
+import net.danygames2014.nyalibtest.block.screen.FluidTankScreen;
 import net.danygames2014.nyalibtest.block.simpleenergy.SimpleEnergyReceiverBlock;
 import net.danygames2014.nyalibtest.block.simpleenergy.SimpleInfiniteEnergyBlock;
 import net.danygames2014.nyalibtest.block.fluid.entity.FluidTankBlockEntity;
@@ -26,13 +27,20 @@ import net.danygames2014.nyalibtest.block.simpleenergy.entity.InfiniteSimpleEner
 import net.danygames2014.nyalibtest.block.simpleenergy.entity.SimpleEnergyReceiverBlockEntity;
 import net.danygames2014.nyalibtest.block.sound.ServerSoundBlock;
 import net.danygames2014.nyalibtest.network.BasicNetworkType;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
 import net.minecraft.block.PressurePlateActivationRule;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
+import net.modificationstation.stationapi.api.client.gui.screen.GuiHandler;
 import net.modificationstation.stationapi.api.event.block.entity.BlockEntityRegisterEvent;
 import net.modificationstation.stationapi.api.event.registry.BlockRegistryEvent;
+import net.modificationstation.stationapi.api.event.registry.GuiHandlerRegistryEvent;
 import net.modificationstation.stationapi.api.event.registry.ItemRegistryEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.util.Identifier;
@@ -150,5 +158,16 @@ public class NyaLibTest {
     @EventListener
     public void registerNetworkTypes(NetworkTypeRegistryEvent event){
         event.register(basicNetworkType = new BasicNetworkType(NAMESPACE.id("basic")));
+    }
+
+    @Environment(EnvType.CLIENT)
+    @EventListener
+    public void registerScreenHandlers(GuiHandlerRegistryEvent event) {
+        event.register(NAMESPACE.id("fluid_tank"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openFluidTank, FluidTankBlockEntity::new));
+    }
+
+    @Environment(EnvType.CLIENT)
+    private Screen openFluidTank(PlayerEntity player, Inventory inventory) {
+        return new FluidTankScreen(player, (FluidTankBlockEntity) inventory);
     }
 }

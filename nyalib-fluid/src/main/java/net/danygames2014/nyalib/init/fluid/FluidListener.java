@@ -1,4 +1,4 @@
-package net.danygames2014.nyalib.init;
+package net.danygames2014.nyalib.init.fluid;
 
 import net.danygames2014.nyalib.event.FluidRegistryEvent;
 import net.danygames2014.nyalib.fluid.Fluids;

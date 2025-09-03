@@ -3,10 +3,13 @@ package net.danygames2014.nyalibtest.block.fluid.entity;
 import net.danygames2014.nyalib.fluid.FluidHandler;
 import net.danygames2014.nyalib.fluid.FluidStack;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
-public class FluidTankBlockEntity extends BlockEntity implements FluidHandler {
+public class FluidTankBlockEntity extends BlockEntity implements FluidHandler, Inventory {
     public FluidStack[] fluidStacks;
 
     public FluidTankBlockEntity() {
@@ -95,6 +98,42 @@ public class FluidTankBlockEntity extends BlockEntity implements FluidHandler {
 
     @Override
     public boolean canConnectFluid(Direction direction) {
+        return true;
+    }
+
+    // Inventory
+    @Override
+    public int size() {
+        return 0;
+    }
+
+    @Override
+    public ItemStack getStack(int slot) {
+        return null;
+    }
+
+    @Override
+    public ItemStack removeStack(int slot, int amount) {
+        return null;
+    }
+
+    @Override
+    public void setStack(int slot, ItemStack stack) {
+
+    }
+
+    @Override
+    public String getName() {
+        return "";
+    }
+
+    @Override
+    public int getMaxCountPerStack() {
+        return 64;
+    }
+
+    @Override
+    public boolean canPlayerUse(PlayerEntity player) {
         return true;
     }
 }

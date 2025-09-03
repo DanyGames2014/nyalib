@@ -78,7 +78,7 @@ public abstract class FurnaceBlockEntityMixin extends BlockEntity implements Ite
         if (slot >= 0 && slot < inventory.length) {
             return this.removeStack(slot, amount);
         }
-
+        
         return null;
     }
 

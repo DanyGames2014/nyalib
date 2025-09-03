@@ -16,8 +16,9 @@
   "entrypoints": {
     "stationapi:event_bus": [
       "net.danygames2014.nyalib.NyaLibFluid",
-      "net.danygames2014.nyalib.init.AfterBlockAndItemListenerFluid",
-      "net.danygames2014.nyalib.init.FluidListener"
+      "net.danygames2014.nyalib.init.fluid.AfterBlockAndItemListenerFluid",
+      "net.danygames2014.nyalib.init.fluid.FluidListener",
+      "net.danygames2014.nyalib.init.fluid.PacketListener"
     ],
     "stationapi:event_bus_client": [
     ],
@@ -27,7 +28,15 @@
   "mixins": [
     "nyalib-fluid.mixins.json"
   ],
+  "accessWidener": "nyalib-fluid.accesswidener",
   "depends": {
     "minecraft": "1.0.0-beta.7.3"
+  },
+  "custom": {
+    "loom:injected_interfaces": {
+      "net/minecraft/class_633": ["net/danygames2014/nyalib/screen/FluidScreenHandlerListener"],
+      "net/minecraft/class_71": ["net/danygames2014/nyalib/screen/FluidScreenHandler"],
+      "net/minecraft/class_504": ["net/danygames2014/nyalib/client/FluidInteractionManager"]
+    }
   }
 }

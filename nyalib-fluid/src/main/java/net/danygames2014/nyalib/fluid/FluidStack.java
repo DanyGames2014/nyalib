@@ -66,12 +66,29 @@ public class FluidStack {
         return other.fluid == this.fluid;
     }
 
+    public static boolean areEqual(FluidStack left, FluidStack right) {
+        if (left == null && right == null) {
+            return true;
+        } else {
+            return left != null && left.equals(right);
+        }
+    }
+
+    @SuppressWarnings("RedundantIfStatement")
     @Override
     public final boolean equals(Object other) {
-        if(other instanceof FluidStack otherStack) {
-            return isFluidEqual(otherStack);
+        if (other instanceof FluidStack otherStack) {
+            if (!isFluidEqual(otherStack)) {
+                return false;
+            }
+            
+            if (this.amount != otherStack.amount) {
+                return false;
+            }
+            
+            return true;
         }
-        
+
         return false;
     }
 

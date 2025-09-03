@@ -4,10 +4,16 @@
   "package": "net.danygames2014.nyalib.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "fluid.ScreenHandlerListenerMixin",
+    "fluid.ScreenHandlerMixin"
   ],
   "server": [
+    "fluid.ServerPlayerEntityMixin"
   ],
   "client": [
+    "fluid.HandledScreenMixin",
+    "fluid.InteractionManagerMixin",
+    "fluid.MultiplayerInteractionManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

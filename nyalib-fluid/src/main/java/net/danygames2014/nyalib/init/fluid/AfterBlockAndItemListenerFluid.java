@@ -1,4 +1,4 @@
-package net.danygames2014.nyalib.init;
+package net.danygames2014.nyalib.init.fluid;
 
 import net.danygames2014.nyalib.event.*;
 import net.mine_diver.unsafeevents.listener.EventListener;

@@ -4,6 +4,10 @@ import static net.modificationstation.stationapi.gradle.SubprojectHelpers.getSub
 archives_base_name = "nyalib-fluid"
 version = getSubprojectVersion(project, "1.0.0")
 
+loom {
+    accessWidenerPath = file("src/main/resources/nyalib-fluid.accesswidener")
+}
+
 addModuleDependencies(project,
         "nyalib-base"
 )
