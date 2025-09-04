@@ -1,7 +1,7 @@
 package net.danygames2014.nyalib.mixin.fluid;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.danygames2014.nyalib.fluid.FluidSlot;
-import net.glasslauncher.mods.alwaysmoreitems.gui.Tooltip;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.item.ItemRenderer;
@@ -16,8 +16,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.List;
 
 @Mixin(HandledScreen.class)
 public abstract class HandledScreenMixin extends Screen {
@@ -36,8 +34,13 @@ public abstract class HandledScreenMixin extends Screen {
     @Shadow
     private static ItemRenderer itemRenderer;
 
+    @Unique
+    FluidSlot hoveredSlot = null;
+    
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glEnable(I)V", ordinal = 0))
     public void renderFluidSlots(int mouseX, int mouseY, float delta, CallbackInfo ci) {
+        hoveredSlot = null;
+        
         for (FluidSlot fluidSlot : container.getFluidSlots()) {
             boolean hovered = isPointOverFluidSlot(fluidSlot, mouseX, mouseY);
 
@@ -47,17 +50,52 @@ public abstract class HandledScreenMixin extends Screen {
                 itemRenderer.renderGuiItemDecoration(this.textRenderer, this.minecraft.textureManager, renderedItem, fluidSlot.x, fluidSlot.y);
             }
 
-            if (hovered) {
+            if (hoveredSlot == null && hovered) {
+                hoveredSlot = fluidSlot;
+                
                 GL11.glDisable(GL11.GL_LIGHTING);
                 GL11.glDisable(GL11.GL_DEPTH_TEST);
-                this.fillGradient(fluidSlot.x, fluidSlot.y, fluidSlot.x + 16, fluidSlot.y + 16, 0x80ffffff, 0x80ffffff);
+                this.fillGradient(hoveredSlot.x, hoveredSlot.y, hoveredSlot.x + 16, hoveredSlot.y + 16, 0x80ffffff, 0x80ffffff);
                 GL11.glEnable(GL11.GL_LIGHTING);
                 GL11.glEnable(GL11.GL_DEPTH_TEST);
+            }
+        }
+    }
+    
+    @Inject(method = "render",at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawForeground()V"))
+    public void renderTooltip(int mouseX, int mouseY, float delta, CallbackInfo ci, @Local(ordinal = 2) int screenX, @Local(ordinal = 3) int screenY) {
+        if (hoveredSlot != null) {
+            String[] tooltip;
+            
+            if (!hoveredSlot.hasStack()) {
+                tooltip = new String[1];
+                tooltip[0] = "Empty";
+            } else {
+                tooltip = new String[2];
+                tooltip[0] = hoveredSlot.getStack().fluid.getTranslatedName();
+                tooltip[1] = Formatting.GRAY.toString() + hoveredSlot.getStack().amount + "/" + hoveredSlot.getMaxFluidAmount() + "mB";
+            }
+            
+            // Calculate the tooltip length according to the longest line
+            int textWidth = -1;
+            for (String line : tooltip) {
+                int lineWidth = this.textRenderer.getWidth(line);
+                if (lineWidth > textWidth) {
+                    textWidth = lineWidth;
+                }
+            }
+            
+            int textHeight = tooltip.length * 10;
 
-                if (!fluidSlot.hasStack()) {
-                    Tooltip.INSTANCE.setTooltip(List.of("Empty"), mouseX, mouseY);
-                } else if (fluidSlot.hasStack()) {
-                    Tooltip.INSTANCE.setTooltip(List.of(fluidSlot.getStack().fluid.getTranslatedName(), Formatting.GRAY + String.valueOf(fluidSlot.getStack().amount)), mouseX, mouseY);
+            int x = (mouseX - screenX + 12);
+            int y = (mouseY - screenY - 12);
+            this.fillGradient(x - 3, y - 3, x + textWidth + 3, y + textHeight + 3, -1073741824, -1073741824);
+            
+            for (int i = 0; i < tooltip.length; i++) {
+                String line = tooltip[i];
+                
+                if (line != null && !line.isEmpty()) {
+                    this.textRenderer.drawWithShadow(line, x, y + (i * 12), -1);
                 }
             }
         }
