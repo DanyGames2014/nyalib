@@ -1,5 +1,6 @@
 package net.danygames2014.nyalib.network;
 
+import net.danygames2014.nyalib.NyaLib;
 import net.danygames2014.nyalib.fluid.FluidRegistry;
 import net.danygames2014.nyalib.fluid.FluidStack;
 import net.fabricmc.api.EnvType;
@@ -88,7 +89,7 @@ public class ScreenHandlerFluidSlotUpdateS2CPacket extends Packet implements Man
         
         switch (this.syncId) {
             case -1 -> {
-                System.err.println("Unknown syncId: " + this.syncId);
+                NyaLib.LOGGER.error("Encountered an unknown syncId in ScreenHandlerFluidSlotUpdateS2CPacket: {}", this.syncId);
             }
             
             case 0 -> {

@@ -73,7 +73,7 @@ public class FluidTankBlockEntity extends BlockEntity implements FluidHandler, I
 
     @Override
     public boolean setFluid(int slot, FluidStack stack, @Nullable Direction direction) {
-        fluidStacks[slot] = stack.copy();
+        fluidStacks[slot] = stack;
         return true;
     }
 

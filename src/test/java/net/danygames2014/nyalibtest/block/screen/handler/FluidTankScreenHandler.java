@@ -49,19 +49,21 @@ public class FluidTankScreenHandler extends ScreenHandler {
         }
 
         this.addFluidSlot(new FluidSlot(fluidTank, 0, 56, 17));
-        this.addFluidSlot(new FluidSlot(fluidTank, 1, 56, 30));
-        this.addFluidSlot(new FluidSlot(fluidTank, 2, 56, 45));
+        this.addFluidSlot(new FluidSlot(fluidTank, 1, 56, 35));
+        this.addFluidSlot(new FluidSlot(fluidTank, 2, 56, 53));
     }
 
     @Override
     public FluidStack onFluidSlotClick(int index, int button, boolean shift, PlayerEntity player, ItemStack cursorStack) {
-        if (getFluidSlot(index).hasStack()) {
+        FluidSlot slot = getFluidSlot(index);
+        
+        if (slot != null && slot.hasStack()) {
             if (button == 0) {
-                getFluidSlot(index).getStack().amount += 500;
-                return getFluidSlot(index).getStack();
+                slot.getStack().amount += 500;
+                return slot.getStack();
             } else if (button == 1) {
-                getFluidSlot(index).getStack().amount -= 500;
-                return getFluidSlot(index).getStack();
+                slot.getStack().amount -= 500;
+                return slot.getStack();
             }
         }
 

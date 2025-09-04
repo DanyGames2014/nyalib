@@ -1,12 +1,11 @@
 package net.danygames2014.nyalib.mixin.fluid;
 
 import net.danygames2014.nyalib.fluid.FluidStack;
+import net.danygames2014.nyalib.network.FluidInventoryS2CPacket;
 import net.danygames2014.nyalib.network.ScreenHandlerFluidSlotUpdateS2CPacket;
 import net.danygames2014.nyalib.screen.FluidScreenHandlerListener;
-import net.danygames2014.nyalib.sound.SoundHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.packet.s2c.play.InventoryS2CPacket;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -38,7 +37,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Fl
 
     @Override
     public void onFluidContentsUpdate(ScreenHandler handler, ArrayList<FluidStack> stacks) {
-        this.networkHandler.sendPacket(new InventoryS2CPacket(handler.syncId, stacks));
+        this.networkHandler.sendPacket(new FluidInventoryS2CPacket(handler.syncId, stacks));
         this.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(-1, -1, this.inventory.getCursorStack()));
     }
 }
