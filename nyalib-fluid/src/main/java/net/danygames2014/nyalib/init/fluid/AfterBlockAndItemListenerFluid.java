@@ -7,7 +7,7 @@ import net.modificationstation.stationapi.api.event.registry.AfterBlockAndItemRe
 
 public class AfterBlockAndItemListenerFluid {
     @EventListener
-    public void sendNetworkTypeRegisterEvent(AfterBlockAndItemRegisterEvent event){
+    public void sendFluidRegistryEvent(AfterBlockAndItemRegisterEvent event){
         StationAPI.EVENT_BUS.post(new FluidRegistryEvent());
     }
 }
