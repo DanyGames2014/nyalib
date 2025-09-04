@@ -99,6 +99,11 @@ public class ClickFluidSlotC2SPacket extends Packet implements ManagedPacket<Cli
         if (PlayerHelper.getPlayerFromPacketHandler(handler) instanceof ServerPlayerEntity player && handler instanceof ServerPlayNetworkHandler networkHandler) {
             if (player.currentScreenHandler.syncId == syncId && player.currentScreenHandler.canOpen(player)) {
                 FluidStack clickResultStack = player.currentScreenHandler.onFluidSlotClick(slot, button, holdingShift, player, player.inventory.getCursorStack());
+
+                System.out.println();
+                System.out.println(FluidStack.areEqual(stack, clickResultStack));
+                System.out.println(stack);
+                System.out.println(clickResultStack);
                 
                 // TODO: This is shit, do something about it, probably not needed at all
                 if (FluidStack.areEqual(stack, clickResultStack)) {
