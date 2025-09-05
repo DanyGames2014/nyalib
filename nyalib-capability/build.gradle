@@ -9,8 +9,5 @@ loom {
 }
 
 addModuleDependencies(project,
-        "nyalib-base",
-        "nyalib-fluid",
-        "nyalib-item",
-        "nyalib-energy"
+        "nyalib-base"
 )

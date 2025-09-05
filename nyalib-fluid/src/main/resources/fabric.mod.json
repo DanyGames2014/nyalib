@@ -18,7 +18,10 @@
       "net.danygames2014.nyalib.NyaLibFluid",
       "net.danygames2014.nyalib.init.fluid.AfterBlockAndItemListenerFluid",
       "net.danygames2014.nyalib.init.fluid.FluidListener",
-      "net.danygames2014.nyalib.init.fluid.PacketListener"
+      "net.danygames2014.nyalib.init.fluid.PacketListener",
+      "net.danygames2014.nyalib.init.fluid.BlockCapabilityListener",
+      "net.danygames2014.nyalib.init.fluid.EntityCapabilityListener",
+      "net.danygames2014.nyalib.init.fluid.ItemCapabilityListener"
     ],
     "stationapi:event_bus_client": [
     ],

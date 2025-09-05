@@ -2,7 +2,6 @@ package net.danygames2014.nyalib.compat.whatsthis;
 
 import net.danygames2014.nyalib.NyaLibCompat;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
-import net.danygames2014.nyalib.capability.block.fluidhandler.FluidHandlerBlockCapability;
 import net.danygames2014.nyalib.capability.entity.fluidhandler.FluidHandlerEntityCapability;
 import net.danygames2014.nyalib.fluid.FluidStack;
 import net.danygames2014.whatsthis.api.*;

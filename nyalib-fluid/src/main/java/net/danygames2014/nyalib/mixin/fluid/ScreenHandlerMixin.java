@@ -1,5 +1,7 @@
 package net.danygames2014.nyalib.mixin.fluid;
 
+import net.danygames2014.nyalib.capability.CapabilityHelper;
+import net.danygames2014.nyalib.capability.item.fluidhandler.FluidHandlerItemCapability;
 import net.danygames2014.nyalib.fluid.FluidHandler;
 import net.danygames2014.nyalib.fluid.FluidSlot;
 import net.danygames2014.nyalib.fluid.FluidStack;
@@ -7,6 +9,7 @@ import net.danygames2014.nyalib.screen.FluidScreenHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerListener;
@@ -79,16 +82,74 @@ public abstract class ScreenHandlerMixin implements FluidScreenHandler {
         if (index < 0 || index >= fluidSlots.size()) {
             return null;
         }
-        
+
         return fluidSlots.get(index);
     }
 
     // TODO: This should probably return the cursor stack, since why would it return the fluid stack, literally not gonna get compared with client
     @Override
     public FluidStack onFluidSlotClick(int index, int button, boolean shift, PlayerEntity player, ItemStack cursorStack) {
-        //var capability = CapabilityHel
+        if (index == -999) {
+            return null;
+        }
         
-        return null;
+        FluidSlot slot = fluidSlots.get(index);
+
+        if (slot != null) {
+            FluidHandler handler = slot.getHandler();
+
+            if (cursorStack == null) {
+                return slot.getStack();
+            }
+            
+            FluidHandlerItemCapability cap = CapabilityHelper.getCapability(cursorStack, FluidHandlerItemCapability.class);
+            
+            if (cap != null) {
+                FluidStack fluid = cap.getFluid(0);
+                FluidStack invFluid = handler.getFluid(index, null);
+                if (fluid != null) {
+                    if (cap.canExtractFluid() && handler.canInsertFluid(null)) {
+                        if (invFluid == null) {
+                            FluidStack fluidStack = cap.extractFluid(handler.getRemainingFluidCapacity(index, null));
+                            FluidStack remainder = handler.insertFluid(fluidStack, index, null);
+                            if (remainder != null && remainder.amount > 0) {
+                                cap.insertFluid(remainder);
+                            }
+                        } else if (invFluid.amount <= handler.getFluidCapacity(0, null)) {
+                            FluidStack fluidStack = cap.extractFluid(handler.getRemainingFluidCapacity(index, null));
+                            FluidStack remainder = handler.insertFluid(fluidStack, index, null);
+                            if (remainder != null && remainder.amount > 0) {
+                                cap.insertFluid(remainder);
+                            }
+                        } else if (invFluid.amount >= handler.getFluidCapacity(0, null)) {
+                            if (cap.canInsertFluid() && handler.canExtractFluid(null)) {
+                                FluidStack fluidStack = handler.extractFluid(index, cap.getRemainingFluidCapacity(0), null);
+                                FluidStack remainder = cap.insertFluid(fluidStack);
+                                if (remainder != null && remainder.amount > 0) {
+                                    handler.insertFluid(remainder, index, null);
+                                }
+                            }
+                        }
+                    } else if (cap.canInsertFluid() && handler.canExtractFluid(null)) {
+                        FluidStack fluidStack = handler.extractFluid(index, cap.getRemainingFluidCapacity(0), null);
+                        FluidStack remainder = cap.insertFluid(fluidStack);
+                        if (remainder != null && remainder.amount > 0) {
+                            handler.insertFluid(remainder, index, null);
+                        }
+                    }
+                } else if (cap.canInsertFluid() && handler.canExtractFluid(null)) {
+                    FluidStack fluidStack = handler.extractFluid(index, cap.getRemainingFluidCapacity(0), null);
+                    FluidStack remainder = cap.insertFluid(fluidStack);
+                    if (remainder != null && remainder.amount > 0) {
+                        handler.insertFluid(remainder, index, null);
+                    }
+                }
+            }
+        }
+
+        sendContentUpdates();
+        
+        return slot != null ? slot.getStack() : null;
     }
 
     @Override
@@ -100,7 +161,7 @@ public abstract class ScreenHandlerMixin implements FluidScreenHandler {
     @Override
     public void setFluidStackInSlotClient(int index, FluidStack fluidStack) {
         FluidSlot slot = this.getFluidSlot(index);
-        
+
         if (slot != null) {
             slot.setStack(fluidStack);
         }

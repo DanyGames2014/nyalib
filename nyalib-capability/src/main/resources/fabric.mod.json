@@ -16,9 +16,6 @@
   "entrypoints": {
     "stationapi:event_bus": [
       "net.danygames2014.nyalib.init.AfterBlockAndItemListenerCapability",
-      "net.danygames2014.nyalib.init.BlockCapabilityListener",
-      "net.danygames2014.nyalib.init.EntityCapabilityListener",
-      "net.danygames2014.nyalib.init.ItemCapabilityListener",
       "net.danygames2014.nyalib.init.InitListenerCapability"
     ],
     "stationapi:event_bus_client": [

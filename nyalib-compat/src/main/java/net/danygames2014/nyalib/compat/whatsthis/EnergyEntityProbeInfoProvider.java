@@ -2,7 +2,6 @@ package net.danygames2014.nyalib.compat.whatsthis;
 
 import net.danygames2014.nyalib.NyaLibCompat;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
-import net.danygames2014.nyalib.capability.block.energyhandler.EnergyStorageBlockCapability;
 import net.danygames2014.nyalib.capability.entity.energyhandler.EnergyStorageEntityCapability;
 import net.danygames2014.whatsthis.api.*;
 import net.danygames2014.whatsthis.config.Config;

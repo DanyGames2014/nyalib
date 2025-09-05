@@ -1,4 +1,4 @@
-package net.danygames2014.nyalib.init;
+package net.danygames2014.nyalib.init.energy;
 
 import net.danygames2014.nyalib.NyaLib;
 import net.danygames2014.nyalib.event.NetworkTypeRegistryEvent;

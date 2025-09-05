@@ -49,6 +49,10 @@ public class FluidSlot {
         return handler.getFluidCapacity(index, null);
     }
 
+    public FluidHandler getHandler() {
+        return handler;
+    }
+
     // Slot Rules
     public boolean canInsert(FluidStack fluidStack) {
         return true;
