@@ -86,7 +86,8 @@ public abstract class ScreenHandlerMixin implements FluidScreenHandler {
     // TODO: This should probably return the cursor stack, since why would it return the fluid stack, literally not gonna get compared with client
     @Override
     public FluidStack onFluidSlotClick(int index, int button, boolean shift, PlayerEntity player, ItemStack cursorStack) {
-        // TODO: DO
+        //var capability = CapabilityHel
+        
         return null;
     }
 

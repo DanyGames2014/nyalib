@@ -56,14 +56,16 @@ public class FluidTankScreenHandler extends ScreenHandler {
     @Override
     public FluidStack onFluidSlotClick(int index, int button, boolean shift, PlayerEntity player, ItemStack cursorStack) {
         FluidSlot slot = getFluidSlot(index);
-        
-        if (slot != null && slot.hasStack()) {
-            if (button == 0) {
-                slot.getStack().amount += 500;
-                return slot.getStack();
-            } else if (button == 1) {
-                slot.getStack().amount -= 500;
-                return slot.getStack();
+
+        if (cursorStack == null) {
+            if (slot != null && slot.hasStack()) {
+                if (button == 0) {
+                    slot.setFluidAmount(slot.getFluidAmount() + 500);
+                    return slot.getStack();
+                } else if (button == 1) {
+                    slot.setFluidAmount(slot.getFluidAmount() - 500);
+                    return slot.getStack();
+                }
             }
         }
 

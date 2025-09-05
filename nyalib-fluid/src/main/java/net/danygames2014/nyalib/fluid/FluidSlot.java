@@ -17,12 +17,8 @@ public class FluidSlot {
         this.x = x;
         this.y = y;
     }
-    
-    // Slot Content
-    public boolean canInsert(FluidStack fluidStack) {
-        return true;
-    }
 
+    // Manipulating the FluidStack itself
     public FluidStack getStack() {
         return handler.getFluid(index, null);
     }
@@ -39,25 +35,39 @@ public class FluidSlot {
     public FluidStack takeStack(int amount) {
         return handler.extractFluid(index, amount, null);
     }
-    
+
+    // Fluid Amount
+    public int getFluidAmount() {
+        return handler.getFluid(index, null).amount;
+    }
+
+    public void setFluidAmount(int amount) {
+        handler.getFluid(index, null).amount = Math.max(0, Math.min(getMaxFluidAmount(), amount));
+    }
+
     public int getMaxFluidAmount() {
         return handler.getFluidCapacity(index, null);
     }
-    
+
+    // Slot Rules
+    public boolean canInsert(FluidStack fluidStack) {
+        return true;
+    }
+
     public void markDirty() {
         // TODO: hmmm oh oh Oh Oh OH OH
         //this.handler.markDirty(); OH OH
     }
-    
+
     public boolean equals(FluidHandler otherHandler, int otherIndex) {
         return otherHandler == this.handler && otherIndex == this.index;
     }
-    
+
     // Events
     public void onTakeFluid(FluidStack fluidStack) {
         markDirty();
     }
-    
+
     // Rendering
     @Environment(EnvType.CLIENT)
     public int getBackgroundTextureId() {
