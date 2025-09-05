@@ -15,12 +15,14 @@
   "environment": "*",
   "entrypoints": {
     "stationapi:event_bus": [
-      "net.danygames2014.nyalib.NyaLibCompat",
-      "net.danygames2014.nyalib.init.ProbeInfoProviderListener"
+      "net.danygames2014.nyalib.NyaLibCompat"
     ],
     "stationapi:event_bus_client": [
     ],
     "stationapi:event_bus_server": [
+    ],
+    "whatsthis": [
+      "net.danygames2014.nyalib.init.ProbeInfoProviderListener"
     ]
   },
   "mixins": [
