@@ -4,6 +4,8 @@
   "package": "net.danygames2014.nyalib.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "fluid.BlockMixin",
+    "fluid.BucketItemMixin",
     "fluid.ScreenHandlerListenerMixin",
     "fluid.ScreenHandlerMixin"
   ],

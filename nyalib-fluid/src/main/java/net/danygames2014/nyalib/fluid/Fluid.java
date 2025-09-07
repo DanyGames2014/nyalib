@@ -47,6 +47,8 @@ public final class Fluid {
      * This represents an ARGB color
      */
     private int color = 0xFFFFFFFF;
+    
+    private boolean automaticBucketRegistration = true;
 
     public Fluid(Identifier identifier, Block still, Block flowing) {
         this.identifier = identifier;
@@ -97,6 +99,15 @@ public final class Fluid {
     public Block getBucketFluid() {
         return flowing;
     }
+    
+    public boolean automaticBucketRegistration() {
+        return automaticBucketRegistration;
+    }
+    
+    public Fluid disableAutomaticBucketRegistration() {
+        this.automaticBucketRegistration = false;
+        return this;
+    }
 
     // Bucket Behavior
     public boolean isPlaceableInWorld() {
@@ -112,9 +123,9 @@ public final class Fluid {
     public String getFillSound() {
         if (fillSound == null) {
             if (getBucketFluid() != null && getBucketFluid().material == Material.LAVA) {
-                return "nyalib-base:item.bucket.fill_lava";
+                return "nyalib-fluid:item.bucket.fill_lava";
             } else {
-                return "nyalib-base:item.bucket.fill";
+                return "nyalib-fluid:item.bucket.fill";
             }
         }
 
@@ -129,9 +140,9 @@ public final class Fluid {
     public String getEmptySound() {
         if (emptySound == null) {
             if (getBucketFluid() != null && getBucketFluid().material == Material.LAVA) {
-                return "nyalib-base:item.bucket.empty_lava";
+                return "nyalib-fluid:item.bucket.empty_lava";
             } else {
-                return "nyalib-base:item.bucket.empty";
+                return "nyalib-fluid:item.bucket.empty";
             }
         }
 
