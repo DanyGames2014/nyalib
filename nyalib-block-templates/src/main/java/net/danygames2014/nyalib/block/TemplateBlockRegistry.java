@@ -184,8 +184,6 @@ public class TemplateBlockRegistry {
         pressurePlateState = pressurePlateState.replace("UP", getBlockModelPath(blockIdentifier + "_up"));
         pressurePlateState = pressurePlateState.replace("DOWN", getBlockModelPath(blockIdentifier + "_down"));
         JsonOverrideRegistry.registerBlockstateOverride(blockIdentifier, pressurePlateState);
-        
-        // TODO: Pressure Plates
     }
     
     public static void registerLadder(Identifier blockIdentifier, Identifier texture) {

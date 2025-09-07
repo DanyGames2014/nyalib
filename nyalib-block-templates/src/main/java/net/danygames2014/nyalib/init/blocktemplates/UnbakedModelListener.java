@@ -1,4 +1,4 @@
-package net.danygames2014.nyalib.init;
+package net.danygames2014.nyalib.init.blocktemplates;
 
 import com.mojang.datafixers.util.Either;
 import net.danygames2014.nyalib.NyaLib;
