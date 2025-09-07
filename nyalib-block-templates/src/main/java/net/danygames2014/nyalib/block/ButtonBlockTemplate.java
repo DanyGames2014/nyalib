@@ -4,6 +4,7 @@ import net.danygames2014.nyalib.sound.SoundHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.BlockView;
@@ -25,9 +26,11 @@ import java.util.Random;
 @SuppressWarnings("DuplicatedCode")
 public class ButtonBlockTemplate extends TemplateBlock {
     public static final EnumProperty<ButtonType> BUTTON_TYPE = EnumProperty.of("type", ButtonType.class);
+    public Block baseBlock;
 
     public ButtonBlockTemplate(Identifier identifier, Block baseBlock, Material material, Identifier texture) {
         super(identifier, material);
+        this.baseBlock = baseBlock;
         this.setTickRandomly(true);
         if (texture != null) {
             TemplateBlockRegistry.registerButton(identifier, texture);
@@ -41,6 +44,13 @@ public class ButtonBlockTemplate extends TemplateBlock {
     public ButtonBlockTemplate(Identifier identifier, Block baseBlock) {
         this(identifier, baseBlock, null);
     }
+    
+//    public ButtonBlockTemplate registerRecipe() {
+//        TemplateBlockRecipeRegistry.registerRecipeCallback(() -> {
+//            TemplateBlockRecipeRegistry.registerShapeless(new ItemStack(this, 1), baseBlock);
+//        });
+//        return this;
+//    }
 
     // Blockstate Properties
     @Override
