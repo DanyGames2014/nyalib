@@ -1,2 +1,6 @@
 fluid.minecraft.water.name=Water
 fluid.minecraft.lava.name=Lava
+
+item.nyalib.fluid_bucket=%s Bucket
+tile.fluid.nyalib.still=Still %s
+tile.fluid.nyalib.Flowing=Flowing %s

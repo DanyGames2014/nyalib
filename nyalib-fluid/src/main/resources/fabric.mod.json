@@ -20,6 +20,7 @@
       "net.danygames2014.nyalib.init.fluid.FluidListener",
       "net.danygames2014.nyalib.init.fluid.PacketListener",
       "net.danygames2014.nyalib.init.fluid.TextureListener",
+      "net.danygames2014.nyalib.init.fluid.TranslationListener",
       "net.danygames2014.nyalib.init.fluid.BlockCapabilityListener",
       "net.danygames2014.nyalib.init.fluid.EntityCapabilityListener",
       "net.danygames2014.nyalib.init.fluid.ItemCapabilityListener"

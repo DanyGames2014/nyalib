@@ -18,3 +18,6 @@ tile.nyalibtest.tnt_slab.name=TNT Slab
 tile.nyalibtest.tnt_fence.name=TNT Fence
 tile.nyalibtest.tnt_fence_gate.name=TNT Fence Gate
 tile.nyalibtest.tnt_button.name=TNT Button
+
+fluid.nyalibtest.gravel.name=Gravel
+fluid.nyalibtest.fuel.name=Fuel

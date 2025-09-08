@@ -12,6 +12,7 @@ public class FlowingFluidBlock extends TemplateFlowingLiquidBlock {
     public FlowingFluidBlock(Identifier identifier, Material material, Fluid fluid) {
         super(identifier, material);
         this.fluid = fluid;
+        this.setTranslationKey(identifier);
     }
 
     public int getTexture(int side) {

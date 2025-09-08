@@ -12,6 +12,7 @@ public class StillFluidBlock extends TemplateStillLiquidBlock {
     public StillFluidBlock(Identifier identifier, Material material, Fluid fluid) {
         super(identifier, material);
         this.fluid = fluid;
+        this.setTranslationKey(identifier);
     }
 
     public int getTexture(int side) {
