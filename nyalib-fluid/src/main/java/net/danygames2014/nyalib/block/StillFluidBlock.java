@@ -18,7 +18,7 @@ public class StillFluidBlock extends TemplateStillLiquidBlock {
         if (textureHolder == null) {
             return 0;
         }
-        
-        return textureHolder.getStillTextureId();
+
+        return textureHolder.getFlowingTextureId();
     }
 }

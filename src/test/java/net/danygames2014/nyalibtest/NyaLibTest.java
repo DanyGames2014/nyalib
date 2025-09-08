@@ -146,7 +146,7 @@ public class NyaLibTest {
     @EventListener
     public void registerFluids(FluidRegistryEvent event) {
         event.register(gravelFluid = new Fluid(NAMESPACE.id("gravel"), Block.GRAVEL, Block.GRAVEL, 0xFF212121));
-        event.register(fuelFluid = new Fluid(NAMESPACE.id("fuel"), NAMESPACE.id("block/fuel_still"), NAMESPACE.id("block/fuel_fowing"), 0xFFFFE524));
+        event.register(fuelFluid = new Fluid(NAMESPACE.id("fuel"), NAMESPACE.id("block/fuel_still"), NAMESPACE.id("block/fuel_flowing"), 0xFFFFE524));
     }
     
     @EventListener

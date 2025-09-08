@@ -6,13 +6,16 @@
   "mixins": [
     "fluid.BlockMixin",
     "fluid.BucketItemMixin",
+    "fluid.FlowingLiquidBlockMixin",
     "fluid.ScreenHandlerListenerMixin",
-    "fluid.ScreenHandlerMixin"
+    "fluid.ScreenHandlerMixin",
+    "fluid.StillLiquidBlockMixin"
   ],
   "server": [
     "fluid.ServerPlayerEntityMixin"
   ],
   "client": [
+    "fluid.BlockRenderManagerMixin",
     "fluid.HandledScreenMixin",
     "fluid.InteractionManagerMixin",
     "fluid.MultiplayerInteractionManagerMixin"

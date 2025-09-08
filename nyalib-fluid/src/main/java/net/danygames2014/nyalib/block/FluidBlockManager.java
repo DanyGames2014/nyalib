@@ -57,10 +57,12 @@ public class FluidBlockManager {
             
             if (fluid.getStillBlock() instanceof StillFluidBlock stillFluidBlock) {
                 stillFluidBlock.textureHolder = textureHolder;
+                stillFluidBlock.textureId = textureHolder.getStillTextureId();
             }
             
             if (fluid.getFlowingBlock() instanceof FlowingFluidBlock flowingFluidBlock) {
                 flowingFluidBlock.textureHolder = textureHolder;
+                flowingFluidBlock.textureId = textureHolder.getFlowingTextureId();
             }
         }
     }

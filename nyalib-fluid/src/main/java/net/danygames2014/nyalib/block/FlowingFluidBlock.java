@@ -13,4 +13,12 @@ public class FlowingFluidBlock extends TemplateFlowingLiquidBlock {
         super(identifier, material);
         this.fluid = fluid;
     }
+
+    public int getTexture(int side) {
+        if (textureHolder == null) {
+            return 0;
+        }
+
+        return textureHolder.getStillTextureId();
+    }
 }
