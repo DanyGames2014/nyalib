@@ -92,6 +92,7 @@ public class NyaLibTest {
     public static Item itemYoinker;
     
     public static Fluid gravelFluid;
+    public static Fluid fuelFluid;
 
     public static NetworkType basicNetworkType;
 
@@ -144,8 +145,8 @@ public class NyaLibTest {
     
     @EventListener
     public void registerFluids(FluidRegistryEvent event) {
-        gravelFluid = new Fluid(NAMESPACE.id("gravel"), Block.GRAVEL, Block.GRAVEL, 0xFF212121);
-        event.register(gravelFluid);
+        event.register(gravelFluid = new Fluid(NAMESPACE.id("gravel"), Block.GRAVEL, Block.GRAVEL, 0xFF212121));
+        event.register(fuelFluid = new Fluid(NAMESPACE.id("fuel"), NAMESPACE.id("block/fuel_still"), NAMESPACE.id("block/fuel_fowing"), 0xFFFFE524));
     }
     
     @EventListener

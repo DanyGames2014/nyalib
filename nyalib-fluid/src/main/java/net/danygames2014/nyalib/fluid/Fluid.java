@@ -1,5 +1,7 @@
 package net.danygames2014.nyalib.fluid;
 
+import net.danygames2014.nyalib.NyaLib;
+import net.danygames2014.nyalib.block.FluidBlockManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.resource.language.I18n;
@@ -18,11 +20,11 @@ public final class Fluid {
     /**
      * The in-world block representing the fluid in its still state
      */
-    private final Block still;
+    private Block still;
     /**
      * The in-world block representing the fluid in its flowing state
      */
-    private final Block flowing;
+    private Block flowing;
     /**
      * This determines how much of a fluid in mB does a bucket hold.
      * This will be used when a fluid is placed into the world or taken from it.
@@ -62,20 +64,35 @@ public final class Fluid {
     private int color = 0xFFFFFFFF;
     
 
+    // Base constructor
     public Fluid(Identifier identifier, Block still, Block flowing) {
         this.identifier = identifier;
         this.still = still;
         this.flowing = flowing;
     }
 
+    // Manual Block Constructors
     public Fluid(Identifier identifier, Block still, Block flowing, int color) {
         this(identifier, still, flowing);
-        this.color = color;
+        this.setColor(color);
     }
 
     public Fluid(Identifier identifier, Block still, Block flowing, Color color) {
         this(identifier, still, flowing);
-        this.color = color.getRGB();
+        this.setColor(color);
+    }
+
+    // Automatic Block Constructors
+    public Fluid(Identifier identifier, Identifier stillTexture, Identifier flowingTexture, int color) {
+        this(identifier, null, null);
+        this.setColor(color);
+        FluidBlockManager.requestBlock(this, stillTexture, flowingTexture);
+    }
+
+    public Fluid(Identifier identifier, Identifier stillTexture, Identifier flowingTexture, Color color) {
+        this(identifier, null, null);
+        this.setColor(color);
+        FluidBlockManager.requestBlock(this, stillTexture, flowingTexture);
     }
 
     // Identifier
@@ -179,8 +196,26 @@ public final class Fluid {
         return still;
     }
 
+    public void setStillBlock(Block still) {
+        if (this.still != null) {
+            NyaLib.LOGGER.warn("Tried to set a still block to the fluid " + this.getIdentifier() + ", but it was already set!");
+            return;
+        }
+        
+        this.still = still;
+    }
+
     public Block getFlowingBlock() {
         return flowing;
+    }
+
+    public void setFlowing(Block flowing) {
+        if (this.flowing != null) {
+            NyaLib.LOGGER.warn("Tried to set a flowing block to the fluid " + this.getIdentifier() + ", but it was already set!");
+            return;
+        }
+        
+        this.flowing = flowing;
     }
 
     // Localization
