@@ -16,7 +16,7 @@
   "entrypoints": {
     "stationapi:event_bus": [
       "net.danygames2014.nyalib.NyaLibFluid",
-      "net.danygames2014.nyalib.init.fluid.AfterBlockAndItemListenerFluid",
+      "net.danygames2014.nyalib.init.fluid.ItemListener",
       "net.danygames2014.nyalib.init.fluid.FluidListener",
       "net.danygames2014.nyalib.init.fluid.PacketListener",
       "net.danygames2014.nyalib.init.fluid.BlockCapabilityListener",

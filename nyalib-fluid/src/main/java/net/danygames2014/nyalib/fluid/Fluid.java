@@ -3,7 +3,9 @@ package net.danygames2014.nyalib.fluid;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.resource.language.I18n;
+import net.minecraft.item.Item;
 import net.modificationstation.stationapi.api.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 
@@ -28,10 +30,21 @@ public final class Fluid {
     private int bucketSize = 1000;
 
     /**
-     * Determines if the fluid is placeable in world
+     * This is the item that will be returned when the fluid is taken from world
+     * If it is null, the fluid won't be taken from world
+     */
+    private Item bucketItem;
+    
+    /**
+     * Determines if a bucket can place this fluid in world
      */
     private boolean isPlaceableInWorld = true;
 
+    /**
+     * Determines whether a bucket will be automatically registered for the fluid
+     */
+    private boolean automaticBucketRegistration = true;
+    
     /**
      * The sound that will be played when the bucket is filled
      */
@@ -48,7 +61,6 @@ public final class Fluid {
      */
     private int color = 0xFFFFFFFF;
     
-    private boolean automaticBucketRegistration = true;
 
     public Fluid(Identifier identifier, Block still, Block flowing) {
         this.identifier = identifier;
@@ -96,11 +108,19 @@ public final class Fluid {
         return this;
     }
 
+    public @Nullable Item getBucketItem() {
+        return bucketItem;
+    }
+
+    public void setBucketItem(Item bucketItem) {
+        this.bucketItem = bucketItem;
+    }
+
     public Block getBucketFluid() {
         return flowing;
     }
     
-    public boolean automaticBucketRegistration() {
+    public boolean automaticBucketRegistrationEnabled() {
         return automaticBucketRegistration;
     }
     
@@ -167,8 +187,17 @@ public final class Fluid {
     public String getTranslationKey() {
         return "fluid." + identifier.namespace + "." + identifier.path + ".name";
     }
-
+    
     public String getTranslatedName() {
         return I18n.getTranslation(getTranslationKey());
+    }
+
+    // Fluidstack specific localization
+    public String getTranslationKey(FluidStack fluidStack) {
+        return getTranslationKey();
+    }
+    
+    public String getTranslatedName(FluidStack fluidStack) {
+        return getTranslatedName();
     }
 }

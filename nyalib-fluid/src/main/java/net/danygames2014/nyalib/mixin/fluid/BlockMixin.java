@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Block.class)
 public class BlockMixin {
-    @Inject(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/stat/Stats;initializeItemStats()V"))
+    @Inject(method = "<clinit>", at = @At(value = "FIELD", target = "Lnet/minecraft/item/Item;ITEMS:[Lnet/minecraft/item/Item;", ordinal = 0))
     private static void callFluidRegisterEvent(CallbackInfo ci){
         StationAPI.EVENT_BUS.post(new FluidRegistryEvent());    
     }

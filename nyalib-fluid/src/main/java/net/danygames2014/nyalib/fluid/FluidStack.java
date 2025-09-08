@@ -1,5 +1,6 @@
 package net.danygames2014.nyalib.fluid;
 
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.util.Identifier;
 
@@ -58,6 +59,16 @@ public class FluidStack {
         this(fluid, 1000);
     }
 
+    // Localization
+    public String getTranslationKey() {
+        return fluid.getTranslationKey(this);
+    }
+
+    public String getTranslatedName() {
+        return fluid.getTranslatedName(this);
+    }
+    
+    // Comparison
     public boolean isFluidEqual(FluidStack other) {
         if (other == null) {
             return false;
@@ -92,6 +103,7 @@ public class FluidStack {
         return false;
     }
 
+    // NBT
     public NbtCompound writeNbt(NbtCompound nbt) {
         nbt.putString("fluid", this.fluid.getIdentifier().toString());
         nbt.putInt("amount", this.amount);
@@ -115,8 +127,9 @@ public class FluidStack {
         }
     }
 
+    // To String
     @Override
     public String toString() {
-        return "FluidStack { Fluid = " + fluid.getTranslatedName() + " | Amount = " + amount + "mB }";
+        return "FluidStack { Fluid = " + getTranslatedName() + " | Amount = " + amount + "mB }";
     }
 }

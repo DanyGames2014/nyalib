@@ -1,7 +1,9 @@
 package net.danygames2014.nyalibtest;
 
 import net.danygames2014.nyalib.block.*;
+import net.danygames2014.nyalib.event.FluidRegistryEvent;
 import net.danygames2014.nyalib.event.NetworkTypeRegistryEvent;
+import net.danygames2014.nyalib.fluid.Fluid;
 import net.danygames2014.nyalib.network.NetworkType;
 import net.danygames2014.nyalibtest.block.capability.block.ItemHandlerBlockCapabilityTesterBlock;
 import net.danygames2014.nyalibtest.block.capability.item.YoinkerItem;
@@ -88,6 +90,8 @@ public class NyaLibTest {
     
     public static Block itemHandlerBlockCapabilityTester;
     public static Item itemYoinker;
+    
+    public static Fluid gravelFluid;
 
     public static NetworkType basicNetworkType;
 
@@ -136,6 +140,12 @@ public class NyaLibTest {
         
         // Capability
         itemHandlerBlockCapabilityTester = new ItemHandlerBlockCapabilityTesterBlock(NAMESPACE.id("item_handler_block_capability")).setTranslationKey(NAMESPACE, "item_handler_block_capability");
+    }
+    
+    @EventListener
+    public void registerFluids(FluidRegistryEvent event) {
+        gravelFluid = new Fluid(NAMESPACE.id("gravel"), Block.GRAVEL, Block.GRAVEL, 0xFF212121);
+        event.register(gravelFluid);
     }
     
     @EventListener
