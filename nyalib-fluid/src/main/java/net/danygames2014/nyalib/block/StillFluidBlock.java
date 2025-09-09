@@ -15,11 +15,28 @@ public class StillFluidBlock extends TemplateStillLiquidBlock {
         this.setTranslationKey(identifier);
     }
 
-    public int getTexture(int side) {
+    @Override
+    public int getTexture(int side, int meta) {
         if (textureHolder == null) {
             return 0;
         }
 
+        if (meta == 0 && (side == 0 || side == 1)) {
+            return textureHolder.getStillTextureId();
+        }
+
+        return super.getTexture(side, meta);
+    }
+
+    public int getTexture(int side) {
+        if (textureHolder == null) {
+            return 0;
+        }
+        
+        if (side == 0 || side == 1) {
+            return textureHolder.getStillTextureId();
+        }
+        
         return textureHolder.getFlowingTextureId();
     }
 }

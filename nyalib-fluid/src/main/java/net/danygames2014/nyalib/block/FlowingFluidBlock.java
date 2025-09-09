@@ -15,6 +15,19 @@ public class FlowingFluidBlock extends TemplateFlowingLiquidBlock {
         this.setTranslationKey(identifier);
     }
 
+    @Override
+    public int getTexture(int side, int meta) {
+        if (textureHolder == null) {
+            return 0;
+        }
+        
+        if ((meta != 0 || side != 0) && side != 1) {
+            return textureHolder.getFlowingTextureId();
+        }
+
+        return textureHolder.getStillTextureId();
+    }
+
     public int getTexture(int side) {
         if (textureHolder == null) {
             return 0;
