@@ -33,7 +33,7 @@ public class FluidBlockManager {
             // Create the Flowing Block and register its item model
             Identifier flowingBlockIdentifier = fluid.getIdentifier().withSuffixedPath("_flowing");
             FlowingFluidBlock flowingFluidBlock = new FlowingFluidBlock(flowingBlockIdentifier, fluidMaterial, fluid);
-            fluid.setFlowing(flowingFluidBlock);
+            fluid.setFlowingBlock(flowingFluidBlock);
             JsonOverrideRegistry.registerItemModelOverride(flowingBlockIdentifier, fluidInventoryJson);
             JsonOverrideRegistry.registerItemModelTextureOverride(flowingBlockIdentifier, "layer0", entry.getValue().flowingTexture);
         }

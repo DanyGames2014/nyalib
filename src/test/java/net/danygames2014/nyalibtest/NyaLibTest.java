@@ -147,6 +147,8 @@ public class NyaLibTest {
     public void registerFluids(FluidRegistryEvent event) {
         event.register(gravelFluid = new Fluid(NAMESPACE.id("gravel"), Block.GRAVEL, Block.GRAVEL, 0xFF212121));
         event.register(fuelFluid = new Fluid(NAMESPACE.id("fuel"), NAMESPACE.id("block/fuel_still"), NAMESPACE.id("block/fuel_flowing"), 0xFFFFE524));
+        
+        fuelFluid.setSwimSpeedMultiplier(1.2D);
     }
     
     @EventListener

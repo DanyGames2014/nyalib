@@ -6,6 +6,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.resource.language.I18n;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.modificationstation.stationapi.api.util.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -75,6 +77,17 @@ public final class Fluid {
      * <p>Lava has a tick rate of 30
      */
     private int tickRate = 5;
+
+    /**
+     * Determines the default behavior of if entities can swim in this method 
+     */
+    private boolean canSwimIn = true;
+
+    /**
+     * The default swimspeed multiplier when swimming in this fluid.
+     * <p> Won't matter if {@link #canSwim(Entity)} returns false
+     */
+    private double swimSpeedMultiplier = 1.0F;
     
     // TODO: Custom fluid interactions
     // TODO: Custom player behavior (slowing down etc.)
@@ -82,8 +95,6 @@ public final class Fluid {
     // TODO: World.updateMovementInFluid
     // TODO: Custom overlay texture
     // TODO: Entity.isWet
-    // TODO: Entity.isSubmergedInWater
-    // TODO: Entity.checkWaterCollisions
     // TODO: Entity.isTouchingLava
     // TODO: LiquidBlock.randomDisplayTick
     // TODO: LiquidBlock.checkBlockCollisions
@@ -178,8 +189,9 @@ public final class Fluid {
         return bucketItem;
     }
 
-    public void setBucketItem(Item bucketItem) {
+    public Fluid setBucketItem(Item bucketItem) {
         this.bucketItem = bucketItem;
+        return this;
     }
 
     public Block getBucketFluid() {
@@ -245,26 +257,28 @@ public final class Fluid {
         return still;
     }
 
-    public void setStillBlock(Block still) {
+    public Fluid setStillBlock(Block still) {
         if (this.still != null) {
             NyaLib.LOGGER.warn("Tried to set a still block to the fluid " + this.getIdentifier() + ", but it was already set!");
-            return;
+            return null;
         }
         
         this.still = still;
+        return this;
     }
 
     public Block getFlowingBlock() {
         return flowing;
     }
 
-    public void setFlowing(Block flowing) {
+    public Fluid setFlowingBlock(Block flowing) {
         if (this.flowing != null) {
             NyaLib.LOGGER.warn("Tried to set a flowing block to the fluid " + this.getIdentifier() + ", but it was already set!");
-            return;
+            return null;
         }
         
         this.flowing = flowing;
+        return this;
     }
     
     public Material getMaterial() {
@@ -284,12 +298,31 @@ public final class Fluid {
         return tickRate;
     }
 
-    public void setTickRate(int tickRate) {
+    public Fluid setTickRate(int tickRate) {
         if (tickRate < 0) {
             tickRate = 0;
         }
         
         this.tickRate = tickRate;
+        return this;
+    }
+    
+    public boolean canSwim(Entity entity) {
+        return this.canSwimIn;
+    }
+
+    public Fluid setCanSwimIn(boolean canSwimIn) {
+        this.canSwimIn = canSwimIn;
+        return this;
+    }
+    
+    public double getSwimSpeedMultiplier(LivingEntity entity) {
+        return this.swimSpeedMultiplier;
+    }
+    
+    public Fluid setSwimSpeedMultiplier(double swimSpeedMultiplier) {
+        this.swimSpeedMultiplier = swimSpeedMultiplier;
+        return this;
     }
 
     // Localization

@@ -9,6 +9,7 @@
     "fluid.EntityMixin",
     "fluid.FlowingLiquidBlockMixin",
     "fluid.LiquidBlockMixin",
+    "fluid.LivingEntityMixin",
     "fluid.ScreenHandlerListenerMixin",
     "fluid.ScreenHandlerMixin",
     "fluid.StillLiquidBlockMixin"
