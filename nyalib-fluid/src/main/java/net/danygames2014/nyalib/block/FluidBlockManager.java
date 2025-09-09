@@ -19,13 +19,14 @@ public class FluidBlockManager {
         for (var entry : fluidBlocks.entrySet()) {
             Fluid fluid = entry.getKey();
 
-            // Create the blocks
+            // Create the Still Block and register its item model
             Identifier stillBlockIdentifier = fluid.getIdentifier().withSuffixedPath("_still");
             StillFluidBlock stillBlock = new StillFluidBlock(stillBlockIdentifier, Material.WATER, fluid);
             fluid.setStillBlock(stillBlock);
             JsonOverrideRegistry.registerItemModelOverride(stillBlockIdentifier, fluidInventoryJson);
             JsonOverrideRegistry.registerItemModelTextureOverride(stillBlockIdentifier, "layer0", entry.getValue().stillTexture);
 
+            // Create the Flowing Block and register its item model
             Identifier flowingBlockIdentifier = fluid.getIdentifier().withSuffixedPath("_flowing");
             FlowingFluidBlock flowingFluidBlock = new FlowingFluidBlock(flowingBlockIdentifier, Material.WATER, fluid);
             fluid.setFlowing(flowingFluidBlock);

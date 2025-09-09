@@ -63,7 +63,36 @@ public final class Fluid {
      */
     private int color = 0xFFFFFFFF;
     
-
+    // TODO: Custom fluid interactions
+    // TODO: Custom player behavior (slowing down etc.)
+    // TODO: Custom material
+    // TODO: Track down where everywhere material for fluids is compared
+    // TODO: LiquidBlock.getFlowingAngle still uses Material WATER/LAVA comaprison
+    // TODO: Entity.isInFluid
+    // TODO: World.updateMovementInFluid
+    // TODO: Custom overlay texture
+    // TODO: Entity.isWet
+    // TODO: Entity.isSubmergedInWater
+    // TODO: Entity.checkWaterCollisions
+    // TODO: Entity.isTouchingLava
+    // TODO: LiquidBlock.randomDisplayTick
+    // TODO: LiquidBlock.checkBlockCollisions
+    // TODO: LiquidBlock.fizz?
+    // TODO: OwO WhatsThis integration graphic improvement https://www.curseforge.com/minecraft/mc-mods/top-addons
+    // TODO: OwO WhatsThis use fluid colors
+    // TODO: Automatic block using only color multiplier?
+    // TODO: Color Multiplier
+    // TODO: Properly implement fluids which cannot be placed into world
+    // TODO: Luminosity
+    // TODO: Density?
+    // TODO: Temperature? Per Stack (pain^2) ? Per Fluid?
+    // TODO: Viscosity?
+    // TODO: Gaseous Fluids?
+    // TODO: Fluids without a block implementation?
+    // TODO: @Nullable overlay parameter
+    // TODO: Interactions -> Vaporization in Nether
+    // TODO: Methods with world/stack contexts
+    
     // Base constructor
     public Fluid(Identifier identifier, Block still, Block flowing) {
         this.identifier = identifier;
