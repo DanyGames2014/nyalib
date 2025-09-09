@@ -6,6 +6,9 @@ import net.minecraft.block.material.FluidMaterial;
 public class Fluids {
     public static Fluid WATER;
     public static Fluid LAVA;
-    
-    public static FluidMaterial FLUID_MATERIAL = new FluidMaterial(MapColor.GRAY);
+
+    /**
+     * A default fluid material used when a fluid doesn't have a material for some reason
+     */
+    public static FluidMaterial DEFAULT_FLUID_MATERIAL = new FluidMaterial(MapColor.GRAY);
 }

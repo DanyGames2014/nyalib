@@ -1,6 +1,8 @@
 package net.danygames2014.nyalib.block;
 
 import net.danygames2014.nyalib.fluid.Fluid;
+import net.minecraft.block.MapColor;
+import net.minecraft.block.material.FluidMaterial;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.modificationstation.stationapi.api.client.event.texture.TextureRegisterEvent;
@@ -11,24 +13,26 @@ import java.util.HashMap;
 public class FluidBlockManager {
     private static final HashMap<Fluid, FluidBlockEntry> fluidBlocks = new HashMap<>();
 
-    public static void requestBlock(Fluid fluid, Identifier stillTexture, Identifier flowingTexture, Material material) {
-        fluidBlocks.put(fluid, new FluidBlockEntry(fluid, stillTexture, flowingTexture, material));
+    public static void requestBlock(Fluid fluid, Identifier stillTexture, Identifier flowingTexture, MapColor mapColor) {
+        fluidBlocks.put(fluid, new FluidBlockEntry(fluid, stillTexture, flowingTexture, mapColor));
     }
 
     public static void registerBlocks() {
         for (var entry : fluidBlocks.entrySet()) {
             Fluid fluid = entry.getKey();
-
+            
+            Material fluidMaterial = new FluidMaterial(entry.getValue().mapColor);
+            
             // Create the Still Block and register its item model
             Identifier stillBlockIdentifier = fluid.getIdentifier().withSuffixedPath("_still");
-            StillFluidBlock stillBlock = new StillFluidBlock(stillBlockIdentifier, entry.getValue().material, fluid);
+            StillFluidBlock stillBlock = new StillFluidBlock(stillBlockIdentifier, fluidMaterial, fluid);
             fluid.setStillBlock(stillBlock);
             JsonOverrideRegistry.registerItemModelOverride(stillBlockIdentifier, fluidInventoryJson);
             JsonOverrideRegistry.registerItemModelTextureOverride(stillBlockIdentifier, "layer0", entry.getValue().stillTexture);
 
             // Create the Flowing Block and register its item model
             Identifier flowingBlockIdentifier = fluid.getIdentifier().withSuffixedPath("_flowing");
-            FlowingFluidBlock flowingFluidBlock = new FlowingFluidBlock(flowingBlockIdentifier, entry.getValue().material, fluid);
+            FlowingFluidBlock flowingFluidBlock = new FlowingFluidBlock(flowingBlockIdentifier, fluidMaterial, fluid);
             fluid.setFlowing(flowingFluidBlock);
             JsonOverrideRegistry.registerItemModelOverride(flowingBlockIdentifier, fluidInventoryJson);
             JsonOverrideRegistry.registerItemModelTextureOverride(flowingBlockIdentifier, "layer0", entry.getValue().flowingTexture);
@@ -65,13 +69,13 @@ public class FluidBlockManager {
         public FluidBlockTextureHolder textureHolder;
         public Identifier stillTexture;
         public Identifier flowingTexture;
-        public Material material;
+        public MapColor mapColor;
 
-        public FluidBlockEntry(Fluid fluid, Identifier stillTexture, Identifier flowingTexture, Material material) {
+        public FluidBlockEntry(Fluid fluid, Identifier stillTexture, Identifier flowingTexture, MapColor mapColor) {
             this.fluid = fluid;
             this.stillTexture = stillTexture;
             this.flowingTexture = flowingTexture;
-            this.material = material;
+            this.mapColor = mapColor;
         }
 
         public void setTextureHolder(FluidBlockTextureHolder textureHolder) {

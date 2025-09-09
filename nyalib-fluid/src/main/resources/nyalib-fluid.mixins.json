@@ -6,6 +6,7 @@
   "mixins": [
     "fluid.BlockMixin",
     "fluid.BucketItemMixin",
+    "fluid.EntityMixin",
     "fluid.FlowingLiquidBlockMixin",
     "fluid.LiquidBlockMixin",
     "fluid.ScreenHandlerListenerMixin",

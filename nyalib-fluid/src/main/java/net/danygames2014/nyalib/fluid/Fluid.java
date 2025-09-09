@@ -3,6 +3,7 @@ package net.danygames2014.nyalib.fluid;
 import net.danygames2014.nyalib.NyaLib;
 import net.danygames2014.nyalib.block.FluidBlockManager;
 import net.minecraft.block.Block;
+import net.minecraft.block.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.item.Item;
@@ -17,14 +18,17 @@ public final class Fluid {
      * The unique identifier of the fluid
      */
     private final Identifier identifier;
+    
     /**
      * The in-world block representing the fluid in its still state
      */
     private Block still;
+    
     /**
      * The in-world block representing the fluid in its flowing state
      */
     private Block flowing;
+    
     /**
      * This determines how much of a fluid in mB does a bucket hold.
      * This will be used when a fluid is placed into the world or taken from it.
@@ -75,7 +79,6 @@ public final class Fluid {
     // TODO: Custom fluid interactions
     // TODO: Custom player behavior (slowing down etc.)
     // TODO: Track down where everywhere material for fluids is compared
-    // TODO: Entity.isInFluid
     // TODO: World.updateMovementInFluid
     // TODO: Custom overlay texture
     // TODO: Entity.isWet
@@ -99,6 +102,8 @@ public final class Fluid {
     // TODO: @Nullable overlay parameter
     // TODO: Interactions -> Vaporization in Nether
     // TODO: Methods with world/stack contexts
+    // TODO: Use fluid to register a MapColor for the fluid
+    // TODO: Entity.isInFluid(Fluid) when https://github.com/FabricMC/fabric-loom/issues/1334 is fixed
     
     // Base constructor
     public Fluid(Identifier identifier, Block still, Block flowing) {
@@ -119,24 +124,24 @@ public final class Fluid {
     }
 
     // Automatic Block Constructors
-    public Fluid(Identifier identifier, Identifier stillTexture, Identifier flowingTexture, Material material, int color) {
+    public Fluid(Identifier identifier, Identifier stillTexture, Identifier flowingTexture, MapColor mapColor, int color) {
         this(identifier, null, null);
         this.setColor(color);
-        FluidBlockManager.requestBlock(this, stillTexture, flowingTexture, material);
+        FluidBlockManager.requestBlock(this, stillTexture, flowingTexture, mapColor);
     }
 
     public Fluid(Identifier identifier, Identifier stillTexture, Identifier flowingTexture, int color) {
-        this(identifier, stillTexture, flowingTexture, Fluids.FLUID_MATERIAL, color);
+        this(identifier, stillTexture, flowingTexture, Fluids.DEFAULT_FLUID_MATERIAL.mapColor, color);
     }
     
-    public Fluid(Identifier identifier, Identifier stillTexture, Identifier flowingTexture, Material material, Color color) {
+    public Fluid(Identifier identifier, Identifier stillTexture, Identifier flowingTexture, MapColor mapColor, Color color) {
         this(identifier, null, null);
         this.setColor(color);
-        FluidBlockManager.requestBlock(this, stillTexture, flowingTexture, material);
+        FluidBlockManager.requestBlock(this, stillTexture, flowingTexture, mapColor);
     }
 
     public Fluid(Identifier identifier, Identifier stillTexture, Identifier flowingTexture, Color color) {
-        this(identifier, stillTexture, flowingTexture, Fluids.FLUID_MATERIAL, color);
+        this(identifier, stillTexture, flowingTexture, Fluids.DEFAULT_FLUID_MATERIAL.mapColor, color);
     }
 
     // Identifier
@@ -260,6 +265,18 @@ public final class Fluid {
         }
         
         this.flowing = flowing;
+    }
+    
+    public Material getMaterial() {
+        if (flowing != null) {
+            return flowing.material;
+        }
+        
+        if (still != null) {
+            return still.material;
+        }
+        
+        return Fluids.DEFAULT_FLUID_MATERIAL;
     }
     
     // Fluid Properties
