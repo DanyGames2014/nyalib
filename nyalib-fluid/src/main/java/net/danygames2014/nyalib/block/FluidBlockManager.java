@@ -11,8 +11,8 @@ import java.util.HashMap;
 public class FluidBlockManager {
     private static final HashMap<Fluid, FluidBlockEntry> fluidBlocks = new HashMap<>();
 
-    public static void requestBlock(Fluid fluid, Identifier stillTexture, Identifier flowingTexture) {
-        fluidBlocks.put(fluid, new FluidBlockEntry(fluid, stillTexture, flowingTexture));
+    public static void requestBlock(Fluid fluid, Identifier stillTexture, Identifier flowingTexture, Material material) {
+        fluidBlocks.put(fluid, new FluidBlockEntry(fluid, stillTexture, flowingTexture, material));
     }
 
     public static void registerBlocks() {
@@ -21,14 +21,14 @@ public class FluidBlockManager {
 
             // Create the Still Block and register its item model
             Identifier stillBlockIdentifier = fluid.getIdentifier().withSuffixedPath("_still");
-            StillFluidBlock stillBlock = new StillFluidBlock(stillBlockIdentifier, Material.WATER, fluid);
+            StillFluidBlock stillBlock = new StillFluidBlock(stillBlockIdentifier, entry.getValue().material, fluid);
             fluid.setStillBlock(stillBlock);
             JsonOverrideRegistry.registerItemModelOverride(stillBlockIdentifier, fluidInventoryJson);
             JsonOverrideRegistry.registerItemModelTextureOverride(stillBlockIdentifier, "layer0", entry.getValue().stillTexture);
 
             // Create the Flowing Block and register its item model
             Identifier flowingBlockIdentifier = fluid.getIdentifier().withSuffixedPath("_flowing");
-            FlowingFluidBlock flowingFluidBlock = new FlowingFluidBlock(flowingBlockIdentifier, Material.WATER, fluid);
+            FlowingFluidBlock flowingFluidBlock = new FlowingFluidBlock(flowingBlockIdentifier, entry.getValue().material, fluid);
             fluid.setFlowing(flowingFluidBlock);
             JsonOverrideRegistry.registerItemModelOverride(flowingBlockIdentifier, fluidInventoryJson);
             JsonOverrideRegistry.registerItemModelTextureOverride(flowingBlockIdentifier, "layer0", entry.getValue().flowingTexture);
@@ -65,11 +65,13 @@ public class FluidBlockManager {
         public FluidBlockTextureHolder textureHolder;
         public Identifier stillTexture;
         public Identifier flowingTexture;
+        public Material material;
 
-        public FluidBlockEntry(Fluid fluid, Identifier stillTexture, Identifier flowingTexture) {
+        public FluidBlockEntry(Fluid fluid, Identifier stillTexture, Identifier flowingTexture, Material material) {
             this.fluid = fluid;
             this.stillTexture = stillTexture;
             this.flowingTexture = flowingTexture;
+            this.material = material;
         }
 
         public void setTextureHolder(FluidBlockTextureHolder textureHolder) {

@@ -62,12 +62,19 @@ public final class Fluid {
      * This represents an ARGB color
      */
     private int color = 0xFFFFFFFF;
+
+    /**
+     * The tick rate governs how fast the fluid will spread.
+     * It is the interval in ticks between each spread.
+     * <p> 
+     * <p>Water has a tick rate of 5
+     * <p>Lava has a tick rate of 30
+     */
+    private int tickRate = 5;
     
     // TODO: Custom fluid interactions
     // TODO: Custom player behavior (slowing down etc.)
-    // TODO: Custom material
     // TODO: Track down where everywhere material for fluids is compared
-    // TODO: LiquidBlock.getFlowingAngle still uses Material WATER/LAVA comaprison
     // TODO: Entity.isInFluid
     // TODO: World.updateMovementInFluid
     // TODO: Custom overlay texture
@@ -112,16 +119,24 @@ public final class Fluid {
     }
 
     // Automatic Block Constructors
-    public Fluid(Identifier identifier, Identifier stillTexture, Identifier flowingTexture, int color) {
+    public Fluid(Identifier identifier, Identifier stillTexture, Identifier flowingTexture, Material material, int color) {
         this(identifier, null, null);
         this.setColor(color);
-        FluidBlockManager.requestBlock(this, stillTexture, flowingTexture);
+        FluidBlockManager.requestBlock(this, stillTexture, flowingTexture, material);
+    }
+
+    public Fluid(Identifier identifier, Identifier stillTexture, Identifier flowingTexture, int color) {
+        this(identifier, stillTexture, flowingTexture, Fluids.FLUID_MATERIAL, color);
+    }
+    
+    public Fluid(Identifier identifier, Identifier stillTexture, Identifier flowingTexture, Material material, Color color) {
+        this(identifier, null, null);
+        this.setColor(color);
+        FluidBlockManager.requestBlock(this, stillTexture, flowingTexture, material);
     }
 
     public Fluid(Identifier identifier, Identifier stillTexture, Identifier flowingTexture, Color color) {
-        this(identifier, null, null);
-        this.setColor(color);
-        FluidBlockManager.requestBlock(this, stillTexture, flowingTexture);
+        this(identifier, stillTexture, flowingTexture, Fluids.FLUID_MATERIAL, color);
     }
 
     // Identifier
@@ -245,6 +260,19 @@ public final class Fluid {
         }
         
         this.flowing = flowing;
+    }
+    
+    // Fluid Properties
+    public int getTickRate() {
+        return tickRate;
+    }
+
+    public void setTickRate(int tickRate) {
+        if (tickRate < 0) {
+            tickRate = 0;
+        }
+        
+        this.tickRate = tickRate;
     }
 
     // Localization

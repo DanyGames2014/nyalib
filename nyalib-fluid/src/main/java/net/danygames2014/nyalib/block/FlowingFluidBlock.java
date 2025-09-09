@@ -15,6 +15,13 @@ public class FlowingFluidBlock extends TemplateFlowingLiquidBlock {
         this.setTranslationKey(identifier);
     }
 
+    // Tick Rate
+    @Override
+    public int getTickRate() {
+        return fluid.getTickRate();
+    }
+    
+    // Rendering
     @Override
     public int getTexture(int side, int meta) {
         if (textureHolder == null) {
