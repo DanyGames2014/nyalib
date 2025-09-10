@@ -3,6 +3,8 @@ package net.danygames2014.nyalib.init.fluid;
 import net.danygames2014.nyalib.block.JsonOverrideRegistry;
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.danygames2014.nyalib.fluid.FluidRegistry;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.item.Item;
@@ -26,7 +28,9 @@ public class ItemListener {
             }
 
             Identifier bucketIdentifier = fluidEntry.getKey().withSuffixedPath("_bucket");
-            JsonOverrideRegistry.registerItemModelOverride(bucketIdentifier, bucketItemJson);
+            if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+                JsonOverrideRegistry.registerItemModelOverride(bucketIdentifier, bucketItemJson);
+            }
             Item bucket = new TemplateBucketItem(bucketIdentifier, fluidEntry.getValue().getBucketFluid().id).setTranslationKey(bucketIdentifier);
             fluidEntry.getValue().setBucketItem(bucket);
             bucketFluids.put(bucket, fluidEntry.getValue());

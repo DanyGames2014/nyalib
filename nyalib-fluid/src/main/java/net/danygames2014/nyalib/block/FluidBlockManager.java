@@ -1,6 +1,9 @@
 package net.danygames2014.nyalib.block;
 
 import net.danygames2014.nyalib.fluid.Fluid;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.material.FluidMaterial;
 import net.minecraft.block.material.Material;
@@ -27,15 +30,19 @@ public class FluidBlockManager {
             Identifier stillBlockIdentifier = fluid.getIdentifier().withSuffixedPath("_still");
             StillFluidBlock stillBlock = new StillFluidBlock(stillBlockIdentifier, fluidMaterial, fluid);
             fluid.setStillBlock(stillBlock);
-            JsonOverrideRegistry.registerItemModelOverride(stillBlockIdentifier, fluidInventoryJson);
-            JsonOverrideRegistry.registerItemModelTextureOverride(stillBlockIdentifier, "layer0", entry.getValue().stillTexture);
+            if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+                JsonOverrideRegistry.registerItemModelOverride(stillBlockIdentifier, fluidInventoryJson);
+                JsonOverrideRegistry.registerItemModelTextureOverride(stillBlockIdentifier, "layer0", entry.getValue().stillTexture);
+            }
 
             // Create the Flowing Block and register its item model
             Identifier flowingBlockIdentifier = fluid.getIdentifier().withSuffixedPath("_flowing");
             FlowingFluidBlock flowingFluidBlock = new FlowingFluidBlock(flowingBlockIdentifier, fluidMaterial, fluid);
             fluid.setFlowingBlock(flowingFluidBlock);
-            JsonOverrideRegistry.registerItemModelOverride(flowingBlockIdentifier, fluidInventoryJson);
-            JsonOverrideRegistry.registerItemModelTextureOverride(flowingBlockIdentifier, "layer0", entry.getValue().flowingTexture);
+            if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+                JsonOverrideRegistry.registerItemModelOverride(flowingBlockIdentifier, fluidInventoryJson);
+                JsonOverrideRegistry.registerItemModelTextureOverride(flowingBlockIdentifier, "layer0", entry.getValue().flowingTexture);
+            }
         }
     }
 
