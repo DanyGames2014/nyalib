@@ -21,7 +21,8 @@
     "fluid.BlockRenderManagerMixin",
     "fluid.HandledScreenMixin",
     "fluid.InteractionManagerMixin",
-    "fluid.MultiplayerInteractionManagerMixin"
+    "fluid.MultiplayerInteractionManagerMixin",
+    "fluid.HeldItemRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.*;
 
 
+@SuppressWarnings("UnusedReturnValue")
 public final class Fluid {
     /**
      * The unique identifier of the fluid
@@ -90,7 +91,6 @@ public final class Fluid {
     private double swimSpeedMultiplier = 1.0F;
     
     // TODO: Custom fluid interactions
-    // TODO: Custom player behavior (slowing down etc.)
     // TODO: Track down where everywhere material for fluids is compared
     // TODO: World.updateMovementInFluid
     // TODO: Custom overlay texture
