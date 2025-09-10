@@ -307,6 +307,7 @@ public final class Fluid {
         return this;
     }
     
+    // Swimming properties
     public boolean canSwim(Entity entity) {
         return this.canSwimIn;
     }
@@ -316,12 +317,12 @@ public final class Fluid {
         return this;
     }
     
-    public double getSwimSpeedMultiplier(LivingEntity entity) {
+    public double getMovementSpeedMultiplier(LivingEntity entity) {
         return this.swimSpeedMultiplier;
     }
     
-    public Fluid setSwimSpeedMultiplier(double swimSpeedMultiplier) {
-        this.swimSpeedMultiplier = swimSpeedMultiplier;
+    public Fluid setMovementSpeedMultiplier(double movementSpeedMultiplier) {
+        this.swimSpeedMultiplier = movementSpeedMultiplier;
         return this;
     }
 

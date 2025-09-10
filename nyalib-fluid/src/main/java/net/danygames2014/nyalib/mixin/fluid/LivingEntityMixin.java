@@ -28,12 +28,12 @@ public abstract class LivingEntityMixin extends Entity {
         Block block = this.world.getBlockState(MathHelper.floor(this.x), MathHelper.floor(this.boundingBox.minY), MathHelper.floor(this.z)).getBlock();
 
         if (block instanceof StillFluidBlock stillFluidBlock) {
-            movementMultiplier = stillFluidBlock.fluid.getSwimSpeedMultiplier((LivingEntity) (Object) this);
+            movementMultiplier = stillFluidBlock.fluid.getMovementSpeedMultiplier((LivingEntity) (Object) this);
             return;
         }
 
         if (block instanceof FlowingFluidBlock flowingFluidBlock) {
-            movementMultiplier = flowingFluidBlock.fluid.getSwimSpeedMultiplier((LivingEntity) (Object) this);
+            movementMultiplier = flowingFluidBlock.fluid.getMovementSpeedMultiplier((LivingEntity) (Object) this);
             return;
         }
 
