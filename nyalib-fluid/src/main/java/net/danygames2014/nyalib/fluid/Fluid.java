@@ -94,7 +94,6 @@ public final class Fluid {
     // TODO: Custom fluid interactions
     // TODO: Track down where everywhere material for fluids is compared
     // TODO: World.updateMovementInFluid
-    // TODO: Custom overlay texture
     // TODO: Entity.isWet
     // TODO: Entity.isTouchingLava
     // TODO: LiquidBlock.randomDisplayTick
