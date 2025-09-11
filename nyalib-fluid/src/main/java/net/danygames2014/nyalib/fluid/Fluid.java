@@ -13,7 +13,6 @@ import net.modificationstation.stationapi.api.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
-import java.util.Map;
 
 
 @SuppressWarnings("UnusedReturnValue")
@@ -91,6 +90,11 @@ public final class Fluid {
      */
     private double swimSpeedMultiplier = 1.0F;
 
+    /**
+     * Determines the default behavior of if entities will drown in this fluid.
+     */
+    private boolean willDrown = true;
+
     // TODO: Custom fluid interactions
     // TODO: Track down where everywhere material for fluids is compared
     // TODO: World.updateMovementInFluid
@@ -110,7 +114,6 @@ public final class Fluid {
     // TODO: Viscosity?
     // TODO: Gaseous Fluids?
     // TODO: Fluids without a block implementation?
-    // TODO: @Nullable overlay parameter
     // TODO: Interactions -> Vaporization in Nether
     // TODO: Methods with world/stack contexts
     // TODO: Use fluid to register a MapColor for the fluid
@@ -325,6 +328,15 @@ public final class Fluid {
 
     public Fluid setMovementSpeedMultiplier(double movementSpeedMultiplier) {
         this.swimSpeedMultiplier = movementSpeedMultiplier;
+        return this;
+    }
+    
+    public boolean willDrown(LivingEntity livingEntity) {
+        return willDrown;
+    }
+    
+    public Fluid setWillDrown(boolean willDrown) {
+        this.willDrown = willDrown;
         return this;
     }
 

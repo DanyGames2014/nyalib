@@ -20,9 +20,10 @@
   "client": [
     "fluid.BlockRenderManagerMixin",
     "fluid.HandledScreenMixin",
+    "fluid.HeldItemRendererMixin",
+    "fluid.InGameHudMixin",
     "fluid.InteractionManagerMixin",
-    "fluid.MultiplayerInteractionManagerMixin",
-    "fluid.HeldItemRendererMixin"
+    "fluid.MultiplayerInteractionManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
