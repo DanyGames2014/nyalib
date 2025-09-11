@@ -35,7 +35,7 @@ public abstract class HeldItemRendererMixin {
             stillBlock = stillFluidBlock;
         } else if (block instanceof FlowingFluidBlock flowingFluidBlock) {
             if (flowingFluidBlock.fluid.getStillBlock() instanceof StillFluidBlock stillFluidBlock) {
-                stillBlock = stillFluidBlock;       
+                stillBlock = stillFluidBlock;
             }
         }
 
@@ -47,22 +47,21 @@ public abstract class HeldItemRendererMixin {
             return;
         }
 
-        int stillTextureId = stillBlock.textureHolder.getStillTextureId();
-        //textureId = Atlases.getTerrain().getTexture(Identifier.of("nyalibtest:block/fuel_still")).index;
-        renderOverlay(tickDelta, stillTextureId);
+        int overlayTextureId = stillBlock.textureHolder.getOverlayTextureId();
+        renderWrappedOverlay(tickDelta, overlayTextureId);
     }
 
     @Unique
     int atlasTextureId = -1;
-    
+
     @Unique
-    private void renderOverlay(float tickDelta, int textureId) {
+    private void renderStaticOverlay(float tickDelta, int textureId) {
         Atlas.Sprite tex = Atlases.getTerrain().getTexture(textureId);
-        
+
         Tessellator tessellator = Tessellator.INSTANCE;
         float brightness = this.minecraft.player.getBrightnessAtEyes(tickDelta);
-        if (atlasTextureId == - 1) {
-            atlasTextureId = StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).getGlId();    
+        if (atlasTextureId == -1) {
+            atlasTextureId = StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).getGlId();
         }
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, atlasTextureId);
         GL11.glColor4f(brightness, brightness, brightness, 0.5F);
@@ -74,6 +73,43 @@ public abstract class HeldItemRendererMixin {
         tessellator.vertex(1.0f, -1.0f, -0.5f, tex.getStartU(), tex.getEndV());
         tessellator.vertex(1.0f, 1.0f, -0.5f, tex.getStartU(), tex.getStartV());
         tessellator.vertex(-1.0f, 1.0f, -0.5f, tex.getEndU(), tex.getStartV());
+        tessellator.draw();
+        GL11.glPopMatrix();
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GL11.glDisable(GL11.GL_BLEND);
+    }
+
+    @Unique
+    public void renderWrappedOverlay(float tickDelta, int textureId) {
+        Tessellator tessellator = Tessellator.INSTANCE;
+
+        int textureWidth = 16;
+        int textureHeight = 256;
+        
+        float yaw = -this.minecraft.player.yaw / 256.0F; // texSizeX * 16
+        float pitch = this.minecraft.player.pitch / 4096.0F; // texSizeY * 16
+
+        float windowU = 1.0f;      // 16px (windowWidth) / 16px (texWidth)
+        float windowV = 0.0625f;   // 16px (windowHeight) / 256px (texHeight)
+
+        float uMin = 0.0f + yaw;
+        float uMax = windowU + yaw;
+        float vMin = 0.0f + pitch;
+        float vMax = windowV + pitch;
+
+        float brightness = this.minecraft.player.getBrightnessAtEyes(tickDelta);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
+        GL11.glColor4f(brightness, brightness, brightness, 0.5F);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
+        GL11.glPushMatrix();
+        tessellator.startQuads();
+        tessellator.vertex(-1.0f, -1.0f, -0.5f, uMax, vMax);
+        tessellator.vertex( 1.0f, -1.0f, -0.5f, uMin, vMax);
+        tessellator.vertex( 1.0f,  1.0f, -0.5f, uMin, vMin);
+        tessellator.vertex(-1.0f,  1.0f, -0.5f, uMax, vMin);
         tessellator.draw();
         GL11.glPopMatrix();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

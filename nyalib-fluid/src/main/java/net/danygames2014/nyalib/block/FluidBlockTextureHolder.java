@@ -1,5 +1,6 @@
 package net.danygames2014.nyalib.block;
 
+import net.minecraft.client.Minecraft;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.client.texture.atlas.ExpandableAtlas;
 import net.modificationstation.stationapi.api.util.Identifier;
@@ -7,6 +8,7 @@ import net.modificationstation.stationapi.api.util.Identifier;
 public class FluidBlockTextureHolder {
     public int stillSpriteId;
     public int flowingSpriteId;
+    public int overlaySpriteId = -1;
 
     public FluidBlockTextureHolder() {
     }
@@ -17,17 +19,25 @@ public class FluidBlockTextureHolder {
 
     public void addStillTexture(Identifier identifier) {
         ExpandableAtlas terrainAtlas = Atlases.getTerrain();
-        
+
         stillSpriteId = terrainAtlas.addTexture(identifier).index;
     }
-    
+
     public void addFlowingTexture(Identifier identifier) {
         ExpandableAtlas terrainAtlas = Atlases.getTerrain();
-        
+
         flowingSpriteId = terrainAtlas.addTexture(identifier).index;
     }
 
     public int getFlowingTextureId() {
         return flowingSpriteId;
+    }
+
+    public void addOverlayTexture(Identifier identifier) {
+        overlaySpriteId = Minecraft.INSTANCE.textureManager.getTextureId("/assets/" + identifier.namespace + "/stationapi/textures/" + identifier.path + ".png");
+    }
+    
+    public int getOverlayTextureId() {
+        return overlaySpriteId;
     }
 }

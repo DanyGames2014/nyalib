@@ -16,8 +16,8 @@ import java.util.HashMap;
 public class FluidBlockManager {
     private static final HashMap<Fluid, FluidBlockEntry> fluidBlocks = new HashMap<>();
 
-    public static void requestBlock(Fluid fluid, Identifier stillTexture, Identifier flowingTexture, MapColor mapColor) {
-        fluidBlocks.put(fluid, new FluidBlockEntry(fluid, stillTexture, flowingTexture, mapColor));
+    public static void requestBlock(Fluid fluid, Identifier stillTexture, Identifier flowingTexture, Identifier overlayTexture, MapColor mapColor) {
+        fluidBlocks.put(fluid, new FluidBlockEntry(fluid, stillTexture, flowingTexture, overlayTexture, mapColor));
     }
 
     public static void registerBlocks() {
@@ -53,6 +53,7 @@ public class FluidBlockManager {
             FluidBlockTextureHolder textureHolder = new FluidBlockTextureHolder();
             textureHolder.addStillTexture(fluidEntry.stillTexture);
             textureHolder.addFlowingTexture(fluidEntry.flowingTexture);
+            textureHolder.addOverlayTexture(fluidEntry.overlayTexture);
 
             fluidEntry.setTextureHolder(textureHolder);
         }
@@ -76,12 +77,14 @@ public class FluidBlockManager {
         public FluidBlockTextureHolder textureHolder;
         public Identifier stillTexture;
         public Identifier flowingTexture;
+        public Identifier overlayTexture;
         public MapColor mapColor;
 
-        public FluidBlockEntry(Fluid fluid, Identifier stillTexture, Identifier flowingTexture, MapColor mapColor) {
+        public FluidBlockEntry(Fluid fluid, Identifier stillTexture, Identifier flowingTexture, Identifier overlayTexture, MapColor mapColor) {
             this.fluid = fluid;
             this.stillTexture = stillTexture;
             this.flowingTexture = flowingTexture;
+            this.overlayTexture = overlayTexture;
             this.mapColor = mapColor;
         }
 

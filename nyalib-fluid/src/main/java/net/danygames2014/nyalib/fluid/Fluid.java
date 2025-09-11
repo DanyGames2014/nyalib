@@ -13,6 +13,7 @@ import net.modificationstation.stationapi.api.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
+import java.util.Map;
 
 
 @SuppressWarnings("UnusedReturnValue")
@@ -21,17 +22,17 @@ public final class Fluid {
      * The unique identifier of the fluid
      */
     private final Identifier identifier;
-    
+
     /**
      * The in-world block representing the fluid in its still state
      */
     private Block still;
-    
+
     /**
      * The in-world block representing the fluid in its flowing state
      */
     private Block flowing;
-    
+
     /**
      * This determines how much of a fluid in mB does a bucket hold.
      * This will be used when a fluid is placed into the world or taken from it.
@@ -43,7 +44,7 @@ public final class Fluid {
      * If it is null, the fluid won't be taken from world
      */
     private Item bucketItem;
-    
+
     /**
      * Determines if a bucket can place this fluid in world
      */
@@ -53,7 +54,7 @@ public final class Fluid {
      * Determines whether a bucket will be automatically registered for the fluid
      */
     private boolean automaticBucketRegistration = true;
-    
+
     /**
      * The sound that will be played when the bucket is filled
      */
@@ -73,14 +74,14 @@ public final class Fluid {
     /**
      * The tick rate governs how fast the fluid will spread.
      * It is the interval in ticks between each spread.
-     * <p> 
+     * <p>
      * <p>Water has a tick rate of 5
      * <p>Lava has a tick rate of 30
      */
     private int tickRate = 5;
 
     /**
-     * Determines the default behavior of if entities can swim in this method 
+     * Determines the default behavior of if entities can swim in this method
      */
     private boolean canSwimIn = true;
 
@@ -89,7 +90,7 @@ public final class Fluid {
      * <p> Won't matter if {@link #canSwim(Entity)} returns false
      */
     private double swimSpeedMultiplier = 1.0F;
-    
+
     // TODO: Custom fluid interactions
     // TODO: Track down where everywhere material for fluids is compared
     // TODO: World.updateMovementInFluid
@@ -115,7 +116,7 @@ public final class Fluid {
     // TODO: Methods with world/stack contexts
     // TODO: Use fluid to register a MapColor for the fluid
     // TODO: Entity.isInFluid(Fluid) when https://github.com/FabricMC/fabric-loom/issues/1334 is fixed
-    
+
     // Base constructor
     public Fluid(Identifier identifier, Block still, Block flowing) {
         this.identifier = identifier;
@@ -135,24 +136,26 @@ public final class Fluid {
     }
 
     // Automatic Block Constructors
-    public Fluid(Identifier identifier, Identifier stillTexture, Identifier flowingTexture, MapColor mapColor, int color) {
+    // Full Constructor with int color
+    public Fluid(Identifier identifier, Identifier stillTexture, Identifier flowingTexture, Identifier overlayTexture, MapColor mapColor, int color) {
         this(identifier, null, null);
         this.setColor(color);
-        FluidBlockManager.requestBlock(this, stillTexture, flowingTexture, mapColor);
-    }
-
-    public Fluid(Identifier identifier, Identifier stillTexture, Identifier flowingTexture, int color) {
-        this(identifier, stillTexture, flowingTexture, Fluids.DEFAULT_FLUID_MATERIAL.mapColor, color);
+        FluidBlockManager.requestBlock(this, stillTexture, flowingTexture, overlayTexture, mapColor);
     }
     
-    public Fluid(Identifier identifier, Identifier stillTexture, Identifier flowingTexture, MapColor mapColor, Color color) {
-        this(identifier, null, null);
-        this.setColor(color);
-        FluidBlockManager.requestBlock(this, stillTexture, flowingTexture, mapColor);
+    // Default map color
+    public Fluid(Identifier identifier, Identifier stillTexture, Identifier flowingTexture, Identifier overlayTexture, int color) {
+        this(identifier, stillTexture, flowingTexture, overlayTexture, Fluids.DEFAULT_FLUID_MATERIAL.mapColor, color);
     }
 
-    public Fluid(Identifier identifier, Identifier stillTexture, Identifier flowingTexture, Color color) {
-        this(identifier, stillTexture, flowingTexture, Fluids.DEFAULT_FLUID_MATERIAL.mapColor, color);
+    // Default overlay texture
+    public Fluid(Identifier identifier, Identifier stillTexture, Identifier flowingTexture, MapColor mapColor, int color) {
+        this(identifier, stillTexture, flowingTexture, stillTexture, mapColor, color);
+    }
+
+    // Default overlay texture and map color
+    public Fluid(Identifier identifier, Identifier stillTexture, Identifier flowingTexture, int color) {
+        this(identifier, stillTexture, flowingTexture, stillTexture, Fluids.DEFAULT_FLUID_MATERIAL.mapColor, color);
     }
 
     // Identifier
@@ -197,11 +200,11 @@ public final class Fluid {
     public Block getBucketFluid() {
         return flowing;
     }
-    
+
     public boolean automaticBucketRegistrationEnabled() {
         return automaticBucketRegistration;
     }
-    
+
     public Fluid disableAutomaticBucketRegistration() {
         this.automaticBucketRegistration = false;
         return this;
@@ -262,7 +265,7 @@ public final class Fluid {
             NyaLib.LOGGER.warn("Tried to set a still block to the fluid " + this.getIdentifier() + ", but it was already set!");
             return null;
         }
-        
+
         this.still = still;
         return this;
     }
@@ -276,23 +279,23 @@ public final class Fluid {
             NyaLib.LOGGER.warn("Tried to set a flowing block to the fluid " + this.getIdentifier() + ", but it was already set!");
             return null;
         }
-        
+
         this.flowing = flowing;
         return this;
     }
-    
+
     public Material getMaterial() {
         if (flowing != null) {
             return flowing.material;
         }
-        
+
         if (still != null) {
             return still.material;
         }
-        
+
         return Fluids.DEFAULT_FLUID_MATERIAL;
     }
-    
+
     // Fluid Properties
     public int getTickRate() {
         return tickRate;
@@ -302,11 +305,11 @@ public final class Fluid {
         if (tickRate < 0) {
             tickRate = 0;
         }
-        
+
         this.tickRate = tickRate;
         return this;
     }
-    
+
     // Swimming properties
     public boolean canSwim(Entity entity) {
         return this.canSwimIn;
@@ -316,11 +319,11 @@ public final class Fluid {
         this.canSwimIn = canSwimIn;
         return this;
     }
-    
+
     public double getMovementSpeedMultiplier(LivingEntity entity) {
         return this.swimSpeedMultiplier;
     }
-    
+
     public Fluid setMovementSpeedMultiplier(double movementSpeedMultiplier) {
         this.swimSpeedMultiplier = movementSpeedMultiplier;
         return this;
@@ -330,7 +333,7 @@ public final class Fluid {
     public String getTranslationKey() {
         return "fluid." + identifier.namespace + "." + identifier.path + ".name";
     }
-    
+
     public String getTranslatedName() {
         return I18n.getTranslation(getTranslationKey());
     }
@@ -339,7 +342,7 @@ public final class Fluid {
     public String getTranslationKey(FluidStack fluidStack) {
         return getTranslationKey();
     }
-    
+
     public String getTranslatedName(FluidStack fluidStack) {
         return getTranslatedName();
     }
