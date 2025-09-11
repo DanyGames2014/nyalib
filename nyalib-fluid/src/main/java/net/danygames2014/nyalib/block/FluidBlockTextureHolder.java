@@ -7,8 +7,12 @@ import net.modificationstation.stationapi.api.util.Identifier;
 
 public class FluidBlockTextureHolder {
     public int stillSpriteId;
+    
     public int flowingSpriteId;
+    
     public int overlaySpriteId = -1;
+    public int overlayTextureWidth = 16;
+    public int overlayTextureHeight = 16;
 
     public FluidBlockTextureHolder() {
     }
@@ -33,8 +37,10 @@ public class FluidBlockTextureHolder {
         return flowingSpriteId;
     }
 
-    public void addOverlayTexture(Identifier identifier) {
+    public void addOverlayTexture(Identifier identifier, int textureWidth, int textureHeight) {
         overlaySpriteId = Minecraft.INSTANCE.textureManager.getTextureId("/assets/" + identifier.namespace + "/stationapi/textures/" + identifier.path + ".png");
+        overlayTextureWidth = textureWidth;
+        overlayTextureHeight = textureHeight;
     }
     
     public int getOverlayTextureId() {

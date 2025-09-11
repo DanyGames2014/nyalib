@@ -1,6 +1,7 @@
 package net.danygames2014.nyalib.mixin.fluid;
 
 import net.danygames2014.nyalib.block.FlowingFluidBlock;
+import net.danygames2014.nyalib.block.FluidBlockTextureHolder;
 import net.danygames2014.nyalib.block.StillFluidBlock;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -47,8 +48,9 @@ public abstract class HeldItemRendererMixin {
             return;
         }
 
-        int overlayTextureId = stillBlock.textureHolder.getOverlayTextureId();
-        renderWrappedOverlay(tickDelta, overlayTextureId);
+        if (stillBlock.textureHolder.overlaySpriteId != -1) {
+            renderWrappedOverlay(tickDelta, stillBlock.textureHolder);
+        }
     }
 
     @Unique
@@ -80,17 +82,18 @@ public abstract class HeldItemRendererMixin {
     }
 
     @Unique
-    public void renderWrappedOverlay(float tickDelta, int textureId) {
+    public void renderWrappedOverlay(float tickDelta, FluidBlockTextureHolder textureHolder) {
         Tessellator tessellator = Tessellator.INSTANCE;
 
-        int textureWidth = 16;
-        int textureHeight = 256;
+        int textureWidth = textureHolder.overlayTextureWidth;
+        int textureHeight = textureHolder.overlayTextureHeight;
+        int windowSize = 32;
         
-        float yaw = -this.minecraft.player.yaw / 256.0F; // texSizeX * 16
-        float pitch = this.minecraft.player.pitch / 4096.0F; // texSizeY * 16
+        float yaw = -this.minecraft.player.yaw / (textureWidth * 16);
+        float pitch = this.minecraft.player.pitch / (textureHeight * 16);
 
-        float windowU = 1.0f;      // 16px (windowWidth) / 16px (texWidth)
-        float windowV = 0.0625f;   // 16px (windowHeight) / 256px (texHeight)
+        float windowU = (float) windowSize / textureWidth; 
+        float windowV = (float) windowSize / textureHeight;
 
         float uMin = 0.0f + yaw;
         float uMax = windowU + yaw;
@@ -98,7 +101,7 @@ public abstract class HeldItemRendererMixin {
         float vMax = windowV + pitch;
 
         float brightness = this.minecraft.player.getBrightnessAtEyes(tickDelta);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureHolder.getOverlayTextureId());
         GL11.glColor4f(brightness, brightness, brightness, 0.5F);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);

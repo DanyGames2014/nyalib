@@ -1,17 +1,22 @@
 package net.danygames2014.nyalib.block;
 
+import it.unimi.dsi.fastutil.ints.IntIntImmutablePair;
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.material.FluidMaterial;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.modificationstation.stationapi.api.client.event.texture.TextureRegisterEvent;
+import net.modificationstation.stationapi.api.client.resource.ReloadableAssetsManager;
+import net.modificationstation.stationapi.api.resource.Resource;
 import net.modificationstation.stationapi.api.util.Identifier;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
+import java.util.Optional;
 
 public class FluidBlockManager {
     private static final HashMap<Fluid, FluidBlockEntry> fluidBlocks = new HashMap<>();
@@ -23,9 +28,9 @@ public class FluidBlockManager {
     public static void registerBlocks() {
         for (var entry : fluidBlocks.entrySet()) {
             Fluid fluid = entry.getKey();
-            
+
             Material fluidMaterial = new FluidMaterial(entry.getValue().mapColor);
-            
+
             // Create the Still Block and register its item model
             Identifier stillBlockIdentifier = fluid.getIdentifier().withSuffixedPath("_still");
             StillFluidBlock stillBlock = new StillFluidBlock(stillBlockIdentifier, fluidMaterial, fluid);
@@ -53,10 +58,30 @@ public class FluidBlockManager {
             FluidBlockTextureHolder textureHolder = new FluidBlockTextureHolder();
             textureHolder.addStillTexture(fluidEntry.stillTexture);
             textureHolder.addFlowingTexture(fluidEntry.flowingTexture);
-            textureHolder.addOverlayTexture(fluidEntry.overlayTexture);
-
             fluidEntry.setTextureHolder(textureHolder);
+
+            if (fluidEntry.overlayTexture != null) {
+                IntIntImmutablePair textureSize = getTextureSize(fluidEntry.overlayTexture);
+                textureHolder.addOverlayTexture(fluidEntry.overlayTexture, textureSize.leftInt(), textureSize.rightInt());
+            } else {
+                textureHolder.overlaySpriteId = -1;
+            }
         }
+    }
+
+    public static IntIntImmutablePair getTextureSize(Identifier identifier) {
+        Optional<Resource> resource = ReloadableAssetsManager.INSTANCE.getResource(Identifier.of("/assets/" + identifier.namespace + "/stationapi/textures/" + identifier.path + ".png"));
+
+        if (resource.isPresent()) {
+            try {
+                BufferedImage image = ImageIO.read(resource.get().getInputStream());
+                return new IntIntImmutablePair(image.getWidth(), image.getHeight());
+            } catch (Exception ignored) {
+
+            }
+        }
+
+        return new IntIntImmutablePair(16, 16);
     }
 
     public static void registerTranslations() {
