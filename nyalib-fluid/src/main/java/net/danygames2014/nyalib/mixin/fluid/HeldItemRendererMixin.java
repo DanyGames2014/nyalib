@@ -85,15 +85,15 @@ public abstract class HeldItemRendererMixin {
     public void renderWrappedOverlay(float tickDelta, FluidBlockTextureHolder textureHolder) {
         Tessellator tessellator = Tessellator.INSTANCE;
 
-        int textureWidth = textureHolder.overlayTextureWidth;
-        int textureHeight = textureHolder.overlayTextureHeight;
-        int windowSize = 32;
+        float textureWidth = textureHolder.overlayTextureWidth;
+        float textureHeight = textureHolder.overlayTextureHeight;
+        float windowSize = 64;
         
         float yaw = -this.minecraft.player.yaw / (textureWidth * 16);
         float pitch = this.minecraft.player.pitch / (textureHeight * 16);
 
-        float windowU = (float) windowSize / textureWidth; 
-        float windowV = (float) windowSize / textureHeight;
+        float windowU = windowSize / textureWidth; 
+        float windowV = windowSize / textureHeight;
 
         float uMin = 0.0f + yaw;
         float uMax = windowU + yaw;
@@ -105,8 +105,6 @@ public abstract class HeldItemRendererMixin {
         GL11.glColor4f(brightness, brightness, brightness, 0.5F);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
         GL11.glPushMatrix();
         tessellator.startQuads();
         tessellator.vertex(-1.0f, -1.0f, -0.5f, uMax, vMax);
