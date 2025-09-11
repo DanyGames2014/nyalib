@@ -60,6 +60,7 @@ public abstract class EntityMixin implements FluidEntity {
                             if (stillFluidBlock.fluid.canSwim(thisEntity)) {
                                 if (this.world.updateMovementInFluid(this.boundingBox.expand(0.0D, -0.4D, 0.0D).contract(0.001, 0.001, 0.001), stillFluidBlock.fluid.getMaterial(), thisEntity)) {
                                     cir.setReturnValue(true);
+                                    return;
                                 }
                             }
                         }
@@ -68,6 +69,7 @@ public abstract class EntityMixin implements FluidEntity {
                             if (flowingFluidBlock.fluid.canSwim(thisEntity)) {
                                 if (this.world.updateMovementInFluid(this.boundingBox.expand(0.0D, -0.4D, 0.0D).contract(0.001, 0.001, 0.001), flowingFluidBlock.fluid.getMaterial(), thisEntity)) {
                                     cir.setReturnValue(true);
+                                    return;
                                 }
                             }
                         }
