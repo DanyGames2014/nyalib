@@ -9,7 +9,6 @@ import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
-import net.minecraft.world.BlockView;
 import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.util.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -238,7 +237,7 @@ public final class Fluid {
     public Fluid setStillBlock(Block still) {
         if (this.still != null) {
             NyaLib.LOGGER.warn("Tried to set a still block to the fluid " + this.getIdentifier() + ", but it was already set!");
-            return null;
+            return this;
         }
 
         this.still = still;
@@ -252,7 +251,7 @@ public final class Fluid {
     public Fluid setFlowingBlock(Block flowing) {
         if (this.flowing != null) {
             NyaLib.LOGGER.warn("Tried to set a flowing block to the fluid " + this.getIdentifier() + ", but it was already set!");
-            return null;
+            return this;
         }
 
         this.flowing = flowing;
