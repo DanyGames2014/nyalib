@@ -8,6 +8,7 @@ import net.minecraft.block.MapColor;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
+import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.util.Identifier;
 
 import java.awt.*;
@@ -39,13 +40,14 @@ public class FluidBuilder {
     private Boolean canSwimIn = null;
     private Double movementSpeedMultiplier = null;
     private Boolean willDrown = null;
+    private Integer lightLevel = null;
 
     /**
      * Start a builder for a fluid using the fluid textures
      * Block implementations and textures will be automatically registered
      *
-     * @param identifier The {@link Identifier} of the fluid
-     * @param stillTexture The texture for the still state of the fluid
+     * @param identifier     The {@link Identifier} of the fluid
+     * @param stillTexture   The texture for the still state of the fluid
      * @param flowingTexture The texture for the flowing state of the fluid
      */
     public FluidBuilder(Identifier identifier, Identifier stillTexture, Identifier flowingTexture) {
@@ -55,14 +57,14 @@ public class FluidBuilder {
         this.stillTexture = stillTexture;
         this.flowingTexture = flowingTexture;
     }
-    
+
     /**
      * <bold>NOT RECOMMENDED</bold>
      * <p>Start a builder for a fluid using a custom block implementations
      * <p>Please note that when this is used, many of the properties of the Fluid won't have an effect
-     * 
-     * @param identifier The {@link Identifier} of the fluid
-     * @param stillBlock The block that represents the still state of the fluid
+     *
+     * @param identifier   The {@link Identifier} of the fluid
+     * @param stillBlock   The block that represents the still state of the fluid
      * @param flowingBlock The block that represents the flowing state of the fluid
      */
     public FluidBuilder(Identifier identifier, Block stillBlock, Block flowingBlock) {
@@ -76,7 +78,7 @@ public class FluidBuilder {
     /**
      * <p> Set the texture that will be overlayed on the screen when the player is submerged in this fluid.
      * <p> If none is specified, the still texture will be used.
-     * 
+     *
      * @param overlayTexture The identifier for the texture. For example <code>NAMESPACE.id("block/myfluid_overlay")</code>
      * @return The Fluid Builder for chaining
      */
@@ -88,8 +90,8 @@ public class FluidBuilder {
     /**
      * <p> Set the color that this block will have on a map
      * <p> If this is not set, a map color will be automatically generated from the provided color in {@link #color(int)} or {@link #color(Color)}
-     * 
-     * @param mapColor The map color to use on a map 
+     *
+     * @param mapColor The map color to use on a map
      * @return The Fluid Builder for chaining
      */
     public FluidBuilder mapColor(MapColor mapColor) {
@@ -100,7 +102,7 @@ public class FluidBuilder {
     /**
      * <p> Set the color that represents this fluid.
      * <p> This will be used for the bucket, WhatsThis and if you don't set one manually, the map color
-     * 
+     *
      * @param color The color to use
      * @return The Fluid Builder for chaining
      */
@@ -124,7 +126,7 @@ public class FluidBuilder {
     /**
      * <p> Set the amount of fluid in mB that a bucket of this fluid will represent
      * <p> If this is not set, the default value will be used
-     * 
+     *
      * @param bucketSize The amount of fluid in mB
      * @return The Fluid Builder for chaining
      */
@@ -135,11 +137,11 @@ public class FluidBuilder {
 
     /**
      * <p> Set the {@link Item} that will represent a bucket of this fluid
-     * <p> This will mean that the only function that will be handled automatically is picking up fluid from world. The rest is on you 
+     * <p> This will mean that the only function that will be handled automatically is picking up fluid from world. The rest is on you
      * <p>
      * <p> If this is not set, a bucket will be automatically generated using the color provided in {@link #color(int)} or {@link #color(Color)}
-     * 
-     * @param bucketItem The {@link Item} that represents a bucket of this fluid 
+     *
+     * @param bucketItem The {@link Item} that represents a bucket of this fluid
      * @return The Fluid Builder for chaining
      */
     public FluidBuilder bucketItem(Item bucketItem) {
@@ -151,7 +153,7 @@ public class FluidBuilder {
     /**
      * <p> Set if a bucket can place this fluid into the world
      * <p> If this is not set, the placement is allowed
-     * 
+     *
      * @param placeableInWorld If a bucket can place this fluid into world
      * @return The Fluid Builder for chaining
      */
@@ -163,7 +165,7 @@ public class FluidBuilder {
 
     /**
      * Disabled the automatic registration of a bucket for this fluid
-     * 
+     *
      * @return The Fluid Builder for chaining
      */
     public FluidBuilder disableAutomaticBucketRegistration() {
@@ -173,7 +175,7 @@ public class FluidBuilder {
 
     /**
      * Sets the sound played when a bucket of this fluid is filled
-     * 
+     *
      * @param fillSound The path to the sound. For example <code>nyalib-fluid:item.bucket.fill</code>
      * @return The Fluid Builder for chaining
      */
@@ -243,7 +245,7 @@ public class FluidBuilder {
      * <p>
      * <p> Water has a tick rate of 5
      * <p> Lava has a tick rate of 30
-     * 
+     *
      * @param tickRate The amount of ticks between each spread
      * @return The Fluid Builder for chaining
      */
@@ -257,7 +259,7 @@ public class FluidBuilder {
      * <p> Sets the default beahvior of if entities can swim in this fluid.
      * <p> This won't have any effect if you override {@link Fluid#canSwim(Entity)} in the Fluid class
      * <p> If this is not set, entities will be able to swim in this fluid
-     * 
+     *
      * @param canSwimIn The default value for if entities can swim in the fluid
      * @return The Fluid Builder for chaining
      */
@@ -271,7 +273,7 @@ public class FluidBuilder {
      * <p> This won't have any effect if you override {@link Fluid#getMovementSpeedMultiplier(LivingEntity)} in the Fluid class
      * <p> If this is not set, the default of 1.0 will apply.
      * <p> Keep in mind that this is separate from the effects of fluid resistance and flow on the entity
-     * 
+     *
      * @param movementSpeedMultiplier The movement speed multiplier
      * @return The Fluid Builder for chaining
      */
@@ -284,8 +286,8 @@ public class FluidBuilder {
      * <p> Sets the default behavior of if living entities will drown in this fluid.
      * <p> This won't have any effect if you override {@link Fluid#willDrown(LivingEntity)} in the Fluid class
      * <p> The default behavior is set to <code>true</code> and also checks {@link LivingEntity#canBreatheInWater()}
-     *     
-     * @param willDrown If entities will drown in this fluid 
+     *
+     * @param willDrown If entities will drown in this fluid
      * @return The Fluid Builder for chaining
      */
     public FluidBuilder willDrown(boolean willDrown) {
@@ -294,16 +296,34 @@ public class FluidBuilder {
     }
 
     /**
+     * <p> Sets the default light level of the fluid
+     * <p> This won't have any effect if you override {@link Fluid#getLightLevel(BlockState)} in the Fluid class
+     * <p> If this is not set, the fluid won't emit any light
+     *
+     * @param lightLevel The light level in the range of 0-15 to set the fluid to
+     * @return The Fluid Builder for chaining
+     */
+    public FluidBuilder lightLevel(int lightLevel) {
+        this.lightLevel = lightLevel;
+        return this;
+    }
+
+    public Fluid build() {
+        return this.build(Fluid::new);
+    }
+
+    /**
      * Builds the {@link Fluid}
+     *
      * @return The built {@link Fluid}
      */
-    public Fluid build() {
+    public Fluid build(FluidFactory factory) {
         Fluid fluid;
 
         if (stillBlock != null && flowingBlock != null) {
-            fluid = new Fluid(identifier, stillBlock, flowingBlock);
-        } else {
-            fluid = new Fluid(identifier, null, null);
+            fluid = factory.create(identifier, stillBlock, flowingBlock);
+        } else if (stillTexture != null && flowingTexture != null) {
+            fluid = factory.create(identifier, null, null);
 
             // If no overlay texture was specified, use the still texture
             if (overlayTexture == null) {
@@ -316,6 +336,8 @@ public class FluidBuilder {
             }
 
             FluidBlockManager.requestBlock(fluid, stillTexture, flowingTexture, overlayTexture, mapColor);
+        } else {
+            throw new IllegalStateException("Tried to build a Fluid that has not been initialized with blocks or textures");
         }
 
         // Fluid Color
@@ -375,6 +397,15 @@ public class FluidBuilder {
             fluid.setWillDrown(willDrown);
         }
 
+        // Light Level
+        if (lightLevel != null) {
+            fluid.setLightLevel(lightLevel);
+        }
+
         return fluid;
+    }
+
+    public interface FluidFactory {
+        Fluid create(Identifier identifier, Block still, Block flowing);
     }
 }

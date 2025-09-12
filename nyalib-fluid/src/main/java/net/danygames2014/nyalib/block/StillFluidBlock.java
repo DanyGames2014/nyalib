@@ -2,6 +2,8 @@ package net.danygames2014.nyalib.block;
 
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.minecraft.block.material.Material;
+import net.minecraft.world.BlockView;
+import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.template.block.TemplateStillLiquidBlock;
 import net.modificationstation.stationapi.api.util.Identifier;
 
@@ -13,6 +15,7 @@ public class StillFluidBlock extends TemplateStillLiquidBlock {
         super(identifier, material);
         this.fluid = fluid;
         this.setTranslationKey(identifier);
+        this.setLuminance(this::getLightLevel);
     }
 
     // Tick Rate
@@ -21,6 +24,11 @@ public class StillFluidBlock extends TemplateStillLiquidBlock {
         return fluid.getTickRate();
     }
 
+    // Light Level
+    public int getLightLevel(BlockState state) {
+        return fluid.getLightLevel(state);
+    }
+    
     // Rendering
     @Override
     public int getTexture(int side, int meta) {

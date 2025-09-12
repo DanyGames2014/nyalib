@@ -9,6 +9,8 @@ import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
+import net.minecraft.world.BlockView;
+import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
@@ -71,6 +73,11 @@ public final class Fluid {
     private int color = 0xFFFFFFFF;
 
     /**
+     * The default light level this fluid emits
+     */
+    private int lightLevel = 0;
+    
+    /**
      * The tick rate governs how fast the fluid will spread.
      * It is the interval in ticks between each spread.
      * <p>
@@ -95,20 +102,19 @@ public final class Fluid {
      */
     private boolean willDrown = true;
 
-    // TODO: Custom fluid interactions
-    // TODO: Track down where everywhere material for fluids is compared
-    // TODO: World.updateMovementInFluid
+    // TODO: OwO WhatsThis use fluid colors
+    // TODO: Color Multiplier
+
+    // TODO: LiquidBlock.randomDisplayTick
     // TODO: Entity.isWet
     // TODO: Entity.isTouchingLava
-    // TODO: LiquidBlock.randomDisplayTick
     // TODO: LiquidBlock.checkBlockCollisions
     // TODO: LiquidBlock.fizz?
-    // TODO: OwO WhatsThis integration graphic improvement https://www.curseforge.com/minecraft/mc-mods/top-addons
-    // TODO: OwO WhatsThis use fluid colors
+    // TODO: Custom fluid interactions
     // TODO: Automatic block using only color multiplier?
-    // TODO: Color Multiplier
+    // TODO: Track down where everywhere material for fluids is compared
+    // TODO: OwO WhatsThis integration graphic improvement https://www.curseforge.com/minecraft/mc-mods/top-addons
     // TODO: Properly implement fluids which cannot be placed into world
-    // TODO: Luminosity
     // TODO: Density?
     // TODO: Temperature? Per Stack (pain^2) ? Per Fluid?
     // TODO: Viscosity?
@@ -116,7 +122,6 @@ public final class Fluid {
     // TODO: Fluids without a block implementation?
     // TODO: Interactions -> Vaporization in Nether
     // TODO: Methods with world/stack contexts
-    // TODO: Use fluid to register a MapColor for the fluid
     // TODO: Entity.isInFluid(Fluid) when https://github.com/FabricMC/fabric-loom/issues/1334 is fixed
     // TODO: When maps are fixed. Make it so the map color of the fluid is reduced to either 16-bit or 8-bit color.
     // TODO: Also make it so after the reduction the method first tries to find an existing map color that matches (maybe in range)
@@ -267,6 +272,25 @@ public final class Fluid {
     }
 
     // Fluid Properties
+    public int getLightLevel(BlockState state) {
+        return lightLevel;
+    }
+
+    public Fluid setLightLevel(int lightLevel) {
+        if (lightLevel < 0) {
+            this.lightLevel = 0;
+            return this;
+        }
+        
+        if  (lightLevel > 15) {
+            this.lightLevel = 15;
+            return this;
+        }
+        
+        this.lightLevel = lightLevel;
+        return this;
+    }
+
     public int getTickRate() {
         return tickRate;
     }
