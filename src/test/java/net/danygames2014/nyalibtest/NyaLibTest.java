@@ -4,6 +4,7 @@ import net.danygames2014.nyalib.block.*;
 import net.danygames2014.nyalib.event.FluidRegistryEvent;
 import net.danygames2014.nyalib.event.NetworkTypeRegistryEvent;
 import net.danygames2014.nyalib.fluid.Fluid;
+import net.danygames2014.nyalib.fluid.FluidBuilder;
 import net.danygames2014.nyalib.network.NetworkType;
 import net.danygames2014.nyalibtest.block.capability.block.ItemHandlerBlockCapabilityTesterBlock;
 import net.danygames2014.nyalibtest.block.capability.item.YoinkerItem;
@@ -145,8 +146,14 @@ public class NyaLibTest {
     
     @EventListener
     public void registerFluids(FluidRegistryEvent event) {
-        event.register(gravelFluid = new Fluid(NAMESPACE.id("gravel"), Block.GRAVEL, Block.GRAVEL, 0xFF212121));
-        event.register(fuelFluid = new Fluid(NAMESPACE.id("fuel"), NAMESPACE.id("block/fuel_still"), NAMESPACE.id("block/fuel_flowing"), NAMESPACE.id("block/fuel_overlay"), 0xFFFFE524));
+        FluidBuilder gravelFluidBuilder = new FluidBuilder(NAMESPACE.id("gravel"), Block.GRAVEL, Block.GRAVEL);
+        gravelFluidBuilder.color(0xFF212121);
+        event.register(gravelFluid = gravelFluidBuilder.build());
+        
+        FluidBuilder fuelFluidBuilder = new FluidBuilder(NAMESPACE.id("fuel"), NAMESPACE.id("block/fuel_still"), NAMESPACE.id("block/fuel_flowing"));
+        fuelFluidBuilder.overlayTexture(NAMESPACE.id("block/fuel_overlay"));
+        fuelFluidBuilder.color(0xFFFFE524);
+        event.register(fuelFluid = fuelFluidBuilder.build());
         
         fuelFluid.setMovementSpeedMultiplier(1.00D);
     }

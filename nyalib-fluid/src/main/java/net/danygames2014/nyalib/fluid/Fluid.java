@@ -118,46 +118,14 @@ public final class Fluid {
     // TODO: Methods with world/stack contexts
     // TODO: Use fluid to register a MapColor for the fluid
     // TODO: Entity.isInFluid(Fluid) when https://github.com/FabricMC/fabric-loom/issues/1334 is fixed
+    // TODO: When maps are fixed. Make it so the map color of the fluid is reduced to either 16-bit or 8-bit color.
+    // TODO: Also make it so after the reduction the method first tries to find an existing map color that matches (maybe in range)
 
     // Base constructor
     public Fluid(Identifier identifier, Block still, Block flowing) {
         this.identifier = identifier;
         this.still = still;
         this.flowing = flowing;
-    }
-
-    // Manual Block Constructors
-    public Fluid(Identifier identifier, Block still, Block flowing, int color) {
-        this(identifier, still, flowing);
-        this.setColor(color);
-    }
-
-    public Fluid(Identifier identifier, Block still, Block flowing, Color color) {
-        this(identifier, still, flowing);
-        this.setColor(color);
-    }
-
-    // Automatic Block Constructors
-    // Full Constructor with int color
-    public Fluid(Identifier identifier, Identifier stillTexture, Identifier flowingTexture, Identifier overlayTexture, MapColor mapColor, int color) {
-        this(identifier, null, null);
-        this.setColor(color);
-        FluidBlockManager.requestBlock(this, stillTexture, flowingTexture, overlayTexture, mapColor);
-    }
-    
-    // Default map color
-    public Fluid(Identifier identifier, Identifier stillTexture, Identifier flowingTexture, Identifier overlayTexture, int color) {
-        this(identifier, stillTexture, flowingTexture, overlayTexture, Fluids.DEFAULT_FLUID_MATERIAL.mapColor, color);
-    }
-
-    // Default overlay texture
-    public Fluid(Identifier identifier, Identifier stillTexture, Identifier flowingTexture, MapColor mapColor, int color) {
-        this(identifier, stillTexture, flowingTexture, stillTexture, mapColor, color);
-    }
-
-    // Default overlay texture and map color
-    public Fluid(Identifier identifier, Identifier stillTexture, Identifier flowingTexture, int color) {
-        this(identifier, stillTexture, flowingTexture, stillTexture, Fluids.DEFAULT_FLUID_MATERIAL.mapColor, color);
     }
 
     // Identifier
@@ -224,13 +192,13 @@ public final class Fluid {
 
     // Bucket Sound
     public String getFillSound() {
-        if (fillSound == null) {
-            if (getBucketFluid() != null && getBucketFluid().material == Material.LAVA) {
-                return "nyalib-fluid:item.bucket.fill_lava";
-            } else {
-                return "nyalib-fluid:item.bucket.fill";
-            }
-        }
+//        if (fillSound == null) {
+//            if (getBucketFluid() != null && getBucketFluid().material == Material.LAVA) {
+//                return "nyalib-fluid:item.bucket.fill_lava";
+//            } else {
+//                return "nyalib-fluid:item.bucket.fill";
+//            }
+//        }
 
         return fillSound;
     }
@@ -241,13 +209,13 @@ public final class Fluid {
     }
 
     public String getEmptySound() {
-        if (emptySound == null) {
-            if (getBucketFluid() != null && getBucketFluid().material == Material.LAVA) {
-                return "nyalib-fluid:item.bucket.empty_lava";
-            } else {
-                return "nyalib-fluid:item.bucket.empty";
-            }
-        }
+//        if (emptySound == null) {
+//            if (getBucketFluid() != null && getBucketFluid().material == Material.LAVA) {
+//                return "nyalib-fluid:item.bucket.empty_lava";
+//            } else {
+//                return "nyalib-fluid:item.bucket.empty";
+//            }
+//        }
 
         return emptySound;
     }
@@ -332,7 +300,7 @@ public final class Fluid {
     }
     
     public boolean willDrown(LivingEntity livingEntity) {
-        return willDrown;
+        return willDrown && !livingEntity.canBreatheInWater();
     }
     
     public Fluid setWillDrown(boolean willDrown) {
