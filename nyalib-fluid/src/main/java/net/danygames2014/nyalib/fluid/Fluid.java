@@ -80,15 +80,15 @@ public final class Fluid {
     private int tickRate = 5;
 
     /**
-     * Determines the default behavior of if entities can swim in this method
+     * Determines the default behavior of if entities can swim in this fluid
      */
     private boolean canSwimIn = true;
 
     /**
-     * The default swimspeed multiplier when swimming in this fluid.
+     * The default movement speed multiplier when in this fluid.
      * <p> Won't matter if {@link #canSwim(Entity)} returns false
      */
-    private double swimSpeedMultiplier = 1.0F;
+    private double movementSpeedMultiplier = 1.0F;
 
     /**
      * Determines the default behavior of if entities will drown in this fluid.
@@ -323,11 +323,11 @@ public final class Fluid {
     }
 
     public double getMovementSpeedMultiplier(LivingEntity entity) {
-        return this.swimSpeedMultiplier;
+        return this.movementSpeedMultiplier;
     }
 
     public Fluid setMovementSpeedMultiplier(double movementSpeedMultiplier) {
-        this.swimSpeedMultiplier = movementSpeedMultiplier;
+        this.movementSpeedMultiplier = movementSpeedMultiplier;
         return this;
     }
     
