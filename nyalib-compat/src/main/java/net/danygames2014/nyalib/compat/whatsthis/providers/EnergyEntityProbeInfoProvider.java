@@ -1,4 +1,4 @@
-package net.danygames2014.nyalib.compat.whatsthis;
+package net.danygames2014.nyalib.compat.whatsthis.providers;
 
 import net.danygames2014.nyalib.NyaLibCompat;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
