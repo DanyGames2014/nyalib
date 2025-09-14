@@ -101,9 +101,7 @@ public final class Fluid {
      */
     private boolean willDrown = true;
 
-    // TODO: OwO WhatsThis use fluid colors
     // TODO: Color Multiplier
-
     // TODO: LiquidBlock.randomDisplayTick
     // TODO: Entity.isWet
     // TODO: Entity.isTouchingLava
@@ -112,7 +110,6 @@ public final class Fluid {
     // TODO: Custom fluid interactions
     // TODO: Automatic block using only color multiplier?
     // TODO: Track down where everywhere material for fluids is compared
-    // TODO: OwO WhatsThis integration graphic improvement https://www.curseforge.com/minecraft/mc-mods/top-addons
     // TODO: Properly implement fluids which cannot be placed into world
     // TODO: Density?
     // TODO: Temperature? Per Stack (pain^2) ? Per Fluid?

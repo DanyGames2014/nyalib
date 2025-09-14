@@ -41,20 +41,9 @@ public class FluidBlockProbeInfoProvider implements IProbeInfoProvider {
                 int capacity = fluidHandler.getFluidCapacity(i, data.getSideHit());
 
                 if (fluidStack != null) {
-//                    vertical.progress(
-//                            fluidStack.amount,
-//                            capacity,
-//                            probeInfo.defaultProgressStyle()
-//                                    .prefix(fluidStack.fluid.getTranslatedName() + " ")
-//                                    .suffix(" mB")
-//                                    .borderColor(borderColor)
-//                                    .filledColor(filledColor)
-//                                    .alternateFilledColor(alternateFilledColor)
-//                    );
-                    
                     vertical.element(
                             new ElementTankGauge(
-                                    "tank", 
+                                    "Tank", 
                                     fluidStack.fluid.getTranslatedName(), 
                                     fluidStack.amount, 
                                     capacity, 
@@ -64,20 +53,9 @@ public class FluidBlockProbeInfoProvider implements IProbeInfoProvider {
                             )
                     );
                 } else {
-//                    vertical.progress(
-//                            0,
-//                            capacity,
-//                            probeInfo.defaultProgressStyle()
-//                                    .prefix("Empty ")
-//                                    .borderColor(borderColor)
-//                                    .filledColor(filledColor)
-//                                    .alternateFilledColor(alternateFilledColor)
-//                                    .numberFormat(NumberFormat.NONE)
-//                    );
-                    
                     vertical.element(
                             new ElementTankGauge(
-                                    "tank", 
+                                    "Tank", 
                                     "", 
                                     0, 
                                     capacity, 

@@ -3,6 +3,7 @@ package net.danygames2014.nyalib.compat.whatsthis.providers;
 import net.danygames2014.nyalib.NyaLibCompat;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.entity.fluidhandler.FluidHandlerEntityCapability;
+import net.danygames2014.nyalib.compat.whatsthis.elements.ElementTankGauge;
 import net.danygames2014.nyalib.fluid.FluidStack;
 import net.danygames2014.whatsthis.api.*;
 import net.danygames2014.whatsthis.config.Config;
@@ -30,31 +31,35 @@ public class FluidEntityProbeInfoProvider implements IProbeInfoEntityProvider {
     public void addProbeEntityInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, Entity entity, IProbeHitEntityData data) {
         FluidHandlerEntityCapability fluidHandler = CapabilityHelper.getCapability(entity, FluidHandlerEntityCapability.class);
         if (fluidHandler != null) {
+            IProbeInfo vertical = probeInfo.vertical();
+            
             for (int i = 0; i < fluidHandler.getFluidSlots(); i++) {
                 FluidStack fluidStack = fluidHandler.getFluid(i);
                 int capacity = fluidHandler.getFluidCapacity(i);
 
                 if (fluidStack != null) {
-                    probeInfo.progress(
-                            fluidStack.amount,
-                            capacity,
-                            probeInfo.defaultProgressStyle()
-                                    .prefix(fluidStack.fluid.getTranslatedName() + " ")
-                                    .suffix(" mB")
-                                    .borderColor(borderColor)
-                                    .filledColor(filledColor)
-                                    .alternateFilledColor(alternateFilledColor)
+                    vertical.element(
+                            new ElementTankGauge(
+                                    "Tank",
+                                    fluidStack.fluid.getTranslatedName(),
+                                    fluidStack.amount,
+                                    capacity,
+                                    "mB",
+                                    fluidStack.fluid.getColor(),
+                                    mode == ProbeMode.EXTENDED
+                            )
                     );
                 } else {
-                    probeInfo.progress(
-                            0,
-                            capacity,
-                            probeInfo.defaultProgressStyle()
-                                    .prefix("Empty ")
-                                    .suffix(" mB")
-                                    .borderColor(borderColor)
-                                    .filledColor(filledColor)
-                                    .alternateFilledColor(alternateFilledColor)
+                    vertical.element(
+                            new ElementTankGauge(
+                                    "Tank",
+                                    "",
+                                    0,
+                                    capacity,
+                                    "",
+                                    0xFF777777,
+                                    mode == ProbeMode.EXTENDED
+                            )
                     );
                 }
             }
