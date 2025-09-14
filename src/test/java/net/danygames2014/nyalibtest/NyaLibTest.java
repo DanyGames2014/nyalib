@@ -158,9 +158,10 @@ public class NyaLibTest {
                 .movementSpeedMultiplier(1.1D)
                 .build()
         );
-        
+
         event.register(glowstoneFluid = new FluidBuilder(NAMESPACE.id("glowstone"), Namespace.MINECRAFT.id("block/glowstone"), Namespace.MINECRAFT.id("block/glowstone"))
                 .color(0xFFCCAA00)
+                .colorMultiplier(0x00FF00)
                 .lightLevel(15)
                 .build()
         );

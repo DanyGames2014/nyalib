@@ -9,6 +9,7 @@ import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
+import net.minecraft.world.BlockView;
 import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.util.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -101,7 +102,11 @@ public final class Fluid {
      */
     private boolean willDrown = true;
 
-    // TODO: Color Multiplier
+    /**
+     * The default color multiplier for this fluid.
+     */
+    private int colorMultiplier = 0xFFFFFF;
+
     // TODO: LiquidBlock.randomDisplayTick
     // TODO: Entity.isWet
     // TODO: Entity.isTouchingLava
@@ -326,6 +331,16 @@ public final class Fluid {
     public Fluid setWillDrown(boolean willDrown) {
         this.willDrown = willDrown;
         return this;
+    }
+    
+    // Rendering
+    public int getColorMultiplier(BlockView blockView, int x, int y, int z) {
+        return colorMultiplier;
+    }
+    
+    public int setColorMultiplier(int colorMultiplier) {
+        this.colorMultiplier = colorMultiplier;
+        return this.colorMultiplier;
     }
 
     // Localization

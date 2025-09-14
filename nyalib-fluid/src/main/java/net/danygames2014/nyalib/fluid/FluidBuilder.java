@@ -8,6 +8,7 @@ import net.minecraft.block.MapColor;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
+import net.minecraft.world.BlockView;
 import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.util.Identifier;
 
@@ -41,6 +42,7 @@ public class FluidBuilder {
     private Double movementSpeedMultiplier = null;
     private Boolean willDrown = null;
     private Integer lightLevel = null;
+    private Integer colorMultiplier = null;
 
     /**
      * Start a builder for a fluid using the fluid textures
@@ -101,6 +103,7 @@ public class FluidBuilder {
 
     /**
      * <p> Set the color that represents this fluid.
+     * <p> This can also be written as a hex value in the format <code>0xAARRGGBB</code>, for example <code>0xFFCCAA00</code>
      * <p> This will be used for the bucket, WhatsThis and if you don't set one manually, the map color
      *
      * @param color The color to use
@@ -308,6 +311,20 @@ public class FluidBuilder {
         return this;
     }
 
+    /**
+     * <p> Sets the default color multiplier of the fluid used for fluid blocks in world
+     * <p> This can also be written as a hex value in the format <code>0xRRGGBB</code>, for example <code>0xCCAA00</code>
+     * <p> This won't have any effect if you override {@link Fluid#getColorMultiplier(BlockView, int, int, int)} in the Fluid class
+     * <p> If this is not set, no color multiplier will be applied
+     * 
+     * @param colorMultiplier The color multiplier
+     * @return The Fluid Builder for chaining
+     */
+    public FluidBuilder colorMultiplier(int colorMultiplier) {
+        this.colorMultiplier = colorMultiplier;
+        return this;
+    }
+
     public Fluid build() {
         return this.build(Fluid::new);
     }
@@ -400,6 +417,11 @@ public class FluidBuilder {
         // Light Level
         if (lightLevel != null) {
             fluid.setLightLevel(lightLevel);
+        }
+        
+        // Color Multiplier
+        if (colorMultiplier != null) {
+            fluid.setColorMultiplier(colorMultiplier);
         }
 
         return fluid;

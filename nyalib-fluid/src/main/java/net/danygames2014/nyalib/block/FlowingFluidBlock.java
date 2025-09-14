@@ -2,6 +2,7 @@ package net.danygames2014.nyalib.block;
 
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.minecraft.block.material.Material;
+import net.minecraft.world.BlockView;
 import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.template.block.TemplateFlowingLiquidBlock;
 import net.modificationstation.stationapi.api.util.Identifier;
@@ -48,5 +49,10 @@ public class FlowingFluidBlock extends TemplateFlowingLiquidBlock {
         }
 
         return textureHolder.getStillTextureId();
+    }
+
+    @Override
+    public int getColorMultiplier(BlockView blockView, int x, int y, int z) {
+        return fluid.getColorMultiplier(blockView, x, y, z);
     }
 }

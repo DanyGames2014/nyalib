@@ -54,4 +54,9 @@ public class StillFluidBlock extends TemplateStillLiquidBlock {
         
         return textureHolder.getFlowingTextureId();
     }
+
+    @Override
+    public int getColorMultiplier(BlockView blockView, int x, int y, int z) {
+        return fluid.getColorMultiplier(blockView, x, y, z);
+    }
 }
