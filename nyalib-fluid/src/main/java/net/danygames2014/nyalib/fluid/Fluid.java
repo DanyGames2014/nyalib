@@ -107,6 +107,9 @@ public final class Fluid {
      */
     private int colorMultiplier = 0xFFFFFF;
 
+    // TODO: Inventory color multiplier
+    // TODO: Color multiplier of block applying to particles
+    // TODO: Also just customizable splash particles
     // TODO: LiquidBlock.randomDisplayTick
     // TODO: Entity.isWet
     // TODO: Entity.isTouchingLava
