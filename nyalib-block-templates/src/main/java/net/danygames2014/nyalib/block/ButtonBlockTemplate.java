@@ -272,6 +272,10 @@ public class ButtonBlockTemplate extends TemplateBlock {
         }
 
         BlockState state = view.getBlockState(x, y, z);
+        
+        if (!state.isOf(this)) {
+            return;
+        }
 
         switch (state.get(BUTTON_TYPE)) {
             case CEILING -> {

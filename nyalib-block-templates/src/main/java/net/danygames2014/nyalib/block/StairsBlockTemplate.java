@@ -58,7 +58,13 @@ public class StairsBlockTemplate extends TemplateBlock {
 
     @Override
     public void addIntersectingBoundingBox(World world, int x, int y, int z, Box box, ArrayList boxes) {
-        Direction facing = world.getBlockState(x, y, z).get(FACING);
+        BlockState state = world.getBlockState(x, y, z);
+        
+        if (!state.isOf(this)) { 
+            return;
+        }
+        
+        Direction facing = state.get(FACING);
         if (facing == Direction.SOUTH) {
             this.setBoundingBox(0.0F, 0.0F, 0.0F, 0.5F, 0.5F, 1.0F);
             super.addIntersectingBoundingBox(world, x, y, z, box, boxes);

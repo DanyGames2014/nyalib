@@ -60,6 +60,10 @@ public class PaneBlockTemplate extends TemplateBlock {
 
     public void updateConnections(World world, int x, int y, int z) {
         BlockState state = world.getBlockState(x, y, z);
+        
+        if (!state.isOf(this)) {
+            return;
+        }
 
         state = getPaneState(world, x, y, z, state, Direction.EAST, Properties.EAST);
         state = getPaneState(world, x, y, z, state, Direction.WEST, Properties.WEST);

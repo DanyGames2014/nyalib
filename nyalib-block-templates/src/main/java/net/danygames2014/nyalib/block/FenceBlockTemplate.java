@@ -85,6 +85,10 @@ public class FenceBlockTemplate extends TemplateBlock {
     public void updateConnections(World world, int x, int y, int z) {
         BlockState state = world.getBlockState(x, y, z);
 
+        if (!state.isOf(this)) {
+            return;
+        }
+        
         state = state.with(NORTH, canConnectTo(world.getBlockState(x - 1, y, z)));
         state = state.with(SOUTH, canConnectTo(world.getBlockState(x + 1, y, z)));
         state = state.with(EAST, canConnectTo(world.getBlockState(x, y, z - 1)));

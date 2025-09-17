@@ -71,6 +71,10 @@ public class WallBlockTemplate extends TemplateBlock {
     public void updateConnections(World world, int x, int y, int z) {
         BlockState state = world.getBlockState(x, y, z);
 
+         if (!state.isOf(this)) {
+             return;
+         }
+        
         state = getWallState(world, x, y, z, state, Direction.EAST, EAST);
         state = getWallState(world, x, y, z, state, Direction.WEST, WEST);
         state = getWallState(world, x, y, z, state, Direction.NORTH, NORTH);
