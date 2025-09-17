@@ -2,6 +2,7 @@ package net.danygames2014.nyalib.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.Box;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.block.BlockState;
@@ -23,7 +24,7 @@ public class SlabBlockTemplate extends TemplateBlock {
     public SlabBlockTemplate(Identifier identifier, Block baseBlock) {
         this(identifier, baseBlock, null);
     }
-    
+
     public SlabBlockTemplate(Identifier identifier, Block baseBlock, Identifier texture) {
         super(identifier, baseBlock.material);
         this.setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
@@ -46,6 +47,21 @@ public class SlabBlockTemplate extends TemplateBlock {
             default ->
                     throw new IllegalStateException("Unexpected value: " + ((World) blockView).getBlockState(x, y, z).get(SLAB_TYPE));
         }
+    }
+
+    @Override
+    public Box getCollisionShape(World world, int x, int y, int z) {
+        BlockState state = world.getBlockState(x, y, z);
+
+        if (!state.isOf(this)) {
+            return Box.create(x + 0.0F, y + 0.0F, z + 0.0F, x + 1.0F, y + 0.5F, z + 1.0F);
+        }
+
+        return switch (world.getBlockState(x, y, z).get(SLAB_TYPE)) {
+            case BOTTOM -> Box.create(x + 0.0F, y + 0.0F, z + 0.0F, x + 1.0F, y + 0.5F, z + 1.0F);
+            case TOP -> Box.create(x + 0.0F, y + 0.5F, z + 0.0F, x + 1.0F, y + 1.0F, z + 1.0F);
+            case DOUBLE -> Box.create(x + 0.0F, y + 0.0F, z + 0.0F, x + 1.0F, y + 1.0F, z + 1.0F);
+        };
     }
 
     @Override
