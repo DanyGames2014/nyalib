@@ -40,7 +40,13 @@ public class SlabBlockTemplate extends TemplateBlock {
             return;
         }
 
-        switch (view.getBlockState(x, y, z).get(SLAB_TYPE)) {
+        BlockState state = view.getBlockState(x, y, z);
+        
+        if (!state.isOf(this)) {
+            return;
+        }
+
+        switch (state.get(SLAB_TYPE)) {
             case BOTTOM -> this.setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
             case TOP -> this.setBoundingBox(0.0F, 0.5F, 0.0F, 1.0F, 1.0F, 1.0F);
             case DOUBLE -> this.setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
