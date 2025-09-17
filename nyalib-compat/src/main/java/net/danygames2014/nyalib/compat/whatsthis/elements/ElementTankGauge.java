@@ -72,7 +72,7 @@ public class ElementTankGauge implements IElement {
                 RenderHelper.drawVerticalLine(x + i * 10, y + 1, y + (i == 5 ? 11 : 6), 0xff767676);
             }
 
-            ElementTextRender.render((capacity > 0) ? amount + "/" + capacity + " " + suffix : I18n.getTranslation("topaddons:tank_empty"), x + 3, y + 2);
+            ElementTextRender.render((capacity > 0) ? amount + "/" + capacity + " " + suffix : I18n.getTranslation("compat.nyalib.whatsthis.empty_tank"), x + 3, y + 2);
             drawSmallText(x + 99 - Minecraft.INSTANCE.textRenderer.getWidth(fluidName) / 2, y + 13, fluidName, color1);
         }
 
