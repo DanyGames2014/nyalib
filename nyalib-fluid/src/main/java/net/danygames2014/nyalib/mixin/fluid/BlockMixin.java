@@ -1,8 +1,10 @@
 package net.danygames2014.nyalib.mixin.fluid;
 
 import net.danygames2014.nyalib.block.FluidBlockManager;
+import net.danygames2014.nyalib.event.AfterFluidRegistryEvent;
 import net.danygames2014.nyalib.event.FluidRegistryEvent;
 import net.minecraft.block.Block;
+import net.minecraft.stat.Stat;
 import net.modificationstation.stationapi.api.StationAPI;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,5 +17,6 @@ public class BlockMixin {
     private static void callFluidRegisterEvent(CallbackInfo ci){
         StationAPI.EVENT_BUS.post(new FluidRegistryEvent());   
         FluidBlockManager.registerBlocks();
+        StationAPI.EVENT_BUS.post(new AfterFluidRegistryEvent());
     }
 }
