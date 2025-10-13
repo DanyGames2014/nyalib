@@ -21,8 +21,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @SuppressWarnings("AddedMixinMembersNamePattern")
 @Mixin(BucketItem.class)
 public class BucketItemMixin implements FluidBucket {
-    // TODO: Fucking lmao, why is this even here, is this just a reminder that I didnt do shit with bucket yet?
-
     @Shadow
     private int fluidBlockId;
 
