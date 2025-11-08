@@ -1,5 +1,6 @@
 package net.danygames2014.nyalib.network;
 
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
 import net.danygames2014.nyalib.util.AStar;
 import net.minecraft.util.math.Vec3i;
@@ -57,7 +58,7 @@ public class NetworkPathManager {
 
     public NetworkPath computePath(Vec3i from, Vec3i to) {
         // Calculate Path
-        ObjectSet<Vec3i> availibleNodes = network.getNonEdgeNodes().keySet();
+        ObjectSet<Vec3i> availibleNodes = new ObjectOpenHashSet<>(network.getNonEdgeNodes().keySet());
         availibleNodes.add(from);
         availibleNodes.add(to);
         AStar aStar = new AStar(from, to, availibleNodes.toArray(new Vec3i[0]));
