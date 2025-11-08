@@ -1,5 +1,6 @@
 package net.danygames2014.nyalib.network;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.nyalib.NyaLib;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NbtCompound;
@@ -56,6 +57,36 @@ public class Network {
 
     public NetworkComponentEntry getEntry(Vec3i pos) {
         return components.get(pos);
+    }
+
+    /**
+     * @return A list of all the Network nodes that are edges
+     */
+    public ObjectArrayList<NetworkComponentEntry> getEdgeNodes() {
+        ObjectArrayList<NetworkComponentEntry> edges = new ObjectArrayList<>();
+
+        for (Map.Entry<Vec3i, NetworkComponentEntry> entry : components.entrySet()) {
+            if (entry.getValue().block() instanceof NetworkEdgeComponent) {
+                edges.add(entry.getValue());
+            }
+        }
+
+        return edges;
+    }
+
+    /**
+     * @return A list of all the Network nodes that are not edges
+     */
+    public ObjectArrayList<NetworkComponentEntry> getNonEdgeNodes() {
+        ObjectArrayList<NetworkComponentEntry> nodes = new ObjectArrayList<>();
+
+        for (Map.Entry<Vec3i, NetworkComponentEntry> entry : components.entrySet()) {
+            if (!(entry.getValue().block() instanceof NetworkEdgeComponent)) {
+                nodes.add(entry.getValue());
+            }
+        }
+
+        return nodes;
     }
 
     /**
@@ -143,7 +174,7 @@ public class Network {
      */
     public void update() {
         pathManager.clearCache();
-        
+
         for (Map.Entry<Vec3i, NetworkComponentEntry> block : components.entrySet()) {
             Vec3i pos = block.getKey();
 
