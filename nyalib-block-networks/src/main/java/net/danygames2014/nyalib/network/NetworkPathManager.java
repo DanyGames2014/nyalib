@@ -55,7 +55,7 @@ public class NetworkPathManager {
 
     public NetworkPath computePath(Vec3i from, Vec3i to) {
         // Calculate Path
-        AStar aStar = new AStar(from, to, network.components.keySet().toArray(new Vec3i[0]));
+        AStar aStar = new AStar(from, to, network.getNonEdgeNodes().keySet().toArray(new Vec3i[0]));
         Vec3i[] path = aStar.calculate();
 
         if (path == null || path.length == 0) {

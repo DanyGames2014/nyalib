@@ -1,6 +1,8 @@
 package net.danygames2014.nyalib.network;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.danygames2014.nyalib.NyaLib;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NbtCompound;
@@ -62,12 +64,12 @@ public class Network {
     /**
      * @return A list of all the Network nodes that are edges
      */
-    public ObjectArrayList<NetworkComponentEntry> getEdgeNodes() {
-        ObjectArrayList<NetworkComponentEntry> edges = new ObjectArrayList<>();
+    public Object2ObjectOpenHashMap<Vec3i, NetworkComponentEntry> getEdgeNodes() {
+        Object2ObjectOpenHashMap<Vec3i, NetworkComponentEntry> edges = new Object2ObjectOpenHashMap<>();
 
         for (Map.Entry<Vec3i, NetworkComponentEntry> entry : components.entrySet()) {
             if (entry.getValue().block() instanceof NetworkEdgeComponent) {
-                edges.add(entry.getValue());
+                edges.put(entry.getKey(), entry.getValue());
             }
         }
 
@@ -77,12 +79,12 @@ public class Network {
     /**
      * @return A list of all the Network nodes that are not edges
      */
-    public ObjectArrayList<NetworkComponentEntry> getNonEdgeNodes() {
-        ObjectArrayList<NetworkComponentEntry> nodes = new ObjectArrayList<>();
+    public Object2ObjectOpenHashMap<Vec3i, NetworkComponentEntry> getNonEdgeNodes() {
+        Object2ObjectOpenHashMap<Vec3i, NetworkComponentEntry> nodes = new Object2ObjectOpenHashMap<>();
 
         for (Map.Entry<Vec3i, NetworkComponentEntry> entry : components.entrySet()) {
             if (!(entry.getValue().block() instanceof NetworkEdgeComponent)) {
-                nodes.add(entry.getValue());
+                nodes.put(entry.getKey(), entry.getValue());
             }
         }
 
