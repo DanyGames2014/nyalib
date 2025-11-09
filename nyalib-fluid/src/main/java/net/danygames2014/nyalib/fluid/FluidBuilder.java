@@ -380,7 +380,7 @@ public class FluidBuilder {
         }
 
         // Automatic Bucket Registration
-        if (automaticBucketRegistration == Boolean.TRUE) {
+        if (automaticBucketRegistration == Boolean.FALSE) {
             fluid.disableAutomaticBucketRegistration();
         }
 
