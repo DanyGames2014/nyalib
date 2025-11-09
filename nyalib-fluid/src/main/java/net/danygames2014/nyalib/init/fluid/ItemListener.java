@@ -9,6 +9,7 @@ import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.item.Item;
 import net.modificationstation.stationapi.api.client.event.color.item.ItemColorsRegisterEvent;
+import net.modificationstation.stationapi.api.event.registry.AfterBlockAndItemRegisterEvent;
 import net.modificationstation.stationapi.api.event.registry.ItemRegistryEvent;
 import net.modificationstation.stationapi.api.template.item.TemplateBucketItem;
 import net.modificationstation.stationapi.api.util.Identifier;
@@ -31,9 +32,20 @@ public class ItemListener {
             if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
                 JsonOverrideRegistry.registerItemModelOverride(bucketIdentifier, bucketItemJson);
             }
+            
             Item bucket = new TemplateBucketItem(bucketIdentifier, fluidEntry.getValue().getBucketFluid().id).setTranslationKey(bucketIdentifier);
             fluidEntry.getValue().setBucketItem(bucket);
             bucketFluids.put(bucket, fluidEntry.getValue());
+        }
+    }
+    
+    @EventListener
+    public void assignFluidBuckets(AfterBlockAndItemRegisterEvent event) {
+        for (var fluidEntry : FluidRegistry.getRegistry().entrySet()) {
+            Fluid fluid = fluidEntry.getValue();
+            if (fluid.getFluidBucketFactory() != null) {
+                fluid.setBucketItem(fluid.getFluidBucketFactory().create(fluid));
+            }
         }
     }
 

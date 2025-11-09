@@ -45,6 +45,8 @@ public final class Fluid {
      * If it is null, the fluid won't be taken from world
      */
     private Item bucketItem;
+    
+    private FluidBucketFactory fluidBucketFactory;
 
     /**
      * Determines if a bucket can place this fluid in world
@@ -173,6 +175,15 @@ public final class Fluid {
 
     public Fluid setBucketItem(Item bucketItem) {
         this.bucketItem = bucketItem;
+        return this;
+    }
+    
+    public FluidBucketFactory getFluidBucketFactory() {
+        return fluidBucketFactory;
+    }
+    
+    public Fluid setFluidBucketFactory(FluidBucketFactory fluidBucketFactory) {
+        this.fluidBucketFactory = fluidBucketFactory;
         return this;
     }
 

@@ -30,7 +30,7 @@ public class FluidBuilder {
 
     // Fluid Parameters
     private Integer bucketSize = null;
-    private Item bucketItem = null;
+    private FluidBucketFactory bucketItemFactory = null;
     private Boolean placeableInWorld = null;
     private Boolean automaticBucketRegistration = null;
     private String fillSound = null;
@@ -139,16 +139,16 @@ public class FluidBuilder {
     }
 
     /**
-     * <p> Set the {@link Item} that will represent a bucket of this fluid
+     * <p> Set the {@link FluidBucketFactory} that will create an {@link Item} that will represent a bucket of this fluid
      * <p> This will mean that the only function that will be handled automatically is picking up fluid from world. The rest is on you
      * <p>
      * <p> If this is not set, a bucket will be automatically generated using the color provided in {@link #color(int)} or {@link #color(Color)}
      *
-     * @param bucketItem The {@link Item} that represents a bucket of this fluid
+     * @param bucketItemFactory The {@link FluidBucketFactory} that will create an {@link Item} that represents a bucket of this fluid
      * @return The Fluid Builder for chaining
      */
-    public FluidBuilder bucketItem(Item bucketItem) {
-        this.bucketItem = bucketItem;
+    public FluidBuilder bucketItem(FluidBucketFactory bucketItemFactory) {
+        this.bucketItemFactory = bucketItemFactory;
         return this;
     }
 
@@ -370,8 +370,8 @@ public class FluidBuilder {
         }
 
         // Bucket Item
-        if (bucketItem != null) {
-            fluid.setBucketItem(bucketItem);
+        if (bucketItemFactory != null) {
+            fluid.setFluidBucketFactory(bucketItemFactory);
         }
 
         // Placeable in World

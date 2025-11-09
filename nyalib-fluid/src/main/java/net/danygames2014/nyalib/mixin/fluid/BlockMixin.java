@@ -4,7 +4,6 @@ import net.danygames2014.nyalib.block.FluidBlockManager;
 import net.danygames2014.nyalib.event.AfterFluidRegistryEvent;
 import net.danygames2014.nyalib.event.FluidRegistryEvent;
 import net.minecraft.block.Block;
-import net.minecraft.stat.Stat;
 import net.modificationstation.stationapi.api.StationAPI;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
