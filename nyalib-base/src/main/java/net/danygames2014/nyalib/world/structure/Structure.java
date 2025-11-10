@@ -121,7 +121,7 @@ public class Structure {
                     x + (block.zOffset * rotation.getXMultiplier()),
                     y + block.yOffset,
                     z + (block.xOffset * rotation.getZMultiplier()),
-                    block.getState(this, world, x, y, z, block),
+                    getState(this, world, x, y, z, block),
                     block.collisionType
             );
         } else {
@@ -130,10 +130,14 @@ public class Structure {
                     x + (block.xOffset * rotation.getXMultiplier()),
                     y + block.yOffset,
                     z + (block.zOffset * rotation.getZMultiplier()),
-                    block.getState(this, world, x, y, z, block),
+                    getState(this, world, x, y, z, block),
                     block.collisionType
             );
         }
+    }
+    
+    public BlockState getState(Structure structure, World world, int x, int y, int z, StructureBlockEntry block){
+        return block.getState(structure, world, x, y, z, block);
     }
 
     public boolean placeState(World world, int x, int y, int z, BlockState state, CollisionType collisionType) {
