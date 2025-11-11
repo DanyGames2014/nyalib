@@ -142,16 +142,20 @@ public class Structure {
 
     public boolean placeState(World world, int x, int y, int z, BlockState state, CollisionType collisionType) {
         if (isReplaceable(world, x, y, z)) {
-            world.setBlockState(x, y, z, state);
+            setState(world, x, y, z, state);
             return true;
         } else {
             if (collisionType == CollisionType.REPLACE_BLOCK) {
-                world.setBlockState(x, y, z, state);
+                setState(world, x, y, z, state);
                 return true;
             } else {
                 return false;
             }
         }
+    }
+    
+    public void setState(World world, int x, int y, int z, BlockState state){
+        world.setBlockState(x, y, z, state);
     }
 
     // Helper method to see if material is either air or replaceable
