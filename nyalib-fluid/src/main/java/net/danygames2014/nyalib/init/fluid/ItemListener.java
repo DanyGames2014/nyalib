@@ -4,6 +4,7 @@ import net.danygames2014.nyalib.block.JsonOverrideRegistry;
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.danygames2014.nyalib.fluid.FluidRegistry;
 import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.client.resource.language.TranslationStorage;
@@ -49,6 +50,7 @@ public class ItemListener {
         }
     }
 
+    @Environment(EnvType.CLIENT)
     @EventListener
     public void registerColorProvider(ItemColorsRegisterEvent event) {
         for (var bucketEntry : bucketFluids.entrySet()) {
