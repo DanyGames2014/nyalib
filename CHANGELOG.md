@@ -23,3 +23,4 @@
 * Abstract setBlockState in Structure to a overrideable method
 * Fix a server crash when registering fluid colors
 * Improve EnergyNetwork energy distribution and use fastutil
+* Add shouldDropStack into DropInventoryOnBreak
