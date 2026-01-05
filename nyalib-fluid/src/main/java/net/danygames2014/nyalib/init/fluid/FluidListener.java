@@ -1,10 +1,8 @@
 package net.danygames2014.nyalib.init.fluid;
 
-import net.danygames2014.nyalib.event.AfterFluidRegistryEvent;
 import net.danygames2014.nyalib.event.FluidRegistryEvent;
-import net.danygames2014.nyalib.fluid.FluidBuilder;
-import net.danygames2014.nyalib.fluid.Fluids;
 import net.danygames2014.nyalib.fluid.Fluid;
+import net.danygames2014.nyalib.fluid.Fluids;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -25,6 +23,14 @@ public class FluidListener {
                         .setColor(0xFFE6913C)
                         .disableAutomaticBucketRegistration()
                         .setFluidBucketFactory(fluid -> Item.LAVA_BUCKET)
+        );
+        
+        event.register(
+                Fluids.MILK = new Fluid(Namespace.MINECRAFT.id("milk"), null, null)
+                        .setColor(0xFFFFFFFF)
+                        .disableAutomaticBucketRegistration()
+                        .setFluidBucketFactory(fluid -> Item.MILK_BUCKET)
+                        .setPlaceableInWorld(false)
         );
     }
 }
