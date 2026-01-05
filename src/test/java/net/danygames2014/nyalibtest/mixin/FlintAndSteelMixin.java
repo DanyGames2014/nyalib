@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class FlintAndSteelMixin {
     @Inject(method = "useOnBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;setBlock(IIII)Z"))
     public void explodeMe(ItemStack stack, PlayerEntity player, World world, int x, int y, int z, int side, CallbackInfoReturnable<Boolean> cir) {
-        if (player.isInFluid(NyaLibTest.fuelFluid.getMaterial())) {
+        if (player.isInFluid(NyaLibTest.fuelFluid)) {
             world.createExplosion(null, x, y, z, 2.0F, true);
         }
     }

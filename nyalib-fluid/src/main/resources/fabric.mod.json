@@ -42,7 +42,8 @@
       "net/minecraft/class_633": ["net/danygames2014/nyalib/screen/FluidScreenHandlerListener"],
       "net/minecraft/class_71": ["net/danygames2014/nyalib/screen/FluidScreenHandler"],
       "net/minecraft/class_504": ["net/danygames2014/nyalib/client/FluidInteractionManager"],
-      "net/minecraft/class_220": ["net/danygames2014/nyalib/fluid/FluidBucket"]
+      "net/minecraft/class_220": ["net/danygames2014/nyalib/fluid/FluidBucket"],
+      "net/minecraft/class_57": ["net/danygames2014/nyalib/entity/FluidEntity"]
     }
   }
 }
