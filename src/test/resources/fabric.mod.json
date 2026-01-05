@@ -18,6 +18,7 @@
       "net.danygames2014.nyalibtest.NyaLibTest"
     ],
     "stationapi:event_bus_client": [
+      "net.danygames2014.nyalibtest.init.ClientListener"
     ],
     "stationapi:event_bus_server": [
     ],
