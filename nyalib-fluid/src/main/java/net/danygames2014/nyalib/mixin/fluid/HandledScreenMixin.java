@@ -41,6 +41,9 @@ public abstract class HandledScreenMixin extends Screen {
     public void renderFluidSlots(int mouseX, int mouseY, float delta, CallbackInfo ci) {
         hoveredSlot = null;
         
+        // TODO: Custom renderer callback using an interface 
+        // TODO: Allow the slot to not be hoverable
+        
         for (FluidSlot fluidSlot : container.getFluidSlots()) {
             boolean hovered = isPointOverFluidSlot(fluidSlot, mouseX, mouseY);
 

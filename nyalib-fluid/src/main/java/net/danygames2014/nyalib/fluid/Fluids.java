@@ -8,7 +8,7 @@ public class Fluids {
     public static Fluid LAVA;
 
     /**
-     * A default fluid material used when a fluid doesn't have a material for some reason
+     * A default fluid material used when a fluid doesn't have a material
      */
     public static FluidMaterial DEFAULT_FLUID_MATERIAL = new FluidMaterial(MapColor.GRAY);
 }

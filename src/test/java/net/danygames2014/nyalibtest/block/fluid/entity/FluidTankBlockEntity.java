@@ -18,12 +18,25 @@ public class FluidTankBlockEntity extends BlockEntity implements FluidHandler, I
 
     @Override
     public boolean canExtractFluid(@Nullable Direction direction) {
-        return false;
+        return true;
     }
 
     @Override
     public FluidStack extractFluid(int slot, int amount, @Nullable Direction direction) {
-        return null;
+        if (fluidStacks[slot] == null) {
+            return null;
+        }
+        
+        FluidStack currentStack = fluidStacks[slot];
+        FluidStack extractedStack = new FluidStack(currentStack.fluid, Math.min(amount, currentStack.amount));
+        
+        currentStack.amount -= extractedStack.amount;
+
+        if (currentStack.amount <= 0) {
+            fluidStacks[slot] = null;
+        }
+        
+        return extractedStack;
     }
 
     @Override

@@ -29,7 +29,6 @@ public class FluidSlot {
 
     public void setStack(FluidStack fluidStack) {
         handler.setFluid(index, fluidStack, null);
-        markDirty();
     }
 
     public FluidStack takeStack(int amount) {
@@ -58,18 +57,9 @@ public class FluidSlot {
         return true;
     }
 
-    public void markDirty() {
-        // TODO: hmmm oh oh Oh Oh OH OH
-        //this.handler.markDirty(); OH OH
-    }
-
+    // Comparable
     public boolean equals(FluidHandler otherHandler, int otherIndex) {
         return otherHandler == this.handler && otherIndex == this.index;
-    }
-
-    // Events
-    public void onTakeFluid(FluidStack fluidStack) {
-        markDirty();
     }
 
     // Rendering

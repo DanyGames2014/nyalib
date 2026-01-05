@@ -1,6 +1,5 @@
 package net.danygames2014.nyalib.fluid;
 
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.util.Identifier;
 
@@ -115,7 +114,7 @@ public class FluidStack {
         this.amount = nbt.getInt("amount");
     }
 
-    public FluidStack fromNbt(NbtCompound nbt) {
+    public static FluidStack fromNbt(NbtCompound nbt) {
         FluidStack stack = new FluidStack();
 
         stack.readNbt(nbt);
