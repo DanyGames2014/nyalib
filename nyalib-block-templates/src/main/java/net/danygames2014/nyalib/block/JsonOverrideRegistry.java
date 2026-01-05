@@ -79,6 +79,6 @@ public class JsonOverrideRegistry {
     }
 
     public static void registerBlockstateOverride(String blockIdentifier, String blockstate) {
-        registerBlockModelOverride(Identifier.of(blockIdentifier), blockstate);
+        registerBlockstateOverride(Identifier.of(blockIdentifier), blockstate);
     }
 }
