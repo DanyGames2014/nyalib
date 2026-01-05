@@ -27,8 +27,13 @@ public class BlockWithEntityMixin {
 
             Random random = new Random();
 
-            for (int i = 0; i < inventory.size(); ++i) {
-                ItemStack stack = inventory.getStack(i);
+            for (int slot = 0; slot < inventory.size(); ++slot) {
+                ItemStack stack = inventory.getStack(slot);
+                
+                if (!dropInventoryOnBreak.shouldDropStack(world, x, y, z, slot, stack)) {
+                    continue;
+                }
+                
                 if (stack != null) {
                     float xPos = random.nextFloat() * 0.8F + 0.1F;
                     float yPos = random.nextFloat() * 0.8F + 0.1F;
