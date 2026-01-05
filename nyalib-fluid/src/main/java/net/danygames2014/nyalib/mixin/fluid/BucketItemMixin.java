@@ -38,6 +38,14 @@ public class BucketItemMixin implements FluidBucket {
         }
     }
 
+    @Inject(method = "use", at = @At(value = "FIELD", target = "Lnet/minecraft/item/BucketItem;fluidBlockId:I", ordinal = 2, opcode = Opcodes.GETFIELD), cancellable = true)
+    public void preventPlacingInWorld(ItemStack stack, World world, PlayerEntity player, CallbackInfoReturnable<ItemStack> cir) {
+        Fluid fluid = FluidRegistry.get(fluidBlockId);
+        if (fluid != null && !fluid.isPlaceableInWorld()) {
+            cir.setReturnValue(stack);
+        }
+    }
+
     @Inject(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;setBlock(IIIII)Z", ordinal = 0), cancellable = true)
     public void playEmptySound(ItemStack stack, World world, PlayerEntity player, CallbackInfoReturnable<ItemStack> cir) {
         Fluid fluid = getFluid();
