@@ -38,7 +38,7 @@ public class CableBlock extends TemplateBlock implements NetworkNodeComponent {
 
     @Override
     public int getColorMultiplier(BlockView blockView, int x, int y, int z) {
-        if (theWorld != null) {
+        if (theWorld != null && !theWorld.isRemote) {
             Network net = NetworkManager.getAt(theWorld.dimension, x, y, z, this.getNetworkTypes().get(0).getIdentifier());
 
             if (net != null) {
@@ -51,6 +51,10 @@ public class CableBlock extends TemplateBlock implements NetworkNodeComponent {
 
     @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
+        if (world.isRemote) {
+            return false;
+        }
+        
         ArrayList<Network> networks = NetworkManager.getAt(world.dimension, x, y, z, this.getNetworkTypes());
         player.sendMessage("This block is in networks:");
         for (var net : networks){

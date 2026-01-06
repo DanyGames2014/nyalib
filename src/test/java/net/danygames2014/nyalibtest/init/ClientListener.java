@@ -3,6 +3,7 @@ package net.danygames2014.nyalibtest.init;
 import net.danygames2014.nyalib.block.JsonOverrideRegistry;
 import net.danygames2014.nyalibtest.fluid.item.FluidCellItem;
 import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.item.ItemStack;
@@ -11,6 +12,7 @@ import net.modificationstation.stationapi.api.client.event.color.item.ItemColors
 import net.modificationstation.stationapi.api.util.Identifier;
 
 public class ClientListener {
+    @Environment(EnvType.CLIENT)
     @EventListener
     public void registerItemColor(ItemColorsRegisterEvent event) {
         for (FluidCellItem fluidCell : FluidCellItem.FLUID_CELL_ITEMS.values()) {

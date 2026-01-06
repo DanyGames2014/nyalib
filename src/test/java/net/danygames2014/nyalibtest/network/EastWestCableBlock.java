@@ -37,7 +37,7 @@ public class EastWestCableBlock extends TemplateBlock implements NetworkNodeComp
 
     @Override
     public int getColorMultiplier(BlockView blockView, int x, int y, int z) {
-        if (theWorld != null) {
+        if (theWorld != null && !theWorld.isRemote) {
             Network net = NetworkManager.getAt(theWorld.dimension, x, y, z, this.getNetworkTypes().get(0).getIdentifier());
 
             if (net != null) {
@@ -50,6 +50,10 @@ public class EastWestCableBlock extends TemplateBlock implements NetworkNodeComp
 
     @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
+        if (world.isRemote) {
+            return false;
+        }
+        
         Network net = NetworkManager.getAt(world.dimension, x, y, z, this.getNetworkTypes().get(0).getIdentifier());
         if (net != null) {
             player.sendMessage("NET " + net.getId() + " HASHCODE: " + net.hashCode());
