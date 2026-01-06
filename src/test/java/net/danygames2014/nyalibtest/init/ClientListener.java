@@ -1,7 +1,7 @@
 package net.danygames2014.nyalibtest.init;
 
 import net.danygames2014.nyalib.block.JsonOverrideRegistry;
-import net.danygames2014.nyalibtest.block.fluid.item.FluidCellItem;
+import net.danygames2014.nyalibtest.fluid.item.FluidCellItem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.mine_diver.unsafeevents.listener.EventListener;
