@@ -27,7 +27,7 @@ public class LiquidBlockMixin {
     private static Material injectFluidMaterial(Operation<Material> original, @Local(argsOnly = true) BlockView view, @Local(ordinal = 0, argsOnly = true) int x, @Local(ordinal = 1, argsOnly = true) int y, @Local(ordinal = 2, argsOnly = true) int z) {
         fluid = FluidRegistry.get(view.getBlockId(x, y, z));
 
-        if (fluid != null) {
+        if (fluid != null && fluid.getFlowingBlock() != null) {
             return fluid.getFlowingBlock().material;
         }
         
@@ -37,7 +37,7 @@ public class LiquidBlockMixin {
     @Environment(EnvType.CLIENT)
     @WrapOperation(method = "getFlowingAngle", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/LiquidBlock;getFlow(Lnet/minecraft/world/BlockView;III)Lnet/minecraft/util/math/Vec3d;", ordinal = 0))
     private static Vec3d calculateFlow(LiquidBlock instance, BlockView blockView, int x, int y, int z, Operation<Vec3d> original){
-        if (fluid.getFlowingBlock() instanceof FlowingFluidBlock flowingFluidBlock) {
+        if (fluid != null && fluid.getFlowingBlock() instanceof FlowingFluidBlock flowingFluidBlock) {
             Vec3d flow = flowingFluidBlock.getFlow(blockView, x,y,z);
             fluid = null;
             return flow;
