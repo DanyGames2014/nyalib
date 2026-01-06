@@ -19,7 +19,7 @@ public class BlockWithEntityMixin extends BlockMixin {
             component.addToNet(world,x,y,z, component);
 
             //NetworkManager.addBlock(world, x, y, z, (T) (Object) this);
-            System.out.println("onPlace BlockWithEntityMixin");
+            //System.out.println("onPlace BlockWithEntityMixin");
         }
     }
 
@@ -31,7 +31,7 @@ public class BlockWithEntityMixin extends BlockMixin {
             component.removeFromNet(world,x,y,z, component);
 
             //NetworkManager.removeBlock(world, x, y, z, (T) (Object) this);
-            System.out.println("onBreak BlockWithEntityMixin");
+            //System.out.println("onBreak BlockWithEntityMixin");
         }
     }
 }
