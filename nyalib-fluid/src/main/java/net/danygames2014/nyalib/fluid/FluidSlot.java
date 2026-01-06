@@ -2,20 +2,34 @@ package net.danygames2014.nyalib.fluid;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.render.item.ItemRenderer;
+import net.minecraft.item.ItemStack;
 
 public class FluidSlot {
-    private final int index;
+    public final int index;
     private final FluidHandler handler;
     public int id;
     public int x;
     public int y;
+    public int width;
+    public int height;
+    
+    public boolean enabled = true;
 
-    // TODO: Allow the slot to not be drawn, useful for custom representation of the fluid contents
-    public FluidSlot(FluidHandler handler, int index, int x, int y) {
+    public FluidSlot(FluidHandler handler, int index, int x, int y, int width, int height) {
         this.handler = handler;
         this.index = index;
         this.x = x;
         this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+
+    public FluidSlot(FluidHandler handler, int index, int x, int y) {
+        this(handler, index, x, y, 16, 16);
     }
 
     // Manipulating the FluidStack itself
@@ -66,5 +80,13 @@ public class FluidSlot {
     @Environment(EnvType.CLIENT)
     public int getBackgroundTextureId() {
         return -1;
+    }
+
+    public void render(Minecraft minecraft, TextRenderer textRenderer, ItemRenderer itemRenderer, HandledScreen screen, int mouseX, int mouseY, float delta, FluidSlot slot, int slotX, int slotY) {
+        if (slot.getStack() != null) {
+            ItemStack renderedItem = new ItemStack(slot.getStack().fluid.getBucketFluid());
+            itemRenderer.renderGuiItem(textRenderer, minecraft.textureManager, renderedItem, slotX, slotY);
+            itemRenderer.renderGuiItemDecoration(textRenderer, minecraft.textureManager, renderedItem, slotX, slotY);
+        }
     }
 }

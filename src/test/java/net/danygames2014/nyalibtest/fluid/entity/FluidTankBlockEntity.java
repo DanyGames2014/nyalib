@@ -51,6 +51,10 @@ public class FluidTankBlockEntity extends BlockEntity implements FluidHandler, I
 
         if (currentStack == null) {
             currentStack = new FluidStack(stack.fluid, 0);
+        } else {
+            if (!currentStack.isFluidEqual(stack)) {
+                return stack;
+            }
         }
 
         int addedAmount = Math.min(remaining, getFluidCapacity(slot, direction) - currentStack.amount);

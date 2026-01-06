@@ -3,6 +3,7 @@ package net.danygames2014.nyalibtest.screen.handler;
 import net.danygames2014.nyalib.fluid.FluidSlot;
 import net.danygames2014.nyalib.fluid.FluidStack;
 import net.danygames2014.nyalibtest.fluid.entity.FluidTankBlockEntity;
+import net.danygames2014.nyalibtest.screen.slot.CustomFluidSlotWithRendering;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -48,9 +49,11 @@ public class FluidTankScreenHandler extends ScreenHandler {
             );
         }
 
-        this.addFluidSlot(new FluidSlot(fluidTank, 0, 56, 17));
-        this.addFluidSlot(new FluidSlot(fluidTank, 1, 56, 35));
+        this.addFluidSlot(new CustomFluidSlotWithRendering(fluidTank, 0, 56, 17));
+        this.addFluidSlot(new FluidSlot(fluidTank, 1, 56, 35, 48, 16));
         this.addFluidSlot(new FluidSlot(fluidTank, 2, 56, 53));
+        
+        //this.getFluidSlots().get(1).enabled = false;
     }
 
     @Override

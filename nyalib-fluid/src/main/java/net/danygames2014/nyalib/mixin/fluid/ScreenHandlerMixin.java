@@ -95,7 +95,7 @@ public abstract class ScreenHandlerMixin implements FluidScreenHandler {
 
         FluidSlot slot = fluidSlots.get(index);
 
-        if (slot != null) {
+        if (slot != null && slot.enabled) {
             FluidHandler inv = slot.getHandler();
 
             if (cursorStack == null) {
