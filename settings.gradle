@@ -12,7 +12,7 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-rootProject.name = "NyaLib"
+rootProject.name = "nyalib"
 
 include 'nyalib-base'
 
