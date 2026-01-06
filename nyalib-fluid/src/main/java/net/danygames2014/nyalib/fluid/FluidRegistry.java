@@ -1,5 +1,6 @@
 package net.danygames2014.nyalib.fluid;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.danygames2014.nyalib.NyaLibFluid;
 import net.minecraft.block.Block;
 import net.modificationstation.stationapi.api.util.Identifier;
@@ -11,6 +12,8 @@ public class FluidRegistry {
     public final HashMap<Identifier, Fluid> registry;
     private static FluidRegistry INSTANCE;
 
+    private static final Int2ObjectOpenHashMap<Fluid> fluidBlockIdCache = new Int2ObjectOpenHashMap<>();
+    
     private static FluidRegistry getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new FluidRegistry();
@@ -40,18 +43,22 @@ public class FluidRegistry {
     }
     
     public static Fluid get(int fluidBlockId) {
+        return fluidBlockIdCache.computeIfAbsent(fluidBlockId, FluidRegistry::getInternal);
+    }
+    
+    private static Fluid getInternal(int fluidBlockId) {
         for (Fluid fluid : getInstance().registry.values()) {
             Block stillBlock = fluid.getStillBlock();
             if (stillBlock != null && stillBlock.id == fluidBlockId) {
                 return fluid;
             }
-            
+
             Block flowingBlock = fluid.getFlowingBlock();
             if (flowingBlock != null && flowingBlock.id == fluidBlockId) {
                 return fluid;
             }
         }
-        
+
         return null;
     }
 
