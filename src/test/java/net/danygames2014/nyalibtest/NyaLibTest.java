@@ -1,10 +1,12 @@
 package net.danygames2014.nyalibtest;
 
 import net.danygames2014.nyalib.block.*;
+import net.danygames2014.nyalib.event.AfterFluidRegistryEvent;
 import net.danygames2014.nyalib.event.FluidRegistryEvent;
 import net.danygames2014.nyalib.event.NetworkTypeRegistryEvent;
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.danygames2014.nyalib.fluid.FluidBuilder;
+import net.danygames2014.nyalib.fluid.FluidRegistry;
 import net.danygames2014.nyalib.fluid.Fluids;
 import net.danygames2014.nyalib.network.NetworkType;
 import net.danygames2014.nyalibtest.capability.block.ItemHandlerBlockCapabilityTesterBlock;
@@ -176,6 +178,13 @@ public class NyaLibTest {
                 .lightLevel(15)
                 .build()
         );
+    }
+    
+    @EventListener
+    public void afterRegisterFluids(AfterFluidRegistryEvent event) {
+        for (Fluid fl : FluidRegistry.getRegistry().values()) {
+            System.out.println(fl.getIdentifier() + " -> " + fl.getMaterial().mapColor.id);
+        }
     }
 
     @EventListener

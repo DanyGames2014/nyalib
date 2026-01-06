@@ -349,7 +349,7 @@ public class FluidBuilder {
 
             // If map color was not specified, use the default one
             if (mapColor == null) {
-                this.mapColor = MapColorUtil.addMapColor(color);
+                this.mapColor = MapColorUtil.getMapColor(color);
             }
 
             FluidBlockManager.requestBlock(fluid, stillTexture, flowingTexture, overlayTexture, mapColor);
