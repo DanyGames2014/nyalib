@@ -214,6 +214,11 @@ public abstract class ScreenHandlerMixin implements FluidScreenHandler {
                             // Insert the fluid
                             FluidStack remainderStack = inv.insertFluid(fluidStack, index, null);
                             if (remainderStack != null && remainderStack.amount > 0) {
+                                // If nothing was inserted, cancel the operation
+                                if (remainderStack.amount == bucketFluid.getBucketSize()) {
+                                    break;
+                                }
+                                
                                 // If it was for some reason not inserted entirely, try to insert it in any slot which will accept it
                                 remainderStack = inv.insertFluid(remainderStack, null);
                                 if (remainderStack != null && remainderStack.amount > 0) {
