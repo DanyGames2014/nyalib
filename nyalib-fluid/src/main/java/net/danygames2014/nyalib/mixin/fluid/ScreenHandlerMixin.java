@@ -87,7 +87,6 @@ public abstract class ScreenHandlerMixin implements FluidScreenHandler {
         return fluidSlots.get(index);
     }
 
-    // TODO: This should probably return the cursor stack, since why would it return the fluid stack, literally not gonna get compared with client
     @Override
     public FluidStack onFluidSlotClick(int index, int button, boolean shift, PlayerEntity player, ItemStack cursorStack) {
         if (index == -999) {
@@ -113,7 +112,7 @@ public abstract class ScreenHandlerMixin implements FluidScreenHandler {
                 if (itemFluidStack == null && invFluidStack == null) {
                     // Both are empty. Do Nothing
 
-                } else if (itemFluidStack == null) {
+                } else if (itemFluidStack == null || inv.getRemainingFluidCapacity(index, null) <= 0) {
                     // The item is empty. Fill It
                     FluidStack extractedStack = inv.extractFluid(index, item.getRemainingFluidCapacity(0), null);
                     FluidStack remainderStack = item.insertFluid(extractedStack);
@@ -276,9 +275,20 @@ public abstract class ScreenHandlerMixin implements FluidScreenHandler {
         if (player.inventory.getCursorStack() == null || player.inventory.getCursorStack().count <= 0) {
             player.inventory.setCursorStack(bufferStack);
             resetItemBuffer();
-            return true;
+            return false;
         } else {
-            if (player.inventory.addStack(bufferStack)) {
+            if (getFreeSlotCount(player) > 0) {
+                if (!player.inventory.addStack(bufferStack)) {
+                    player.world.spawnEntity(new ItemEntity(player.world, player.x, player.y, player.z, bufferStack));
+                    resetItemBuffer();
+                    return false;
+                }
+                
+                if (getFreeSlotCount(player) <= 0) {
+                    resetItemBuffer();
+                    return true;
+                }
+                
                 resetItemBuffer();
                 return true;
             } else {
@@ -289,11 +299,23 @@ public abstract class ScreenHandlerMixin implements FluidScreenHandler {
         }
     }
 
+    @Unique
     public void resetItemBuffer() {
         bufferItem = null;
         bufferCount = 0;
     }
 
+    @Unique
+    private int getFreeSlotCount(PlayerEntity player) {
+        int freeSlots = 0;
+        for (ItemStack slot : player.inventory.main) {
+            if (slot == null) {
+                freeSlots++;
+            }
+        }
+        return freeSlots;
+    }
+    
     @Override
     public void onFluidSlotUpdate(FluidHandler handler) {
         this.sendContentUpdates();
