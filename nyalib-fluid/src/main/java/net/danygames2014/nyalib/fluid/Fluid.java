@@ -1,9 +1,7 @@
 package net.danygames2014.nyalib.fluid;
 
 import net.danygames2014.nyalib.NyaLib;
-import net.danygames2014.nyalib.block.FluidBlockManager;
 import net.minecraft.block.Block;
-import net.minecraft.block.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.Entity;
@@ -125,12 +123,8 @@ public final class Fluid {
     // TODO: Temperature? Per Stack (pain^2) ? Per Fluid?
     // TODO: Viscosity?
     // TODO: Gaseous Fluids?
-    // TODO: Fluids without a block implementation?
     // TODO: Interactions -> Vaporization in Nether
     // TODO: Methods with world/stack contexts
-    // TODO: Entity.isInFluid(Fluid) when https://github.com/FabricMC/fabric-loom/issues/1334 is fixed
-    // TODO: When maps are fixed. Make it so the map color of the fluid is reduced to either 16-bit or 8-bit color.
-    // TODO: Also make it so after the reduction the method first tries to find an existing map color that matches (maybe in range)
 
     // Base constructor
     public Fluid(Identifier identifier, Block still, Block flowing) {
