@@ -14,6 +14,9 @@ public class NyaLib {
     @ConfigRoot(value = "item", visibleName = "Item API")
     public static final Config.ItemConfig ITEM_CONFIG = new Config.ItemConfig();
     
+    @ConfigRoot(value = "fluid", visibleName = "Fluid API")
+    public static final Config.FluidConfig FLUID_CONFIG = new Config.FluidConfig();
+    
     // TODO: Consistent sorting of methods across interfaces and capabilities
     // TODO: Consistent documentation on item/fluid/energy interface and their capabilities with propagated docs
     // TODO: Move config to configuration module?
