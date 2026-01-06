@@ -24,3 +24,7 @@
 * Fix a server crash when registering fluid colors
 * Improve EnergyNetwork energy distribution and use fastutil
 * Add shouldDropStack into DropInventoryOnBreak
+* Respect when fluids are not placeable in world
+* Rewrite the logic of putting fluids in and out of tanks in the ScreenHandler
+* Milk is now a fluid
+* Fluids will now try to find the closest map color before creating a new one
