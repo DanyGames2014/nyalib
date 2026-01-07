@@ -5,6 +5,7 @@ tile.nyalibtest.network_node_block.name=Network Node Block
 tile.nyalibtest.east_west_network_node.name=East/West Network Node Block
 tile.nyalibtest.network_edge.name=Network Edge
 tile.nyalibtest.fluid_tank.name=Fluid Tank
+tile.nyalibtest.simple_fluid_tank.name=Simple Fluid Tank
 tile.nyalibtest.infinite_water_tank.name=Infinite Water Source
 tile.nyalibtest.energy_source.name=Energy Source
 tile.nyalibtest.energy_consumer.name=Energy Consumer

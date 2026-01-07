@@ -19,8 +19,10 @@ import net.danygames2014.nyalibtest.energy.entity.EnergyConsumerBlockEntity;
 import net.danygames2014.nyalibtest.energy.entity.EnergySourceBlockEntity;
 import net.danygames2014.nyalibtest.fluid.FluidTankBlock;
 import net.danygames2014.nyalibtest.fluid.InfiniteWaterBlock;
+import net.danygames2014.nyalibtest.fluid.SimpleFluidTankBlock;
 import net.danygames2014.nyalibtest.fluid.entity.FluidTankBlockEntity;
 import net.danygames2014.nyalibtest.fluid.entity.InfiniteWaterBlockEntity;
+import net.danygames2014.nyalibtest.fluid.entity.SimpleFluidTankBlockEntity;
 import net.danygames2014.nyalibtest.fluid.item.FluidCellItem;
 import net.danygames2014.nyalibtest.fluid.item.FluidPipetteItem;
 import net.danygames2014.nyalibtest.item.SideHopperBlock;
@@ -30,6 +32,7 @@ import net.danygames2014.nyalibtest.network.CableBlock;
 import net.danygames2014.nyalibtest.network.EastWestCableBlock;
 import net.danygames2014.nyalibtest.network.NetworkEdgeBlock;
 import net.danygames2014.nyalibtest.screen.FluidTankScreen;
+import net.danygames2014.nyalibtest.screen.SimpleFluidTankScreen;
 import net.danygames2014.nyalibtest.simpleenergy.SimpleEnergyReceiverBlock;
 import net.danygames2014.nyalibtest.simpleenergy.SimpleInfiniteEnergyBlock;
 import net.danygames2014.nyalibtest.simpleenergy.entity.InfiniteSimpleEnergyBlockEntity;
@@ -74,6 +77,7 @@ public class NyaLibTest {
     public static Item multimeter;
 
     public static Block fluidTankBlock;
+    public static Block simpleFluidTankBlock;
     public static Block infiniteWaterBlock;
     public static Item fluidPippeteItem;
     public static Item emptyCellItem;
@@ -127,6 +131,7 @@ public class NyaLibTest {
 
         // Fluid
         fluidTankBlock = new FluidTankBlock(NAMESPACE.id("fluid_tank")).setTranslationKey(NAMESPACE, "fluid_tank");
+        simpleFluidTankBlock = new SimpleFluidTankBlock(NAMESPACE.id("simple_fluid_tank")).setTranslationKey(NAMESPACE, "simple_fluid_tank");
         infiniteWaterBlock = new InfiniteWaterBlock(NAMESPACE.id("infinite_water_tank")).setTranslationKey(NAMESPACE, "infinite_water_tank");
 
         // Energy
@@ -210,6 +215,7 @@ public class NyaLibTest {
         event.register(InfiniteWaterBlockEntity.class, "infinite_water_block");
         event.register(EnergySourceBlockEntity.class, "energy_source");
         event.register(EnergyConsumerBlockEntity.class, "energy_consumer");
+        event.register(SimpleFluidTankBlockEntity.class, "simple_fluid_tank");
     }
 
     @EventListener
@@ -221,10 +227,16 @@ public class NyaLibTest {
     @EventListener
     public void registerScreenHandlers(GuiHandlerRegistryEvent event) {
         event.register(NAMESPACE.id("fluid_tank"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openFluidTank, FluidTankBlockEntity::new));
+        event.register(NAMESPACE.id("simple_fluid_tank"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openSimpleFluidTank, SimpleFluidTankBlockEntity::new));
     }
 
     @Environment(EnvType.CLIENT)
     private Screen openFluidTank(PlayerEntity player, Inventory inventory) {
         return new FluidTankScreen(player, (FluidTankBlockEntity) inventory);
+    }
+
+    @Environment(EnvType.CLIENT)
+    private Screen openSimpleFluidTank(PlayerEntity player, Inventory inventory) {
+        return new SimpleFluidTankScreen(player, (SimpleFluidTankBlockEntity) inventory);
     }
 }
