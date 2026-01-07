@@ -45,8 +45,6 @@ public interface ItemHandler extends ItemCapable {
         return null;
     }
 
-    // TODO: extractItem(slot, side)
-    
     /**
      * Extract an item in the given slot
      *
