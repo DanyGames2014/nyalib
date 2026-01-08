@@ -1,9 +1,10 @@
 package net.danygames2014.nyalib.fluid;
 
+import net.modificationstation.stationapi.api.util.Util;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
-public interface SimpleFluidHandler extends FluidHandler {
+public interface ManagedFluidHandler extends FluidHandler {
     @Override
     default boolean canExtractFluid(@Nullable Direction direction) {
         return true;
@@ -11,23 +12,22 @@ public interface SimpleFluidHandler extends FluidHandler {
 
     @Override
     default FluidStack extractFluid(int slot, int amount, @Nullable Direction direction) {
-        if (!canExtractFluid(direction)) {
-            return null;
-        }
-        
-        FluidStack[] fluidStacks = getFluids(direction);
-        
-        if (fluidStacks[slot] == null) {
+        if (!canExtractFluid(direction) || !getTankManager().getSlot(slot, direction).isSideAllowed(direction)) {
             return null;
         }
 
-        FluidStack currentStack = fluidStacks[slot];
+        FluidStack currentStack = getFluid(slot, direction);
+        
+        if (currentStack == null) {
+            return null;
+        }
+
         FluidStack extractedStack = new FluidStack(currentStack.fluid, Math.min(amount, currentStack.amount));
 
         currentStack.amount -= extractedStack.amount;
 
         if (currentStack.amount <= 0) {
-            fluidStacks[slot] = null;
+            setFluid(slot, null, direction);
         }
 
         return extractedStack;
@@ -35,10 +35,6 @@ public interface SimpleFluidHandler extends FluidHandler {
 
     @Override
     default FluidStack extractFluid(@Nullable Direction direction) {
-        if (!canExtractFluid(direction)) {
-            return null;
-        }
-        
         return extractFluid(Integer.MAX_VALUE, direction);
     }
 
@@ -48,7 +44,7 @@ public interface SimpleFluidHandler extends FluidHandler {
             return null;
         }
         
-        for (int i = 0; i < getFluidSlots(direction); i++) {
+        for (int i = 0; i < getFluidSlots(null); i++) {
             if (getFluid(i, direction) != null) {
                 return this.extractFluid(i, amount, direction);
             }
@@ -66,7 +62,7 @@ public interface SimpleFluidHandler extends FluidHandler {
         FluidStack currentStack = null;
         int remaining = amount;
 
-        for (int i = 0; i < getFluidSlots(direction); i++) {
+        for (int i = 0; i < getFluidSlots(null); i++) {
             if (remaining <= 0) {
                 break;
             }
@@ -94,13 +90,11 @@ public interface SimpleFluidHandler extends FluidHandler {
 
     @Override
     default FluidStack insertFluid(FluidStack stack, int slot, @Nullable Direction direction) {
-        if (!canInsertFluid(direction)) {
+        if (!canInsertFluid(direction) || !getTankManager().getSlot(0, direction).isSideAllowed(direction) || !getSlot(slot, direction).isFluidAllowed(stack.fluid)) {
             return stack;
         }
         
-        FluidStack[] fluidStacks = getFluids(direction);
-        
-        FluidStack currentStack = fluidStacks[slot];
+        FluidStack currentStack = getFluid(slot, direction);
         int remaining = stack.amount;
 
         if (currentStack == null) {
@@ -115,7 +109,7 @@ public interface SimpleFluidHandler extends FluidHandler {
         currentStack.amount += addedAmount;
         remaining -= addedAmount;
 
-        fluidStacks[slot] = currentStack;
+        setFluid(slot, currentStack, direction);
 
         if (remaining > 0) {
             stack.amount -= remaining;
@@ -132,7 +126,7 @@ public interface SimpleFluidHandler extends FluidHandler {
         }
         
         FluidStack insertedStack = stack.copy();
-        for (int i = 0; i < getFluidSlots(direction); i++) {
+        for (int i = 0; i < getFluidSlots(null); i++) {
             insertedStack = insertFluid(insertedStack, i, direction);
             if (insertedStack == null) {
                 return null;
@@ -143,49 +137,50 @@ public interface SimpleFluidHandler extends FluidHandler {
 
     @Override
     default FluidStack getFluid(int slot, @Nullable Direction direction) {
-        if (slot >= getFluidSlots(direction)) {
-            return null;
-        }
-        
-        return getFluids(direction)[slot];
+        return getTankManager().getFluid(slot, direction);
+    }
+    
+    default TankManager.FluidSlotEntry getSlot(int slot, @Nullable Direction direction) {
+        return getTankManager().getSlot(slot, direction);
     }
 
     @Override
     default boolean setFluid(int slot, FluidStack stack, @Nullable Direction direction) {
-        if (slot >= getFluidSlots(direction)) {
-            return false;
-        }
-
-        getFluids(direction)[slot] = stack;
-        return true;
+        return getTankManager().setFluid(slot, stack, direction);
     }
 
     @Override
     default int getFluidSlots(@Nullable Direction direction) {
-        return getFluids(direction).length;
+        return getTankManager().getFluidSlots(direction);
     }
 
     @Override
-    int getFluidCapacity(int slot, @Nullable Direction direction);
+    default int getFluidCapacity(int slot, @Nullable Direction direction) {
+        return getTankManager().getFluidCapacity(slot, direction);
+    }
 
     @Override
     default int getRemainingFluidCapacity(int slot, @Nullable Direction direction) {
-        if (slot >= getFluidSlots(direction)) {
-            return 0;
-        }
-
-        if (getFluid(slot, direction) == null) {
-            return getFluidCapacity(slot, direction);
-        }
-
-        return getFluidCapacity(slot, direction) - getFluid(slot, direction).amount;
+        return getTankManager().getRemainingFluidCapacity(slot, direction);
     }
 
     @Override
-    FluidStack[] getFluids(@Nullable Direction direction);
+    default FluidStack[] getFluids(@Nullable Direction direction) {
+        return getTankManager().getFluids(direction);
+    }
 
+    // FluidCapable
     @Override
     default boolean canConnectFluid(Direction direction) {
         return true;
+    }
+
+    // Managed Fluid Handler
+    default TankManager getTankManager() {
+        return Util.assertImpl();
+    }
+    
+    default TankManager.FluidSlotEntry addSlot(int capacity) {
+        return getTankManager().addSlot(capacity);
     }
 }

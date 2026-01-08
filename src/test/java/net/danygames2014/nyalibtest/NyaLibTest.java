@@ -7,7 +7,6 @@ import net.danygames2014.nyalib.event.NetworkTypeRegistryEvent;
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.danygames2014.nyalib.fluid.FluidBuilder;
 import net.danygames2014.nyalib.fluid.FluidRegistry;
-import net.danygames2014.nyalib.fluid.Fluids;
 import net.danygames2014.nyalib.network.NetworkType;
 import net.danygames2014.nyalibtest.capability.block.ItemHandlerBlockCapabilityTesterBlock;
 import net.danygames2014.nyalibtest.capability.item.YoinkerItem;
@@ -19,9 +18,11 @@ import net.danygames2014.nyalibtest.energy.entity.EnergyConsumerBlockEntity;
 import net.danygames2014.nyalibtest.energy.entity.EnergySourceBlockEntity;
 import net.danygames2014.nyalibtest.fluid.FluidTankBlock;
 import net.danygames2014.nyalibtest.fluid.InfiniteWaterBlock;
+import net.danygames2014.nyalibtest.fluid.ManagedFluidTankBlock;
 import net.danygames2014.nyalibtest.fluid.SimpleFluidTankBlock;
 import net.danygames2014.nyalibtest.fluid.entity.FluidTankBlockEntity;
 import net.danygames2014.nyalibtest.fluid.entity.InfiniteWaterBlockEntity;
+import net.danygames2014.nyalibtest.fluid.entity.ManagedFluidTankBlockEntity;
 import net.danygames2014.nyalibtest.fluid.entity.SimpleFluidTankBlockEntity;
 import net.danygames2014.nyalibtest.fluid.item.FluidCellItem;
 import net.danygames2014.nyalibtest.fluid.item.FluidPipetteItem;
@@ -32,6 +33,7 @@ import net.danygames2014.nyalibtest.network.CableBlock;
 import net.danygames2014.nyalibtest.network.EastWestCableBlock;
 import net.danygames2014.nyalibtest.network.NetworkEdgeBlock;
 import net.danygames2014.nyalibtest.screen.FluidTankScreen;
+import net.danygames2014.nyalibtest.screen.ManagedFluidTankScreen;
 import net.danygames2014.nyalibtest.screen.SimpleFluidTankScreen;
 import net.danygames2014.nyalibtest.simpleenergy.SimpleEnergyReceiverBlock;
 import net.danygames2014.nyalibtest.simpleenergy.SimpleInfiniteEnergyBlock;
@@ -78,6 +80,7 @@ public class NyaLibTest {
 
     public static Block fluidTankBlock;
     public static Block simpleFluidTankBlock;
+    public static Block managedFluidTankBlock;
     public static Block infiniteWaterBlock;
     public static Item fluidPippeteItem;
     public static Item emptyCellItem;
@@ -132,6 +135,7 @@ public class NyaLibTest {
         // Fluid
         fluidTankBlock = new FluidTankBlock(NAMESPACE.id("fluid_tank")).setTranslationKey(NAMESPACE, "fluid_tank");
         simpleFluidTankBlock = new SimpleFluidTankBlock(NAMESPACE.id("simple_fluid_tank")).setTranslationKey(NAMESPACE, "simple_fluid_tank");
+        managedFluidTankBlock = new ManagedFluidTankBlock(NAMESPACE.id("managed_fluid_tank")).setTranslationKey(NAMESPACE, "managed_fluid_tank");
         infiniteWaterBlock = new InfiniteWaterBlock(NAMESPACE.id("infinite_water_tank")).setTranslationKey(NAMESPACE, "infinite_water_tank");
 
         // Energy
@@ -198,12 +202,16 @@ public class NyaLibTest {
         itemYoinker = new YoinkerItem(NAMESPACE.id("item_yoinker")).setTranslationKey(NAMESPACE, "item_yoinker");
         fluidPippeteItem = new FluidPipetteItem(NAMESPACE.id("fluid_pipette")).setTranslationKey(NAMESPACE, "fluid_pipette");
         emptyCellItem = new FluidCellItem(NAMESPACE.id("fluid_cell"), null).setTranslationKey(NAMESPACE, "fluid_cell");
-        waterCellItem = new FluidCellItem(NAMESPACE.id("water_cell"), Fluids.WATER).setTranslationKey(NAMESPACE, "water_cell");
-        lavaCellItem = new FluidCellItem(NAMESPACE.id("lava_cell"), Fluids.LAVA).setTranslationKey(NAMESPACE, "lava_cell");
-        milkCellItem = new FluidCellItem(NAMESPACE.id("milk_cell"), Fluids.MILK).setTranslationKey(NAMESPACE, "milk_cell");
-        fuelCellItem = new FluidCellItem(NAMESPACE.id("fuel_cell"), fuelFluid).setTranslationKey(NAMESPACE, "fuel_cell");
-        glowstoneCellItem = new FluidCellItem(NAMESPACE.id("glowstone_cell"), glowstoneFluid).setTranslationKey(NAMESPACE, "glowstone_cell");
-        gravelCellItem = new FluidCellItem(NAMESPACE.id("gravel_cell"), gravelFluid).setTranslationKey(NAMESPACE, "gravel_cell");
+//        waterCellItem = new FluidCellItem(NAMESPACE.id("water_cell"), Fluids.WATER).setTranslationKey(NAMESPACE, "water_cell");
+//        lavaCellItem = new FluidCellItem(NAMESPACE.id("lava_cell"), Fluids.LAVA).setTranslationKey(NAMESPACE, "lava_cell");
+//        milkCellItem = new FluidCellItem(NAMESPACE.id("milk_cell"), Fluids.MILK).setTranslationKey(NAMESPACE, "milk_cell");
+//        fuelCellItem = new FluidCellItem(NAMESPACE.id("fuel_cell"), fuelFluid).setTranslationKey(NAMESPACE, "fuel_cell");
+//        glowstoneCellItem = new FluidCellItem(NAMESPACE.id("glowstone_cell"), glowstoneFluid).setTranslationKey(NAMESPACE, "glowstone_cell");
+//        gravelCellItem = new FluidCellItem(NAMESPACE.id("gravel_cell"), gravelFluid).setTranslationKey(NAMESPACE, "gravel_cell");
+        
+        for (var fluid : FluidRegistry.getRegistry().values()) {
+            new FluidCellItem(NAMESPACE.id(fluid.getIdentifier().path + "_cell"), fluid).setTranslationKey(NAMESPACE, fluid.getIdentifier().path + "_cell");
+        }
     }
 
     @EventListener
@@ -216,6 +224,7 @@ public class NyaLibTest {
         event.register(EnergySourceBlockEntity.class, "energy_source");
         event.register(EnergyConsumerBlockEntity.class, "energy_consumer");
         event.register(SimpleFluidTankBlockEntity.class, "simple_fluid_tank");
+        event.register(ManagedFluidTankBlockEntity.class, "managed_fluid_tank");
     }
 
     @EventListener
@@ -228,6 +237,7 @@ public class NyaLibTest {
     public void registerScreenHandlers(GuiHandlerRegistryEvent event) {
         event.register(NAMESPACE.id("fluid_tank"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openFluidTank, FluidTankBlockEntity::new));
         event.register(NAMESPACE.id("simple_fluid_tank"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openSimpleFluidTank, SimpleFluidTankBlockEntity::new));
+        event.register(NAMESPACE.id("managed_fluid_tank"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openManagedFluidTank, ManagedFluidTankBlockEntity::new));
     }
 
     @Environment(EnvType.CLIENT)
@@ -238,5 +248,10 @@ public class NyaLibTest {
     @Environment(EnvType.CLIENT)
     private Screen openSimpleFluidTank(PlayerEntity player, Inventory inventory) {
         return new SimpleFluidTankScreen(player, (SimpleFluidTankBlockEntity) inventory);
+    }
+
+    @Environment(EnvType.CLIENT)
+    private Screen openManagedFluidTank(PlayerEntity player, Inventory inventory) {
+        return new ManagedFluidTankScreen(player, (ManagedFluidTankBlockEntity) inventory);
     }
 }

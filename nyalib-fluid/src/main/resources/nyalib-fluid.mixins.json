@@ -4,6 +4,7 @@
   "package": "net.danygames2014.nyalib.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "fluid.BlockEntityMixin",
     "fluid.BlockItemMixin",
     "fluid.BlockMixin",
     "fluid.BucketItemMixin",
