@@ -177,22 +177,6 @@ public class TankManager {
             if (stack != null) {
                 nbt.put("FluidStack", stack.writeNbt(new NbtCompound()));
             }
-            
-//            NbtList allowedFluidsListNbt = new NbtList();
-//            if (allowedFluids != null) {
-//                for (var allowedFluid : allowedFluids) {
-//                    allowedFluidsListNbt.add(new NbtString(allowedFluid.getIdentifier().toString()));
-//                }
-//            }
-//            nbt.put("AllowedFluids", allowedFluidsListNbt);
-//            
-//            NbtList allowedSidesListNbt = new NbtList();
-//            if (allowedSides != null) {
-//                for (var allowedSide : allowedSides) {
-//                    allowedSidesListNbt.add(new NbtString(allowedSide.getName()));
-//                }
-//            }
-//            nbt.put("AllowedSides", allowedSidesListNbt);
         }
 
         public void readNbt(NbtCompound nbt) {
@@ -200,22 +184,6 @@ public class TankManager {
                 stack = new FluidStack(nbt.getCompound("FluidStack"));
                 stack.amount = Math.min(stack.amount, capacity);
             }
-            
-//            NbtList allowedFluidsNbtList = nbt.getList("AllowedFluids");
-//            if (allowedFluidsNbtList.size() > 0) {
-//                allowedFluids = new ObjectArrayList<>();
-//                for (int i = 0; i < allowedFluidsNbtList.size(); i++) {
-//                    allowedFluids.add(FluidRegistry.get(Identifier.of(((NbtString)allowedFluidsNbtList.get(i)).value)));
-//                }
-//            }
-//
-//            NbtList allowedSidesNbtList = nbt.getList("AllowedSides");
-//            if (allowedSidesNbtList.size() > 0) {
-//                allowedSides = new ObjectArrayList<>();
-//                for (int i = 0; i < allowedSidesNbtList.size(); i++) {
-//                    allowedSides.add(Direction.byName(((NbtString)allowedSidesNbtList.get(i)).value));
-//                }
-//            }
         }
         
         public static FluidSlotEntry fromNbt(NbtCompound nbt) {
