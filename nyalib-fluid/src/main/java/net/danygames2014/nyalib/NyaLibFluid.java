@@ -12,6 +12,7 @@ public class NyaLibFluid {
     public static Namespace NAMESPACE;
     
     // TODO: SimpleTank
-    // TODO: SimpleFluidHandler? extend FluidHandler (default simple implementation)
     // TODO: ItemDrainer (unify Bucket and Handler logic with min/max withdrawal and deposit)
+    // TODO: ManagedItemHandler
+    // TODO: ManagedEnergyHandler (idk about this one)
 }
