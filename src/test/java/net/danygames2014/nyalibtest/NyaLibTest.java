@@ -202,15 +202,10 @@ public class NyaLibTest {
         itemYoinker = new YoinkerItem(NAMESPACE.id("item_yoinker")).setTranslationKey(NAMESPACE, "item_yoinker");
         fluidPippeteItem = new FluidPipetteItem(NAMESPACE.id("fluid_pipette")).setTranslationKey(NAMESPACE, "fluid_pipette");
         emptyCellItem = new FluidCellItem(NAMESPACE.id("fluid_cell"), null).setTranslationKey(NAMESPACE, "fluid_cell");
-//        waterCellItem = new FluidCellItem(NAMESPACE.id("water_cell"), Fluids.WATER).setTranslationKey(NAMESPACE, "water_cell");
-//        lavaCellItem = new FluidCellItem(NAMESPACE.id("lava_cell"), Fluids.LAVA).setTranslationKey(NAMESPACE, "lava_cell");
-//        milkCellItem = new FluidCellItem(NAMESPACE.id("milk_cell"), Fluids.MILK).setTranslationKey(NAMESPACE, "milk_cell");
-//        fuelCellItem = new FluidCellItem(NAMESPACE.id("fuel_cell"), fuelFluid).setTranslationKey(NAMESPACE, "fuel_cell");
-//        glowstoneCellItem = new FluidCellItem(NAMESPACE.id("glowstone_cell"), glowstoneFluid).setTranslationKey(NAMESPACE, "glowstone_cell");
-//        gravelCellItem = new FluidCellItem(NAMESPACE.id("gravel_cell"), gravelFluid).setTranslationKey(NAMESPACE, "gravel_cell");
         
         for (var fluid : FluidRegistry.getRegistry().values()) {
-            new FluidCellItem(NAMESPACE.id(fluid.getIdentifier().path + "_cell"), fluid).setTranslationKey(NAMESPACE, fluid.getIdentifier().path + "_cell");
+            String id = fluid.getIdentifier().namespace + "_" + fluid.getIdentifier().path + "_cell";
+            new FluidCellItem(NAMESPACE.id(id), fluid).setTranslationKey(NAMESPACE, id);
         }
     }
 
