@@ -24,7 +24,6 @@ public abstract class EnergySourceBlockEntityTemplate extends BlockEntity implem
     
     private final HashMap<EnergyNetwork, Direction> energyNets = new HashMap<>(2);
     
-    // TODO: Solve this without queues
     private final ArrayList<EnergyNetwork> energyNetRemoveQueue = new ArrayList<>(2);
     private final ArrayList<ObjectObjectMutablePair<EnergyNetwork, Direction>> energyNetAddQueue = new ArrayList<>(2);
 

@@ -118,10 +118,7 @@ public final class Fluid {
     // TODO: Custom fluid interactions
     // TODO: Automatic block using only color multiplier?
     // TODO: Track down where everywhere material for fluids is compared
-    // TODO: Properly implement fluids which cannot be placed into world
-    // TODO: Density?
     // TODO: Temperature? Per Stack (pain^2) ? Per Fluid?
-    // TODO: Viscosity?
     // TODO: Gaseous Fluids?
     // TODO: Interactions -> Vaporization in Nether
     // TODO: Methods with world/stack contexts

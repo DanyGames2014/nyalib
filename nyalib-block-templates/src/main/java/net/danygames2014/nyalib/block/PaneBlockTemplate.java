@@ -3,19 +3,23 @@ package net.danygames2014.nyalib.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.FenceBlock;
 import net.minecraft.block.material.Material;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.item.ItemPlacementContext;
 import net.modificationstation.stationapi.api.state.StateManager;
 import net.modificationstation.stationapi.api.state.property.BooleanProperty;
-import net.modificationstation.stationapi.api.state.property.Properties;
 import net.modificationstation.stationapi.api.template.block.TemplateBlock;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
+import java.util.ArrayList;
+
+import static net.modificationstation.stationapi.api.state.property.Properties.*;
+
 public class PaneBlockTemplate extends TemplateBlock {
-    // TODO: Proper bounding & collision Box
-    
     public PaneBlockTemplate(Identifier identifier, Block baseBlock, Material material, Identifier texture, Identifier edgeTexture) {
         super(identifier, material);
         if(texture != null) {
@@ -34,16 +38,107 @@ public class PaneBlockTemplate extends TemplateBlock {
     @Override
     public void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         super.appendProperties(builder);
-        builder.add(Properties.NORTH, Properties.SOUTH, Properties.EAST, Properties.WEST);
+        builder.add(NORTH, SOUTH, EAST, WEST);
     }
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext context) {
         return super.getPlacementState(context)
-                .with(Properties.EAST, false)
-                .with(Properties.WEST, false)
-                .with(Properties.NORTH, false)
-                .with(Properties.SOUTH, false);
+                .with(EAST, false)
+                .with(WEST, false)
+                .with(NORTH, false)
+                .with(SOUTH, false);
+    }
+
+    @Override
+    public Box getCollisionShape(World world, int x, int y, int z) {
+        return super.getCollisionShape(world, x, y, z);
+    }
+
+    @Override
+    public Box getBoundingBox(World world, int x, int y, int z) {
+        BlockState state = world.getBlockState(x, y, z);
+
+        if (!(state.getBlock() instanceof PaneBlockTemplate)) {
+            return null;
+        }
+
+        float minX = 0.4375F;
+        float minY = 0.0F;
+        float minZ = 0.4375F;
+
+        float maxX = 0.5625F;
+        float maxY = 1.0F;
+        float maxZ = 0.5625F;
+
+        if (state.get(WEST)) {
+            maxZ = 1.0F;
+        }
+
+        if (state.get(EAST)) {
+            minZ = 0.0F;
+        }
+
+        if (state.get(NORTH)) {
+            minX = 0.0F;
+        }
+
+        if (state.get(SOUTH)) {
+            maxX = 1.0F;
+        }
+
+        return Box.createCached(x + minX, y + minY, z + minZ, x + maxX, y + maxY, z + maxZ);
+    }
+
+    @Override
+    public void addIntersectingBoundingBox(World world, int x, int y, int z, Box box, ArrayList boxes) {
+        BlockState state = world.getBlockState(x, y, z);
+
+        if (!(state.getBlock() instanceof PaneBlockTemplate)) {
+            return;
+        }
+
+        if (state.get(WEST)) {
+            this.setBoundingBox(0.4375F, 0.0F, 0.4375F, 0.5625F, 1.0F, 1.0F);
+            super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
+        }
+
+        if (state.get(EAST)) {
+            this.setBoundingBox(0.4375F, 0.0F, 0.0F, 0.5625F, 1.0F, 0.5625F);
+            super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
+        }
+
+        if (state.get(SOUTH)) {
+            this.setBoundingBox(0.4375F, 0.0F, 0.4375F, 1.0F, 1.0F, 0.5625F);
+            super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
+        }
+
+        if (state.get(NORTH)) {
+            this.setBoundingBox(0.0F, 0.0F, 0.4375F, 0.5625F, 1.0F, 0.5625F);
+            super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
+        }
+
+        this.setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+
+    }
+
+    @Override
+    public HitResult raycast(World world, int x, int y, int z, Vec3d startPos, Vec3d endPos) {
+        Box box = getBoundingBox(world, x, y, z).expand(0.05D, 0.05D, 0.05D);
+
+        this.updateBoundingBox(world, x, y, z);
+
+        HitResult hitResult = box.raycast(startPos, endPos);
+
+        if (hitResult == null) {
+            return null;
+        }
+
+        if (hitResult.blockX == 0 && hitResult.blockY == 0 && hitResult.blockZ == 0) {
+            return new HitResult(x,y,z,hitResult.side, hitResult.pos);
+        }
+
+        return hitResult;
     }
 
     @Override
@@ -65,10 +160,10 @@ public class PaneBlockTemplate extends TemplateBlock {
             return;
         }
 
-        state = getPaneState(world, x, y, z, state, Direction.EAST, Properties.EAST);
-        state = getPaneState(world, x, y, z, state, Direction.WEST, Properties.WEST);
-        state = getPaneState(world, x, y, z, state, Direction.NORTH,Properties.NORTH);
-        state = getPaneState(world, x, y, z, state, Direction.SOUTH,Properties.SOUTH);
+        state = getPaneState(world, x, y, z, state, Direction.EAST, EAST);
+        state = getPaneState(world, x, y, z, state, Direction.WEST, WEST);
+        state = getPaneState(world, x, y, z, state, Direction.NORTH, NORTH);
+        state = getPaneState(world, x, y, z, state, Direction.SOUTH, SOUTH);
 
         world.setBlockStateWithNotify(x, y, z, state);
     }

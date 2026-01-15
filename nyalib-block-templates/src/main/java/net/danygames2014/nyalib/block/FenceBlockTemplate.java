@@ -2,13 +2,17 @@ package net.danygames2014.nyalib.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.FenceBlock;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.state.StateManager;
 import net.modificationstation.stationapi.api.state.property.BooleanProperty;
 import net.modificationstation.stationapi.api.template.block.TemplateBlock;
 import net.modificationstation.stationapi.api.util.Identifier;
+
+import java.util.ArrayList;
 
 public class FenceBlockTemplate extends TemplateBlock {
     public static final BooleanProperty NORTH = BooleanProperty.of("north"); // X--
@@ -44,30 +48,91 @@ public class FenceBlockTemplate extends TemplateBlock {
             return null;
         }
 
-        Box box = Box.create(state.get(NORTH) ? 0 : 0.375F, 0F, state.get(EAST) ? 0F : 0.375F, state.get(SOUTH) ? 1F : 0.625F, 1F, state.get(WEST) ? 1.F : 0.625F);
+        float minX = 0.375F;
+        float minY = 0.0F;
+        float minZ = 0.375F;
 
-        box.minX += x;
-        box.minY += y;
-        box.minZ += z;
-        box.maxX += x;
-        box.maxY += y;
-        box.maxZ += z;
+        float maxX = 0.625F;
+        float maxY = 1.0F;
+        float maxZ = 0.625F;
 
-        if (collider) {
-            box.maxY += 0.5F;
+        if (state.get(WEST)) {
+            maxZ = 1.0F;
         }
 
-        return box;
-    }
+        if (state.get(EAST)) {
+            minZ = 0.0F;
+        }
 
-    @Override
-    public Box getCollisionShape(World world, int x, int y, int z) {
-        return generateBox(world, x, y, z, true);
-    }
+        if (state.get(NORTH)) {
+            minX = 0.0F;
+        }
 
+        if (state.get(SOUTH)) {
+            maxX = 1.0F;
+        }
+        
+        if (collider) {
+            maxY += 0.5F;
+        }
+
+        return Box.createCached(x + minX, y + minY, z + minZ, x + maxX, y + maxY, z + maxZ);
+    }
+    
     @Override
     public Box getBoundingBox(World world, int x, int y, int z) {
         return generateBox(world, x, y, z, false);
+    }
+
+    @Override
+    public void addIntersectingBoundingBox(World world, int x, int y, int z, Box box, ArrayList boxes) {
+        BlockState state = world.getBlockState(x, y, z);
+
+        if (!(state.getBlock() instanceof FenceBlockTemplate)) {
+            return;
+        }
+
+        this.setBoundingBox(0.375F, 0.0F, 0.375F, 0.625F, 1.5F, 0.625F);
+        super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
+
+        if (state.get(WEST)) {
+            this.setBoundingBox(0.375F, 0.0F, 0.375F, 0.625F, 1.5F, 1.0F);
+            super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
+        }
+
+        if (state.get(EAST)) {
+            this.setBoundingBox(0.375F, 0.0F, 0.0F, 0.625F, 1.5F, 0.625F);
+            super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
+        }
+
+        if (state.get(SOUTH)) {
+            this.setBoundingBox(0.375F, 0.0F, 0.375F, 1.0F, 1.5F, 0.625F);
+            super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
+        }
+
+        if (state.get(NORTH)) {
+            this.setBoundingBox(0.0F, 0.0F, 0.375F, 0.625F, 1.5F, 0.625F);
+            super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
+        }
+    }
+    
+    @Override
+    public HitResult raycast(World world, int x, int y, int z, Vec3d startPos, Vec3d endPos) {
+        Box box = getBoundingBox(world, x, y, z).expand(0.05D, 0.05D, 0.05D);
+
+        this.updateBoundingBox(world, x, y, z);
+
+        HitResult hitResult = box.raycast(startPos, endPos);
+
+        if (hitResult == null) {
+            return null;
+        }
+
+        if (hitResult.blockX == 0 && hitResult.blockY == 0 && hitResult.blockZ == 0) {
+            return new HitResult(x,y,z,hitResult.side, hitResult.pos);
+        }
+
+        return hitResult;
     }
 
     @Override
