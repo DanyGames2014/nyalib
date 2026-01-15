@@ -7,6 +7,23 @@ plugins {
     id "com.modrinth.minotaur" version "2.+"
 }
 
+version = property("mod_version")
+group = property("maven_group")
+
+base {
+    archivesName = project.archives_base_name
+}
+
+babric {
+    disablePomOverride.set(true)
+}
+
+loom {
+    mixin {
+        useLegacyMixinAp = false
+    }
+}
+
 allprojects {
     apply plugin: "maven-publish"
     apply plugin: "fabric-loom"
@@ -103,7 +120,7 @@ allprojects {
             exclude group: "babric", module: "fabric-loader"
         }
 
-        modImplementation("net.glasslauncher.mods:ModMenu:${project.modmenu_version}") {
+        modImplementation("net.danygames2014:modmenu:${project.modmenu_version}") {
             transitive = false
         }
 
@@ -130,16 +147,24 @@ allprojects {
         modImplementation("maven.modrinth:bh-creative:${project.bhcreative_version}-b1.7.3") {
             transitive = false
         }
+        
+        modImplementation("net.danygames2014:WhatsThis:${project.whatsthis_version}") {
+            transitive = false
+        }
+
+        modRuntimeOnly("net.danygames2014:UniWrench:${project.uniwrench_version}") {
+            transitive = false
+        }
+        
+        modRuntimeOnly("net.danygames2014:DebugUtilities:${project.debugutilities_version}") {
+            transitive = false
+        }
 
         modRuntimeOnly("maven.modrinth:retroauth:${project.retroauth_version}-b1.7.3") {
             transitive = false
         }
-        
+
         modRuntimeOnly("maven.modrinth:unitweaks:${project.unitweaks_version}-b1.7.3") {
-            transitive = false
-        }
-        
-        modImplementation("net.danygames2014:WhatsThis:${project.whatsthis_version}") {
             transitive = false
         }
 
@@ -242,14 +267,8 @@ allprojects {
 
 }
 
-group = project.properties['maven_group']
-base.archivesName.set(project.archives_base_name)
-version = project.hasProperty('override_version') ? project.properties['override_version'].substring(0, 7) : project.properties['mod_version']
-
 subprojects {
-    group = rootProject.hasProperty('override_version') ?
-            project.properties['maven_group'] + ".NyaLib." + project.properties['override_version'].substring(0, 7) :
-            project.properties['maven_group'] + ".NyaLib.submodule"
+    group = project.properties['maven_group'] + ".NyaLib.submodule"
 
     configurations {
         out {
@@ -327,16 +346,6 @@ publishing {
     }
 }
 
-babric {
-    disablePomOverride.set(true)
-}
-
-loom {
-    mixin {
-        useLegacyMixinAp = false
-    }
-}
-
 loom {
     runs {
         register('runTestmodClient') {
@@ -383,6 +392,7 @@ modrinth {
     }
 }
 
+// Updater
 tasks.register("update") {
     doLast {
         def propsFile = file("gradle.properties")
@@ -395,15 +405,17 @@ tasks.register("update") {
         updateDependency(lines, "Glass Networking", "glass_networking_version", "https://maven.glass-launcher.net/releases/net/glasslauncher/mods/glass-networking")
         updateDependency(lines, "Glass Config API", "gcapi_version", "https://maven.glass-launcher.net/releases/net/glasslauncher/mods/GlassConfigAPI")
         updateDependency(lines, "Always More Items", "alwaysmoreitems_version", "https://maven.glass-launcher.net/releases/net/glasslauncher/mods/AlwaysMoreItems")
-        updateDependency(lines, "ModMenu", "modmenu_version", "https://maven.glass-launcher.net/releases/net/glasslauncher/mods/ModMenu")
+        updateDependency(lines, "ModMenu", "modmenu_version", "https://maven.glass-launcher.net/releases/net/danygames2014/modmenu")
         updateDependency(lines, "BH Creative", "bhcreative_version", "https://api.modrinth.com/maven/maven/modrinth/bh-creative")
         updateDependency(lines, "Spawn Eggs", "spawneggs_version", "https://maven.glass-launcher.net/releases/net/danygames2014/spawneggs")
         updateDependency(lines, "Retro Commands", "retrocommands_version", "https://api.modrinth.com/maven/maven/modrinth/retrocommands")
+        updateDependency(lines, "Accessory API", "accessoryapi_version", "https://api.modrinth.com/maven/maven/modrinth/accessory-api")
         updateDependency(lines, "RetroAuth", "retroauth_version", "https://api.modrinth.com/maven/maven/modrinth/retroauth")
         updateDependency(lines, "UniTweaks", "unitweaks_version", "https://api.modrinth.com/maven/maven/modrinth/unitweaks")
         updateDependency(lines, "Whats This", "whatsthis_version", "https://maven.glass-launcher.net/releases/net/danygames2014/WhatsThis")
-        updateDependency(lines, "NyaLib", "nyalib_version", "https://maven.glass-launcher.cz/releases/net/danygames2014/NyaLib")
-        updateDependency(lines, "UniWrench", "uniwrench_version", "https://maven.glass-launcher.cz/releases/net/danygames2014/UniWrench")
+        updateDependency(lines, "NyaLib", "nyalib_version", "https://maven.glass-launcher.net/releases/net/danygames2014/NyaLib")
+        updateDependency(lines, "UniWrench", "uniwrench_version", "https://maven.glass-launcher.net/releases/net/danygames2014/UniWrench")
+        updateDependency(lines, "DebugUtilities", "debugutilities_version", "https://maven.glass-launcher.net/releases/net/danygames2014/DebugUtilities")
 
         propsFile.text = lines.join(System.lineSeparator())
         println("Finished updating dependencies, please reload your Gradle Project")
@@ -411,7 +423,7 @@ tasks.register("update") {
 }
 
 def updateDependency(List<String> lines, String name, String property, String artifactUrl) {
-    println("Updating Dependency " + name)
+    println("Checking updates for " + name)
 
     if (!project.hasProperty(property)) {
         println("Project does not have property " + property)
@@ -426,11 +438,11 @@ def updateDependency(List<String> lines, String name, String property, String ar
     }
 
     for (int i = 0; i < lines.size(); i++) {
-        if (lines[i].contains(property)){
+        if (lines[i].contains(property)) {
             String[] split = lines[i].split("=")
             String currentVersion = split[1]
 
-            if (!currentVersion.equalsIgnoreCase(latestVersion)){
+            if (!currentVersion.equalsIgnoreCase(latestVersion)) {
                 println("Dependency " + name + " updated. (" + currentVersion + " -> " + latestVersion + ")")
                 lines[i] = split[0] + "=" + latestVersion
             } else {
