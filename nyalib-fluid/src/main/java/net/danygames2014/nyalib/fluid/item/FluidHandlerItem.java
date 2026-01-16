@@ -1,45 +1,54 @@
-package net.danygames2014.nyalib.fluid;
+package net.danygames2014.nyalib.fluid.item;
+
+import net.danygames2014.nyalib.fluid.Fluid;
+import net.danygames2014.nyalib.fluid.FluidStack;
+import net.minecraft.item.ItemStack;
 
 /**
- * A fluid handler interface to be implemented on {@link net.minecraft.entity.Entity}
+ * A fluid handler interface to be implemented on {@link net.minecraft.item.Item}
+ * The first parameter is always the ItemStack of the Item on which this code is called on
  */
-public interface FluidHandlerEntity {
+public interface FluidHandlerItem {
     /**
      * Check if the entity supports extracting fluid if this returns false there
-     * should be no point in trying to use {@link #extractFluid(int, int)}
+     * should be no point in trying to use {@link #extractFluid(ItemStack, int, int)}
      *
+     * @param thiz The ItemStack this is called on
      * @return <code>true</code> if the handler supports fluid extraction
      */
-    boolean canExtractFluid();
+    boolean canExtractFluid(ItemStack thiz);
 
     /**
      * Extract a fluid in the given slot from the entity
      *
+     * @param thiz   The ItemStack this is called on
      * @param slot   The slot to extract from
      * @param amount The amount in mB to extract
      * @return The FluidStack extracted, null if nothing is extracted
      */
-    FluidStack extractFluid(int slot, int amount);
+    FluidStack extractFluid(ItemStack thiz, int slot, int amount);
 
     /**
      * Extract any fluid from the entity
      *
+     * @param thiz The ItemStack this is called on
      * @return The extracted {@link FluidStack}
      */
-    default FluidStack extractFluid() {
-        return extractFluid(Integer.MAX_VALUE);
+    default FluidStack extractFluid(ItemStack thiz) {
+        return extractFluid(thiz, Integer.MAX_VALUE);
     }
 
     /**
      * Extract a specified amount of any fluid from the entity
      *
+     * @param thiz   The ItemStack this is called on
      * @param amount The amount of fluid in mB to extract
      * @return The extracted {@link FluidStack}
      */
-    default FluidStack extractFluid(int amount) {
-        for (int i = 0; i < getFluidSlots(); i++) {
-            if (getFluid(i) != null) {
-                return this.extractFluid(i, amount);
+    default FluidStack extractFluid(ItemStack thiz, int amount) {
+        for (int i = 0; i < getFluidSlots(thiz); i++) {
+            if (getFluid(thiz, i) != null) {
+                return this.extractFluid(thiz, i, amount);
             }
         }
         return null;
@@ -48,27 +57,28 @@ public interface FluidHandlerEntity {
     /**
      * Extract the given fluid in any slot from the handler
      *
+     * @param thiz   The ItemStack this is called on
      * @param fluid  The Fluid to extract
      * @param amount The amount in mB to extract
      * @return The FluidStack extracted, null if nothing is extracted
      */
-    default FluidStack extractFluid(Fluid fluid, int amount) {
+    default FluidStack extractFluid(ItemStack thiz, Fluid fluid, int amount) {
         FluidStack currentStack = null;
         int remaining = amount;
 
-        for (int i = 0; i < getFluidSlots(); i++) {
+        for (int i = 0; i < getFluidSlots(thiz); i++) {
             if (remaining <= 0) {
                 break;
             }
 
             if (currentStack != null) {
-                if (this.getFluid(i).isFluidEqual(currentStack)) {
-                    FluidStack extractedStack = extractFluid(i, remaining);
+                if (this.getFluid(thiz, i).isFluidEqual(currentStack)) {
+                    FluidStack extractedStack = extractFluid(thiz, i, remaining);
                     remaining -= extractedStack.amount;
                     currentStack.amount += extractedStack.amount;
                 }
             } else {
-                FluidStack extractedStack = extractFluid(i, remaining);
+                FluidStack extractedStack = extractFluid(thiz, i, remaining);
                 remaining -= extractedStack.amount;
                 currentStack = extractedStack;
             }
@@ -79,84 +89,93 @@ public interface FluidHandlerEntity {
 
     /**
      * Check if the entity supports inserting fluids, if this returns false there
-     * should be no point in trying to use {@link #insertFluid(FluidStack)} or {@link #insertFluid(FluidStack, int)}
+     * should be no point in trying to use {@link #insertFluid(ItemStack, FluidStack)} or {@link #insertFluid(ItemStack, FluidStack, int)}
      *
+     * @param thiz The ItemStack this is called on
      * @return <code>true</code> if the entity supports fluid insertion
      */
-    boolean canInsertFluid();
+    boolean canInsertFluid(ItemStack thiz);
 
     /**
      * Insert fluid into the given slot and return the remainder
      *
+     * @param thiz  The ItemStack this is called on
      * @param stack The {@link FluidStack} to insert
      * @param slot  Slot to insert into
      * @return The remainder of the FluidStack (null if it was inserted entirely), this should be a new FluidStack, however it can be the same if it was not modified
      */
-    FluidStack insertFluid(FluidStack stack, int slot);
+    FluidStack insertFluid(ItemStack thiz, FluidStack stack, int slot);
 
     /**
      * Insert fluid into any slot and return the remainder
      *
+     * @param thiz  The ItemStack this is called on
      * @param stack The {@link FluidStack} to insert
      * @return The remainder of the FluidStack (null if it was inserted entirely), this should be a new FluidStack, however it can be the same if it was not modified
      */
-    FluidStack insertFluid(FluidStack stack);
+    FluidStack insertFluid(ItemStack thiz, FluidStack stack);
 
     /**
      * Get the {@link FluidStack} in the given slot, If there is no {@link FluidStack}, then return null
      * <p>
      *
+     * @param thiz The ItemStack this is called on
      * @param slot The slot to get the {@link FluidStack} from
      * @return The {@link FluidStack} in the slot
      */
-    FluidStack getFluid(int slot);
+    FluidStack getFluid(ItemStack thiz, int slot);
 
     /**
      * Sets a {@link FluidStack} into the given slot
      *
+     * @param thiz  The ItemStack this is called on
      * @param slot  The slot to set the {@link FluidStack} into
      * @param stack The {@link FluidStack} to set into the slot
      * @return Whether the action was succesfull
      */
-    boolean setFluid(int slot, FluidStack stack);
+    boolean setFluid(ItemStack thiz, int slot, FluidStack stack);
 
     /**
      * Get the size of the entity fluid inventory
      *
+     * @param thiz The ItemStack this is called on
      * @return The number of slots this entity has
      */
-    int getFluidSlots();
+    int getFluidSlots(ItemStack thiz);
 
     /**
      * Get the capacity of the given slot
      *
+     * @param thiz The ItemStack this is called on
      * @param slot The slot to query for capacity
      * @return The capacity of the slot
      */
-    int getFluidCapacity(int slot);
+    int getFluidCapacity(ItemStack thiz, int slot);
 
     /**
      * Get the remaining capacity of the given slot
      *
+     * @param thiz The ItemStack this is called on
      * @param slot The slot to query for remaining capacity
      * @return The remaining capacity of the slot
      */
-    default int getRemainingFluidCapacity(int slot) {
-        if (slot >= getFluidSlots()) {
+    default int getRemainingFluidCapacity(ItemStack thiz, int slot) {
+        if (slot >= getFluidSlots(thiz)) {
             return 0;
         }
 
-        if (getFluid(slot) == null) {
-            return getFluidCapacity(slot);
+        if (getFluid(thiz, slot) == null) {
+            return getFluidCapacity(thiz, slot);
         }
 
-        return getFluidCapacity(slot) - getFluid(slot).amount;
+        return getFluidCapacity(thiz, slot) - getFluid(thiz, slot).amount;
     }
 
     /**
      * Get the entire fluid inventory of the entity
      *
+     * @param thiz The ItemStack this is called on
      * @return An array of all the FluidStacks
      */
-    FluidStack[] getFluids();
+    FluidStack[] getFluids(ItemStack thiz);
 }

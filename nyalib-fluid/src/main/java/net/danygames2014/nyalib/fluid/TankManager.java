@@ -10,9 +10,15 @@ import java.util.Arrays;
 
 public class TankManager {
     private FluidSlotEntry[] fluidSlotEntries;
+    private final boolean forbidSideChecks;
+
+    public TankManager(boolean forbidSideChecks) {
+        fluidSlotEntries = new FluidSlotEntry[0];
+        this.forbidSideChecks = forbidSideChecks;
+    }
 
     public TankManager() {
-        fluidSlotEntries = new FluidSlotEntry[0];
+        this(false);
     }
 
     /**
@@ -21,6 +27,7 @@ public class TankManager {
      */
     public FluidSlotEntry addSlot(int capacity) {
         FluidSlotEntry entry = new FluidSlotEntry(capacity);
+        entry.forbidSideChecks = forbidSideChecks;
 
         fluidSlotEntries = Arrays.copyOf(fluidSlotEntries, fluidSlotEntries.length + 1);
         fluidSlotEntries[fluidSlotEntries.length - 1] = entry;
@@ -28,12 +35,16 @@ public class TankManager {
         return entry;
     }
 
-    public FluidSlotEntry getSlot(int slot, Direction direction) {
+    public FluidSlotEntry getSlot(int slot) {
+        return getSlot(slot, null);
+    }
+    
+    public FluidSlotEntry getSlot(int slot, @Nullable Direction side) {
         if (slot > fluidSlotEntries.length - 1 || slot < 0) {
             return null;
         }
 
-        if (!fluidSlotEntries[slot].isSideAllowed(direction)) {
+        if (!fluidSlotEntries[slot].isSideAllowed(side)) {
             return null;
         }
 
@@ -41,8 +52,8 @@ public class TankManager {
     }
 
     // FluidHandler methods
-    public FluidStack getFluid(int slot, @Nullable Direction direction) {
-        FluidSlotEntry entry = getSlot(slot, direction);
+    public FluidStack getFluid(int slot, @Nullable Direction side) {
+        FluidSlotEntry entry = getSlot(slot, side);
 
         if (entry == null) {
             return null;
@@ -51,8 +62,8 @@ public class TankManager {
         return entry.stack;
     }
 
-    public boolean setFluid(int slot, FluidStack stack, @Nullable Direction direction) {
-        FluidSlotEntry entry = getSlot(slot, direction);
+    public boolean setFluid(int slot, FluidStack stack, @Nullable Direction side) {
+        FluidSlotEntry entry = getSlot(slot, side);
 
         if (entry == null) {
             return false;
@@ -62,11 +73,11 @@ public class TankManager {
         return true;
     }
 
-    public int getFluidSlots(@Nullable Direction direction) {
+    public int getFluidSlots(@Nullable Direction side) {
         int slotCount = 0;
 
         for (FluidSlotEntry fluidSlotEntry : fluidSlotEntries) {
-            if (fluidSlotEntry.isSideAllowed(direction)) {
+            if (fluidSlotEntry.isSideAllowed(side)) {
                 slotCount++;
             }
         }
@@ -74,11 +85,11 @@ public class TankManager {
         return slotCount;
     }
 
-    public FluidStack[] getFluids(@Nullable Direction direction) {
+    public FluidStack[] getFluids(@Nullable Direction side) {
         ObjectArrayList<FluidStack> stacks = new ObjectArrayList<>();
 
         for (FluidSlotEntry fluidSlotEntry : fluidSlotEntries) {
-            if (fluidSlotEntry.isSideAllowed(direction)) {
+            if (fluidSlotEntry.isSideAllowed(side)) {
                 stacks.add(fluidSlotEntry.stack);
             } else {
                 stacks.add(null);
@@ -88,8 +99,8 @@ public class TankManager {
         return stacks.toArray(FluidStack[]::new);
     }
 
-    public int getFluidCapacity(int slot, @Nullable Direction direction) {
-        FluidSlotEntry entry = getSlot(slot, direction);
+    public int getFluidCapacity(int slot, @Nullable Direction side) {
+        FluidSlotEntry entry = getSlot(slot, side);
 
         if (entry == null) {
             return 0;
@@ -98,8 +109,8 @@ public class TankManager {
         return entry.capacity;
     }
 
-    public int getRemainingFluidCapacity(int slot, @Nullable Direction direction) {
-        FluidSlotEntry entry = getSlot(slot, direction);
+    public int getRemainingFluidCapacity(int slot, @Nullable Direction side) {
+        FluidSlotEntry entry = getSlot(slot, side);
 
         if (entry == null) {
             return 0;
@@ -144,6 +155,8 @@ public class TankManager {
         public int capacity;
 
         public FluidStack stack;
+        
+        public boolean forbidSideChecks = false;
 
         public FluidSlotEntry(int capacity) {
             this(capacity, new Fluid[0]);
@@ -157,6 +170,10 @@ public class TankManager {
         }
 
         public FluidSlotEntry setAllowedSides(Direction... allowedSides) {
+            if (forbidSideChecks) {
+                throw new UnsupportedOperationException("Setting allowed sides is not applicable for this TankManager.");
+            }
+            
             this.allowedSides = new ObjectArrayList<>(Arrays.asList(allowedSides));
             return this;
         }
@@ -171,7 +188,7 @@ public class TankManager {
             return allowedFluids == null || allowedFluids.contains(fluid);
         }
 
-        public boolean isSideAllowed(Direction side) {
+        public boolean isSideAllowed(@Nullable Direction side) {
             return side == null || allowedSides == null || allowedSides.contains(side);
         }
 

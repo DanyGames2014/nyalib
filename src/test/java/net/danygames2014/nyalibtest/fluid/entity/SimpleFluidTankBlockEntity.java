@@ -1,7 +1,7 @@
 package net.danygames2014.nyalibtest.fluid.entity;
 
 import net.danygames2014.nyalib.fluid.FluidStack;
-import net.danygames2014.nyalib.fluid.SimpleFluidHandler;
+import net.danygames2014.nyalib.fluid.block.SimpleFluidHandler;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;

@@ -1,7 +1,7 @@
 package net.danygames2014.nyalibtest.screen.slot;
 
-import net.danygames2014.nyalib.fluid.FluidHandler;
 import net.danygames2014.nyalib.fluid.FluidSlot;
+import net.danygames2014.nyalib.fluid.block.FluidHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;

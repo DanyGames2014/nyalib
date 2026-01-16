@@ -1,7 +1,7 @@
 package net.danygames2014.nyalib.capability.item.fluidhandler;
 
 import net.danygames2014.nyalib.capability.item.ItemCapabilityProvider;
-import net.danygames2014.nyalib.fluid.FluidHandlerItem;
+import net.danygames2014.nyalib.fluid.item.FluidHandlerItem;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 

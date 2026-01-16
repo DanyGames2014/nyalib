@@ -1,13 +1,17 @@
-package net.danygames2014.nyalib.fluid;
+package net.danygames2014.nyalib.fluid.entity;
 
+import net.danygames2014.nyalib.fluid.TankManager;
 import net.minecraft.nbt.NbtCompound;
-import net.modificationstation.stationapi.api.util.math.Direction;
 
-public class SimpleTank implements ManagedFluidHandler {
+/**
+ * An simple implementation of a tank with multiple slots based on the {@link ManagedFluidHandlerEntity}.
+ * This should only be used with {@link net.minecraft.entity.Entity}
+ */
+public class SimpleEntityTank implements ManagedFluidHandlerEntity {
     private final TankManager tankManager;
     
-    public SimpleTank() {
-        tankManager = new TankManager();
+    public SimpleEntityTank() {
+        tankManager = new TankManager(true);
     }
     
     // Expose TankManager specific methods
@@ -15,8 +19,8 @@ public class SimpleTank implements ManagedFluidHandler {
         return tankManager.addSlot(capacity);
     }
     
-    public TankManager.FluidSlotEntry getSlot(int slot, Direction direction) {
-        return tankManager.getSlot(slot, direction);
+    public TankManager.FluidSlotEntry getSlot(int slot) {
+        return tankManager.getSlot(slot);
     }
 
     // Implement getting the tank manager

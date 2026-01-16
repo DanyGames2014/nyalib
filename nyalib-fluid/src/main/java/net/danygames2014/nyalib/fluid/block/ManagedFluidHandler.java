@@ -1,5 +1,8 @@
-package net.danygames2014.nyalib.fluid;
+package net.danygames2014.nyalib.fluid.block;
 
+import net.danygames2014.nyalib.fluid.Fluid;
+import net.danygames2014.nyalib.fluid.FluidStack;
+import net.danygames2014.nyalib.fluid.TankManager;
 import net.modificationstation.stationapi.api.util.Util;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
@@ -140,10 +143,6 @@ public interface ManagedFluidHandler extends FluidHandler {
         return getTankManager().getFluid(slot, direction);
     }
     
-    default TankManager.FluidSlotEntry getSlot(int slot, @Nullable Direction direction) {
-        return getTankManager().getSlot(slot, direction);
-    }
-
     @Override
     default boolean setFluid(int slot, FluidStack stack, @Nullable Direction direction) {
         return getTankManager().setFluid(slot, stack, direction);
@@ -182,5 +181,9 @@ public interface ManagedFluidHandler extends FluidHandler {
     
     default TankManager.FluidSlotEntry addSlot(int capacity) {
         return getTankManager().addSlot(capacity);
+    }
+
+    default TankManager.FluidSlotEntry getSlot(int slot, @Nullable Direction direction) {
+        return getTankManager().getSlot(slot, direction);
     }
 }

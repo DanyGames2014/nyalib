@@ -2,8 +2,8 @@ package net.danygames2014.nyalib.capability.entity.fluidhandler;
 
 import net.danygames2014.nyalib.capability.entity.EntityCapability;
 import net.danygames2014.nyalib.fluid.Fluid;
-import net.danygames2014.nyalib.fluid.FluidHandlerEntity;
 import net.danygames2014.nyalib.fluid.FluidStack;
+import net.danygames2014.nyalib.fluid.entity.FluidHandlerEntity;
 
 public abstract class FluidHandlerEntityCapability extends EntityCapability implements FluidHandlerEntity {
     /**

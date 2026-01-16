@@ -1,4 +1,4 @@
-package net.danygames2014.nyalib.fluid;
+package net.danygames2014.nyalib.fluid.block;
 
 import net.modificationstation.stationapi.api.util.math.Direction;
 

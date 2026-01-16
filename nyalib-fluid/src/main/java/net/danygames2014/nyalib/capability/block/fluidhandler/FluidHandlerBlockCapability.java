@@ -2,8 +2,8 @@ package net.danygames2014.nyalib.capability.block.fluidhandler;
 
 import net.danygames2014.nyalib.capability.block.BlockCapability;
 import net.danygames2014.nyalib.fluid.Fluid;
-import net.danygames2014.nyalib.fluid.FluidHandler;
 import net.danygames2014.nyalib.fluid.FluidStack;
+import net.danygames2014.nyalib.fluid.block.FluidHandler;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 

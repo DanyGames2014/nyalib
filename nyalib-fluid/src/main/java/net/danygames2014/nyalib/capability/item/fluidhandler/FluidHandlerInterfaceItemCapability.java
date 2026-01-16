@@ -1,8 +1,8 @@
 package net.danygames2014.nyalib.capability.item.fluidhandler;
 
 import net.danygames2014.nyalib.fluid.Fluid;
-import net.danygames2014.nyalib.fluid.FluidHandlerItem;
 import net.danygames2014.nyalib.fluid.FluidStack;
+import net.danygames2014.nyalib.fluid.item.FluidHandlerItem;
 import net.minecraft.item.ItemStack;
 
 public class FluidHandlerInterfaceItemCapability extends FluidHandlerItemCapability {

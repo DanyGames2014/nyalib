@@ -1,8 +1,8 @@
 package net.danygames2014.nyalibtest.fluid.entity;
 
-import net.danygames2014.nyalib.fluid.FluidHandler;
 import net.danygames2014.nyalib.fluid.FluidStack;
 import net.danygames2014.nyalib.fluid.Fluids;
+import net.danygames2014.nyalib.fluid.block.FluidHandler;
 import net.minecraft.block.entity.BlockEntity;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;

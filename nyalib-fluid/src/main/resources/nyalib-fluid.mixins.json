@@ -10,6 +10,7 @@
     "fluid.BucketItemMixin",
     "fluid.EntityMixin",
     "fluid.FlowingLiquidBlockMixin",
+    "fluid.FluidHandlerEntityMixin",
     "fluid.LiquidBlockMixin",
     "fluid.LivingEntityMixin",
     "fluid.ScreenHandlerListenerMixin",

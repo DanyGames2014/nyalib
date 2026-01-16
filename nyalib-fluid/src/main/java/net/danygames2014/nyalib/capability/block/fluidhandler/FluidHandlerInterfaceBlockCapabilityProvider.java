@@ -1,7 +1,7 @@
 package net.danygames2014.nyalib.capability.block.fluidhandler;
 
 import net.danygames2014.nyalib.capability.block.BlockCapabilityProvider;
-import net.danygames2014.nyalib.fluid.FluidHandler;
+import net.danygames2014.nyalib.fluid.block.FluidHandler;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 

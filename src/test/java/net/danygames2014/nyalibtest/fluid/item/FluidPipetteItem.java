@@ -1,7 +1,7 @@
 package net.danygames2014.nyalibtest.fluid.item;
 
-import net.danygames2014.nyalib.fluid.FluidHandlerItem;
 import net.danygames2014.nyalib.fluid.FluidStack;
+import net.danygames2014.nyalib.fluid.item.FluidHandlerItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.client.item.CustomTooltipProvider;

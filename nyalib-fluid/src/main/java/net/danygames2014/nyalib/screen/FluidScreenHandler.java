@@ -1,8 +1,8 @@
 package net.danygames2014.nyalib.screen;
 
-import net.danygames2014.nyalib.fluid.FluidHandler;
 import net.danygames2014.nyalib.fluid.FluidSlot;
 import net.danygames2014.nyalib.fluid.FluidStack;
+import net.danygames2014.nyalib.fluid.block.FluidHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.player.PlayerEntity;

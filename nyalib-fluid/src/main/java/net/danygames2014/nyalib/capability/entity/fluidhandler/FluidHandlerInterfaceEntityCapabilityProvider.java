@@ -1,7 +1,7 @@
 package net.danygames2014.nyalib.capability.entity.fluidhandler;
 
 import net.danygames2014.nyalib.capability.entity.EntityCapabilityProvider;
-import net.danygames2014.nyalib.fluid.FluidHandlerEntity;
+import net.danygames2014.nyalib.fluid.entity.FluidHandlerEntity;
 import net.minecraft.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 

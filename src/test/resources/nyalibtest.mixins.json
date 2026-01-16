@@ -3,7 +3,12 @@
   "minVersion": "0.8",
   "package": "net.danygames2014.nyalibtest.mixin",
   "compatibilityLevel": "JAVA_17",
-  "mixins": ["BucketItemMixin", "FlintAndSteelMixin", "MapItemMixin"],
+  "mixins": [
+    "BucketItemMixin",
+    "FlintAndSteelMixin",
+    "MapItemMixin",
+    "SheepEntityMixin"
+  ],
   "server": [
   ],
   "client": [
