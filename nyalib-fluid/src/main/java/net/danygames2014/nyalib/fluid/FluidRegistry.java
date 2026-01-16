@@ -1,7 +1,7 @@
 package net.danygames2014.nyalib.fluid;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.danygames2014.nyalib.NyaLibFluid;
+import net.danygames2014.nyalib.NyaLib;
 import net.minecraft.block.Block;
 import net.modificationstation.stationapi.api.util.Identifier;
 
@@ -34,7 +34,7 @@ public class FluidRegistry {
             return;
         }
 
-        NyaLibFluid.LOGGER.info("Registering fluid {}", identifier);
+        NyaLib.LOGGER.info("Registering fluid {}", identifier);
         getInstance().registry.put(identifier, fluid);
     }
 

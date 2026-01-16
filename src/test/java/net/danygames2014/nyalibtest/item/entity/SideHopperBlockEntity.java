@@ -1,6 +1,6 @@
 package net.danygames2014.nyalibtest.item.entity;
 
-import net.danygames2014.nyalib.capability.Capability;
+import net.danygames2014.nyalib.NyaLib;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.block.itemhandler.ItemHandlerBlockCapability;
 import net.minecraft.block.entity.BlockEntity;
@@ -26,8 +26,8 @@ public class SideHopperBlockEntity extends BlockEntity {
                 facing = world.getBlockState(x, y, z).get(Properties.HORIZONTAL_FACING);
             }
 
-            ItemHandlerBlockCapability source = CapabilityHelper.getCapability(world, x + facing.getOpposite().getOffsetX(), y, z + facing.getOpposite().getOffsetZ(), Capability.ITEM_HANDLER_CAPABILITY);
-            ItemHandlerBlockCapability destination = CapabilityHelper.getCapability(world, x + facing.getOffsetX(), y , z + facing.getOffsetZ(), Capability.ITEM_HANDLER_CAPABILITY);
+            ItemHandlerBlockCapability source = CapabilityHelper.getCapability(world, x + facing.getOpposite().getOffsetX(), y, z + facing.getOpposite().getOffsetZ(), NyaLib.NAMESPACE.id("item_handler"));
+            ItemHandlerBlockCapability destination = CapabilityHelper.getCapability(world, x + facing.getOffsetX(), y , z + facing.getOffsetZ(), NyaLib.NAMESPACE.id("item_handler"));
             
             if (source != null) {
                 if (internalBuffer == null && source.canExtractItem(facing)) {
