@@ -1,0 +1,36 @@
+package net.danygames2014.nyalib.fluid;
+
+import net.minecraft.nbt.NbtCompound;
+import net.modificationstation.stationapi.api.util.math.Direction;
+
+public class SimpleTank implements ManagedFluidHandler {
+    private final TankManager tankManager;
+    
+    public SimpleTank() {
+        tankManager = new TankManager();
+    }
+    
+    // Expose TankManager specific methods
+    public TankManager.FluidSlotEntry addSlot(int capacity) {
+        return tankManager.addSlot(capacity);
+    }
+    
+    public TankManager.FluidSlotEntry getSlot(int slot, Direction direction) {
+        return tankManager.getSlot(slot, direction);
+    }
+
+    // Implement getting the tank manager
+    @Override
+    public TankManager getTankManager() {
+        return tankManager;
+    }
+    
+    // Saving and loading
+    public void writeNbt(NbtCompound nbt) {
+        tankManager.writeNbt(nbt);
+    }
+    
+    public void readNbt(NbtCompound nbt) {
+        tankManager.readNbt(nbt);
+    }
+}
