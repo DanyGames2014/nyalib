@@ -5,6 +5,7 @@ import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.block.itemhandler.ItemHandlerBlockCapability;
 import net.danygames2014.nyalib.capability.entity.EntityCapabilityRegistry;
 import net.danygames2014.nyalib.capability.entity.itemhandler.ItemHandlerEntityCapability;
+import net.danygames2014.nyalibtest.capability.meow.MeowBlockCapability;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
@@ -61,6 +62,12 @@ public class YoinkerItem extends TemplateItem {
                 if (yoinkedStack != null) {
                     ItemEntity itemEntity = new ItemEntity(world, x, y, z, yoinkedStack);
                     world.spawnEntity(itemEntity);
+                }
+            } else {
+                MeowBlockCapability meowCap = CapabilityHelper.getCapability(world, x, y, z, MeowBlockCapability.class);
+                
+                if (meowCap != null) {
+                    meowCap.meow();
                 }
             }
         }
