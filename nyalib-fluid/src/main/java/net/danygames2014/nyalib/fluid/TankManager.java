@@ -79,6 +79,8 @@ public class TankManager {
         for (FluidSlotEntry fluidSlotEntry : fluidSlotEntries) {
             if (fluidSlotEntry.isSideAllowed(direction)) {
                 stacks.add(fluidSlotEntry.stack);
+            } else {
+                stacks.add(null);
             }
         }
         
