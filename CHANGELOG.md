@@ -28,3 +28,7 @@
 * Rewrite the logic of putting fluids in and out of tanks in the ScreenHandler
 * Milk is now a fluid
 * Fluids will now try to find the closest map color before creating a new one
+* Fix collion shape and bounding box of panes and fences
+* Custom fluid slot rendering and size
+* BlockEntityInit interface
+* SimpleFluidHandler, ManagedFluidHandler and SimpleTank

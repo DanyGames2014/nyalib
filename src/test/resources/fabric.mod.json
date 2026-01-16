@@ -23,6 +23,7 @@
     "stationapi:event_bus_server": [
     ],
     "nyalib:event_bus" : [
+      "net.danygames2014.nyalibtest.init.CapabilityListener"
     ]
   },
   "mixins": [
