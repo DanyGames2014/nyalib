@@ -26,6 +26,7 @@ import net.danygames2014.nyalibtest.fluid.entity.ManagedFluidTankBlockEntity;
 import net.danygames2014.nyalibtest.fluid.entity.SimpleFluidTankBlockEntity;
 import net.danygames2014.nyalibtest.fluid.item.FluidCellItem;
 import net.danygames2014.nyalibtest.fluid.item.FluidPipetteItem;
+import net.danygames2014.nyalibtest.fluid.item.ManagedFluidPipetteItem;
 import net.danygames2014.nyalibtest.item.SideHopperBlock;
 import net.danygames2014.nyalibtest.item.entity.SideHopperBlockEntity;
 import net.danygames2014.nyalibtest.network.BasicNetworkType;
@@ -83,6 +84,7 @@ public class NyaLibTest {
     public static Block managedFluidTankBlock;
     public static Block infiniteWaterBlock;
     public static Item fluidPippeteItem;
+    public static Item managedfluidPipetteItem;
     public static Item emptyCellItem;
     public static Item waterCellItem;
     public static Item lavaCellItem;
@@ -201,6 +203,7 @@ public class NyaLibTest {
         multimeter = new MultimeterItem(NAMESPACE.id("multimeter")).setTranslationKey(NAMESPACE, "multimeter");
         itemYoinker = new YoinkerItem(NAMESPACE.id("item_yoinker")).setTranslationKey(NAMESPACE, "item_yoinker");
         fluidPippeteItem = new FluidPipetteItem(NAMESPACE.id("fluid_pipette")).setTranslationKey(NAMESPACE, "fluid_pipette");
+        managedfluidPipetteItem = new ManagedFluidPipetteItem(NAMESPACE.id("managed_fluid_pipette")).setTranslationKey(NAMESPACE, "managed_fluid_pipette");
         emptyCellItem = new FluidCellItem(NAMESPACE.id("fluid_cell"), null).setTranslationKey(NAMESPACE, "fluid_cell");
         
         for (var fluid : FluidRegistry.getRegistry().values()) {

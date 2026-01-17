@@ -34,6 +34,11 @@ public class TankManager {
 
         return entry;
     }
+    
+    public void addSlot(FluidSlotEntry entry) {
+        fluidSlotEntries = Arrays.copyOf(fluidSlotEntries, fluidSlotEntries.length + 1);
+        fluidSlotEntries[fluidSlotEntries.length - 1] = entry;
+    }
 
     public FluidSlotEntry getSlot(int slot) {
         return getSlot(slot, null);
@@ -209,6 +214,14 @@ public class TankManager {
         public static FluidSlotEntry fromNbt(NbtCompound nbt) {
             FluidSlotEntry entry = new FluidSlotEntry(0);
             entry.readNbt(nbt);
+            return entry;
+        }
+        
+        public FluidSlotEntry copy() {
+            FluidSlotEntry entry = new FluidSlotEntry(capacity);
+            entry.allowedFluids = allowedFluids == null ? null : new ObjectArrayList<>(allowedFluids);
+            entry.allowedSides = allowedSides == null ? null : new ObjectArrayList<>(allowedSides);
+            entry.stack = stack == null ? null : stack.copy();
             return entry;
         }
     }

@@ -11,6 +11,8 @@
     "fluid.EntityMixin",
     "fluid.FlowingLiquidBlockMixin",
     "fluid.FluidHandlerEntityMixin",
+    "fluid.ItemMixin",
+    "fluid.ItemStackMixin",
     "fluid.LiquidBlockMixin",
     "fluid.LivingEntityMixin",
     "fluid.ScreenHandlerListenerMixin",
