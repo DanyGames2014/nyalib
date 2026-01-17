@@ -35,7 +35,7 @@ public abstract class ItemStackMixin implements ItemStackTankManagerRetriever {
 
             ItemTemplateSlotRetriever templateEntries = (ItemTemplateSlotRetriever) this.getItem();
             for (var entry : templateEntries.nyalib$getTemplateSlotEntries()) {
-                tankManager.addSlot(entry);
+                tankManager.addSlot(entry.copy());
             }
         }
     }
@@ -63,4 +63,6 @@ public abstract class ItemStackMixin implements ItemStackTankManagerRetriever {
             tankManager.readNbt(managedTankNbt);
         }
     }
+    
+    // TODO: mix into comaprison methods
 }
