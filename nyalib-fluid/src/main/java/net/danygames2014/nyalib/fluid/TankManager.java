@@ -217,11 +217,15 @@ public class TankManager {
             return entry;
         }
         
-        public FluidSlotEntry copy() {
+        public FluidSlotEntry copy(boolean withStack) {
             FluidSlotEntry entry = new FluidSlotEntry(capacity);
             entry.allowedFluids = allowedFluids == null ? null : new ObjectArrayList<>(allowedFluids);
             entry.allowedSides = allowedSides == null ? null : new ObjectArrayList<>(allowedSides);
-            entry.stack = stack == null ? null : stack.copy();
+            
+            if (withStack) {
+                entry.stack = stack == null ? null : stack.copy();
+            }
+            
             return entry;
         }
     }

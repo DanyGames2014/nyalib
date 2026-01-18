@@ -10,4 +10,8 @@ public interface ItemStackTankManagerRetriever {
     default TankManager nyalib$getTankManager() {
         return Util.assertImpl();
     }
+    
+    default void nyalib$setTankManager(TankManager tankManager) {
+        Util.assertImpl();
+    }
 }

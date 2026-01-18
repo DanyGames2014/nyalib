@@ -109,7 +109,7 @@ public abstract class ScreenHandlerMixin implements FluidScreenHandler {
             // Item Capability
             FluidHandlerItemCapability item = CapabilityHelper.getCapability(cursorStack, FluidHandlerItemCapability.class);
 
-            if (item != null) {
+            if (item != null && cursorStack.count == 1) {
                 FluidStack itemFluidStack = item.getFluid(0);
                 FluidStack invFluidStack = inv.getFluid(index, null);
 

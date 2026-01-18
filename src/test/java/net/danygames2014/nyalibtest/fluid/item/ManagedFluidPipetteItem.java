@@ -27,10 +27,10 @@ public class ManagedFluidPipetteItem extends TemplateItem implements ManagedFlui
         
         for (FluidStack fluidStack : this.getFluids(stack)) {
             if (fluidStack == null) {
-                continue;
+                tooltip.add("Empty");
+            } else {
+                tooltip.add(fluidStack.toString());
             }
-            
-            tooltip.add(fluidStack.toString());
         }
         
         return tooltip.toArray(new String[0]);
