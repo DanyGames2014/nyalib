@@ -1,6 +1,6 @@
 package net.danygames2014.nyalib.capability.block.itemhandler;
 
-import net.danygames2014.nyalib.item.ItemHandler;
+import net.danygames2014.nyalib.item.block.ItemHandler;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.util.math.Direction;

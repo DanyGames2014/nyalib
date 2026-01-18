@@ -1,6 +1,6 @@
 package net.danygames2014.nyalib.mixin.item;
 
-import net.danygames2014.nyalib.item.ItemHandler;
+import net.danygames2014.nyalib.item.block.ItemHandler;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.DispenserBlockEntity;
 import net.minecraft.item.ItemStack;

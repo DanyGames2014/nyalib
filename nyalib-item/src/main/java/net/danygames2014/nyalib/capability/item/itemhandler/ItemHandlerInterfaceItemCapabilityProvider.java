@@ -1,7 +1,7 @@
 package net.danygames2014.nyalib.capability.item.itemhandler;
 
 import net.danygames2014.nyalib.capability.item.ItemCapabilityProvider;
-import net.danygames2014.nyalib.item.ItemHandlerItem;
+import net.danygames2014.nyalib.item.item.ItemHandlerItem;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 

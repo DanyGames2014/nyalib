@@ -1,4 +1,4 @@
-package net.danygames2014.nyalib.item;
+package net.danygames2014.nyalib.item.block;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

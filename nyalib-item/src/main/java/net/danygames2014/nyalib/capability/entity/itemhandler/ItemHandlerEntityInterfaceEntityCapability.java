@@ -1,6 +1,6 @@
 package net.danygames2014.nyalib.capability.entity.itemhandler;
 
-import net.danygames2014.nyalib.item.ItemHandlerEntity;
+import net.danygames2014.nyalib.item.entity.ItemHandlerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
