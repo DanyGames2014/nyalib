@@ -18,5 +18,4 @@ public class NyaLib {
     public static final Config.FluidConfig FLUID_CONFIG = new Config.FluidConfig();
     
     // TODO: Move config to configuration (more like the base mod pls) module?
-    // TODO: Slot Locking
 }

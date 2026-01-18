@@ -3,8 +3,11 @@ package net.danygames2014.nyalibtest.fluid.item;
 import net.danygames2014.nyalib.fluid.FluidStack;
 import net.danygames2014.nyalib.fluid.Fluids;
 import net.danygames2014.nyalib.fluid.item.ManagedFluidHandlerItem;
+import net.danygames2014.nyalib.item.SlotLockingItem;
 import net.danygames2014.nyalibtest.NyaLibTest;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.screen.slot.Slot;
 import net.modificationstation.stationapi.api.client.item.CustomTooltipProvider;
 import net.modificationstation.stationapi.api.template.item.TemplateItem;
 import net.modificationstation.stationapi.api.util.Identifier;
@@ -12,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class ManagedFluidPipetteItem extends TemplateItem implements ManagedFluidHandlerItem, CustomTooltipProvider {
+public class ManagedFluidPipetteItem extends TemplateItem implements ManagedFluidHandlerItem, CustomTooltipProvider, SlotLockingItem {
     public ManagedFluidPipetteItem(Identifier identifier) {
         super(identifier);
         this.addSlot(2000).setAllowedFluids(Fluids.WATER);
@@ -34,5 +37,10 @@ public class ManagedFluidPipetteItem extends TemplateItem implements ManagedFlui
         }
         
         return tooltip.toArray(new String[0]);
+    }
+
+    @Override
+    public boolean shouldLockSlot(ItemStack stack, int slotIndex, Slot slot, PlayerEntity player) {
+        return ((int) player.x) % 7 == 0;
     }
 }

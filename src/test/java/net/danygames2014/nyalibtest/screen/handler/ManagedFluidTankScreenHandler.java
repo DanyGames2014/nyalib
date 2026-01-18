@@ -4,6 +4,7 @@ import net.danygames2014.nyalib.fluid.FluidSlot;
 import net.danygames2014.nyalib.fluid.FluidStack;
 import net.danygames2014.nyalibtest.fluid.entity.ManagedFluidTankBlockEntity;
 import net.danygames2014.nyalibtest.screen.slot.CustomFluidSlotWithRendering;
+import net.danygames2014.nyalibtest.screen.slot.LockingSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -30,7 +31,7 @@ public class ManagedFluidTankScreenHandler extends ScreenHandler {
         // Player Inventory
         for (row = 0; row < 3; row++) {
             for (column = 0; column < 9; column++) {
-                this.addSlot(new Slot(playerInventory,
+                this.addSlot(new LockingSlot(playerInventory,
                                 column + (row * 9) + 9,
                                 playerInventoryHorizontalOffset + 8 + (column * 18),
                                 playerInventoryVerticalOffset + (row * 18)
@@ -74,7 +75,7 @@ public class ManagedFluidTankScreenHandler extends ScreenHandler {
 
         return super.onFluidSlotClick(index, button, shift, player, cursorStack);
     }
-
+    
     @Override
     public boolean canUse(PlayerEntity player) {
         return true;
