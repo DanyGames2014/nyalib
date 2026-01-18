@@ -32,3 +32,4 @@
 * Custom fluid slot rendering and size
 * BlockEntityInit interface
 * SimpleFluidHandler, ManagedFluidHandler and SimpleTank
+* Add slot locking via LockableSlot and SlotLockingItem
