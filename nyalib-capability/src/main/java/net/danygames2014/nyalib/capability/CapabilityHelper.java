@@ -6,6 +6,7 @@ import net.danygames2014.nyalib.capability.entity.EntityCapability;
 import net.danygames2014.nyalib.capability.entity.EntityCapabilityRegistry;
 import net.danygames2014.nyalib.capability.item.ItemCapability;
 import net.danygames2014.nyalib.capability.item.ItemCapabilityRegistry;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -14,8 +15,16 @@ import org.jetbrains.annotations.Nullable;
 
 public class CapabilityHelper {
     // Block Capabilities
+    public static <T extends BlockCapability> @Nullable T getCapability(BlockEntity blockEntity, Identifier identifier) {
+        return BlockCapabilityRegistry.getCapability(blockEntity.world, blockEntity.x, blockEntity.y, blockEntity.z, identifier);
+    }
+    
     public static <T extends BlockCapability> @Nullable T getCapability(World world, int x, int y, int z, Identifier identifier) {
         return BlockCapabilityRegistry.getCapability(world, x, y, z, identifier);
+    }
+
+    public static <T extends BlockCapability> @Nullable T getCapability(BlockEntity blockEntity, Class<T> capabilityClass) {
+        return BlockCapabilityRegistry.getCapability(blockEntity.world, blockEntity.x, blockEntity.y, blockEntity.z, capabilityClass);
     }
 
     public static <T extends BlockCapability> @Nullable T getCapability(World world, int x, int y, int z, Class<T> capabilityClass) {
