@@ -4,7 +4,6 @@ import net.danygames2014.nyalib.sound.SoundHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.BlockView;
@@ -205,7 +204,7 @@ public class ButtonBlockTemplate extends TemplateBlock {
     }
 
     @Override
-    public boolean isEmittingRedstonePowerInDirection(BlockView blockView, int x, int y, int z, int direction) {
+    public boolean isPoweringSide(BlockView blockView, int x, int y, int z, int side) {
         if (blockView instanceof BlockStateView stateView) {
             return stateView.getBlockState(x, y, z).get(Properties.POWERED);
         }
@@ -213,19 +212,19 @@ public class ButtonBlockTemplate extends TemplateBlock {
     }
 
     @Override
-    public boolean canTransferPowerInDirection(World world, int x, int y, int z, int direction) {
+    public boolean isStrongPoweringSide(World world, int x, int y, int z, int side) {
         BlockState state = world.getBlockState(x, y, z);
 
         if (state.get(Properties.POWERED)) {
             switch (state.get(BUTTON_TYPE)) {
                 case CEILING -> {
-                    return Direction.byId(direction) == Direction.DOWN;
+                    return Direction.byId(side) == Direction.DOWN;
                 }
                 case FLOOR -> {
-                    return Direction.byId(direction) == Direction.UP;
+                    return Direction.byId(side) == Direction.UP;
                 }
                 case WALL -> {
-                    return state.get(Properties.HORIZONTAL_FACING) == Direction.byId(direction);
+                    return state.get(Properties.HORIZONTAL_FACING) == Direction.byId(side);
                 }
             }
         }

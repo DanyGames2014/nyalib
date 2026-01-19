@@ -48,15 +48,18 @@ public class PressurePlateBlockTemplate extends TemplateBlock {
         builder.add(Properties.POWERED);
     }
 
+    @Override
     public int getTickRate() {
         return 20;
     }
 
+    @Override
     public int getPistonBehavior() {
         return 1;
     }
 
     // Placement
+    @Override
     public boolean canPlaceAt(World world, int x, int y, int z) {
         return world.shouldSuffocate(x, y - 1, z);
     }
@@ -66,10 +69,12 @@ public class PressurePlateBlockTemplate extends TemplateBlock {
         return super.getPlacementState(context).with(Properties.POWERED, false);
     }
 
-    // LogIC
+    // Logic
+    @Override
     public void onPlaced(World world, int x, int y, int z) {
     }
 
+    @Override
     public void neighborUpdate(World world, int x, int y, int z, int id) {
         if (!world.shouldSuffocate(x, y - 1, z)) {
             this.dropStacks(world, x, y, z, world.getBlockMeta(x, y, z));
@@ -77,6 +82,7 @@ public class PressurePlateBlockTemplate extends TemplateBlock {
         }
     }
 
+    @Override
     public void onTick(World world, int x, int y, int z, Random random) {
         if (!world.isRemote) {
             if (isPressed(world, x, y, z)) {
@@ -85,6 +91,7 @@ public class PressurePlateBlockTemplate extends TemplateBlock {
         }
     }
 
+    @Override
     public void onBreak(World world, int x, int y, int z) {
         if (isPressed(world, x, y, z)) {
             world.notifyNeighbors(x, y, z, this.id);
@@ -94,6 +101,7 @@ public class PressurePlateBlockTemplate extends TemplateBlock {
         super.onBreak(world, x, y, z);
     }
 
+    @Override
     public void onEntityCollision(World world, int x, int y, int z, Entity entity) {
         if (!world.isRemote) {
             if (!isPressed(world, x, y, z)) {
@@ -143,10 +151,12 @@ public class PressurePlateBlockTemplate extends TemplateBlock {
     }
 
     // Collision & Bounding Box
+    @Override
     public Box getCollisionShape(World world, int x, int y, int z) {
         return null;
     }
 
+    @Override
     public void updateBoundingBox(BlockView blockView, int x, int y, int z) {
         if (isPressed(blockView, x, y, z)) {
             this.setBoundingBox(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.03125F, 0.9375F);
@@ -156,23 +166,28 @@ public class PressurePlateBlockTemplate extends TemplateBlock {
     }
 
     // Redstone Behavior
-    public boolean isEmittingRedstonePowerInDirection(BlockView blockView, int x, int y, int z, int direction) {
+    @Override
+    public boolean isPoweringSide(BlockView blockView, int x, int y, int z, int side) {
         return isPressed(blockView, x, y, z);
     }
 
-    public boolean canTransferPowerInDirection(World world, int x, int y, int z, int direction) {
-        return isPressed(world, x, y, z) && direction == 1;
+    @Override
+    public boolean isStrongPoweringSide(World world, int x, int y, int z, int side) {
+        return isPressed(world, x, y, z) && side == 1;
     }
 
+    @Override
     public boolean canEmitRedstonePower() {
         return true;
     }
 
     // Rendering
+    @Override
     public boolean isOpaque() {
         return false;
     }
 
+    @Override
     public boolean isFullCube() {
         return false;
     }

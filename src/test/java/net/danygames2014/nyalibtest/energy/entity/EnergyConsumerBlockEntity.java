@@ -14,7 +14,7 @@ public class EnergyConsumerBlockEntity extends EnergyConsumerBlockEntityTemplate
         powered = false;
         
         for (Direction side : Direction.values()) {
-            if (world.isEmittingRedstonePower(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ())) {
+            if (world.isPowered(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ())) {
                 powered = true;
             }
         }
