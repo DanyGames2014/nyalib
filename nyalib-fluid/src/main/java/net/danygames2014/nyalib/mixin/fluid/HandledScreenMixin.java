@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(HandledScreen.class)
 public abstract class HandledScreenMixin extends Screen {
     @Shadow
-    public ScreenHandler container;
+    public ScreenHandler handler;
 
     @Shadow
     public abstract void init();
@@ -40,7 +40,7 @@ public abstract class HandledScreenMixin extends Screen {
     public void renderFluidSlots(int mouseX, int mouseY, float delta, CallbackInfo ci) {
         hoveredSlot = null;
 
-        for (FluidSlot fluidSlot : container.getFluidSlots()) {
+        for (FluidSlot fluidSlot : handler.getFluidSlots()) {
             boolean hovered = isPointOverFluidSlot(fluidSlot, mouseX, mouseY);
 
             fluidSlot.render(this.minecraft, this.textRenderer, itemRenderer, HandledScreen.class.cast(this), mouseX, mouseY, delta, fluidSlot, fluidSlot.x, fluidSlot.y);
@@ -107,7 +107,7 @@ public abstract class HandledScreenMixin extends Screen {
 
     @Unique
     public FluidSlot getFluidSlotAt(int x, int y) {
-        for (FluidSlot fluidSlot : container.getFluidSlots()) {
+        for (FluidSlot fluidSlot : handler.getFluidSlots()) {
             if (isPointOverFluidSlot(fluidSlot, x, y)) {
                 return fluidSlot;
             }
@@ -136,7 +136,7 @@ public abstract class HandledScreenMixin extends Screen {
 
             if (slotId != -1) {
                 boolean shift = slotId != -999 && (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT));
-                this.minecraft.interactionManager.clickFluidSlot(this.container.syncId, slotId, button, shift, this.minecraft.player);
+                this.minecraft.interactionManager.clickFluidSlot(this.handler.syncId, slotId, button, shift, this.minecraft.player);
             }
         }
     }
