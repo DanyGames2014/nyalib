@@ -2,8 +2,8 @@ package net.danygames2014.nyalib.mixin.fluid;
 
 import net.danygames2014.nyalib.fluid.TankManager;
 import net.danygames2014.nyalib.fluid.item.ManagedFluidHandlerItem;
+import net.danygames2014.nyalib.mixininterface.ItemFluidSlotTemplateRetriever;
 import net.danygames2014.nyalib.mixininterface.ItemStackTankManagerRetriever;
-import net.danygames2014.nyalib.mixininterface.ItemTemplateSlotRetriever;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -41,13 +41,12 @@ public abstract class ItemStackMixin implements ItemStackTankManagerRetriever, S
         if (this.getItem() instanceof ManagedFluidHandlerItem && tankManager == null) {
             tankManager = new TankManager(true);
 
-            ItemTemplateSlotRetriever templateEntries = (ItemTemplateSlotRetriever) this.getItem();
-            for (var entry : templateEntries.nyalib$getTemplateSlotEntries()) {
+            ItemFluidSlotTemplateRetriever templateEntries = (ItemFluidSlotTemplateRetriever) this.getItem();
+            for (var entry : templateEntries.nyalib$getTemplateFluidSlotEntries()) {
                 tankManager.addSlot(entry.copy(false));
             }
 
             if (this.getStationNbt() != null && this.getStationNbt().contains("ManagedTankData")) {
-                System.err.println("HAS NBT");
                 tankManager.readNbt(this.getStationNbt().getCompound("ManagedTankData"));
             }
         }
@@ -94,8 +93,8 @@ public abstract class ItemStackMixin implements ItemStackTankManagerRetriever, S
             NbtCompound managedTankNbt = stationNbt.getCompound("ManagedTankData");
             tankManager = new TankManager();
 
-            ItemTemplateSlotRetriever templateEntries = (ItemTemplateSlotRetriever) this.getItem();
-            for (var entry : templateEntries.nyalib$getTemplateSlotEntries()) {
+            ItemFluidSlotTemplateRetriever templateEntries = (ItemFluidSlotTemplateRetriever) this.getItem();
+            for (var entry : templateEntries.nyalib$getTemplateFluidSlotEntries()) {
                 tankManager.addSlot(entry.copy(false));
             }
 

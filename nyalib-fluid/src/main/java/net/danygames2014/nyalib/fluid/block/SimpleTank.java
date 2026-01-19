@@ -16,11 +16,11 @@ public class SimpleTank implements ManagedFluidHandler {
     }
     
     // Expose TankManager specific methods
-    public TankManager.FluidSlotEntry addSlot(int capacity) {
+    public TankManager.FluidSlotEntry addFluidSlot(int capacity) {
         return tankManager.addSlot(capacity);
     }
     
-    public TankManager.FluidSlotEntry getSlot(int slot, Direction direction) {
+    public TankManager.FluidSlotEntry getFluidSlot(int slot, Direction direction) {
         return tankManager.getSlot(slot, direction);
     }
 

@@ -15,7 +15,8 @@ public interface ManagedFluidHandler extends FluidHandler {
 
     @Override
     default FluidStack extractFluid(int slot, int amount, @Nullable Direction direction) {
-        if (!canExtractFluid(direction) || !getTankManager().getSlot(slot, direction).isSideAllowed(direction)) {
+        TankManager.FluidSlotEntry fluidSlot = getFluidSlot(slot, direction);
+        if (!canExtractFluid(direction) || fluidSlot == null || !fluidSlot.isSideAllowed(direction)) {
             return null;
         }
 
@@ -71,15 +72,22 @@ public interface ManagedFluidHandler extends FluidHandler {
             }
 
             if (currentStack != null) {
-                if (this.getFluid(i, direction).isFluidEqual(currentStack)) {
+                FluidStack slotStack = getFluid(i, direction);
+                if (slotStack == null) {
+                    continue;
+                }
+                
+                if (slotStack.isFluidEqual(currentStack)) {
                     FluidStack extractedStack = extractFluid(i, remaining, direction);
                     remaining -= extractedStack.amount;
                     currentStack.amount += extractedStack.amount;
                 }
             } else {
                 FluidStack extractedStack = extractFluid(i, remaining, direction);
-                remaining -= extractedStack.amount;
-                currentStack = extractedStack;
+                if (extractedStack != null) {
+                    remaining -= extractedStack.amount;
+                    currentStack = extractedStack;
+                }
             }
         }
 
@@ -93,7 +101,8 @@ public interface ManagedFluidHandler extends FluidHandler {
 
     @Override
     default FluidStack insertFluid(FluidStack stack, int slot, @Nullable Direction direction) {
-        if (!canInsertFluid(direction) || !getTankManager().getSlot(0, direction).isSideAllowed(direction) || !getSlot(slot, direction).isFluidAllowed(stack.fluid)) {
+        TankManager.FluidSlotEntry fluidSlot = getFluidSlot(slot, direction);
+        if (!canInsertFluid(direction) || fluidSlot == null || !fluidSlot.isSideAllowed(direction) || stack == null || !fluidSlot.isFluidAllowed(stack.fluid)) {
             return stack;
         }
         
@@ -179,11 +188,11 @@ public interface ManagedFluidHandler extends FluidHandler {
         return Util.assertImpl();
     }
     
-    default TankManager.FluidSlotEntry addSlot(int capacity) {
+    default TankManager.FluidSlotEntry addFluidSlot(int capacity) {
         return getTankManager().addSlot(capacity);
     }
 
-    default TankManager.FluidSlotEntry getSlot(int slot, @Nullable Direction direction) {
+    default TankManager.FluidSlotEntry getFluidSlot(int slot, @Nullable Direction direction) {
         return getTankManager().getSlot(slot, direction);
     }
 }

@@ -18,9 +18,9 @@ import java.util.ArrayList;
 public class ManagedFluidPipetteItem extends TemplateItem implements ManagedFluidHandlerItem, CustomTooltipProvider, SlotLockingItem {
     public ManagedFluidPipetteItem(Identifier identifier) {
         super(identifier);
-        this.addSlot(2000).setAllowedFluids(Fluids.WATER);
-        this.addSlot(1877).setAllowedFluids(NyaLibTest.fuelFluid);
-        this.addSlot(9000);
+        this.addFluidSlot(2000).setAllowedFluids(Fluids.WATER);
+        this.addFluidSlot(1877).setAllowedFluids(NyaLibTest.fuelFluid);
+        this.addFluidSlot(9000);
     }
 
     @Override

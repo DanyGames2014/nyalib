@@ -14,7 +14,8 @@ public interface ManagedFluidHandlerItem extends FluidHandlerItem {
 
     @Override
     default FluidStack extractFluid(ItemStack thiz, int slot, int amount) {
-        if (!canExtractFluid(thiz)) {
+        TankManager.FluidSlotEntry fluidSlot = getFluidSlot(thiz, slot);
+        if (!canExtractFluid(thiz) || fluidSlot == null) {
             return null;
         }
 
@@ -70,15 +71,22 @@ public interface ManagedFluidHandlerItem extends FluidHandlerItem {
             }
 
             if (currentStack != null) {
-                if (this.getFluid(thiz, i).isFluidEqual(currentStack)) {
+                FluidStack slotStack = getFluid(thiz, i);
+                if (slotStack == null) {
+                    continue;
+                }
+                
+                if (slotStack.isFluidEqual(currentStack)) {
                     FluidStack extractedStack = extractFluid(thiz, i, remaining);
                     remaining -= extractedStack.amount;
                     currentStack.amount += extractedStack.amount;
                 }
             } else {
                 FluidStack extractedStack = extractFluid(thiz, i, remaining);
-                remaining -= extractedStack.amount;
-                currentStack = extractedStack;
+                if (extractedStack != null) {
+                    remaining -= extractedStack.amount;
+                    currentStack = extractedStack;
+                }
             }
         }
 
@@ -92,7 +100,8 @@ public interface ManagedFluidHandlerItem extends FluidHandlerItem {
 
     @Override
     default FluidStack insertFluid(ItemStack thiz, FluidStack stack, int slot) {
-        if (!canInsertFluid(thiz) || !getSlot(thiz, slot).isFluidAllowed(stack.fluid)) {
+        TankManager.FluidSlotEntry fluidSlot = getFluidSlot(thiz, slot);
+        if (!canInsertFluid(thiz) || fluidSlot == null || stack == null || !fluidSlot.isFluidAllowed(stack.fluid)) {
             return stack;
         }
 
@@ -172,15 +181,15 @@ public interface ManagedFluidHandlerItem extends FluidHandlerItem {
         return Util.assertImpl();
     }
 
-    default TankManager.FluidSlotEntry addSlot(int capacity) {
+    default TankManager.FluidSlotEntry addFluidSlot(int capacity) {
         return Util.assertImpl();
     }
     
-    default TankManager.FluidSlotEntry addSlot(ItemStack thiz, int capacity) {
+    default TankManager.FluidSlotEntry addFluidSlot(ItemStack thiz, int capacity) {
         return getTankManager(thiz).addSlot(capacity);
     }
 
-    default TankManager.FluidSlotEntry getSlot(ItemStack thiz, int slot) {
+    default TankManager.FluidSlotEntry getFluidSlot(ItemStack thiz, int slot) {
         return getTankManager(thiz).getSlot(slot);
     }
 }

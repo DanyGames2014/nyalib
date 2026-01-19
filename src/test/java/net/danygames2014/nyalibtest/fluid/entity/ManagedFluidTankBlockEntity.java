@@ -10,9 +10,9 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 
 public class ManagedFluidTankBlockEntity extends BlockEntity implements ManagedFluidHandler, Inventory {
     public ManagedFluidTankBlockEntity() {
-        this.addSlot(2000).setAllowedSides(Direction.UP, Direction.NORTH).setAllowedFluids(Fluids.WATER);
-        this.addSlot(18000);
-        this.addSlot(6877).setAllowedFluids(Fluids.MILK);
+        this.addFluidSlot(2000).setAllowedSides(Direction.UP, Direction.NORTH).setAllowedFluids(Fluids.WATER);
+        this.addFluidSlot(18000);
+        this.addFluidSlot(6877).setAllowedFluids(Fluids.MILK);
     }
 
     // Inventory

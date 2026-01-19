@@ -15,11 +15,11 @@ public class SimpleEntityTank implements ManagedFluidHandlerEntity {
     }
     
     // Expose TankManager specific methods
-    public TankManager.FluidSlotEntry addSlot(int capacity) {
+    public TankManager.FluidSlotEntry addFluidSlot(int capacity) {
         return tankManager.addSlot(capacity);
     }
     
-    public TankManager.FluidSlotEntry getSlot(int slot) {
+    public TankManager.FluidSlotEntry getFluidSlot(int slot) {
         return tankManager.getSlot(slot);
     }
 

@@ -14,7 +14,8 @@ public interface ManagedFluidHandlerEntity extends FluidHandlerEntity {
 
     @Override
     default FluidStack extractFluid(int slot, int amount) {
-        if (!canExtractFluid()) {
+        TankManager.FluidSlotEntry fluidSlot = getFluidSlot(slot);
+        if (!canExtractFluid() || fluidSlot == null) {
             return null;
         }
 
@@ -70,15 +71,22 @@ public interface ManagedFluidHandlerEntity extends FluidHandlerEntity {
             }
 
             if (currentStack != null) {
-                if (this.getFluid(i).isFluidEqual(currentStack)) {
+                FluidStack slotStack = getFluid(i);
+                if (slotStack == null) {
+                    continue;
+                }
+                
+                if (slotStack.isFluidEqual(currentStack)) {
                     FluidStack extractedStack = extractFluid(i, remaining);
                     remaining -= extractedStack.amount;
                     currentStack.amount += extractedStack.amount;
                 }
             } else {
                 FluidStack extractedStack = extractFluid(i, remaining);
-                remaining -= extractedStack.amount;
-                currentStack = extractedStack;
+                if (extractedStack != null) {
+                    remaining -= extractedStack.amount;
+                    currentStack = extractedStack;
+                }
             }
         }
 
@@ -92,7 +100,8 @@ public interface ManagedFluidHandlerEntity extends FluidHandlerEntity {
 
     @Override
     default FluidStack insertFluid(FluidStack stack, int slot) {
-        if (!canInsertFluid() || !getSlot(slot).isFluidAllowed(stack.fluid)) {
+        TankManager.FluidSlotEntry fluidSlot = getFluidSlot(slot);
+        if (!canInsertFluid() || fluidSlot == null || stack == null || !fluidSlot.isFluidAllowed(stack.fluid)) {
             return stack;
         }
 
@@ -172,11 +181,11 @@ public interface ManagedFluidHandlerEntity extends FluidHandlerEntity {
         return Util.assertImpl();
     }
 
-    default TankManager.FluidSlotEntry addSlot(int capacity) {
+    default TankManager.FluidSlotEntry addFluidSlot(int capacity) {
         return getTankManager().addSlot(capacity);
     }
 
-    default TankManager.FluidSlotEntry getSlot(int slot) {
+    default TankManager.FluidSlotEntry getFluidSlot(int slot) {
         return getTankManager().getSlot(slot);
     }
 }

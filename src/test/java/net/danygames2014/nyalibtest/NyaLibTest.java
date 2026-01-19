@@ -27,6 +27,7 @@ import net.danygames2014.nyalibtest.fluid.entity.SimpleFluidTankBlockEntity;
 import net.danygames2014.nyalibtest.fluid.item.FluidCellItem;
 import net.danygames2014.nyalibtest.fluid.item.FluidPipetteItem;
 import net.danygames2014.nyalibtest.fluid.item.ManagedFluidPipetteItem;
+import net.danygames2014.nyalibtest.item.ManagedItemBag;
 import net.danygames2014.nyalibtest.item.SideHopperBlock;
 import net.danygames2014.nyalibtest.item.entity.SideHopperBlockEntity;
 import net.danygames2014.nyalibtest.network.BasicNetworkType;
@@ -113,6 +114,8 @@ public class NyaLibTest {
 
     public static Block itemHandlerBlockCapabilityTester;
     public static Item itemYoinker;
+    public static Item managedItemBag;
+    // TODO: Managed Block Item Handler
 
     public static Fluid gravelFluid;
     public static Fluid fuelFluid;
@@ -202,6 +205,7 @@ public class NyaLibTest {
     public void registerItems(ItemRegistryEvent event) {
         multimeter = new MultimeterItem(NAMESPACE.id("multimeter")).setTranslationKey(NAMESPACE, "multimeter");
         itemYoinker = new YoinkerItem(NAMESPACE.id("item_yoinker")).setTranslationKey(NAMESPACE, "item_yoinker");
+        managedItemBag = new ManagedItemBag(NAMESPACE.id("managed_item_bag")).setTranslationKey(NAMESPACE, "managed_item_bag");
         fluidPippeteItem = new FluidPipetteItem(NAMESPACE.id("fluid_pipette")).setTranslationKey(NAMESPACE, "fluid_pipette");
         managedfluidPipetteItem = new ManagedFluidPipetteItem(NAMESPACE.id("managed_fluid_pipette")).setTranslationKey(NAMESPACE, "managed_fluid_pipette");
         emptyCellItem = new FluidCellItem(NAMESPACE.id("fluid_cell"), null).setTranslationKey(NAMESPACE, "fluid_cell");

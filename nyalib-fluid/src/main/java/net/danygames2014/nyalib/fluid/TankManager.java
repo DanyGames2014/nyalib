@@ -170,7 +170,7 @@ public class TankManager {
         public FluidSlotEntry(int capacity, Fluid... allowedFluids) {
             this.capacity = capacity;
             if (allowedFluids.length > 0) {
-                this.allowedFluids = new ObjectArrayList<>(Arrays.asList(allowedFluids));
+                this.allowedFluids = new ObjectArrayList<>(allowedFluids);
             }
         }
 
@@ -179,12 +179,12 @@ public class TankManager {
                 throw new UnsupportedOperationException("Setting allowed sides is not applicable for this TankManager.");
             }
             
-            this.allowedSides = new ObjectArrayList<>(Arrays.asList(allowedSides));
+            this.allowedSides = new ObjectArrayList<>(allowedSides);
             return this;
         }
 
         public FluidSlotEntry setAllowedFluids(Fluid... allowedFluids) {
-            this.allowedFluids = new ObjectArrayList<>(Arrays.asList(allowedFluids));
+            this.allowedFluids = new ObjectArrayList<>(allowedFluids);
             return this;
         }
 
@@ -211,12 +211,6 @@ public class TankManager {
             }
         }
 
-        public static FluidSlotEntry fromNbt(NbtCompound nbt) {
-            FluidSlotEntry entry = new FluidSlotEntry(0);
-            entry.readNbt(nbt);
-            return entry;
-        }
-        
         public FluidSlotEntry copy(boolean withStack) {
             FluidSlotEntry entry = new FluidSlotEntry(capacity);
             entry.allowedFluids = allowedFluids == null ? null : new ObjectArrayList<>(allowedFluids);
