@@ -27,6 +27,8 @@ import net.danygames2014.nyalibtest.fluid.entity.SimpleFluidTankBlockEntity;
 import net.danygames2014.nyalibtest.fluid.item.FluidCellItem;
 import net.danygames2014.nyalibtest.fluid.item.FluidPipetteItem;
 import net.danygames2014.nyalibtest.fluid.item.ManagedFluidPipetteItem;
+import net.danygames2014.nyalibtest.item.ManagedInventoryBlock;
+import net.danygames2014.nyalibtest.item.ManagedInventoryBlockEntity;
 import net.danygames2014.nyalibtest.item.ManagedItemBag;
 import net.danygames2014.nyalibtest.item.SideHopperBlock;
 import net.danygames2014.nyalibtest.item.entity.SideHopperBlockEntity;
@@ -36,6 +38,7 @@ import net.danygames2014.nyalibtest.network.EastWestCableBlock;
 import net.danygames2014.nyalibtest.network.NetworkEdgeBlock;
 import net.danygames2014.nyalibtest.screen.FluidTankScreen;
 import net.danygames2014.nyalibtest.screen.ManagedFluidTankScreen;
+import net.danygames2014.nyalibtest.screen.ManagedInventoryScreen;
 import net.danygames2014.nyalibtest.screen.SimpleFluidTankScreen;
 import net.danygames2014.nyalibtest.simpleenergy.SimpleEnergyReceiverBlock;
 import net.danygames2014.nyalibtest.simpleenergy.SimpleInfiniteEnergyBlock;
@@ -115,7 +118,7 @@ public class NyaLibTest {
     public static Block itemHandlerBlockCapabilityTester;
     public static Item itemYoinker;
     public static Item managedItemBag;
-    // TODO: Managed Block Item Handler
+    public static Block managedInventoryBlock;
 
     public static Fluid gravelFluid;
     public static Fluid fuelFluid;
@@ -131,6 +134,7 @@ public class NyaLibTest {
 
         // Item
         sideHopper = new SideHopperBlock(NAMESPACE.id("side_hopper")).setTranslationKey(NAMESPACE, "side_hopper");
+        managedInventoryBlock = new ManagedInventoryBlock(NAMESPACE.id("managed_inventory"), Material.METAL).setTranslationKey(NAMESPACE, "managed_inventory");
 
         // Block Networks
         networkNodeBlock = new CableBlock(NAMESPACE.id("network_node_block")).setTranslationKey(NAMESPACE, "network_node_block");
@@ -227,6 +231,7 @@ public class NyaLibTest {
         event.register(EnergyConsumerBlockEntity.class, "energy_consumer");
         event.register(SimpleFluidTankBlockEntity.class, "simple_fluid_tank");
         event.register(ManagedFluidTankBlockEntity.class, "managed_fluid_tank");
+        event.register(ManagedInventoryBlockEntity.class, "managed_inventory");
     }
 
     @EventListener
@@ -240,6 +245,12 @@ public class NyaLibTest {
         event.register(NAMESPACE.id("fluid_tank"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openFluidTank, FluidTankBlockEntity::new));
         event.register(NAMESPACE.id("simple_fluid_tank"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openSimpleFluidTank, SimpleFluidTankBlockEntity::new));
         event.register(NAMESPACE.id("managed_fluid_tank"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openManagedFluidTank, ManagedFluidTankBlockEntity::new));
+        event.register(NAMESPACE.id("managed_inventory"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openManagedInventory, ManagedFluidTankBlockEntity::new));
+    }
+
+    @Environment(EnvType.CLIENT)
+    private Screen openManagedInventory(PlayerEntity player, Inventory inventory) {
+        return new ManagedInventoryScreen(player, (ManagedInventoryBlockEntity) inventory);
     }
 
     @Environment(EnvType.CLIENT)

@@ -130,6 +130,12 @@ public interface ManagedItemHandler extends ItemHandler {
     default ItemStack[] getInventory(@Nullable Direction side) {
         return getInventoryManager().getInventory(side);
     }
+    
+    // ItemCapable
+    @Override
+    default boolean canConnectItem(Direction side) {
+        return true;
+    }
 
     // Managed Item Handler
     default InventoryManager getInventoryManager() {

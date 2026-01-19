@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "nyalibtest:block/managed_inventory" }
+  }
+}
