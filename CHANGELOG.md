@@ -33,3 +33,5 @@
 * BlockEntityInit interface
 * SimpleFluidHandler, ManagedFluidHandler and SimpleTank
 * Add slot locking via LockableSlot and SlotLockingItem
+* Add ManagedItemHandlerWithInventory
+* Add Block Entity related methods to CapabilityHelper
