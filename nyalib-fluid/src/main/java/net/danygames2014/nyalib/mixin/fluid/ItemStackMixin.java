@@ -7,9 +7,7 @@ import net.danygames2014.nyalib.mixininterface.ItemStackTankManagerRetriever;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.modificationstation.stationapi.api.StationAPI;
 import net.modificationstation.stationapi.api.item.StationItemStack;
-import net.modificationstation.stationapi.api.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -18,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(ItemStack.class)
+@Mixin(value = ItemStack.class, priority = 1100)
 public abstract class ItemStackMixin implements ItemStackTankManagerRetriever, StationItemStack {
     @Shadow
     public abstract Item getItem();
@@ -77,20 +75,16 @@ public abstract class ItemStackMixin implements ItemStackTankManagerRetriever, S
     @Inject(method = "writeNbt", at = @At(value = "RETURN"))
     public void writeManagedTankNbt(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
         if (this.getItem() instanceof ManagedFluidHandlerItem) {
-            NbtCompound stationNbt = this.getStationNbt();
-
             NbtCompound managedTankNbt = new NbtCompound();
             tankManager.writeNbt(managedTankNbt);
-            stationNbt.put("ManagedTankData", managedTankNbt);
+            this.getStationNbt().put("ManagedTankData", managedTankNbt);
         }
     }
 
     @Inject(method = "readNbt", at = @At(value = "RETURN"))
     public void readManagedTankNbt(NbtCompound nbt, CallbackInfo ci) {
         if (this.getItem() instanceof ManagedFluidHandlerItem) {
-            NbtCompound stationNbt = nbt.getCompound(Identifier.of(StationAPI.NAMESPACE, "item_nbt").toString());
-
-            NbtCompound managedTankNbt = stationNbt.getCompound("ManagedTankData");
+            NbtCompound managedTankNbt = this.getStationNbt().getCompound("ManagedTankData");
             tankManager = new TankManager();
 
             ItemFluidSlotTemplateRetriever templateEntries = (ItemFluidSlotTemplateRetriever) this.getItem();

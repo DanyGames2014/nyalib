@@ -4,6 +4,7 @@ import net.danygames2014.nyalib.fluid.Fluid;
 import net.danygames2014.nyalib.fluid.FluidStack;
 import net.danygames2014.nyalib.fluid.TankManager;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.util.Util;
 
 public interface ManagedFluidHandlerItem extends FluidHandlerItem {
@@ -153,7 +154,17 @@ public interface ManagedFluidHandlerItem extends FluidHandlerItem {
 
     @Override
     default boolean setFluid(ItemStack thiz, int slot, FluidStack stack) {
-        return getTankManager(thiz).setFluid(slot, stack, null);
+        TankManager tankManager = getTankManager(thiz);
+        
+        boolean result = tankManager.setFluid(slot, stack, null);
+        
+        if (result) {
+            NbtCompound managedTankNbt = new NbtCompound();
+            tankManager.writeNbt(managedTankNbt);
+            thiz.getStationNbt().put("ManagedTankData", managedTankNbt);
+        }
+        
+        return result;
     }
 
     @Override
