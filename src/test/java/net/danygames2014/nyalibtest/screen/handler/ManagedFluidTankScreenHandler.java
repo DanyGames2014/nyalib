@@ -51,7 +51,7 @@ public class ManagedFluidTankScreenHandler extends ScreenHandler {
         }
 
         this.addFluidSlot(new CustomFluidSlotWithRendering(fluidTank, 0, 56, 17));
-        this.addFluidSlot(new FluidSlot(fluidTank, 1, 56, 35, 48, 16));
+        this.addFluidSlot(new FluidSlot(fluidTank, 1, 56, 35, 16, 16));
         this.addFluidSlot(new FluidSlot(fluidTank, 2, 56, 53));
         
         //this.getFluidSlots().get(1).enabled = false;
@@ -64,10 +64,10 @@ public class ManagedFluidTankScreenHandler extends ScreenHandler {
         if (cursorStack == null) {
             if (slot != null && slot.hasStack()) {
                 if (button == 0) {
-                    slot.setFluidAmount(slot.getFluidAmount() + 500);
+                    slot.setFluidAmount(slot.getFluidAmount() + 500 * (shift ? 10 : 1));
                     return slot.getStack();
                 } else if (button == 1) {
-                    slot.setFluidAmount(slot.getFluidAmount() - 500);
+                    slot.setFluidAmount(slot.getFluidAmount() - 500 * (shift ? 10 : 1));
                     return slot.getStack();
                 }
             }

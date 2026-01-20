@@ -1,8 +1,8 @@
 package net.danygames2014.nyalib.fluid;
 
 import net.danygames2014.nyalib.fluid.block.FluidHandler;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.danygames2014.nyalib.util.fluid.FluidStackUtil;
+import net.danygames2014.nyalib.util.fluid.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -76,18 +76,23 @@ public class FluidSlot {
     public boolean equals(FluidHandler otherHandler, int otherIndex) {
         return otherHandler == this.handler && otherIndex == this.index;
     }
-
+    
     // Rendering
-    @Environment(EnvType.CLIENT)
-    public int getBackgroundTextureId() {
-        return -1;
+    public boolean renderAmount(HandledScreen screen) {
+        return true;
     }
-
+    
     public void render(Minecraft minecraft, TextRenderer textRenderer, ItemRenderer itemRenderer, HandledScreen screen, int mouseX, int mouseY, float delta, FluidSlot slot, int slotX, int slotY) {
         if (slot.getStack() != null) {
             ItemStack renderedItem = new ItemStack(slot.getStack().fluid.getBucketFluid());
             itemRenderer.renderGuiItem(textRenderer, minecraft.textureManager, renderedItem, slotX, slotY);
             itemRenderer.renderGuiItemDecoration(textRenderer, minecraft.textureManager, renderedItem, slotX, slotY);
+
+            if (slot.renderAmount(screen)) {
+                String formattedAmount = FluidStackUtil.formatAmount(slot.getStack());
+                int formattedAmountWidth = (int) (Minecraft.INSTANCE.textRenderer.getWidth(formattedAmount) * 0.53);
+                RenderHelper.drawSmallText(slotX + width - formattedAmountWidth, slotY + height - 5, formattedAmount, 0xFFFFFF);
+            }
         }
     }
 }
