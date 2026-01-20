@@ -16,11 +16,22 @@ public class FluidStack {
     public int amount;
 
     private FluidStack() {
+        throw new IllegalArgumentException("Cannot create an empty FluidStack!");
     }
 
     private FluidStack(int amount) {
+        throw new IllegalArgumentException("Cannot create an FluidStack with no fluid!");
     }
 
+    /**
+     * Initializes a new FluidStack with the given fluid and 1000mB
+     *
+     * @param fluid The fluid to initialize the ItemStack with
+     */
+    public FluidStack(Fluid fluid) {
+        this(fluid, 1000);
+    }
+    
     /**
      * Initializes a new FluidStack with the given fluid and amount
      *
@@ -45,19 +56,29 @@ public class FluidStack {
         this.readNbt(nbt);
     }
 
+    // Operations
     public FluidStack copy() {
         return new FluidStack(this.fluid, this.amount);
     }
-
-    /**
-     * Initializes a new FluidStack with the given fluid and 1000mB
-     *
-     * @param fluid The fluid to initialize the ItemStack with
-     */
-    public FluidStack(Fluid fluid) {
-        this(fluid, 1000);
+    
+    public FluidStack split(int amount) {
+        FluidStack stack;
+        
+        if (this.amount > amount) {
+            stack = new FluidStack(this.fluid, amount);
+            this.amount -= amount;
+        } else {
+            stack = new FluidStack(this.fluid, this.amount);
+            this.amount = 0;
+        }
+        
+        return stack;
     }
-
+    
+//    public ItemStack asItemStack() {
+//        
+//    }
+    
     // Localization
     public String getTranslationKey() {
         return fluid.getTranslationKey(this);
