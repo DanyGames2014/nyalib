@@ -10,6 +10,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.StationAPI;
 import net.modificationstation.stationapi.api.item.StationItemStack;
 import net.modificationstation.stationapi.api.util.Identifier;
+import net.modificationstation.stationapi.impl.item.StationNBTSetter;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -18,8 +19,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(ItemStack.class)
-public abstract class ItemStackMixin implements ItemStackInventoryManagerRetriever, StationItemStack {
+@Mixin(value = ItemStack.class, priority = 1100)
+public abstract class ItemStackMixin implements ItemStackInventoryManagerRetriever, StationItemStack, StationNBTSetter {
     @Shadow
     public abstract Item getItem();
 
@@ -56,7 +57,7 @@ public abstract class ItemStackMixin implements ItemStackInventoryManagerRetriev
             method = "copy",
             at = @At("RETURN")
     )
-    private void copyManagedTank(CallbackInfoReturnable<ItemStack> cir) {
+    private void copyTransferManagedInventory(CallbackInfoReturnable<ItemStack> cir) {
         if (this.getItem() instanceof ManagedItemHandlerItem && inventoryManager != null) {
             //noinspection DataFlowIssue
             ItemStackInventoryManagerRetriever.class.cast(cir.getReturnValue()).nyalib$setInventoryManager(this.inventoryManager);
@@ -67,7 +68,7 @@ public abstract class ItemStackMixin implements ItemStackInventoryManagerRetriev
             method = "split",
             at = @At("RETURN")
     )
-    private void splitStackTransferManagedTank(int par1, CallbackInfoReturnable<ItemStack> cir) {
+    private void splitStackTransferManagedInventory(int par1, CallbackInfoReturnable<ItemStack> cir) {
         if (this.getItem() instanceof ManagedItemHandlerItem && inventoryManager != null) {
             //noinspection DataFlowIssue
             ItemStackInventoryManagerRetriever.class.cast(cir.getReturnValue()).nyalib$setInventoryManager(this.inventoryManager);
@@ -75,7 +76,7 @@ public abstract class ItemStackMixin implements ItemStackInventoryManagerRetriev
     }
 
     @Inject(method = "writeNbt", at = @At(value = "RETURN"))
-    public void writeManagedTankNbt(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
+    public void writeManagedInventoryNbt(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
         if (this.getItem() instanceof ManagedItemHandlerItem) {
             NbtCompound stationNbt = this.getStationNbt();
 
@@ -86,7 +87,7 @@ public abstract class ItemStackMixin implements ItemStackInventoryManagerRetriev
     }
 
     @Inject(method = "readNbt", at = @At(value = "RETURN"))
-    public void readManagedTankNbt(NbtCompound nbt, CallbackInfo ci) {
+    public void readManagedInventoryNbt(NbtCompound nbt, CallbackInfo ci) {
         if (this.getItem() instanceof ManagedItemHandlerItem) {
             NbtCompound stationNbt = nbt.getCompound(Identifier.of(StationAPI.NAMESPACE, "item_nbt").toString());
 
@@ -101,4 +102,8 @@ public abstract class ItemStackMixin implements ItemStackInventoryManagerRetriev
             inventoryManager.readNbt(managedTankNbt);
         }
     }
+    
+    // TODO: PlayerInventoryMixin (New Stack StationAPI)
+    // TODO: writeNbt when its dirty
+    // TODO: fix dropping item erasing not saved nbt entries
 }
