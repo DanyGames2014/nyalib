@@ -7,9 +7,7 @@ import net.danygames2014.nyalib.mixininterface.ItemStackInventoryManagerRetrieve
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.modificationstation.stationapi.api.StationAPI;
 import net.modificationstation.stationapi.api.item.StationItemStack;
-import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.impl.item.StationNBTSetter;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -78,20 +76,16 @@ public abstract class ItemStackMixin implements ItemStackInventoryManagerRetriev
     @Inject(method = "writeNbt", at = @At(value = "RETURN"))
     public void writeManagedInventoryNbt(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
         if (this.getItem() instanceof ManagedItemHandlerItem) {
-            NbtCompound stationNbt = this.getStationNbt();
-
-            NbtCompound managedTankNbt = new NbtCompound();
-            inventoryManager.writeNbt(managedTankNbt);
-            stationNbt.put("ManagedInventoryData", managedTankNbt);
+            NbtCompound managedInventoryNbt = new NbtCompound();
+            inventoryManager.writeNbt(managedInventoryNbt);
+            this.getStationNbt().put("ManagedInventoryData", managedInventoryNbt);
         }
     }
 
     @Inject(method = "readNbt", at = @At(value = "RETURN"))
     public void readManagedInventoryNbt(NbtCompound nbt, CallbackInfo ci) {
         if (this.getItem() instanceof ManagedItemHandlerItem) {
-            NbtCompound stationNbt = nbt.getCompound(Identifier.of(StationAPI.NAMESPACE, "item_nbt").toString());
-
-            NbtCompound managedTankNbt = stationNbt.getCompound("ManagedInventoryData");
+            NbtCompound managedInventoryNbt = this.getStationNbt().getCompound("ManagedInventoryData");
             inventoryManager = new InventoryManager();
 
             ItemItemSlotTemplateRetriever templateEntries = (ItemItemSlotTemplateRetriever) this.getItem();
@@ -99,7 +93,7 @@ public abstract class ItemStackMixin implements ItemStackInventoryManagerRetriev
                 inventoryManager.addSlot(entry.copy(false));
             }
 
-            inventoryManager.readNbt(managedTankNbt);
+            inventoryManager.readNbt(managedInventoryNbt);
         }
     }
     

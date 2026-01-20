@@ -12,6 +12,7 @@
     "item.FurnaceBlockEntityMixin",
     "item.ItemMixin",
     "item.ItemStackMixin",
+    "item.PlayerInventoryMixin",
     "item.ScreenHandlerMixin",
     "item.SlotMixin"
   ],

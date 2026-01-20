@@ -3,6 +3,7 @@ package net.danygames2014.nyalib.item.item;
 import net.danygames2014.nyalib.item.InventoryManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.util.Util;
 
 public interface ManagedItemHandlerItem extends ItemHandlerItem {
@@ -39,7 +40,7 @@ public interface ManagedItemHandlerItem extends ItemHandlerItem {
             } else {
                 returnStack = getItem(thiz, slot).split(amount);
                 if (getItem(thiz, slot).count == 0) {
-                    setItem(thiz, null, slot);
+                    this.setItem(thiz, null, slot);
                 }
             }
 
@@ -116,7 +117,17 @@ public interface ManagedItemHandlerItem extends ItemHandlerItem {
 
     @Override
     default boolean setItem(ItemStack thiz, ItemStack stack, int slot) {
-        return getInventoryManager(thiz).setItem(stack, slot, null);
+        InventoryManager inventoryManager = getInventoryManager(thiz);
+        
+        boolean result = inventoryManager.setItem(stack, slot, null);
+        
+        if (result) {
+            NbtCompound managedInventoryNbt = new NbtCompound();
+            inventoryManager.writeNbt(managedInventoryNbt);
+            thiz.getStationNbt().put("ManagedInventoryData", managedInventoryNbt);
+        }
+        
+        return result;
     }
 
     @Override
