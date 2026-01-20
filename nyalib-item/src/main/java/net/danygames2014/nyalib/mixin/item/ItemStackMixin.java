@@ -96,8 +96,4 @@ public abstract class ItemStackMixin implements ItemStackInventoryManagerRetriev
             inventoryManager.readNbt(managedInventoryNbt);
         }
     }
-    
-    // TODO: PlayerInventoryMixin (New Stack StationAPI)
-    // TODO: writeNbt when its dirty
-    // TODO: fix dropping item erasing not saved nbt entries
 }
