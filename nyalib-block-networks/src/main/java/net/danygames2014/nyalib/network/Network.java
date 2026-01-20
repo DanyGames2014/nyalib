@@ -1,8 +1,6 @@
 package net.danygames2014.nyalib.network;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.danygames2014.nyalib.NyaLib;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NbtCompound;
@@ -262,6 +260,8 @@ public class Network {
         return tag;
     }
 
+    // TODO: validate networks on load
+    
     public static Network fromNbt(NbtCompound tag, World world, Identifier networkTypeIdentifier) {
         NetworkType networkType = NetworkTypeRegistry.get(networkTypeIdentifier);
 
@@ -284,6 +284,8 @@ public class Network {
         network.id = tag.getInt("id");
         NbtList blocksNbt = tag.getList("blocks");
 
+        boolean missingComponents = false;
+        
         // Iterate over all the block NBT Compounds
         for (int i = 0; i < blocksNbt.size(); i++) {
             // Get this block NBT Compound
@@ -295,8 +297,9 @@ public class Network {
             // Fetch the type of the block
             Block block = world.getBlockState(pos.x, pos.y, pos.z).getBlock();
 
-            // Mod NBT
+            // Load the block into network
             if (block instanceof NetworkComponent component) {
+                // Mod NBT
                 component.readNbt(world, pos.x, pos.y, pos.z, network, blockNbt);
 
                 // Put the block in Network
@@ -306,7 +309,16 @@ public class Network {
                 );
 
                 component.onAddedToNet(world, pos.x, pos.y, pos.z, network);
+            } else {
+                missingComponents = true;
             }
+        }
+
+        // Check if there were any components missing during the network load
+        if (missingComponents) {
+            NyaLib.LOGGER.warn("Network {} is missing blocks.", network.id);
+            // TODO: Could potentially, refuse to load the network
+            // TODO: Could also mark the blocks and initialize a new network
         }
 
         network.readNbt(tag);
