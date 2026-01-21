@@ -665,8 +665,6 @@ public class NetworkManager {
                             continue;
                         }
                         
-                        // TODO: validate the network by walking it and ensuring that all of the blocks in it are reachable, if not, sever them
-                        
                         addNetwork(dim, loadedNet);
                         loadedNet.update();
                     }

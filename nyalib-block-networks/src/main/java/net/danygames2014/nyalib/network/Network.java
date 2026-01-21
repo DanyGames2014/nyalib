@@ -261,8 +261,6 @@ public class Network {
         return tag;
     }
 
-    // TODO: validate networks on load
-    
     public static Network fromNbt(NbtCompound tag, World world, Identifier networkTypeIdentifier) {
         NetworkType networkType = NetworkTypeRegistry.get(networkTypeIdentifier);
 
@@ -325,7 +323,7 @@ public class Network {
             }
 
             ObjectArrayList<Vec3i> foundBlocks = new ObjectArrayList<>();
-            ObjectArrayList<ObjectArrayList<Vec3i>> continuousNetworks = new ObjectArrayList<>();
+            ObjectArrayList<ObjectArrayList<Vec3i>> continuousSegments = new ObjectArrayList<>();
             
             // We will verify all of the components in the network
             for (Vec3i component : network.components.keySet()) {
@@ -337,7 +335,7 @@ public class Network {
                 // We have not yet verified this component
                 // Walk the network from this component and add it to the continuous networks
                 ArrayList<Vec3i> walk = network.walk(component);
-                continuousNetworks.add(new ObjectArrayList<>(walk));
+                continuousSegments.add(new ObjectArrayList<>(walk));
                 
                 // Add all the found blocks to found blocks in order to not verify them again
                 foundBlocks.addAll(walk);
@@ -346,18 +344,16 @@ public class Network {
             if (foundBlocks.size() != network.components.size()) {
                 NyaLib.LOGGER.warn("Unable to verify that all blocks in network {} are present.", network.id);
             }
-            NyaLib.LOGGER.info("Found {} continuous networks.", continuousNetworks.size());
-            
-            if (continuousNetworks.size() == 1) {
-                NyaLib.LOGGER.info("All of the blocks in the network {} are a continuous network.", network.id);
+            if (continuousSegments.size() == 1) {
+                NyaLib.LOGGER.info("All of the blocks in the network {} are a single continuous segment.", network.id);
             } else {
-                NyaLib.LOGGER.warn("The blocks in network {} are not a continuous network, separating out the largest continuous segment.", network.id);
+                NyaLib.LOGGER.warn("The blocks in network {} are separated into {} continuous segments.", network.id, continuousSegments.size());
                 
                 // Determine the largest continuous network
-                ObjectArrayList<Vec3i> largestNetwork = continuousNetworks.get(0);
-                for (ObjectArrayList<Vec3i> continuousNetwork : continuousNetworks) {
-                    if (continuousNetwork.size() > largestNetwork.size()) {
-                        largestNetwork = continuousNetwork;
+                ObjectArrayList<Vec3i> largestSegment = continuousSegments.get(0);
+                for (ObjectArrayList<Vec3i> continuousSegment : continuousSegments) {
+                    if (continuousSegment.size() > largestSegment.size()) {
+                        largestSegment = continuousSegment;
                     }
                 }
                 
@@ -365,7 +361,7 @@ public class Network {
                 // Determine the blocks which need to be removed
                 ObjectArrayList<Vec3i> removeQueue = new ObjectArrayList<>();
                 for (Vec3i component : network.components.keySet()) {
-                    if (!largestNetwork.contains(component)) {
+                    if (!largestSegment.contains(component)) {
                         removeQueue.add(component);
                     }
                 }
@@ -374,11 +370,25 @@ public class Network {
                 for (Vec3i component : removeQueue) {
                     network.removeBlock(component.x, component.y, component.z, true);
                 }
-                
                 NyaLib.LOGGER.warn("Removed {} blocks from network {}.", sizeBefore - network.components.size(), network.id);
+                
+                // Assemble the other networks
+                for (ObjectArrayList<Vec3i> continuousSegment : continuousSegments) {
+                    if (continuousSegment != largestSegment) {
+                        Network newNetwork = NetworkManager.createNetwork(world.dimension, networkType);
+                        
+                        if (newNetwork == null) {
+                            continue;
+                        }
+                        
+                        for (Vec3i component : continuousSegment) {
+                            newNetwork.addBlock(component.x, component.y, component.z, world.getBlockState(component.x, component.y, component.z).getBlock(), true);
+                        }
+                        
+                        NyaLib.LOGGER.info("Created network {} from network {} with {} blocks.", newNetwork.id, network.id, continuousSegment.size());
+                    }
+                }
             }
-            
-            // TODO: Could also mark the blocks and initialize a new network
         }
 
         network.readNbt(tag);
