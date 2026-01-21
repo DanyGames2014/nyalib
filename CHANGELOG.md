@@ -35,3 +35,4 @@
 * Add slot locking via LockableSlot and SlotLockingItem
 * Add ManagedItemHandlerWithInventory
 * Add Block Entity related methods to CapabilityHelper
+* Improve Block Network loading resilience and error correction
