@@ -281,9 +281,6 @@ public class NetworkManager {
 
     }
 
-    // TODO: When adding a block and encountering a neighbor which is a network component, but does not have a network, estabilish one
-    // TODO: Possibly add it to the current network too, this could cause a chaining reaction to update an entire faulty section of a network
-    
     // Adding and Removing Blocks
     @SuppressWarnings("RedundantLabeledSwitchRuleCodeBlock")
     public static <T extends Block & NetworkComponent> void addBlock(World world, int x, int y, int z, T component) {
