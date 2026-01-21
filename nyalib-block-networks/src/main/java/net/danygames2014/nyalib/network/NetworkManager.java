@@ -90,7 +90,7 @@ public class NetworkManager {
         Network network;
 
         try {
-            network = networkType.getNetworkClass().getDeclaredConstructor(World.class, NetworkType.class).newInstance(dimension.world, networkType);
+            network = networkType.getNetworkFactory().create(dimension.world, networkType);
         } catch (Exception e) {
             NyaLib.LOGGER.error("Error when creating a network of type {}", networkType.getIdentifier(), e);
             return null;

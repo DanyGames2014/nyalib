@@ -7,22 +7,22 @@ public class NetworkType {
     public static NetworkType ENERGY;
     
     Identifier identifier;
-    Class<? extends Network> networkClass;
+    NetworkFactory networkFactory;
 
-    public NetworkType(Identifier identifier, Class<? extends Network> networkClass) {
+    public NetworkType(Identifier identifier, NetworkFactory networkFactory) {
         this.identifier = identifier;
-        this.networkClass = networkClass;
+        this.networkFactory = networkFactory;
     }
 
     public NetworkType(Identifier identifier) {
-        this(identifier, Network.class);
+        this(identifier, Network::new);
     }
 
     public Identifier getIdentifier() {
         return identifier;
     }
 
-    public Class<? extends Network> getNetworkClass() {
-        return networkClass;
+    public NetworkFactory getNetworkFactory() {
+        return networkFactory;
     }
 }
