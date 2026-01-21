@@ -1,6 +1,7 @@
 package net.danygames2014.nyalib.network;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.nyalib.NyaLib;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NbtCompound;
@@ -317,7 +318,66 @@ public class Network {
         // Check if there were any components missing during the network load
         if (missingComponents) {
             NyaLib.LOGGER.warn("Network {} is missing blocks.", network.id);
-            // TODO: Could potentially, refuse to load the network
+
+            if (network.components.isEmpty()) {
+                NyaLib.LOGGER.warn("Network {} is empty as a result of missing blocks during load.", network.id);
+                return null;
+            }
+
+            ObjectArrayList<Vec3i> foundBlocks = new ObjectArrayList<>();
+            ObjectArrayList<ObjectArrayList<Vec3i>> continuousNetworks = new ObjectArrayList<>();
+            
+            // We will verify all of the components in the network
+            for (Vec3i component : network.components.keySet()) {
+                // We have already verified this component
+                if (foundBlocks.contains(component)) {
+                    continue;
+                }
+                
+                // We have not yet verified this component
+                // Walk the network from this component and add it to the continuous networks
+                ArrayList<Vec3i> walk = network.walk(component);
+                continuousNetworks.add(new ObjectArrayList<>(walk));
+                
+                // Add all the found blocks to found blocks in order to not verify them again
+                foundBlocks.addAll(walk);
+            }
+            
+            if (foundBlocks.size() != network.components.size()) {
+                NyaLib.LOGGER.warn("Unable to verify that all blocks in network {} are present.", network.id);
+            }
+            NyaLib.LOGGER.info("Found {} continuous networks.", continuousNetworks.size());
+            
+            if (continuousNetworks.size() == 1) {
+                NyaLib.LOGGER.info("All of the blocks in the network {} are a continuous network.", network.id);
+            } else {
+                NyaLib.LOGGER.warn("The blocks in network {} are not a continuous network, separating out the largest continuous segment.", network.id);
+                
+                // Determine the largest continuous network
+                ObjectArrayList<Vec3i> largestNetwork = continuousNetworks.get(0);
+                for (ObjectArrayList<Vec3i> continuousNetwork : continuousNetworks) {
+                    if (continuousNetwork.size() > largestNetwork.size()) {
+                        largestNetwork = continuousNetwork;
+                    }
+                }
+                
+                int sizeBefore = network.components.size();
+                // Determine the blocks which need to be removed
+                ObjectArrayList<Vec3i> removeQueue = new ObjectArrayList<>();
+                for (Vec3i component : network.components.keySet()) {
+                    if (!largestNetwork.contains(component)) {
+                        removeQueue.add(component);
+                    }
+                }
+                
+                // Remove them from the network
+                for (Vec3i component : removeQueue) {
+                    network.removeBlock(component.x, component.y, component.z, true);
+                }
+                
+                NyaLib.LOGGER.warn("Removed {} blocks from network {}.", sizeBefore - network.components.size(), network.id);
+            }
+            
             // TODO: Could also mark the blocks and initialize a new network
         }
 
