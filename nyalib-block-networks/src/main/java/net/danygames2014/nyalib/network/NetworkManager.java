@@ -410,6 +410,21 @@ public class NetworkManager {
                 }
             }
         }
+
+        // Check for neighbors without networks
+        for (NetworkType networkType : component.getNetworkTypes()) {
+            for (var dir : Direction.values()) {
+                Vec3i side = new Vec3i(x + dir.getOffsetX(), y + dir.getOffsetY(), z + dir.getOffsetZ());
+
+                if (world.getBlockState(side.x, side.y, side.z).getBlock() instanceof NetworkComponent networkComponent) {
+                    // If the block can participate in this network type, but there is no network of that type at that place, rectify it
+                    if (networkComponent.getNetworkTypes().contains(networkType) && getAt(world.dimension, side.x, side.y, side.z, networkType.getIdentifier()) == null) {
+                        //noinspection unchecked
+                        addBlock(world, side.x, side.y, side.z, (T) networkComponent);
+                    }
+                }
+            }
+        }
     }
 
     public static <T extends Block & NetworkComponent> void removeBlock(World world, int x, int y, int z, T component) {
