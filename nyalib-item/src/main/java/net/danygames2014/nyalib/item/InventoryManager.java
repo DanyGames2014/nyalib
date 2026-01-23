@@ -81,7 +81,7 @@ public class InventoryManager {
         
         for (ItemSlotEntry entry : itemSlotEntries) {
             if (entry.isSideAllowed(side)) {
-                slotCount += entry.maxStackSize;
+                slotCount++;
             }
         }
         
