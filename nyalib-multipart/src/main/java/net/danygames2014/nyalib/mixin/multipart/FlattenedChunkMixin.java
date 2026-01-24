@@ -6,8 +6,8 @@ import net.danygames2014.nyalib.mixininterface.ChunkWithMultipart;
 import net.danygames2014.nyalib.multipart.MultipartState;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.modificationstation.stationapi.api.block.BlockState;
-import net.modificationstation.stationapi.impl.world.chunk.FlattenedChunk;
+import net.modificationstation.stationapi.api.world.chunk.StationFlatteningChunk;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -16,22 +16,20 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @SuppressWarnings("AddedMixinMembersNamePattern")
-@Mixin(FlattenedChunk.class)
-public abstract class FlattenedChunkMixin extends Chunk implements ChunkWithMultipart {
+@Mixin(Chunk.class)
+public abstract class FlattenedChunkMixin implements ChunkWithMultipart, StationFlatteningChunk {
     @Shadow
-    public abstract BlockState getBlockState(int x, int y, int z);
-
+    public World world;
     @Shadow
-    public abstract BlockState setBlockState(int x, int y, int z, BlockState state);
-
+    @Final
+    public int x;
+    @Shadow
+    @Final
+    public int z;
     @Unique
     private Int2ObjectOpenHashMap<MultipartState> multipartStates;
     
-    public FlattenedChunkMixin(World world, int x, int z) {
-        super(world, x, z);
-    }
-    
-    @Inject(method = "<init>", at = @At(value = "TAIL"))
+    @Inject(method = "<init>(Lnet/minecraft/world/World;II)V", at = @At(value = "TAIL"))
     public void initMultipartStates(World world, int xPos, int zPos, CallbackInfo ci) {
         multipartStates = new Int2ObjectOpenHashMap<>();
     }
