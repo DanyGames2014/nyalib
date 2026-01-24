@@ -17,7 +17,8 @@
     "stationapi:event_bus": [
       "net.danygames2014.nyalib.NyaLibMultipart",
       "net.danygames2014.nyalib.init.multipart.AfterBlockAndItemListener",
-      "net.danygames2014.nyalib.init.multipart.PacketListener"
+      "net.danygames2014.nyalib.init.multipart.PacketListener",
+      "net.danygames2014.nyalib.init.multipart.BlockListener"
     ],
     "stationapi:event_bus_client": [
     ],

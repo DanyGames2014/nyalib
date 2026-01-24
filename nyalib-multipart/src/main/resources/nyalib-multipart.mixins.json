@@ -16,6 +16,7 @@
     "multipart.TrackedChunkMixin"
   ],
   "client": [
+    "multipart.ChunkBuilderMixin"
   ],
   "injectors": {
     "defaultRequire": 1

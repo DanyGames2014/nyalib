@@ -17,17 +17,15 @@ public class MultipartItem extends TemplateItem {
     @Override
     public boolean useOnBlock(ItemStack stack, PlayerEntity user, World world, int x, int y, int z, int side) {
         Direction dir = Direction.byId(side);
-        if (world.getBlockState(x + dir.getOffsetX(), y + dir.getOffsetY(), z + dir.getOffsetZ()).isAir()) {
-            if (world instanceof MultipartWorld multipartWorld) {
-                if (user.isSneaking()) {
-                    System.out.println(FabricLoader.getInstance().getEnvironmentType() + ":" + multipartWorld.getMultipartState(x + dir.getOffsetX(), y + dir.getOffsetY(), z + dir.getOffsetZ()));
-                } else {
-                    if (!world.isRemote) {
-                        multipartWorld.addMultipartComponent(x + dir.getOffsetX(), y + dir.getOffsetY(), z + dir.getOffsetZ(), new TestMultipartComponent());
-                    }
+        if (world instanceof MultipartWorld multipartWorld) {
+            if (user.isSneaking()) {
+                System.out.println(FabricLoader.getInstance().getEnvironmentType() + ":" + multipartWorld.getMultipartState(x + dir.getOffsetX(), y + dir.getOffsetY(), z + dir.getOffsetZ()));
+            } else {
+                if (!world.isRemote) {
+                    multipartWorld.addMultipartComponent(x + dir.getOffsetX(), y + dir.getOffsetY(), z + dir.getOffsetZ(), new TestMultipartComponent());
                 }
-                return true;
             }
+            return true;
         }
 
         return super.useOnBlock(stack, user, world, x, y, z, side);

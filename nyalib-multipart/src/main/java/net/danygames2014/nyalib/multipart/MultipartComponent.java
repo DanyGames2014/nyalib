@@ -1,5 +1,7 @@
 package net.danygames2014.nyalib.multipart;
 
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
 
@@ -23,13 +25,13 @@ public abstract class MultipartComponent {
 
     }
     
+    // Rendering
+    public void render(Tessellator tessellator, BlockRenderManager blockRenderManager, int renderLayer) {
+        
+    }
+    
     @Override
     public String toString() {
-        return "MultipartComponent{" +
-                "x=" + x +
-                ", y=" + y +
-                ", z=" + z +
-                ", world=" + world +
-                '}';
+        return this.getClass().getSimpleName() + " { x=" + x + ", y=" + y + ", z=" + z + ", world=" + world + "}";
     }
 }

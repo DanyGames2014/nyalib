@@ -65,6 +65,8 @@ public class NetworkLoader {
             NyaLib.LOGGER.info("Skipping loading NyaLib networks because of the world being remote");
             return;
         }
+        
+        readOnly = false;
 
         try {
             File file = event.world.storage.getWorldPropertiesFile("nyalib_networks");

@@ -34,6 +34,7 @@ import net.danygames2014.nyalibtest.item.ManagedItemBag;
 import net.danygames2014.nyalibtest.item.SideHopperBlock;
 import net.danygames2014.nyalibtest.item.entity.SideHopperBlockEntity;
 import net.danygames2014.nyalibtest.multipart.CoverMultipartComponent;
+import net.danygames2014.nyalibtest.multipart.CoverMultipartItem;
 import net.danygames2014.nyalibtest.multipart.MultipartItem;
 import net.danygames2014.nyalibtest.multipart.TestMultipartComponent;
 import net.danygames2014.nyalibtest.network.BasicNetworkType;
@@ -125,6 +126,8 @@ public class NyaLibTest {
     public static Block managedInventoryBlock;
     
     public static Item multipartItem;
+    public static Item stoneCoverMultipartItem;
+    public static Item diamondBlockCoverMultipartItem;
 
     public static Fluid gravelFluid;
     public static Fluid fuelFluid;
@@ -228,6 +231,8 @@ public class NyaLibTest {
         }
         
         multipartItem = new MultipartItem(NAMESPACE.id("multipart_item")).setTranslationKey(NAMESPACE, "multipart_item");
+        stoneCoverMultipartItem = new CoverMultipartItem(NAMESPACE.id("stone_cover"), Block.STONE).setTranslationKey(NAMESPACE, "stone_cover");
+        diamondBlockCoverMultipartItem = new CoverMultipartItem(NAMESPACE.id("diamond_cover"), Block.DIAMOND_BLOCK).setTranslationKey(NAMESPACE, "diamond_cover");
     }
 
     @EventListener

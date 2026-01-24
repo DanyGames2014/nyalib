@@ -5,6 +5,8 @@ import net.danygames2014.nyalib.NyaLibMultipart;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.MinecraftServer;
@@ -55,6 +57,13 @@ public class MultipartState {
             server.playerManager.markMultipartDirty(x, y, z, world.dimension.id);
         }
     }
+    
+    // Rendering
+    public void render(Tessellator tessellator, BlockRenderManager blockRenderManager, int renderLayer) {
+        for (MultipartComponent component : components) {
+            component.render(tessellator, blockRenderManager, renderLayer);
+        }
+    }
 
     // NBT
     public void writeNbt(NbtCompound nbt) {
@@ -92,12 +101,14 @@ public class MultipartState {
 
     @Override
     public String toString() {
-        return "MultipartState{" +
-                "x=" + x +
-                ", y=" + y +
-                ", z=" + z +
-                ", world=" + world +
-                ", components=" + components +
-                '}';
+        StringBuilder sb = new StringBuilder();
+
+        //noinspection StringConcatenationInsideStringBufferAppend
+        sb.append("MultipartState { x= " + x + ", y= " + y + ", z= " + z + ", world= " + world + " }");
+        for (var component : components) {
+            sb.append("\n").append(component);
+        }
+        
+        return sb.toString();
     }
 }
