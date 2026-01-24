@@ -16,7 +16,7 @@ public class FluidStack {
     public int amount;
 
     private FluidStack() {
-        throw new IllegalArgumentException("Cannot create an empty FluidStack!");
+        
     }
 
     private FluidStack(int amount) {

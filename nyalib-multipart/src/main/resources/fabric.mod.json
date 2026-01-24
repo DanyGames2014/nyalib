@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "nyalib-multipart",
+  "version": "${version}",
+
+  "name": "NyaLib Multipart",
+  "description": "A module providing multipart capabilities",
+  "authors": [
+    "DanyGames2014"
+  ],
+
+  "license": "MIT",
+  "icon": "assets/nyalib-multipart/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "stationapi:event_bus": [
+      "net.danygames2014.nyalib.NyaLibMultipart",
+      "net.danygames2014.nyalib.init.multipart.AfterBlockAndItemListener",
+      "net.danygames2014.nyalib.init.multipart.PacketListener"
+    ],
+    "stationapi:event_bus_client": [
+    ],
+    "stationapi:event_bus_server": [
+    ]
+  },
+  "mixins": [
+    "nyalib-multipart.mixins.json"
+  ],
+  "accessWidener": "nyalib-multipart.accesswidener",
+  "depends": {
+    "minecraft": "1.0.0-beta.7.3"
+  }
+}
