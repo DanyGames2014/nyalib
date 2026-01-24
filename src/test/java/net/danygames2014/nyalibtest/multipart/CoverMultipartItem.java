@@ -1,6 +1,5 @@
 package net.danygames2014.nyalibtest.multipart;
 
-import net.danygames2014.nyalib.mixininterface.MultipartWorld;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -24,15 +23,12 @@ public class CoverMultipartItem extends TemplateItem {
         }
 
         Direction dir = Direction.byId(side);
-        if (world instanceof MultipartWorld multipartWorld) {
-            if (user.isSneaking()) {
-                System.out.println(multipartWorld.getMultipartState(x + dir.getOffsetX(), y + dir.getOffsetY(), z + dir.getOffsetZ()));
-            } else {
-                multipartWorld.addMultipartComponent(x + dir.getOffsetX(), y + dir.getOffsetY(), z + dir.getOffsetZ(), new CoverMultipartComponent(block));
-            }
-            return true;
+        if (user.isSneaking()) {
+            System.out.println(world.getMultipartState(x + dir.getOffsetX(), y + dir.getOffsetY(), z + dir.getOffsetZ()));
+        } else {
+            world.addMultipartComponent(x + dir.getOffsetX(), y + dir.getOffsetY(), z + dir.getOffsetZ(), new CoverMultipartComponent(block));
         }
 
-        return super.useOnBlock(stack, user, world, x, y, z, side);
+        return true;
     }
 }
