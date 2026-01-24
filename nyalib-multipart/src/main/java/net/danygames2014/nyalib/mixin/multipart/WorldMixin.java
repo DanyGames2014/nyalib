@@ -50,6 +50,6 @@ public abstract class WorldMixin implements MultipartWorld, StationFlatteningWor
             }
         }
         
-        return state.addComponent(component);
+        return state.addComponent(component, true);
     }
 }

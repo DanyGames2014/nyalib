@@ -33,8 +33,8 @@ import net.danygames2014.nyalibtest.item.ManagedInventoryBlockEntity;
 import net.danygames2014.nyalibtest.item.ManagedItemBag;
 import net.danygames2014.nyalibtest.item.SideHopperBlock;
 import net.danygames2014.nyalibtest.item.entity.SideHopperBlockEntity;
+import net.danygames2014.nyalibtest.multipart.CoverMultipartComponent;
 import net.danygames2014.nyalibtest.multipart.MultipartItem;
-import net.danygames2014.nyalibtest.multipart.SecondMultipartComponent;
 import net.danygames2014.nyalibtest.multipart.TestMultipartComponent;
 import net.danygames2014.nyalibtest.network.BasicNetworkType;
 import net.danygames2014.nyalibtest.network.CableBlock;
@@ -252,7 +252,7 @@ public class NyaLibTest {
     @EventListener
     public void registerMultipartComponents(MultipartComponentRegistryEvent event) {
         event.register(NAMESPACE.id("test"), TestMultipartComponent.class, TestMultipartComponent::new);
-        event.register(NAMESPACE.id("second"), SecondMultipartComponent.class, SecondMultipartComponent::new);
+        event.register(NAMESPACE.id("cover"), CoverMultipartComponent.class, CoverMultipartComponent::new);
     }
 
     @Environment(EnvType.CLIENT)

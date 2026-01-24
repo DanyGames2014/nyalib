@@ -1,10 +1,12 @@
 package net.danygames2014.nyalib.packet;
 
+import net.danygames2014.nyalib.multipart.MultipartState;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.NetworkHandler;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.world.World;
@@ -14,9 +16,7 @@ import net.modificationstation.stationapi.api.network.packet.PacketType;
 import net.modificationstation.stationapi.api.util.SideUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 public class MultipartDataS2CPacket extends Packet implements ManagedPacket<MultipartDataS2CPacket> {
     public static final PacketType<MultipartDataS2CPacket> TYPE = PacketType.builder(true, false, MultipartDataS2CPacket::new).build();
@@ -25,6 +25,7 @@ public class MultipartDataS2CPacket extends Packet implements ManagedPacket<Mult
     private int x;
     private int y;
     private int z;
+    private NbtCompound stateNbt;
 
     public MultipartDataS2CPacket(World world, int x, int y, int z) {
         this.world = world;
@@ -42,7 +43,15 @@ public class MultipartDataS2CPacket extends Packet implements ManagedPacket<Mult
             this.x = stream.readInt();
             this.y = stream.readInt();
             this.z = stream.readInt();
+            
+            int length = stream.readInt();
+            if (length > 0) {
+                byte[] bytes = new byte[length];
+                stream.readFully(bytes);
+                stateNbt = NbtIo.readCompressed(new ByteArrayInputStream(bytes));
+            }
         } catch (IOException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -53,7 +62,25 @@ public class MultipartDataS2CPacket extends Packet implements ManagedPacket<Mult
             stream.writeInt(x);
             stream.writeInt(y);
             stream.writeInt(z);
+
+            MultipartState state = world.getMultipartState(x,y,z);
+
+            NbtCompound stateNbt = new NbtCompound();
+            if (state != null) {
+                state.writeNbt(stateNbt);
+            }
+            
+            if (stateNbt.values().isEmpty()) {
+                stream.writeInt(0); // length   
+            } else {
+                ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+                NbtIo.writeCompressed(stateNbt, byteStream);
+                byte[] bytes = byteStream.toByteArray();
+                stream.writeInt(bytes.length); // length
+                stream.write(bytes); // nbt data
+            }
         } catch (IOException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -70,7 +97,10 @@ public class MultipartDataS2CPacket extends Packet implements ManagedPacket<Mult
         PlayerEntity player = PlayerHelper.getPlayerFromPacketHandler(networkHandler);
         World world = player.world;
 
-        world.setBlockStateWithNotify(x, y, z, Block.GLASS.getDefaultState());
+        MultipartState state = new MultipartState();
+        world.setMultipartState(x,y,z,state);
+        state.readNbt(stateNbt);
+        
         for (int i = 0; i < 50; i++) {
             Minecraft.INSTANCE.worldRenderer.addParticle("lava", x + 0.5D,y,z + 0.5D, 0.0D, 0.2D, 0.0D);
             Minecraft.INSTANCE.worldRenderer.addParticle("heart", x + 0.5D,y,z + 0.5D, 0.0D, 0.2D, 0.0D);

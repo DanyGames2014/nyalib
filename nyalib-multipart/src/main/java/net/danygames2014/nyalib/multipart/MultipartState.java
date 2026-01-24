@@ -24,14 +24,16 @@ public class MultipartState {
         this.components = new ObjectArrayList<>();
     }
 
-    public boolean addComponent(MultipartComponent component) {
+    public boolean addComponent(MultipartComponent component, boolean notify) {
         component.world = world;
         component.x = x;
         component.y = y;
         component.z = z;
         component.state = this;
         if (components.add(component)) {
-            this.markDirty();
+            if (notify) {
+                this.markDirty();
+            }
             return true;
         }
         
@@ -39,7 +41,7 @@ public class MultipartState {
     }
 
     public void markDirty() {
-        if (!world.isRemote) {
+        if (world != null && !world.isRemote) {
             world.blockUpdateEvent(x, y, z);
             //noinspection Convert2MethodRef
             SideUtil.run(() -> {}, () -> sendUpdateToClient());
@@ -83,7 +85,7 @@ public class MultipartState {
             }
 
             MultipartComponent component = factory.create();
-            addComponent(component);
+            addComponent(component, false);
             component.readNbt(componentNbt);
         }
     }
