@@ -5,8 +5,11 @@ import net.minecraft.block.Block;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.math.Box;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
+
+import java.util.ArrayList;
 
 public class CoverMultipartComponent extends MultipartComponent {
     public Block block;
@@ -31,6 +34,11 @@ public class CoverMultipartComponent extends MultipartComponent {
         if (nbt.contains("blockId")) {
             this.block = BlockRegistry.INSTANCE.get(Identifier.of(nbt.getString("blockId")));
         }
+    }
+
+    @Override
+    public void getCollisionBoxes(ArrayList<Box> boxes) {
+        boxes.add(Box.createCached(this.x + 0.5D, this.y, this.z, this.x + 1.0D, this.y + 1.0D, this.z + 1.0D));
     }
 
     @Override

@@ -10,9 +10,12 @@ import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.SideUtil;
+
+import java.util.ArrayList;
 
 public class MultipartState {
     public int x;
@@ -55,6 +58,13 @@ public class MultipartState {
         //noinspection deprecation
         if (FabricLoader.getInstance().getGameInstance() instanceof MinecraftServer server) {
             server.playerManager.markMultipartDirty(x, y, z, world.dimension.id);
+        }
+    }
+
+    // Collision and Bounds checking
+    public void getCollisionBoxes(ArrayList<Box> boxes) {
+        for (var component : components) {
+            component.getCollisionBoxes(boxes);
         }
     }
     

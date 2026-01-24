@@ -6,6 +6,7 @@
   "mixins": [
     "multipart.FlattenedChunkMixin",
     "multipart.FlattenedWorldManagerMixin",
+    "multipart.MultipartWorldMixin",
     "multipart.WorldMixin"
   ],
   "server": [

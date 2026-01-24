@@ -1,55 +1,48 @@
 package net.danygames2014.nyalib.mixin.multipart;
 
-import net.danygames2014.nyalib.mixininterface.MultipartWorld;
-import net.danygames2014.nyalib.multipart.MultipartComponent;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.danygames2014.nyalib.multipart.MultipartState;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
-import net.modificationstation.stationapi.api.world.StationFlatteningWorld;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@SuppressWarnings("AddedMixinMembersNamePattern")
+import java.util.ArrayList;
+import java.util.List;
+
+@SuppressWarnings({"unchecked", "rawtypes"})
 @Mixin(World.class)
-public abstract class WorldMixin implements MultipartWorld, StationFlatteningWorld {
+public class WorldMixin {
     @Shadow
-    public abstract Chunk getChunk(int chunkX, int chunkZ);
+    private ArrayList tempCollisionBoxes;
 
-    @Override
-    public MultipartState getMultipartState(int x, int y, int z) {
-        if (x < -32000000 || z < -32000000 || x > 32000000 || z > 32000000 || y < this.getBottomY() || y > this.getTopY()) {
-            return null;
-        }
+    @Shadow
+    public boolean isRemote;
 
-        Chunk chunk = this.getChunk(x >> 4, z >> 4);
-        return chunk.getMultipartState(x & 15, y, z & 15);
-    }
-
-    @Override
-    public boolean setMultipartState(int x, int y, int z, MultipartState state) {
-        if (x < -32000000 || z < -32000000 || x > 32000000 || z > 32000000 || y < this.getBottomY() || y > this.getTopY()) {
-            return false;
-        }
-
-        Chunk chunk = this.getChunk(x >> 4, z >> 4);
-        return chunk.setMultipartState(x & 15, y, z & 15, state);
-    }
-
-    @Override
-    public boolean addMultipartComponent(int x, int y, int z, MultipartComponent component) {
-        if (x < -32000000 || z < -32000000 || x > 32000000 || z > 32000000 || y < this.getBottomY() || y > this.getTopY()) {
-            return false;
-        }
-
-        MultipartState state = this.getMultipartState(x,y,z);
-        
-        if (state == null) {
-            state = new MultipartState();
-            if (!this.setMultipartState(x,y,z,state)) {
-                return false;
+    @Inject(method = "getEntityCollisions", at = @At(value = "FIELD", target = "Lnet/minecraft/block/Block;BLOCKS:[Lnet/minecraft/block/Block;", opcode = Opcodes.GETSTATIC))
+    public void handleMultipartCollision(Entity entity, Box box, CallbackInfoReturnable<List<?>> cir, @Local(ordinal = 6) int var9, @Local(ordinal = 7) int var10, @Local(ordinal = 8) int var11) {
+        MultipartState state = entity.world.getMultipartState(var9, var11, var10);
+        if (state != null) {
+            System.err.println("\n");
+            System.err.println(state);
+            System.err.println("BEFORE:");
+            for (Object leBoxO : tempCollisionBoxes) {
+                Box leBox = (Box) leBoxO;
+                System.err.println(leBox);
+            }
+            
+            state.getCollisionBoxes((ArrayList<Box>)this.tempCollisionBoxes);
+            
+            System.err.println("AFTER:");
+            for (Object leBoxO : tempCollisionBoxes) {
+                Box leBox = (Box) leBoxO;
+                System.err.println(leBox);
             }
         }
-        
-        return state.addComponent(component, true);
     }
 }

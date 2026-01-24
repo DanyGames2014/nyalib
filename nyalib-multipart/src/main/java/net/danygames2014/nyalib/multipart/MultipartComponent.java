@@ -3,7 +3,10 @@ package net.danygames2014.nyalib.multipart;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
 
 public abstract class MultipartComponent {
     public int x;
@@ -23,6 +26,11 @@ public abstract class MultipartComponent {
 
     public void readNbt(NbtCompound nbt) {
 
+    }
+    
+    // Collision and Bounds checking
+    public void getCollisionBoxes(ArrayList<Box> boxes) {
+        
     }
     
     // Rendering
