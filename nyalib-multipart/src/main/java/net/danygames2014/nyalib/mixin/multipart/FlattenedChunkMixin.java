@@ -42,6 +42,7 @@ public class FlattenedChunkMixin extends Chunk implements ChunkWithMultipart {
         state.y = y;
         state.z = this.z * 16 + chunkZ;
         multipartStates.put(hashCode, state);
+        state.markDirty();
         return true;
     }
 

@@ -2,3 +2,6 @@ classTweaker v1 named
 
 transitive-inject-interface net/minecraft/world/chunk/Chunk net/danygames2014/nyalib/mixininterface/ChunkWithMultipart
 transitive-inject-interface net/minecraft/world/World net/danygames2014/nyalib/mixininterface/MultipartWorld
+transitive-inject-interface net/minecraft/server/ChunkMap net/danygames2014/nyalib/mixininterface/MultipartChunkMap
+transitive-inject-interface net/minecraft/server/PlayerManager net/danygames2014/nyalib/mixininterface/MultipartPlayerManager
+transitive-inject-interface net/minecraft/server/ChunkMap$TrackedChunk net/danygames2014/nyalib/mixininterface/MultipartTrackedChunk

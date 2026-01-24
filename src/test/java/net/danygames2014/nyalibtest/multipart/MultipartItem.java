@@ -23,9 +23,9 @@ public class MultipartItem extends TemplateItem {
         if (world.getBlockState(x + dir.getOffsetX(), y + dir.getOffsetY(), z + dir.getOffsetZ()).isAir()) {
             if (world instanceof MultipartWorld multipartWorld) {
                 if (user.isSneaking()) {
-                    System.out.println(multipartWorld.getMultipartState(x,y,z));
+                    System.out.println(multipartWorld.getMultipartState(x + dir.getOffsetX(), y + dir.getOffsetY(), z + dir.getOffsetZ()));
                 } else {
-                    multipartWorld.addMultipartComponent(x,y,z, new TestMultipartComponent());
+                    multipartWorld.addMultipartComponent(x + dir.getOffsetX(), y + dir.getOffsetY(), z + dir.getOffsetZ(), new TestMultipartComponent());
                 }
                 return true;
             }

@@ -9,7 +9,11 @@
     "multipart.WorldMixin"
   ],
   "server": [
-    "multipart.ServerPlayerEntityMixin"
+    "multipart.ChunkMapMixin",
+    "multipart.ChunkSectionTrackerMixin",
+    "multipart.PlayerManagerMixin",
+    "multipart.ServerPlayerEntityMixin",
+    "multipart.TrackedChunkMixin"
   ],
   "client": [
   ],
