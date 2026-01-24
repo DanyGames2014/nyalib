@@ -15,8 +15,6 @@ import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.SideUtil;
 
-import java.util.ArrayList;
-
 public class MultipartState {
     public int x;
     public int y;
@@ -62,7 +60,7 @@ public class MultipartState {
     }
 
     // Collision and Bounds checking
-    public void getCollisionBoxes(ArrayList<Box> boxes) {
+    public void getCollisionBoxes(ObjectArrayList<Box> boxes) {
         for (var component : components) {
             component.getCollisionBoxes(boxes);
         }

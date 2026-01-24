@@ -1,12 +1,11 @@
 package net.danygames2014.nyalib.multipart;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
 
 public abstract class MultipartComponent {
     public int x;
@@ -29,7 +28,7 @@ public abstract class MultipartComponent {
     }
     
     // Collision and Bounds checking
-    public void getCollisionBoxes(ArrayList<Box> boxes) {
+    public void getCollisionBoxes(ObjectArrayList<Box> boxes) {
         
     }
     

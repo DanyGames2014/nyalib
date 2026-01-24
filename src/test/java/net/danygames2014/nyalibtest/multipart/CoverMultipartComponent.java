@@ -1,5 +1,6 @@
 package net.danygames2014.nyalibtest.multipart;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.nyalib.multipart.MultipartComponent;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.Tessellator;
@@ -8,8 +9,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Box;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
-
-import java.util.ArrayList;
+import org.jetbrains.annotations.UnknownNullability;
 
 public class CoverMultipartComponent extends MultipartComponent {
     public Block block;
@@ -37,7 +37,7 @@ public class CoverMultipartComponent extends MultipartComponent {
     }
 
     @Override
-    public void getCollisionBoxes(ArrayList<Box> boxes) {
+    public void getCollisionBoxes(@UnknownNullability ObjectArrayList<Box> boxes) {
         boxes.add(Box.createCached(this.x + 0.5D, this.y, this.z, this.x + 1.0D, this.y + 1.0D, this.z + 1.0D));
     }
 
