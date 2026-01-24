@@ -9,7 +9,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Box;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
-import org.jetbrains.annotations.UnknownNullability;
 
 public class CoverMultipartComponent extends MultipartComponent {
     public Block block;
@@ -37,7 +36,7 @@ public class CoverMultipartComponent extends MultipartComponent {
     }
 
     @Override
-    public void getCollisionBoxes(@UnknownNullability ObjectArrayList<Box> boxes) {
+    public void getCollisionBoxes(ObjectArrayList<Box> boxes) {
         boxes.add(Box.createCached(this.x + 0.5D, this.y, this.z, this.x + 1.0D, this.y + 1.0D, this.z + 1.0D));
     }
 
