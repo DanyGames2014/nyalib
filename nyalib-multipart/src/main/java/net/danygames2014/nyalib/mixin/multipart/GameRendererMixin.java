@@ -7,6 +7,7 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -22,7 +23,10 @@ public class GameRendererMixin {
     @Inject(method = "renderFrame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/ParticleManager;render(Lnet/minecraft/entity/Entity;F)V"))
     void renderMultiblockOutline(float tickDelta, long time, CallbackInfo ci, @Local WorldRenderer worldRenderer, @Local LivingEntity player){
         if(Minecraft.INSTANCE.crosshairTarget == null){
+            GL11.glDisable(GL11.GL_ALPHA_TEST);
+            worldRenderer.renderMultipartMiningProgress((PlayerEntity) player, tickDelta);
             worldRenderer.renderMultipartOutline((PlayerEntity) player, tickDelta);
+            GL11.glEnable(GL11.GL_ALPHA_TEST);
         }
     }
 }

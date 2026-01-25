@@ -7,4 +7,8 @@ public interface MultipartWorldRenderer {
     default void renderMultipartOutline(PlayerEntity player, float tickDelta){
         Util.assertImpl();
     }
+
+    default void renderMultipartMiningProgress(PlayerEntity player, float tickDelta) {
+        Util.assertImpl();
+    }
 }
