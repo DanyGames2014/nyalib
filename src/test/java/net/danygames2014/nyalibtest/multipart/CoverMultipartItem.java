@@ -28,7 +28,7 @@ public class CoverMultipartItem extends TemplateItem implements EnhancedPlacemen
             System.out.println(FabricLoader.getInstance().getEnvironmentType() + ":" + world.getMultipartState(x + dir.getOffsetX(), y + dir.getOffsetY(), z + dir.getOffsetZ()));
         } else {
             if (!world.isRemote) {
-                world.addMultipartComponent(x + dir.getOffsetX(), y + dir.getOffsetY(), z + dir.getOffsetZ(), new CoverMultipartComponent(block));
+                world.addMultipartComponent(x + dir.getOffsetX(), y + dir.getOffsetY(), z + dir.getOffsetZ(), new CoverMultipartComponent(block, Direction.UP));
             }
         }
 
