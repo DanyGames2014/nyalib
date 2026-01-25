@@ -4,7 +4,9 @@ import net.danygames2014.nyalib.multipart.MultipartComponent;
 import net.danygames2014.nyalib.multipart.MultipartHitResult;
 import net.minecraft.client.InteractionManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.hit.HitResult;
@@ -38,33 +40,43 @@ public class MinecraftMixin {
     @Shadow
     public GameRenderer gameRenderer;
 
+    @Shadow
+    public ParticleManager particleManager;
+
+    @Shadow
+    public WorldRenderer worldRenderer;
+
     @Inject(method = "handleMouseClick", at = @At(value = "FIELD", target = "Lnet/minecraft/client/Minecraft;crosshairTarget:Lnet/minecraft/util/hit/HitResult;", ordinal = 0, opcode = Opcodes.GETFIELD), cancellable = true)
     public void handleMultipartMouseClick(int button, CallbackInfo ci) {
+        // Check if there is a multipart hit result
         MultipartHitResult hitResult = Minecraft.INSTANCE.getMultipartCrosshairTarget();
         if (hitResult == null) {
             return;
         }
 
+        // Get the hit result information
         int blockX = hitResult.blockX;
         int blockY = hitResult.blockY;
         int blockZ = hitResult.blockZ;
         Vec3d pos = hitResult.pos;
         Direction face = hitResult.face;
         MultipartComponent component = hitResult.component;
+
+        // Get the selected stack
+        ItemStack selectedStack = this.player.inventory.getSelectedItem();
+        int lastCount = selectedStack != null ? selectedStack.count : 0;
         
+        // Process the action
         if (button == 0) {
-            this.interactionManager.attackMultipart(blockX, blockY, blockZ, pos, face, component);
+            this.interactionManager.attackMultipart(selectedStack, blockX, blockY, blockZ, pos, face, component);
         } else {
-            ItemStack selectedStack = this.player.inventory.getSelectedItem();
-            int lastCount = selectedStack != null ? selectedStack.count : 0;
             if (this.interactionManager.interactMultipart(selectedStack, blockX, blockY, blockZ, pos, face, component)) {
                 this.player.swingHand();
             }
+        }
 
-            if (selectedStack == null) {
-                return;
-            }
-
+        // Check the changes on the selected stack
+        if (selectedStack != null) {
             if (selectedStack.count == 0) {
                 this.player.inventory.main[this.player.inventory.selectedSlot] = null;
             } else if (selectedStack.count != lastCount) {
@@ -72,11 +84,35 @@ public class MinecraftMixin {
             }
         }
 
+        // Prevent the vanilla code from running
         ci.cancel();
     }
 
-    @Inject(method = "handleMouseDown", at = @At(value = "HEAD"))
+    @Inject(method = "handleMouseDown", at = @At(value = "FIELD", target = "Lnet/minecraft/client/Minecraft;crosshairTarget:Lnet/minecraft/util/hit/HitResult;", ordinal = 0, opcode = Opcodes.GETFIELD), cancellable = true)
     public void handleMultipartMouseDown(int button, boolean holdingAttack, CallbackInfo ci) {
+        // Check if there is a multipart hit result
+        MultipartHitResult hitResult = Minecraft.INSTANCE.getMultipartCrosshairTarget();
+        if (hitResult == null) {
+            return;
+        }
 
+        // Get the hit result information
+        int blockX = hitResult.blockX;
+        int blockY = hitResult.blockY;
+        int blockZ = hitResult.blockZ;
+        Vec3d pos = hitResult.pos;
+        Direction face = hitResult.face;
+        MultipartComponent component = hitResult.component;
+
+        // Process the action
+        if (holdingAttack && button == 0) {
+            this.interactionManager.processMultipartBreakingAction(blockX, blockY, blockZ, pos, face, component);
+            this.worldRenderer.addParticle("portal", pos.x, pos.y, pos.z, 0.0D, 0.0D, 0.0D);
+        } else {
+            this.interactionManager.cancelMultipartBreaking();
+        }
+
+        // Prevent the vanilla code from running
+        ci.cancel();
     }
 }
