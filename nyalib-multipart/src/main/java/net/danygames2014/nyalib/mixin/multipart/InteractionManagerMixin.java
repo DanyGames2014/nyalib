@@ -19,11 +19,7 @@ public class InteractionManagerMixin implements MultipartInteractionManager {
     @Final
     protected Minecraft minecraft;
     @Unique
-    protected int multipartBreakingPosX = -1;
-    @Unique
-    protected int multipartBreakingPosY = -1;
-    @Unique
-    protected int multipartBreakingPosZ = -1;
+    protected MultipartComponent currentlyBrokenComponent;
     @Unique
     protected float multipartBreakingProgress = 0.0F;
     @Unique

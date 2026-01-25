@@ -107,7 +107,7 @@ public class MinecraftMixin {
         // Process the action
         if (holdingAttack && button == 0) {
             this.interactionManager.processMultipartBreakingAction(blockX, blockY, blockZ, pos, face, component);
-            this.worldRenderer.addParticle("portal", pos.x, pos.y, pos.z, 0.0D, 0.0D, 0.0D);
+            this.worldRenderer.addParticle("lava", pos.x, pos.y, pos.z, 0.0D, 0.0D, 0.0D);
         } else {
             this.interactionManager.cancelMultipartBreaking();
         }

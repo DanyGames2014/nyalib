@@ -37,7 +37,7 @@ public abstract class MultiplayerInteractionManagerMixin extends InteractionMana
             if (this.multipartBreakingDelayTicks > 0) {
                 --this.multipartBreakingDelayTicks;
             } else {
-                if (x == this.multipartBreakingPosX && y == this.multipartBreakingPosY && z == this.multipartBreakingPosZ) {
+                if (component == currentlyBrokenComponent) {
                     int blockId = this.minecraft.world.getBlockId(x, y, z);
                     if (blockId == 0) {
                         this.breakingMultipart = false;

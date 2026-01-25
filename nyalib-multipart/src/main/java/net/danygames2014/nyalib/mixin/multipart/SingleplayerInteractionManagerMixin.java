@@ -1,12 +1,13 @@
 package net.danygames2014.nyalib.mixin.multipart;
 
 import net.danygames2014.nyalib.multipart.MultipartComponent;
-import net.minecraft.block.Block;
+import net.danygames2014.nyalib.multipart.MultipartState;
 import net.minecraft.client.SingleplayerInteractionManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 
 @SuppressWarnings("AddedMixinMembersNamePattern")
 @Mixin(SingleplayerInteractionManager.class)
@@ -27,22 +28,21 @@ public class SingleplayerInteractionManagerMixin extends InteractionManagerMixin
             --this.multipartBreakingDelayTicks;
             return;
         }
-        
-        if (x == this.multipartBreakingPosX && y == this.multipartBreakingPosY && z == this.multipartBreakingPosZ) {
-            int blockId = this.minecraft.world.getBlockId(x, y, z);
-            if (blockId == 0) {
-                return;
-            }
 
-            Block var6 = Block.BLOCKS[blockId];
-            this.multipartBreakingProgress += var6.getHardness(this.minecraft.player);
+        if (component == null) {
+            cancelMultipartBreaking();
+            return;
+        }
+        
+        if (component == currentlyBrokenComponent) {
+            this.multipartBreakingProgress += component.getHardness(this.minecraft.player);
             if (this.multipartBreakingSoundDelayTicks % 4.0F == 0.0F) {
-                this.minecraft.soundManager.playSound(var6.soundGroup.getSound(), (float)x + 0.5F, (float)y + 0.5F, (float)z + 0.5F, (var6.soundGroup.getVolume() + 1.0F) / 8.0F, var6.soundGroup.getPitch() * 0.5F);
+                this.minecraft.soundManager.playSound(component.getSoundGroup().getSound(), (float)x + 0.5F, (float)y + 0.5F, (float)z + 0.5F, (component.getSoundGroup().getVolume() + 1.0F) / 8.0F, component.getSoundGroup().getPitch() * 0.5F);
             }
 
             this.multipartBreakingSoundDelayTicks++;
             if (this.multipartBreakingProgress >= 1.0F) {
-                //this.breakBlock(x, y, z, side);
+                this.breakMultipart(x, y, z, component);
                 this.multipartBreakingProgress = 0.0F;
                 this.lastMultipartBreakingProgress = 0.0F;
                 this.multipartBreakingSoundDelayTicks = 0.0F;
@@ -52,16 +52,26 @@ public class SingleplayerInteractionManagerMixin extends InteractionManagerMixin
             this.multipartBreakingProgress = 0.0F;
             this.lastMultipartBreakingProgress = 0.0F;
             this.multipartBreakingSoundDelayTicks = 0.0F;
-            this.multipartBreakingPosX = x;
-            this.multipartBreakingPosY = y;
-            this.multipartBreakingPosZ = z;
+            this.currentlyBrokenComponent = component;
         }
 
+        this.minecraft.worldRenderer.miningProgress = this.multipartBreakingProgress;
+    }
+    
+    @Unique
+    public void breakMultipart(int x, int y, int z, MultipartComponent component) {
+        MultipartState state = this.minecraft.world.getMultipartState(x,y,z);
+        if (state != null) {
+            state.components.remove(component);
+            state.markDirty();
+        }
     }
 
     @Override
     public void cancelMultipartBreaking() {
         multipartBreakingProgress = 0.0F;
         multipartBreakingDelayTicks = 0;
+        currentlyBrokenComponent = null;
+        this.minecraft.worldRenderer.miningProgress = this.multipartBreakingProgress;
     }
 }

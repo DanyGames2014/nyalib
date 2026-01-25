@@ -1,9 +1,12 @@
 package net.danygames2014.nyalib.multipart;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.block.Block;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderManager;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
@@ -17,9 +20,27 @@ public abstract class MultipartComponent {
     public int z;
     public World world;
     public MultipartState state;
+    
+    public float hardness = 1.0F;
 
     public void markDirty() {
         state.markDirty();
+    }
+    
+    public float getHardness(PlayerEntity player) {
+        if (this.hardness < 0.0F) {
+            return 0.0F;
+        } else {
+            if (!player.canHarvest(Block.STONE)) {
+                return 1.0F / this.hardness / 100.0F;
+            }
+            
+            return player.getBlockBreakingSpeed(Block.STONE) / this.hardness / 30.0F;
+        }
+    }
+    
+    public BlockSoundGroup getSoundGroup() {
+        return Block.GLASS_SOUND_GROUP;
     }
     
     // NBT
