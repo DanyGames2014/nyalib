@@ -33,6 +33,12 @@ public abstract class MultiplayerInteractionManagerMixin extends InteractionMana
     private float breakingSoundDelayTicks;
     @Shadow
     private ClientNetworkHandler networkHandler;
+    @Shadow
+    private int breakingPosX;
+    @Shadow
+    private int breakingPosY;
+    @Shadow
+    private int breakingPosZ;
     @Unique
     private boolean breakingMultipart = false;
 
@@ -79,6 +85,13 @@ public abstract class MultiplayerInteractionManagerMixin extends InteractionMana
             return;
         }
 
+        if (x != this.breakingPosX || y != this.breakingPosY || z != this.breakingPosZ) {
+            this.breakingPosX = x;
+            this.breakingPosY = y;
+            this.breakingPosZ = z;
+            cancelMultipartBreaking(false);
+        }
+
         if (component == currentlyBrokenComponent) {
             MultipartState state = this.minecraft.world.getMultipartState(x, y, z);
             if (state == null) {
@@ -107,11 +120,13 @@ public abstract class MultiplayerInteractionManagerMixin extends InteractionMana
     }
 
     @Override
-    public void cancelMultipartBreaking() {
+    public void cancelMultipartBreaking(boolean resetComponent) {
         blockBreakingProgress = 0.0F;
         lastBlockBreakingProgress = 0.0F;
         breakingDelayTicks = 0;
-        currentlyBrokenComponent = null;
+        if (resetComponent) {
+            currentlyBrokenComponent = null;
+        }
         update(blockBreakingProgress);
     }
 }

@@ -27,6 +27,15 @@ public abstract class SingleplayerInteractionManagerMixin extends InteractionMan
     @Shadow
     private float breakingSoundDelayTicks;
 
+    @Shadow
+    private int breakingPosX;
+
+    @Shadow
+    private int breakingPosY;
+
+    @Shadow
+    private int breakingPosZ;
+
     @Override
     public void attackMultipart(ItemStack selectedStack, int x, int y, int z, Vec3d pos, Direction face, MultipartComponent component) {
         MultipartState state = this.minecraft.world.getMultipartState(x,y,z);
@@ -56,8 +65,15 @@ public abstract class SingleplayerInteractionManagerMixin extends InteractionMan
             return;
         }
 
+        if (x != this.breakingPosX || y != this.breakingPosY || z != this.breakingPosZ) {
+            this.breakingPosX = x;
+            this.breakingPosY = y;
+            this.breakingPosZ = z;
+            cancelMultipartBreaking(false);
+        }
+
         if (component == null) {
-            cancelMultipartBreaking();
+            cancelMultipartBreaking(true);
             return;
         }
         
@@ -86,11 +102,13 @@ public abstract class SingleplayerInteractionManagerMixin extends InteractionMan
     }
     
     @Override
-    public void cancelMultipartBreaking() {
+    public void cancelMultipartBreaking(boolean resetComponent) {
         blockBreakingProgress = 0.0F;
         lastBlockBreakingProgress = 0.0F;
         breakingDelayTicks = 0;
-        currentlyBrokenComponent = null;
+        if (resetComponent) {
+            currentlyBrokenComponent = null;
+        }
         update(blockBreakingProgress);
     }
 }

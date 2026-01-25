@@ -110,7 +110,7 @@ public class MinecraftMixin {
             // TODO: multipart breaking particles
             //this.particleManager.addBlockBreakingParticles(blockX, blockY, blockZ, face.getId());
         } else {
-            this.interactionManager.cancelMultipartBreaking();
+            this.interactionManager.cancelMultipartBreaking(true);
         }
 
         // Prevent the vanilla code from running

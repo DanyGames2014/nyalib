@@ -37,7 +37,7 @@ public class InteractionManagerMixin implements MultipartInteractionManager {
     }
 
     @Override
-    public void cancelMultipartBreaking() {
+    public void cancelMultipartBreaking(boolean resetComponent) {
         
     }
 

@@ -19,7 +19,7 @@ public interface MultipartInteractionManager {
         Util.assertImpl();
     }
     
-    default void cancelMultipartBreaking() {
+    default void cancelMultipartBreaking(boolean resetComponent) {
         Util.assertImpl();
     }
 }
