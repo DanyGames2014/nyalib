@@ -5,19 +5,27 @@ import net.danygames2014.nyalib.multipart.MultipartHitResult;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GameRenderer.class)
 public class GameRendererMixin {
-    @Inject(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;raycast(DF)Lnet/minecraft/util/hit/HitResult;"))
+    @Shadow private Entity targetedEntity;
+
+    @Inject(method = "updateTargetedEntity", at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/GameRenderer;targetedEntity:Lnet/minecraft/entity/Entity;", ordinal = 3))
     void setMultiblockCrosshairTarget(float tickDelta, CallbackInfo ci){
-        Minecraft.INSTANCE.setMultipartCrosshairTarget(MultipartHitResult.lastHit);
+        if(this.targetedEntity == null){
+            Minecraft.INSTANCE.setMultipartCrosshairTarget(MultipartHitResult.lastHit);
+        } else {
+            Minecraft.INSTANCE.setMultipartCrosshairTarget(null);
+        }
     }
 
     @Inject(method = "renderFrame", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/particle/ParticleManager;render(Lnet/minecraft/entity/Entity;F)V"))
