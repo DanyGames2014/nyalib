@@ -108,6 +108,9 @@ public abstract class MultipartComponent {
     public MultipartHitResult raycast(Vec3d startPos, Vec3d endPos) {
         ObjectArrayList<Box> boxes = new ObjectArrayList<>();
         getCollisionBoxes(boxes);
+        if(boxes.isEmpty()){
+            return null;
+        }
         MultipartHitResult[] hitResults = new MultipartHitResult[boxes.size()];
         for (int i = 0; i < boxes.size(); i++) {
             HitResult hitResult = boxes.get(i).raycast(startPos, endPos);
