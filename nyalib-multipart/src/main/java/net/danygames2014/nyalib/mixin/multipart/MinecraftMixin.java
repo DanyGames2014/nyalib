@@ -66,12 +66,15 @@ public class MinecraftMixin {
         ItemStack selectedStack = this.player.inventory.getSelectedItem();
         int lastCount = selectedStack != null ? selectedStack.count : 0;
         
+        boolean doItemInteraction = true;
+        
         // Process the action
         if (button == 0) {
             this.interactionManager.attackMultipart(selectedStack, blockX, blockY, blockZ, pos, face, component);
         } else {
             if (this.interactionManager.interactMultipart(selectedStack, blockX, blockY, blockZ, pos, face, component)) {
                 this.player.swingHand();
+                doItemInteraction = false;
             }
         }
 
@@ -81,6 +84,13 @@ public class MinecraftMixin {
                 this.player.inventory.main[this.player.inventory.selectedSlot] = null;
             } else if (selectedStack.count != lastCount) {
                 this.gameRenderer.heldItemRenderer.place();
+            }
+        }
+
+        if (button == 1 && doItemInteraction) {
+            ItemStack stack = this.player.inventory.getSelectedItem();
+            if (stack != null && this.interactionManager.interactItem(this.player, this.world, stack)) {
+                this.gameRenderer.heldItemRenderer.use();
             }
         }
 
