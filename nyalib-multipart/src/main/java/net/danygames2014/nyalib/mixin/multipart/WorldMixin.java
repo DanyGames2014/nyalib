@@ -72,7 +72,7 @@ public class WorldMixin {
         }
 
         MultipartState state = instance.getMultipartState(x, y, z);
-        if(state == null || state.components == null){
+        if(state == null || state.components == null || state.components.isEmpty()){
             return blockId;
         }
         MultipartHitResult[] hitResults = new MultipartHitResult[state.components.size()];
