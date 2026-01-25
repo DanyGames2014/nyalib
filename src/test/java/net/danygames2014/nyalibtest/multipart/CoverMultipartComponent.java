@@ -36,6 +36,13 @@ public class CoverMultipartComponent extends MultipartComponent {
     }
 
     @Override
+    public ObjectArrayList<Box> getBoundingBoxes() {
+        ObjectArrayList<Box> boxes = new ObjectArrayList<>();
+        boxes.add(Box.createCached(this.x + 0.5D, this.y, this.z, this.x + 1.0D, this.y + 1.0D, this.z + 1.0D));
+        return boxes;
+    }
+
+    @Override
     public void getCollisionBoxes(ObjectArrayList<Box> boxes) {
         boxes.add(Box.createCached(this.x + 0.5D, this.y, this.z, this.x + 1.0D, this.y + 1.0D, this.z + 1.0D));
     }

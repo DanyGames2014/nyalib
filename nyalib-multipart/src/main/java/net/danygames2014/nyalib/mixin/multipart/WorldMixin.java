@@ -1,10 +1,15 @@
 package net.danygames2014.nyalib.mixin.multipart;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.danygames2014.nyalib.multipart.MultipartHitResult;
 import net.danygames2014.nyalib.multipart.MultipartState;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,9 +27,12 @@ import java.util.List;
 public class WorldMixin {
     @Shadow
     private ArrayList tempCollisionBoxes;
-    
+
     @Unique
     private final ObjectArrayList<Box> tempMultipartCollisionBoxes = new ObjectArrayList<>();
+
+    @Unique
+    private MultipartHitResult lastMultiblockRaycastHitResult = null;
 
     @Inject(method = "getEntityCollisions", at = @At(value = "HEAD"))
     public void clearMultipartCollisionBoxes(Entity entity, Box entityBox, CallbackInfoReturnable<List> cir) {
@@ -43,6 +51,56 @@ public class WorldMixin {
                     tempCollisionBoxes.add(box);
                 }
             }
+        }
+    }
+
+    @WrapOperation(
+            method = "raycast(Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Vec3d;ZZ)Lnet/minecraft/util/hit/HitResult;",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getBlockId(III)I")
+    )
+    public int raycastMultipart(World instance, int x, int y, int z, Operation<Integer> original, Vec3d start, Vec3d end, boolean bl, boolean bl2){
+        MultipartState state = instance.getMultipartState(x, y, z);
+        if(state == null || state.components == null){
+            return original.call(instance, x, y, z);
+        }
+        MultipartHitResult[] hitResults = new MultipartHitResult[state.components.size()];
+        for(int i = 0; i < state.components.size(); i++){
+            hitResults[i] = state.components.get(i).raycast(start, end);
+        }
+
+        double minimumLengthSquared = Double.POSITIVE_INFINITY;
+        int minimumIndex = 0;
+        for(int i = 0; i < hitResults.length; i++) {
+            MultipartHitResult hitResult = hitResults[i];
+            if(hitResult == null){
+                continue;
+            }
+
+            double lengthSquared = hitResult.pos.squaredDistanceTo(start);
+
+            if(lengthSquared < minimumLengthSquared) {
+                minimumLengthSquared = lengthSquared;
+                minimumIndex = i;
+            }
+        }
+        MultipartHitResult.lastHit = hitResults[minimumIndex];
+        lastMultiblockRaycastHitResult = hitResults[minimumIndex];
+
+        if(hitResults[minimumIndex] == null){
+            return original.call(instance, x, y, z);
+        }
+        return 0;
+    }
+
+    @Inject(
+            method = "raycast(Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Vec3d;ZZ)Lnet/minecraft/util/hit/HitResult;",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getBlockId(III)I"),
+            cancellable = true
+    )
+    void returnMultipart(Vec3d end, Vec3d bl, boolean bl2, boolean par4, CallbackInfoReturnable<HitResult> cir){
+        if(lastMultiblockRaycastHitResult != null) {
+            lastMultiblockRaycastHitResult = null;
+            cir.setReturnValue(null);
         }
     }
 }

@@ -11,12 +11,14 @@ public class MultipartHitResult {
     public int blockZ;
     public Vec3d pos;
     public Direction face;
+    public MultipartComponent component;
 
-    public MultipartHitResult(int blockX, int blockY, int blockZ, Vec3d pos, Direction face) {
+    public MultipartHitResult(int blockX, int blockY, int blockZ, Vec3d pos, Direction face, MultipartComponent component) {
         this.blockX = blockX;
         this.blockY = blockY;
         this.blockZ = blockZ;
         this.pos = pos;
         this.face = face;
+        this.component = component;
     }
 }

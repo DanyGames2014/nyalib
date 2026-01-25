@@ -17,7 +17,10 @@
     "multipart.TrackedChunkMixin"
   ],
   "client": [
-    "multipart.ChunkBuilderMixin"
+    "multipart.ChunkBuilderMixin",
+    "multipart.GameRendererMixin",
+    "multipart.MinecraftMixin",
+    "multipart.WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
