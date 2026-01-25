@@ -11,19 +11,14 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Box;
-import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.List;
 
 @Mixin(WorldRenderer.class)
 public abstract class WorldRendererMixin implements MultipartWorldRenderer {
-    @Shadow private World world;
-
-    @Shadow protected abstract void renderOutline(Box box);
 
     @SuppressWarnings("ExtractMethodRecommender")
     @Override
@@ -41,11 +36,15 @@ public abstract class WorldRendererMixin implements MultipartWorldRenderer {
                 float zFightExpansion = 0.002F;
 
                 ObjectArrayList<Box> boxes = multipartHitResult.component.getBoundingBoxes();
-                List<Line> lines = BoxToLinesConverter.convertBoxesToLines(boxes.elements(), new Vec3d(0.5, 0.5, 0.5));
+                for (int i = 0; i < boxes.size(); i++) {
+                    Box box = boxes.get(i);
+                    boxes.set(i, box.expand(zFightExpansion, zFightExpansion, zFightExpansion));
+                }
+                List<Line> lines = BoxToLinesConverter.convertBoxesToLines(boxes.toArray(new Box[0]), new Vec3d(0.5, 0.5, 0.5));
 
                 Vec3d playerPos = PlayerUtil.getRenderPosition(player, tickDelta);
 
-                Vec3d offset = new Vec3d(multipartHitResult.blockX, multipartHitResult.blockY, multipartHitResult.blockZ);
+                Vec3d offset = new Vec3d(0, 0, 0);
 
                 Tessellator tessellator = Tessellator.INSTANCE;
                 tessellator.start(1);
@@ -62,10 +61,6 @@ public abstract class WorldRendererMixin implements MultipartWorldRenderer {
                     );
                 }
                 tessellator.draw();
-
-//                for(Box box : boxes) {
-//                    renderOutline(box.expand(zFightExpansion, zFightExpansion, zFightExpansion).offset(-playerPos.getX(), -playerPos.getY(), -playerPos.getZ()));
-//                }
 
                 GL11.glDepthMask(true);
                 GL11.glEnable(GL11.GL_TEXTURE_2D);
