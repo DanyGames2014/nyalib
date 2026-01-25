@@ -1,6 +1,7 @@
 package net.danygames2014.nyalib.multipart;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.danygames2014.nyalib.sound.SoundHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderManager;
@@ -46,7 +47,7 @@ public abstract class MultipartComponent {
     }
 
     public BlockSoundGroup getSoundGroup() {
-        return Block.GLASS_SOUND_GROUP;
+        return Block.DEFAULT_SOUND_GROUP;
     }
 
     public void onPlaced() {
@@ -67,6 +68,8 @@ public abstract class MultipartComponent {
                     world.spawnEntity(itemEntity);
                 }
             }
+
+            SoundHelper.playSound(world, x + 0.5, y + 0.5, z + 0.5, getSoundGroup().getBreakSound(), (getSoundGroup().getVolume() + 1.0F) / 2.0F, getSoundGroup().getPitch() * 0.8F);
         }
         markDirty();
     }

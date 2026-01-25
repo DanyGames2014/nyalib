@@ -7,6 +7,7 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.math.Box;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
@@ -19,6 +20,11 @@ public class CoverMultipartComponent extends MultipartComponent {
     }
 
     public CoverMultipartComponent() {
+    }
+
+    @Override
+    public BlockSoundGroup getSoundGroup() {
+        return block.soundGroup;
     }
 
     @Override
