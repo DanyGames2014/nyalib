@@ -49,8 +49,7 @@ public class MultipartState {
     }
     
     public boolean removeComponent(MultipartComponent component, boolean notify) {
-        component.onBreak();
-        
+
         if (components.remove(component)) {
             if (notify) {
                 this.markDirty();

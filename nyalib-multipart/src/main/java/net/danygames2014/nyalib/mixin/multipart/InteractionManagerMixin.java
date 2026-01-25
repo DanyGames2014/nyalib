@@ -45,6 +45,7 @@ public class InteractionManagerMixin implements MultipartInteractionManager {
     public void breakMultipart(int x, int y, int z, MultipartComponent component) {
         MultipartState state = this.minecraft.world.getMultipartState(x,y,z);
         if (state != null) {
+            component.onBreak();
             state.removeComponent(component, true);
         }
     }

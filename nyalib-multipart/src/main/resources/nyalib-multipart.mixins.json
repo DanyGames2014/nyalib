@@ -8,6 +8,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "multipart.ArrowEntityMixin",
+    "multipart.ExplosionMixin",
     "multipart.FlattenedChunkMixin",
     "multipart.FlattenedWorldManagerMixin",
     "multipart.ItemMixin",

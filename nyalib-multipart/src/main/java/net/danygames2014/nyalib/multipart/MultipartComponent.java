@@ -5,6 +5,7 @@ import net.danygames2014.nyalib.sound.SoundHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -72,6 +73,15 @@ public abstract class MultipartComponent {
             SoundHelper.playSound(world, x + 0.5, y + 0.5, z + 0.5, getSoundGroup().getBreakSound(), (getSoundGroup().getVolume() + 1.0F) / 2.0F, getSoundGroup().getPitch() * 0.8F);
         }
         markDirty();
+    }
+
+    public void onExploded() {
+        onBreak();
+        this.state.removeComponent(this, true);
+    }
+
+    public float getBlastResistance(Entity source) {
+        return 0.0F;
     }
     
     public ObjectArrayList<ItemStack> getDropList() {
