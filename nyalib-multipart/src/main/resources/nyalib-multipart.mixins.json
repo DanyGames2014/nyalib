@@ -20,7 +20,6 @@
   ],
   "server": [
     "multipart.ChunkMapMixin",
-    "multipart.ChunkSectionTrackerMixin",
     "multipart.PlayerManagerMixin",
     "multipart.ServerPlayerEntityMixin",
     "multipart.TrackedChunkMixin"
