@@ -6,6 +6,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.nyalib.multipart.MultipartHitResult;
 import net.danygames2014.nyalib.multipart.MultipartState;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Box;
@@ -59,9 +60,20 @@ public class WorldMixin {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getBlockId(III)I")
     )
     public int raycastMultipart(World instance, int x, int y, int z, Operation<Integer> original, Vec3d start, Vec3d end, boolean bl, boolean bl2){
+        int blockId = original.call(instance, x, y, z);
+        int blockMeta = instance.getBlockMeta(x, y, z);
+
+        Block block = Block.BLOCKS[blockId];
+
+        HitResult blockHitResult = null;
+
+        if ((!bl2 || block == null || block.getCollisionShape(instance, x, y, z) != null) && blockId > 0 && block != null && block.hasCollision(blockMeta, bl)) {
+            blockHitResult = block.raycast(instance, x, y, z, start, end);
+        }
+
         MultipartState state = instance.getMultipartState(x, y, z);
         if(state == null || state.components == null){
-            return original.call(instance, x, y, z);
+            return blockId;
         }
         MultipartHitResult[] hitResults = new MultipartHitResult[state.components.size()];
         for(int i = 0; i < state.components.size(); i++){
@@ -83,11 +95,22 @@ public class WorldMixin {
                 minimumIndex = i;
             }
         }
-        MultipartHitResult.lastHit = hitResults[minimumIndex];
-        lastMultiblockRaycastHitResult = hitResults[minimumIndex];
 
-        if(hitResults[minimumIndex] == null){
-            return original.call(instance, x, y, z);
+        double lengthBlock = Double.POSITIVE_INFINITY;
+        if(blockHitResult != null){
+            lengthBlock = blockHitResult.pos.squaredDistanceTo(start);
+        }
+
+        if(lengthBlock >= minimumLengthSquared) {
+            MultipartHitResult.lastHit = hitResults[minimumIndex];
+            lastMultiblockRaycastHitResult = hitResults[minimumIndex];
+        } else {
+            MultipartHitResult.lastHit = null;
+            lastMultiblockRaycastHitResult = null;
+        }
+
+        if(hitResults[minimumIndex] == null || lengthBlock < minimumLengthSquared){
+            return blockId;
         }
         return 0;
     }
@@ -102,5 +125,13 @@ public class WorldMixin {
             lastMultiblockRaycastHitResult = null;
             cir.setReturnValue(null);
         }
+    }
+
+    @Inject(
+            method = "raycast(Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Vec3d;ZZ)Lnet/minecraft/util/hit/HitResult;",
+            at = @At(value = "HEAD")
+    )
+    void resetLastHitMultipart(Vec3d end, Vec3d bl, boolean bl2, boolean par4, CallbackInfoReturnable<HitResult> cir){
+        MultipartHitResult.lastHit = null;
     }
 }
