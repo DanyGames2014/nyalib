@@ -5,6 +5,7 @@ import net.danygames2014.nyalib.multipart.MultipartComponent;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderManager;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Box;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
@@ -18,6 +19,13 @@ public class CoverMultipartComponent extends MultipartComponent {
     }
 
     public CoverMultipartComponent() {
+    }
+
+    @Override
+    public ObjectArrayList<ItemStack> getDropList() {
+        ObjectArrayList<ItemStack> dropList = new ObjectArrayList<>();
+        dropList.add(new ItemStack(block));
+        return dropList;
     }
 
     @Override

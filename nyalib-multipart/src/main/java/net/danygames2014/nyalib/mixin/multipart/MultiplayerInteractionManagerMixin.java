@@ -1,8 +1,11 @@
 package net.danygames2014.nyalib.mixin.multipart;
 
 import net.danygames2014.nyalib.multipart.MultipartComponent;
-import net.minecraft.block.Block;
+import net.danygames2014.nyalib.multipart.MultipartState;
+import net.danygames2014.nyalib.packet.AttackMultipartC2SPacket;
+import net.danygames2014.nyalib.packet.BreakMultipartC2SPacket;
 import net.minecraft.client.MultiplayerInteractionManager;
+import net.minecraft.client.network.ClientNetworkHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
 import net.modificationstation.stationapi.api.util.math.Direction;
@@ -16,12 +19,47 @@ public abstract class MultiplayerInteractionManagerMixin extends InteractionMana
     @Shadow
     protected abstract void updateSelectedSlot();
 
+    @Shadow
+    private float blockBreakingProgress;
+    @Shadow
+    private float lastBlockBreakingProgress;
+
+    @Shadow
+    public abstract void update(float f);
+
+    @Shadow
+    private int breakingDelayTicks;
+    @Shadow
+    private float breakingSoundDelayTicks;
+    @Shadow
+    private ClientNetworkHandler networkHandler;
     @Unique
     private boolean breakingMultipart = false;
-    
+
     @Override
     public void attackMultipart(ItemStack selectedStack, int x, int y, int z, Vec3d pos, Direction face, MultipartComponent component) {
-        
+        MultipartState state = this.minecraft.world.getMultipartState(x, y, z);
+
+        if (state == null) {
+            return;
+        }
+
+        if (!this.breakingMultipart || component != this.currentlyBrokenComponent) {
+            this.networkHandler.sendPacket(new AttackMultipartC2SPacket(x, y, z, component));
+            if (this.blockBreakingProgress == 0.0F) {
+                component.onBreakStart();
+            }
+
+            if (component.getHardness(this.minecraft.player) >= 1.0F) {
+                this.breakMultipart(x, y, z, component);
+            } else {
+                this.breakingMultipart = true;
+                this.currentlyBrokenComponent = component;
+                this.blockBreakingProgress = 0.0F;
+                this.lastBlockBreakingProgress = 0.0F;
+                this.breakingSoundDelayTicks = 0.0F;
+            }
+        }
     }
 
     @Override
@@ -31,46 +69,49 @@ public abstract class MultiplayerInteractionManagerMixin extends InteractionMana
 
     @Override
     public void processMultipartBreakingAction(int x, int y, int z, Vec3d pos, Direction face, MultipartComponent component) {
-        // TODO: actually do this for multiparts
-        if (this.breakingMultipart) {
-            this.updateSelectedSlot();
-            if (this.multipartBreakingDelayTicks > 0) {
-                --this.multipartBreakingDelayTicks;
-            } else {
-                if (component == currentlyBrokenComponent) {
-                    int blockId = this.minecraft.world.getBlockId(x, y, z);
-                    if (blockId == 0) {
-                        this.breakingMultipart = false;
-                        return;
-                    }
+        if (!this.breakingMultipart) {
+            return;
+        }
 
-                    Block var6 = Block.BLOCKS[blockId];
-                    this.multipartBreakingProgress += var6.getHardness(this.minecraft.player);
-                    if (this.multipartBreakingDelayTicks % 4.0F == 0.0F) {
-                        this.minecraft.soundManager.playSound(var6.soundGroup.getSound(), (float)x + 0.5F, (float)y + 0.5F, (float)z + 0.5F, (var6.soundGroup.getVolume() + 1.0F) / 8.0F, var6.soundGroup.getPitch() * 0.5F);
-                    }
+        this.updateSelectedSlot();
+        if (this.breakingDelayTicks > 0) {
+            this.breakingDelayTicks--;
+            return;
+        }
 
-                    ++this.multipartBreakingDelayTicks;
-                    if (this.multipartBreakingProgress >= 1.0F) {
-                        this.breakingMultipart = false;
-                        //this.networkHandler.sendPacket(new PlayerActionC2SPacket(2, x, y, z, side));
-                        //this.breakBlock(x, y, z, side);
-                        this.multipartBreakingProgress = 0.0F;
-                        this.lastMultipartBreakingProgress = 0.0F;
-                        this.multipartBreakingSoundDelayTicks = 0.0F;
-                        this.multipartBreakingDelayTicks = 5;
-                    }
-                } else {
-                    this.attackMultipart(this.minecraft.player.getHand(), x, y, z, pos, face, component);
-                }
-
+        if (component == currentlyBrokenComponent) {
+            MultipartState state = this.minecraft.world.getMultipartState(x, y, z);
+            if (state == null) {
+                this.breakingMultipart = false;
+                return;
             }
+
+            this.blockBreakingProgress += component.getHardness(this.minecraft.player);
+            if (this.breakingSoundDelayTicks % 4.0F == 0.0F) {
+                this.minecraft.soundManager.playSound(component.getSoundGroup().getSound(), (float) x + 0.5F, (float) y + 0.5F, (float) z + 0.5F, (component.getSoundGroup().getVolume() + 1.0F) / 8.0F, component.getSoundGroup().getPitch() * 0.5F);
+            }
+
+            this.breakingSoundDelayTicks++;
+            if (this.blockBreakingProgress >= 1.0F) {
+                this.breakingMultipart = false;
+                this.networkHandler.sendPacket(new BreakMultipartC2SPacket(x, y, z, component));
+                this.breakMultipart(x, y, z, component);
+                this.blockBreakingProgress = 0.0F;
+                this.lastBlockBreakingProgress = 0.0F;
+                this.breakingSoundDelayTicks = 0.0F;
+                this.breakingDelayTicks = 5;
+            }
+        } else {
+            this.attackMultipart(this.minecraft.player.getHand(), x, y, z, pos, face, component);
         }
     }
 
     @Override
     public void cancelMultipartBreaking() {
-        multipartBreakingProgress = 0.0F;
-        multipartBreakingDelayTicks = 0;
+        blockBreakingProgress = 0.0F;
+        lastBlockBreakingProgress = 0.0F;
+        breakingDelayTicks = 0;
+        currentlyBrokenComponent = null;
+        update(blockBreakingProgress);
     }
 }

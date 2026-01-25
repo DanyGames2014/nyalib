@@ -9,7 +9,11 @@
   "mixins": [
     "multipart.FlattenedChunkMixin",
     "multipart.FlattenedWorldManagerMixin",
+    "multipart.ItemMixin",
+    "multipart.ItemStackMixin",
     "multipart.MultipartWorldMixin",
+    "multipart.PlayerEntityMixin",
+    "multipart.PlayerInventoryMixin",
     "multipart.WorldMixin"
   ],
   "server": [

@@ -100,12 +100,11 @@ public class MultipartDataS2CPacket extends Packet implements ManagedPacket<Mult
         MultipartState state = new MultipartState();
         world.setMultipartState(x,y,z,state);
         state.readNbt(stateNbt);
+        state.markDirty();
         
         for (int i = 0; i < 50; i++) {
             Minecraft.INSTANCE.worldRenderer.addParticle("lava", x + 0.5D,y,z + 0.5D, 0.0D, 0.2D, 0.0D);
-            Minecraft.INSTANCE.worldRenderer.addParticle("heart", x + 0.5D,y,z + 0.5D, 0.0D, 0.2D, 0.0D);
         }
-        System.err.println("Received update for block at " + x + ", " + y + ", " + z);
     }
 
     @Override

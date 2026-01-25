@@ -27,14 +27,15 @@ public class FlattenedWorldManagerMixin {
         
         // Save the multipart data
         NbtCompound multipartNbt = new NbtCompound();
+
+        // If there are no states, dont save em
+        if (multipartStates.isEmpty()) {
+            return;
+        }
         
         // Write all the multipart states in the chunk
         NbtList multipartNbtList = new NbtList();
         for (MultipartState multipartState : multipartStates) {
-            if (multipartStates.isEmpty()) {
-                return;
-            }
-            
             NbtCompound multipartNbtCompound = new NbtCompound();
             
             multipartNbtCompound.putInt("x", multipartState.x & 15);

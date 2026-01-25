@@ -17,4 +17,6 @@ public class NyaLibMultipart {
     // TODO: Fake block when no block present
     // TODO: Swap fake block for real block when a real block is placed
     // TODO: Rendering
+    // TODO: Explosio nhandling
+    // TODO: luminance?
 }

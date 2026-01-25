@@ -34,20 +34,42 @@ public class MultipartState {
         component.z = z;
         component.state = this;
         if (components.add(component)) {
+            component.onPlaced();
             if (notify) {
                 this.markDirty();
             }
             return true;
         }
+
+        return false;
+    }
+
+    public boolean removeComponent(int index, boolean notify) {
+        return removeComponent(components.get(index), notify);
+    }
+    
+    public boolean removeComponent(MultipartComponent component, boolean notify) {
+        component.onBreak();
         
+        if (components.remove(component)) {
+            if (notify) {
+                this.markDirty();
+            }
+            return true;
+        }
+
         return false;
     }
 
     public void markDirty() {
-        if (world != null && !world.isRemote) {
-            world.blockUpdateEvent(x, y, z);
-            //noinspection Convert2MethodRef
-            SideUtil.run(() -> {}, () -> sendUpdateToClient());
+        if (world != null) {
+            if (!world.isRemote) {
+                world.blockUpdateEvent(x, y, z);
+                //noinspection Convert2MethodRef
+                SideUtil.run(() -> {}, () -> sendUpdateToClient());
+            }
+            
+            world.setBlockDirty(x,y,z);
         }
     }
 
@@ -65,7 +87,7 @@ public class MultipartState {
             component.getCollisionBoxes(boxes);
         }
     }
-    
+
     // Rendering
     public void render(Tessellator tessellator, BlockRenderManager blockRenderManager, int renderLayer) {
         for (MultipartComponent component : components) {
@@ -116,7 +138,7 @@ public class MultipartState {
         for (var component : components) {
             sb.append("\n").append(component);
         }
-        
+
         return sb.toString();
     }
 }

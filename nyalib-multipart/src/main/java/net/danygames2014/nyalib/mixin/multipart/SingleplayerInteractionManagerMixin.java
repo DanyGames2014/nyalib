@@ -7,14 +7,41 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.Shadow;
 
 @SuppressWarnings("AddedMixinMembersNamePattern")
 @Mixin(SingleplayerInteractionManager.class)
-public class SingleplayerInteractionManagerMixin extends InteractionManagerMixin {
+public abstract class SingleplayerInteractionManagerMixin extends InteractionManagerMixin {
+    @Shadow
+    public abstract void update(float f);
+
+    @Shadow
+    private float blockBreakingProgress;
+
+    @Shadow
+    private float lastBlockBreakingProgress;
+
+    @Shadow
+    private int breakingDelayTicks;
+
+    @Shadow
+    private float breakingSoundDelayTicks;
+
     @Override
     public void attackMultipart(ItemStack selectedStack, int x, int y, int z, Vec3d pos, Direction face, MultipartComponent component) {
+        MultipartState state = this.minecraft.world.getMultipartState(x,y,z);
         
+        if (state == null) {
+            return;
+        }
+        
+        if (this.blockBreakingProgress == 0.0F) {
+            component.onBreakStart();
+        }
+
+        if (component.getHardness(this.minecraft.player) >= 1.0F) {
+            this.breakMultipart(x, y, z, component);
+        }
     }
 
     @Override
@@ -24,8 +51,8 @@ public class SingleplayerInteractionManagerMixin extends InteractionManagerMixin
 
     @Override
     public void processMultipartBreakingAction(int x, int y, int z, Vec3d pos, Direction face, MultipartComponent component) {
-        if (this.multipartBreakingDelayTicks > 0) {
-            --this.multipartBreakingDelayTicks;
+        if (this.breakingDelayTicks > 0) {
+            this.breakingDelayTicks--;
             return;
         }
 
@@ -35,43 +62,35 @@ public class SingleplayerInteractionManagerMixin extends InteractionManagerMixin
         }
         
         if (component == currentlyBrokenComponent) {
-            this.multipartBreakingProgress += component.getHardness(this.minecraft.player);
-            if (this.multipartBreakingSoundDelayTicks % 4.0F == 0.0F) {
+            this.blockBreakingProgress += component.getHardness(this.minecraft.player);
+            if (this.breakingSoundDelayTicks % 4.0F == 0.0F) {
                 this.minecraft.soundManager.playSound(component.getSoundGroup().getSound(), (float)x + 0.5F, (float)y + 0.5F, (float)z + 0.5F, (component.getSoundGroup().getVolume() + 1.0F) / 8.0F, component.getSoundGroup().getPitch() * 0.5F);
             }
 
-            this.multipartBreakingSoundDelayTicks++;
-            if (this.multipartBreakingProgress >= 1.0F) {
+            this.breakingSoundDelayTicks++;
+            if (this.blockBreakingProgress >= 1.0F) {
                 this.breakMultipart(x, y, z, component);
-                this.multipartBreakingProgress = 0.0F;
-                this.lastMultipartBreakingProgress = 0.0F;
-                this.multipartBreakingSoundDelayTicks = 0.0F;
-                this.multipartBreakingDelayTicks = 5;
+                this.blockBreakingProgress = 0.0F;
+                this.lastBlockBreakingProgress = 0.0F;
+                this.breakingSoundDelayTicks = 0.0F;
+                this.breakingDelayTicks = 5;
             }
         } else {
-            this.multipartBreakingProgress = 0.0F;
-            this.lastMultipartBreakingProgress = 0.0F;
-            this.multipartBreakingSoundDelayTicks = 0.0F;
+            this.blockBreakingProgress = 0.0F;
+            this.lastBlockBreakingProgress = 0.0F;
+            this.breakingSoundDelayTicks = 0.0F;
             this.currentlyBrokenComponent = component;
         }
 
-        this.minecraft.worldRenderer.miningProgress = this.multipartBreakingProgress;
+        update(this.blockBreakingProgress);
     }
     
-    @Unique
-    public void breakMultipart(int x, int y, int z, MultipartComponent component) {
-        MultipartState state = this.minecraft.world.getMultipartState(x,y,z);
-        if (state != null) {
-            state.components.remove(component);
-            state.markDirty();
-        }
-    }
-
     @Override
     public void cancelMultipartBreaking() {
-        multipartBreakingProgress = 0.0F;
-        multipartBreakingDelayTicks = 0;
+        blockBreakingProgress = 0.0F;
+        lastBlockBreakingProgress = 0.0F;
+        breakingDelayTicks = 0;
         currentlyBrokenComponent = null;
-        this.minecraft.worldRenderer.miningProgress = this.multipartBreakingProgress;
+        update(blockBreakingProgress);
     }
 }
