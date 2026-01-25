@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "nyalib-block",
+  "version": "${version}",
+
+  "name": "NyaLib Block",
+  "description": "A module providing functionality around blocks",
+  "authors": [
+    "DanyGames2014",
+    "Slainlight"
+  ],
+
+  "license": "MIT",
+  "icon": "assets/nyalib-block/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "stationapi:event_bus": [
+    ],
+    "stationapi:event_bus_client": [
+    ],
+    "stationapi:event_bus_server": [
+    ]
+  },
+  "mixins": [
+    "nyalib-block.mixins.json"
+  ],
+  "accessWidener": "nyalib-block.accesswidener",
+  "depends": {
+    "minecraft": "1.0.0-beta.7.3"
+  }
+}

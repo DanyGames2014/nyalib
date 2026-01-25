@@ -5,9 +5,11 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "BucketItemMixin",
+    "FenceBlockMixin",
     "FlintAndSteelMixin",
     "MapItemMixin",
-    "SheepEntityMixin"
+    "SheepEntityMixin",
+    "StairsBlockMixin"
   ],
   "server": [
   ],
