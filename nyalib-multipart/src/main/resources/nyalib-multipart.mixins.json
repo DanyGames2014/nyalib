@@ -14,6 +14,7 @@
     "multipart.ItemMixin",
     "multipart.ItemStackMixin",
     "multipart.MultipartWorldMixin",
+    "multipart.PistonBlockMixin",
     "multipart.PlayerEntityMixin",
     "multipart.PlayerInventoryMixin",
     "multipart.WorldMixin"
