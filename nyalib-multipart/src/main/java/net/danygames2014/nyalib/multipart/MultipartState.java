@@ -35,6 +35,11 @@ public class MultipartState {
         component.state = this;
         if (components.add(component)) {
             component.onPlaced();
+            
+            for (var comp : components) {
+                comp.onStateUpdated(component, StateUpdateType.COMPONENT_ADD);
+            }
+            
             if (notify) {
                 this.markDirty();
                 world.notifyNeighbors(x, y, z, world.getBlockId(x, y, z));
@@ -53,6 +58,10 @@ public class MultipartState {
         if (components.remove(component)) {
             if (components.isEmpty()) {
                 world.setMultipartState(x, y, z, null);
+            }
+            
+            for (var comp : components) {
+                comp.onStateUpdated(component, StateUpdateType.COMPONENT_REMOVE);
             }
             
             if (notify) {
@@ -144,5 +153,10 @@ public class MultipartState {
         }
 
         return sb.toString();
+    }
+    
+    public enum StateUpdateType {
+        COMPONENT_ADD,
+        COMPONENT_REMOVE
     }
 }

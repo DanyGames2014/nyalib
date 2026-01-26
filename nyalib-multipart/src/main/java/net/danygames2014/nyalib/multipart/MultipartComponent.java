@@ -83,6 +83,10 @@ public abstract class MultipartComponent {
         onBreak();
         this.state.removeComponent(this, true);
     }
+    
+    public void onStateUpdated(MultipartComponent updateSource, MultipartState.StateUpdateType updateType) {
+        
+    }
 
     public float getBlastResistance(Entity source) {
         return 0.0F;
