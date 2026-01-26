@@ -54,11 +54,6 @@ public abstract class SingleplayerInteractionManagerMixin extends InteractionMan
     }
 
     @Override
-    public boolean interactMultipart(ItemStack stack, int x, int y, int z, Vec3d pos, Direction face, MultipartComponent component) {
-        return false;
-    }
-
-    @Override
     public void processMultipartBreakingAction(int x, int y, int z, Vec3d pos, Direction face, MultipartComponent component) {
         if (this.breakingDelayTicks > 0) {
             this.breakingDelayTicks--;

@@ -75,6 +75,10 @@ public abstract class MultipartComponent {
         markDirty();
     }
 
+    public boolean onUse(PlayerEntity player) {
+        return false;
+    }
+
     public void onExploded() {
         onBreak();
         this.state.removeComponent(this, true);

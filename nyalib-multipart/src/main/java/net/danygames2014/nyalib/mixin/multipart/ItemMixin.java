@@ -10,13 +10,17 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 
 @SuppressWarnings("AddedMixinMembersNamePattern")
 @Mixin(Item.class)
-public class ItemMixin implements MultipartAwareItem {
+public abstract class ItemMixin implements MultipartAwareItem {
+    @Shadow
+    public abstract boolean useOnBlock(ItemStack stack, PlayerEntity user, World world, int x, int y, int z, int side);
+
     @Override
     public boolean useOnMultipart(ItemStack stack, PlayerEntity player, World world, int x, int y, int z, Direction face, Vec3d hitPos, MultipartComponent component) {
-        return false;
+        return useOnBlock(stack, player, world, x, y, z, face.getId());
     }
 
     @Override

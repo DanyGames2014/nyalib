@@ -70,7 +70,10 @@ public abstract class MultiplayerInteractionManagerMixin extends InteractionMana
 
     @Override
     public boolean interactMultipart(ItemStack stack, int x, int y, int z, Vec3d pos, Direction face, MultipartComponent component) {
-        return false;
+        this.updateSelectedSlot();
+        // TODO: Reimplement PlayerInteractBlockC2SPacket for multiparts 😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭
+        //this.networkHandler.sendPacket(new PlayerInteractBlockC2SPacket(x, y, z, side, player.inventory.getSelectedItem()));
+        return super.interactMultipart(stack, x, y, z, pos, face, component);
     }
 
     @Override

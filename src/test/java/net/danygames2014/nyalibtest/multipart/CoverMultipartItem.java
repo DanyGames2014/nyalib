@@ -1,6 +1,7 @@
 package net.danygames2014.nyalibtest.multipart;
 
 import net.danygames2014.nyalib.item.EnhancedPlacementContextItem;
+import net.danygames2014.nyalib.multipart.MultipartComponent;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
@@ -18,6 +19,11 @@ public class CoverMultipartItem extends TemplateItem implements EnhancedPlacemen
     public CoverMultipartItem(Identifier identifier, Block block) {
         super(identifier);
         this.block = block;
+    }
+
+    @Override
+    public boolean useOnMultipart(ItemStack stack, PlayerEntity player, World world, int x, int y, int z, Direction face, Vec3d hitPos, MultipartComponent component) {
+        return useOnBlock(stack, player, world, x, y, z, face.ordinal(), hitPos);
     }
 
     @Override

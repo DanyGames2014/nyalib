@@ -28,7 +28,17 @@ public class InteractionManagerMixin implements MultipartInteractionManager {
 
     @Override
     public boolean interactMultipart(ItemStack stack, int x, int y, int z, Vec3d pos, Direction face, MultipartComponent component) {
-        return false;
+        MultipartState state = this.minecraft.world.getMultipartState(x,y,z);
+
+        if (state == null) {
+            return false;
+        }
+
+        if (component.onUse(this.minecraft.player)) {
+            return true;
+        } else {
+            return stack != null && stack.getItem().useOnMultipart(stack, this.minecraft.player, this.minecraft.world, x, y, z, face, pos, component);
+        }
     }
 
     @Override
