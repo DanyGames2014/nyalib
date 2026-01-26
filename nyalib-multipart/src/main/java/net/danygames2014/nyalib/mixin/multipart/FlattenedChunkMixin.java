@@ -43,6 +43,12 @@ public abstract class FlattenedChunkMixin implements ChunkWithMultipart, Station
     @Override
     public boolean setMultipartState(int chunkX, int y, int chunkZ, MultipartState state) {
         int hashCode = (chunkX & 15) << 16 | (y << 8) | (chunkZ & 15);
+        
+        if (state == null) {
+            multipartStates.remove(hashCode);
+            return true;
+        }
+        
         state.world = this.world;
         state.x = this.x * 16 + chunkX;
         state.y = y;

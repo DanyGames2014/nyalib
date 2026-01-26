@@ -49,8 +49,11 @@ public class MultipartState {
     }
     
     public boolean removeComponent(MultipartComponent component, boolean notify) {
-
         if (components.remove(component)) {
+            if (components.isEmpty()) {
+                world.setMultipartState(x, y, z, null);
+            }
+            
             if (notify) {
                 this.markDirty();
             }

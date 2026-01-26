@@ -21,18 +21,15 @@ public class FlattenedWorldManagerMixin {
         ObjectCollection<MultipartState> multipartStates = chunk.getMultipartStates();
         
         // If there are no multiparts, do not bother
-        if (multipartStates == null) {
+        if (multipartStates == null || multipartStates.isEmpty()) {
             return;
         }
+
+        multipartStates.removeIf(multipartState -> multipartState.components.isEmpty());
         
         // Save the multipart data
         NbtCompound multipartNbt = new NbtCompound();
 
-        // If there are no states, dont save em
-        if (multipartStates.isEmpty()) {
-            return;
-        }
-        
         // Write all the multipart states in the chunk
         NbtList multipartNbtList = new NbtList();
         for (MultipartState multipartState : multipartStates) {
