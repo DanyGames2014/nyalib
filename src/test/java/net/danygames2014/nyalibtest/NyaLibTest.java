@@ -41,6 +41,7 @@ import net.danygames2014.nyalibtest.network.BasicNetworkType;
 import net.danygames2014.nyalibtest.network.CableBlock;
 import net.danygames2014.nyalibtest.network.EastWestCableBlock;
 import net.danygames2014.nyalibtest.network.NetworkEdgeBlock;
+import net.danygames2014.nyalibtest.redstone.CustomRedstoneLevelBlock;
 import net.danygames2014.nyalibtest.screen.FluidTankScreen;
 import net.danygames2014.nyalibtest.screen.ManagedFluidTankScreen;
 import net.danygames2014.nyalibtest.screen.ManagedInventoryScreen;
@@ -128,6 +129,8 @@ public class NyaLibTest {
     public static Item multipartItem;
     public static Item stoneCoverMultipartItem;
     public static Item diamondBlockCoverMultipartItem;
+    
+    public static Block customRedstoneLevelBlock;
 
     public static Fluid gravelFluid;
     public static Fluid fuelFluid;
@@ -177,6 +180,9 @@ public class NyaLibTest {
         glassPane = new PaneBlockTemplate(NAMESPACE.id("glass_pane"), Block.GLASS, Identifier.of("minecraft:block/glass")).setTranslationKey(NAMESPACE, "glass_pane").setHardness(0.5F);
         tntPressurePlate = new PressurePlateBlockTemplate(NAMESPACE.id("tnt_pressure_plate"), Block.TNT, PressurePlateActivationRule.EVERYTHING, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE, "tnt_pressure_plate").setHardness(0.2F);
         obsidianPressurePlate = new PressurePlateBlockTemplate(NAMESPACE.id("obsidian_pressure_plate"), Block.TNT, PressurePlateActivationRule.PLAYERS, Identifier.of("minecraft:block/obsidian")).setTranslationKey(NAMESPACE, "obsidian_pressure_plate").setHardness(0.2F);
+        
+        // Custom Redstone Level
+        customRedstoneLevelBlock = new CustomRedstoneLevelBlock(NAMESPACE.id("custom_redstone_level_block"), Material.METAL).setTranslationKey(NAMESPACE, "custom_redstone_level_block");
 
         // Sound
         serverSoundBlock = new ServerSoundBlock(NAMESPACE.id("server_sound_block"), Material.WOOL).setTranslationKey(NAMESPACE, "server_sound_block");

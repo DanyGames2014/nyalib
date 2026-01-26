@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"ConstantValue", "BooleanMethodIsAlwaysInverted"})
 @Mixin(Block.class)
-public class BlockMixin {
+public class VoxelShapeBlockMixin {
     @Inject(method = "addIntersectingBoundingBox(Lnet/minecraft/world/World;IIILnet/minecraft/util/math/Box;Ljava/util/ArrayList;)V", at = @At("HEAD"), cancellable = true)
     private void addVoxelShapesToCollision(World world, int x, int y, int z, Box box, ArrayList<Box> boxes, CallbackInfo ci) {
         if (this instanceof HasCollisionVoxelShape hasCollisionVoxelShape) {
