@@ -72,9 +72,9 @@ public class BoxUtil {
         double maxZ = box.maxZ;
 
         if(modifyBox) {
-            return box.set(minZ, box.minY, 1 - minX, maxZ, box.maxY, 1 - maxX);
+            return box.set(minZ, box.minY, 1 - maxX, maxZ, box.maxY, 1 - minX);
         } else {
-            return Box.create(minZ, box.minY, 1 - minX, maxZ, box.maxY, 1 - maxX);
+            return Box.create(minZ, box.minY, 1 - maxX, maxZ, box.maxY, 1 - minX);
         }
     }
 

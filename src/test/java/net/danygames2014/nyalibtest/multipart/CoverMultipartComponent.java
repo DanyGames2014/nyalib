@@ -17,7 +17,7 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 public class CoverMultipartComponent extends MultipartComponent {
     public Block block;
     public Direction direction;
-    public Box bounds = Box.create(0f, 0f, 0f, 0.5f, 1f, 1f);
+    public Box bounds = Box.create(0f, 0f, 0f, 1f / 16f, 1f, 1f);
 
     public CoverMultipartComponent(Block block, Direction direction) {
         this.block = block;
@@ -79,18 +79,25 @@ public class CoverMultipartComponent extends MultipartComponent {
         if (renderLayer != 0) {
             return;
         }
-//        blockRenderManager.renderBlock(block, x, y + renderLayer, z);
+        ObjectArrayList<Box> boxes = new ObjectArrayList<>();
+        getCollisionBoxes(boxes);
+
+        for(Box box : boxes){
+            block.setBoundingBox((float) (box.minX - x), (float) (box.minY - y), (float) (box.minZ - z), (float) (box.maxX - x), (float) (box.maxY - y), (float) (box.maxZ - z));
+            blockRenderManager.renderBlock(block, x, y + renderLayer, z);
+        }
+        block.setBoundingBox(0f, 0f, 0f, 1f, 1f, 1f);
     }
 
     @Override
     public void onBreakStart() {
-        int dir = direction.getId();
-        dir++;
-        if(dir >= Direction.values().length){
-            dir = 0;
-        }
-        direction = Direction.byId(dir);
-        System.out.println(direction);
+//        int dir = direction.getId();
+//        dir++;
+//        if(dir >= Direction.values().length){
+//            dir = 0;
+//        }
+//        direction = Direction.byId(dir);
+//        System.out.println(direction);
     }
 
     @Override
