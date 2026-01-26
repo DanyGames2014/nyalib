@@ -36,3 +36,7 @@
 * Add ManagedItemHandlerWithInventory
 * Add Block Entity related methods to CapabilityHelper
 * Improve Block Network loading resilience and error correction
+* Block Multiparts
+* Voxel Shapes (Thanks to Slainlight)
+* Added EnhancedPlacementContextItem
+* Added Redstone API
