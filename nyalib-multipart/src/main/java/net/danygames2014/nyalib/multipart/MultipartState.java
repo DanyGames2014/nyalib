@@ -37,6 +37,7 @@ public class MultipartState {
             component.onPlaced();
             if (notify) {
                 this.markDirty();
+                world.notifyNeighbors(x, y, z, world.getBlockId(x, y, z));
             }
             return true;
         }
@@ -56,6 +57,7 @@ public class MultipartState {
             
             if (notify) {
                 this.markDirty();
+                world.notifyNeighbors(x, y, z, world.getBlockId(x, y, z));
             }
             return true;
         }
