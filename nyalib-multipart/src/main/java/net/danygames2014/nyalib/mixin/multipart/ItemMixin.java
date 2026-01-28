@@ -1,5 +1,6 @@
 package net.danygames2014.nyalib.mixin.multipart;
 
+import net.danygames2014.nyalib.item.EnhancedPlacementContextItem;
 import net.danygames2014.nyalib.mixininterface.MultipartAwareItem;
 import net.danygames2014.nyalib.multipart.MultipartComponent;
 import net.minecraft.entity.LivingEntity;
@@ -20,6 +21,9 @@ public abstract class ItemMixin implements MultipartAwareItem {
 
     @Override
     public boolean useOnMultipart(ItemStack stack, PlayerEntity player, World world, int x, int y, int z, Direction face, Vec3d hitPos, MultipartComponent component) {
+        if (Item.class.cast(this) instanceof EnhancedPlacementContextItem enhancedPlacementContextItem) {
+            return enhancedPlacementContextItem.useOnBlock(stack, player, world, x, y, z, face.getId(), hitPos);
+        }
         return useOnBlock(stack, player, world, x, y, z, face.getId());
     }
 

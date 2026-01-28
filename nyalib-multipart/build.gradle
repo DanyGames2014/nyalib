@@ -10,5 +10,6 @@ loom {
 
 addModuleDependencies(project,
         "nyalib-base",
-        "nyalib-block"
+        "nyalib-block",
+        "nyalib-item"
 )
