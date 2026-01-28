@@ -53,7 +53,7 @@ public abstract class MultiplayerInteractionManagerMixin extends InteractionMana
         if (!this.breakingMultipart || component != this.currentlyBrokenComponent) {
             this.networkHandler.sendPacket(new AttackMultipartC2SPacket(x, y, z, component));
             if (this.blockBreakingProgress == 0.0F) {
-                component.onBreakStart();
+                component.onBreakStart(this.minecraft.player);
             }
 
             if (component.getHardness(this.minecraft.player) >= 1.0F) {

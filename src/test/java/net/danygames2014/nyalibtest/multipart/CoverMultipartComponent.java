@@ -6,6 +6,7 @@ import net.danygames2014.nyalib.util.BoxUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderManager;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.BlockSoundGroup;
@@ -90,7 +91,7 @@ public class CoverMultipartComponent extends MultipartComponent {
     }
 
     @Override
-    public void onBreakStart() {
+    public void onBreakStart(PlayerEntity player) {
 //        int dir = direction.getId();
 //        dir++;
 //        if(dir >= Direction.values().length){

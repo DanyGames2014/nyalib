@@ -45,7 +45,7 @@ public abstract class SingleplayerInteractionManagerMixin extends InteractionMan
         }
         
         if (this.blockBreakingProgress == 0.0F) {
-            component.onBreakStart();
+            component.onBreakStart(this.minecraft.player);
         }
 
         if (component.getHardness(this.minecraft.player) >= 1.0F) {

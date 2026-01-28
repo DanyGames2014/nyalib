@@ -73,7 +73,7 @@ public class AttackMultipartC2SPacket extends Packet implements ManagedPacket<At
         
         MultipartState state = world.getMultipartState(x,y,z);
         if (state != null) {
-            state.components.get(componentIndex).onBreakStart();
+            state.components.get(componentIndex).onBreakStart(player);
         }
     }
 

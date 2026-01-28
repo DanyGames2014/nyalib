@@ -56,6 +56,7 @@ public abstract class MultipartComponent {
     }
     
     public void onBreakStart() {
+    public void onBreakStart(PlayerEntity player) {
 
     }
 
