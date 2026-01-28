@@ -19,47 +19,82 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class MultipartComponent {
+    /**
+     * The x-coordinate of the {@link MultipartState} this component is in
+     */
     public int x;
+    /**
+     * The y-coordinate of the {@link MultipartState} this component is in
+     */
     public int y;
+    /**
+     * The z-coordinate of the {@link MultipartState} this component is in
+     */
     public int z;
+    /**
+     * The world this component is in
+     */
     public World world;
+    /**
+     * The {@link MultipartState} this component is in
+     */
     public MultipartState state;
 
+    // Properties
     public float hardness = 1.0F;
 
+    /**
+     * Marks the component dirty, subsequently marking the {@link MultipartState} dirty causing an update to be sent
+     */
     public void markDirty() {
         state.markDirty();
     }
 
-    public boolean isHandHarvestable() {
-        return true;
-    }
-
-    public float getHardness(PlayerEntity player) {
-        if (this.hardness < 0.0F) {
-            return 0.0F;
-        } else {
-            if (!player.canHarvestMultipart(x, y, z, this)) {
-                return 1.0F / this.hardness / 100.0F;
-            }
-
-            return player.getMultipartBreakingSpeed(x, y, z, this) / this.hardness / 30.0F;
-        }
-    }
-
-    public BlockSoundGroup getSoundGroup() {
-        return Block.DEFAULT_SOUND_GROUP;
-    }
-
+    // Events
+    /**
+     * Gets called when the component is added into a {@link MultipartState}
+     */
     public void onPlaced() {
-        
+
     }
-    
-    public void onBreakStart() {
+
+    /**
+     * Gets called when the {@link MultipartState} this component is in is updated
+     * @param updateSource The component which caused the update
+     * @param updateType The type of the update (If a component was added, removed etc.)
+     */
+    public void onStateUpdated(MultipartComponent updateSource, MultipartState.StateUpdateType updateType) {
+
+    }
+
+    /**
+     * Called when a player right clicks this component
+     * @param player The player interacting with the component
+     * @return <code>true</code> if the action was succesfull, cancelling subsequent actions
+     */
+    public boolean onUse(PlayerEntity player) {
+        return false;
+    }
+
+    /**
+     * Called when a player starts breaking this component
+     * @param player The player breaking the component
+     */
     public void onBreakStart(PlayerEntity player) {
 
     }
 
+    /**
+     * Called when this component is exploded
+     */
+    public void onExploded() {
+        onBreak();
+        state.removeComponent(this, true);
+    }
+
+    /**
+     * Called when this component is broken
+     */
     public void onBreak() {
         if (!world.isRemote) {
             ObjectArrayList<ItemStack> dropList = getDropList();
@@ -76,23 +111,32 @@ public abstract class MultipartComponent {
         markDirty();
     }
 
-    public boolean onUse(PlayerEntity player) {
-        return false;
+    // Properties
+    public boolean isHandHarvestable() {
+        return true;
     }
 
-    public void onExploded() {
-        onBreak();
-        this.state.removeComponent(this, true);
-    }
-    
-    public void onStateUpdated(MultipartComponent updateSource, MultipartState.StateUpdateType updateType) {
-        
+    public float getHardness(PlayerEntity player) {
+        if (this.hardness < 0.0F) {
+            return 0.0F;
+        } else {
+            if (!player.canHarvestMultipart(x, y, z, this)) {
+                return 1.0F / this.hardness / 100.0F;
+            }
+
+            return player.getMultipartBreakingSpeed(x, y, z, this) / this.hardness / 30.0F;
+        }
     }
 
     public float getBlastResistance(Entity source) {
         return 0.0F;
     }
+
+    public BlockSoundGroup getSoundGroup() {
+        return Block.DEFAULT_SOUND_GROUP;
+    }
     
+    // Drop List
     public ObjectArrayList<ItemStack> getDropList() {
         return null;
     }
@@ -106,9 +150,9 @@ public abstract class MultipartComponent {
 
     }
 
-    public abstract ObjectArrayList<Box> getBoundingBoxes();
-
     // Collision and Bounds checking
+    public abstract ObjectArrayList<Box> getBoundingBoxes();
+    
     public void getCollisionBoxes(ObjectArrayList<Box> boxes) {
 
     }
