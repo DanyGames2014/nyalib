@@ -44,7 +44,7 @@ public class MultipartDataS2CPacket extends Packet implements ManagedPacket<Mult
             this.x = stream.readInt();
             this.y = stream.readInt();
             this.z = stream.readInt();
-            
+
             int length = stream.readInt();
             if (length > 0) {
                 byte[] bytes = new byte[length];
@@ -64,13 +64,13 @@ public class MultipartDataS2CPacket extends Packet implements ManagedPacket<Mult
             stream.writeInt(y);
             stream.writeInt(z);
 
-            MultipartState state = world.getMultipartState(x,y,z);
+            MultipartState state = world.getMultipartState(x, y, z);
 
             NbtCompound stateNbt = new NbtCompound();
             if (state != null) {
                 state.writeNbt(stateNbt);
             }
-            
+
             if (stateNbt.values().isEmpty()) {
                 stream.writeInt(0); // length   
             } else {
@@ -98,14 +98,18 @@ public class MultipartDataS2CPacket extends Packet implements ManagedPacket<Mult
         PlayerEntity player = PlayerHelper.getPlayerFromPacketHandler(networkHandler);
         World world = player.world;
 
-        MultipartState state = new MultipartState();
-        world.setMultipartState(x,y,z,state);
-        state.readNbt(stateNbt);
-        state.markDirty();
-        
+        if (stateNbt != null) {
+            MultipartState state = new MultipartState();
+            world.setMultipartState(x, y, z, state);
+            state.readNbt(stateNbt);
+            state.markDirty();
+        } else {
+            world.setMultipartState(x, y, z, null);
+        }
+
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
             for (int i = 0; i < 20; i++) {
-                Minecraft.INSTANCE.worldRenderer.addParticle("lava", x + 0.5D,y,z + 0.5D, 0.0D, 0.2D, 0.0D);
+                Minecraft.INSTANCE.worldRenderer.addParticle("lava", x + 0.5D, y, z + 0.5D, 0.0D, 0.2D, 0.0D);
             }
         }
     }
