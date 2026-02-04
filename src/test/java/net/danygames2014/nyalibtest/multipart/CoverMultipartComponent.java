@@ -76,9 +76,9 @@ public class CoverMultipartComponent extends MultipartComponent {
     }
 
     @Override
-    public void render(Tessellator tessellator, BlockRenderManager blockRenderManager, int renderLayer) {
+    public boolean render(Tessellator tessellator, BlockRenderManager blockRenderManager, int renderLayer) {
         if (renderLayer != 0) {
-            return;
+            return false;
         }
         ObjectArrayList<Box> boxes = new ObjectArrayList<>();
         getCollisionBoxes(boxes);
@@ -88,6 +88,7 @@ public class CoverMultipartComponent extends MultipartComponent {
             blockRenderManager.renderBlock(block, x, y + renderLayer, z);
         }
         block.setBoundingBox(0f, 0f, 0f, 1f, 1f, 1f);
+        return true;
     }
 
     @Override

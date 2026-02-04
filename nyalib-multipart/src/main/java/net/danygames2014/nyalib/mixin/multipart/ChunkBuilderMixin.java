@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import net.danygames2014.nyalib.multipart.MultipartState;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.Tessellator;
@@ -62,9 +63,9 @@ public class ChunkBuilderMixin {
     }
     
     @Inject(method = "rebuild", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getRenderLayer()I"))
-    public void renderMultipart(CallbackInfo ci, @Local BlockRenderManager blockRenderManager, @Local(ordinal = 7) int var11) {
+    public void renderMultipart(CallbackInfo ci, @Local BlockRenderManager blockRenderManager, @Local(ordinal = 7) int var11, @Local(ordinal = 9) LocalIntRef var13) {
         if (state != null) {
-            state.render(Tessellator.INSTANCE, blockRenderManager, var11);
+            var13.set(var13.get() | (state.render(Tessellator.INSTANCE, blockRenderManager, var11) ? 1 : 0));
         }
     }
 }

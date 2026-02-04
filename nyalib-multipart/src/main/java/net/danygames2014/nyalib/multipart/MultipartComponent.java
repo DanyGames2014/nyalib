@@ -192,8 +192,8 @@ public abstract class MultipartComponent {
     }
 
     // Rendering
-    public void render(Tessellator tessellator, BlockRenderManager blockRenderManager, int renderLayer) {
-
+    public boolean render(Tessellator tessellator, BlockRenderManager blockRenderManager, int renderLayer) {
+        return false;
     }
 
     @Override
