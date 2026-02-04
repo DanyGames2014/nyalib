@@ -9,7 +9,6 @@ public interface ManagedFluidHandlerEntity extends FluidHandlerEntity {
     @Override
     default boolean canExtractFluid() {
         return true;
-        // TODO: IDK actually do logic based on theavailibity of slots? dingus, this aint a self-serve checkout
     }
 
     @Override

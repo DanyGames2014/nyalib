@@ -107,7 +107,6 @@ public final class Fluid {
      */
     private int colorMultiplier = 0xFFFFFF;
 
-    // TODO: Inventory color multiplier
     // TODO: Color multiplier of block applying to particles
     // TODO: Also just customizable splash particles
     // TODO: LiquidBlock.randomDisplayTick
@@ -117,9 +116,7 @@ public final class Fluid {
     // TODO: LiquidBlock.fizz?
     // TODO: Custom fluid interactions
     // TODO: Automatic block using only color multiplier?
-    // TODO: Track down where everywhere material for fluids is compared
-    // TODO: Temperature? Per Stack (pain^2) ? Per Fluid?
-    // TODO: Gaseous Fluids?
+    // TODO: Temperature Per Fluid?
     // TODO: Interactions -> Vaporization in Nether
     // TODO: Methods with world/stack contexts
 

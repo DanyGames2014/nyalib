@@ -11,6 +11,5 @@ public class NyaLibMultipart {
     @Entrypoint.Logger
     public static Logger LOGGER;
     
-    // TODO: Rendering
-    // TODO: luminance?
+    // TODO: Luminance?
 }

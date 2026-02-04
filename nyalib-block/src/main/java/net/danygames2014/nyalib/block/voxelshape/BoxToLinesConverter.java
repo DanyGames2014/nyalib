@@ -13,7 +13,6 @@ public class BoxToLinesConverter {
     public static List<Line> convertBoxesToLines(VoxelBox[] boxes, Vec3d center) {
         List<Line> lines = new ArrayList<>();
 
-        // TODO: Make lines not go out from a center, and instead out from each box.
         for (VoxelBox box : boxes) {
             Vec3d corner1 = new Vec3d(box.minX(), box.minY(), box.minZ());
             Vec3d corner2 = new Vec3d(box.minX(), box.minY(), box.maxZ());

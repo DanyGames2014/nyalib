@@ -17,5 +17,7 @@ public class NyaLib {
     @ConfigRoot(value = "fluid", visibleName = "Fluid API")
     public static final Config.FluidConfig FLUID_CONFIG = new Config.FluidConfig();
     
-    // TODO: Move config to configuration (more like the base mod pls) module?
+    // TODO: Move config to configuration module?
+    // TODO: ItemDrainer (unify Bucket and Handler logic with min/max withdrawal and deposit)
+    // TODO: ManagedEnergyHandler (idk about this one)
 }
