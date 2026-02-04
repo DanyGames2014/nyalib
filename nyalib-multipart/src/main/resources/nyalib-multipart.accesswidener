@@ -12,3 +12,6 @@ transitive-inject-interface net/minecraft/item/Item net/danygames2014/nyalib/mix
 transitive-inject-interface net/minecraft/item/ItemStack net/danygames2014/nyalib/mixininterface/MultipartAwareItemStack
 transitive-inject-interface net/minecraft/entity/player/PlayerEntity net/danygames2014/nyalib/mixininterface/MultipartPlayer
 transitive-inject-interface net/minecraft/entity/player/PlayerInventory net/danygames2014/nyalib/mixininterface/MultipartPlayerInventory
+
+accessible field net/minecraft/server/network/ServerPlayNetworkHandler server Lnet/minecraft/server/MinecraftServer;
+accessible field net/minecraft/server/network/ServerPlayNetworkHandler teleported Z

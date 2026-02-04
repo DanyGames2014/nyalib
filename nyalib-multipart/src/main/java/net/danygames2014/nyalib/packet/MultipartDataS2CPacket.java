@@ -3,6 +3,7 @@ package net.danygames2014.nyalib.packet;
 import net.danygames2014.nyalib.multipart.MultipartState;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -102,8 +103,10 @@ public class MultipartDataS2CPacket extends Packet implements ManagedPacket<Mult
         state.readNbt(stateNbt);
         state.markDirty();
         
-        for (int i = 0; i < 50; i++) {
-            Minecraft.INSTANCE.worldRenderer.addParticle("lava", x + 0.5D,y,z + 0.5D, 0.0D, 0.2D, 0.0D);
+        if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+            for (int i = 0; i < 20; i++) {
+                Minecraft.INSTANCE.worldRenderer.addParticle("lava", x + 0.5D,y,z + 0.5D, 0.0D, 0.2D, 0.0D);
+            }
         }
     }
 

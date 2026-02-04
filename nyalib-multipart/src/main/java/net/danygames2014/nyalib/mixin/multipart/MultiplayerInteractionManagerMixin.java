@@ -4,6 +4,7 @@ import net.danygames2014.nyalib.multipart.MultipartComponent;
 import net.danygames2014.nyalib.multipart.MultipartState;
 import net.danygames2014.nyalib.packet.AttackMultipartC2SPacket;
 import net.danygames2014.nyalib.packet.BreakMultipartC2SPacket;
+import net.danygames2014.nyalib.packet.InteractMultipartC2SPacket;
 import net.minecraft.client.MultiplayerInteractionManager;
 import net.minecraft.client.network.ClientNetworkHandler;
 import net.minecraft.item.ItemStack;
@@ -71,8 +72,7 @@ public abstract class MultiplayerInteractionManagerMixin extends InteractionMana
     @Override
     public boolean interactMultipart(ItemStack stack, int x, int y, int z, Vec3d pos, Direction face, MultipartComponent component) {
         this.updateSelectedSlot();
-        // TODO: Reimplement PlayerInteractBlockC2SPacket for multiparts 😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭
-        //this.networkHandler.sendPacket(new PlayerInteractBlockC2SPacket(x, y, z, side, player.inventory.getSelectedItem()));
+        this.networkHandler.sendPacket(new InteractMultipartC2SPacket(x, y, z, face.getId(), pos, stack, component));
         return super.interactMultipart(stack, x, y, z, pos, face, component);
     }
 
