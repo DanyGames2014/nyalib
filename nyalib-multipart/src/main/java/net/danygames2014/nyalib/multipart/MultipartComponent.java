@@ -70,9 +70,11 @@ public abstract class MultipartComponent {
     /**
      * Called when a player right clicks this component
      * @param player The player interacting with the component
+     * @param pos The position that the raycast hit
+     * @param face The face that the raycast hit
      * @return <code>true</code> if the action was succesfull, cancelling subsequent actions
      */
-    public boolean onUse(PlayerEntity player) {
+    public boolean onUse(PlayerEntity player, Vec3d pos, Direction face) {
         return false;
     }
 

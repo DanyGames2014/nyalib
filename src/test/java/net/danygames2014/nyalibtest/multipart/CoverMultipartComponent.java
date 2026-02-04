@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
@@ -61,6 +62,12 @@ public class CoverMultipartComponent extends MultipartComponent {
         } else {
             direction = Direction.NORTH;
         }
+    }
+
+    @Override
+    public boolean onUse(PlayerEntity player, Vec3d pos, Direction face) {
+        System.out.println(pos + " " + face);
+        return true;
     }
 
     @Override

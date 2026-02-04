@@ -34,7 +34,7 @@ public class InteractionManagerMixin implements MultipartInteractionManager {
             return false;
         }
 
-        if (component.onUse(this.minecraft.player)) {
+        if (component.onUse(this.minecraft.player, pos, face)) {
             return true;
         } else {
             return stack != null && stack.getItem().useOnMultipart(stack, this.minecraft.player, this.minecraft.world, x, y, z, face, pos, component);
