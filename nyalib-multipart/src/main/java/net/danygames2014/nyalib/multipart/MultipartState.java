@@ -102,10 +102,12 @@ public class MultipartState {
     }
 
     // Rendering
-    public void render(Tessellator tessellator, BlockRenderManager blockRenderManager, int renderLayer) {
+    public boolean render(Tessellator tessellator, BlockRenderManager blockRenderManager, int renderLayer) {
+        boolean rendered = false;
         for (MultipartComponent component : components) {
-            component.render(tessellator, blockRenderManager, renderLayer);
+            rendered |= component.render(tessellator, blockRenderManager, renderLayer);
         }
+        return rendered;
     }
 
     // NBT
