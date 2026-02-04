@@ -3,6 +3,7 @@ package net.danygames2014.nyalib.mixin.multipart;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.nyalib.block.voxelshape.BoxToLinesConverter;
 import net.danygames2014.nyalib.block.voxelshape.Line;
+import net.danygames2014.nyalib.item.multipart.CustomMultipartOutlineRenderer;
 import net.danygames2014.nyalib.mixininterface.MultipartWorldRenderer;
 import net.danygames2014.nyalib.multipart.MultipartHitResult;
 import net.danygames2014.nyalib.util.PlayerUtil;
@@ -39,7 +40,12 @@ public abstract class WorldRendererMixin implements MultipartWorldRenderer {
     public void renderMultipartOutline(PlayerEntity player, float tickDelta){
         if(Minecraft.INSTANCE.getMultipartCrosshairTarget() != null){
             MultipartHitResult multipartHitResult = Minecraft.INSTANCE.getMultipartCrosshairTarget();
-            if(multipartHitResult != null){
+            boolean renderedCustom = false;
+
+            if(player.getHand() != null && player.getHand().getItem() instanceof CustomMultipartOutlineRenderer outlineRenderer){
+                renderedCustom = outlineRenderer.renderOutline(player, multipartHitResult, tickDelta);
+            }
+            if(multipartHitResult != null && !renderedCustom){
                 GL11.glEnable(GL11.GL_BLEND);
                 GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
                 GL11.glColor4f(0.0F, 0.0F, 0.0F, 0.4F);

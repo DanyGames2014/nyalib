@@ -28,10 +28,7 @@ import net.danygames2014.nyalibtest.fluid.entity.SimpleFluidTankBlockEntity;
 import net.danygames2014.nyalibtest.fluid.item.FluidCellItem;
 import net.danygames2014.nyalibtest.fluid.item.FluidPipetteItem;
 import net.danygames2014.nyalibtest.fluid.item.ManagedFluidPipetteItem;
-import net.danygames2014.nyalibtest.item.ManagedInventoryBlock;
-import net.danygames2014.nyalibtest.item.ManagedInventoryBlockEntity;
-import net.danygames2014.nyalibtest.item.ManagedItemBag;
-import net.danygames2014.nyalibtest.item.SideHopperBlock;
+import net.danygames2014.nyalibtest.item.*;
 import net.danygames2014.nyalibtest.item.entity.SideHopperBlockEntity;
 import net.danygames2014.nyalibtest.multipart.CoverMultipartComponent;
 import net.danygames2014.nyalibtest.multipart.CoverMultipartItem;
@@ -102,6 +99,8 @@ public class NyaLibTest {
     public static Item fuelCellItem;
     public static Item glowstoneCellItem;
     public static Item gravelCellItem;
+
+    public static Item itemWithCustomOutlineRenderer;
 
     public static Block spongeStairs;
     public static Block spongeSlab;
@@ -239,6 +238,8 @@ public class NyaLibTest {
         multipartItem = new MultipartItem(NAMESPACE.id("multipart_item")).setTranslationKey(NAMESPACE, "multipart_item");
         stoneCoverMultipartItem = new CoverMultipartItem(NAMESPACE.id("stone_cover"), Block.STONE).setTranslationKey(NAMESPACE, "stone_cover");
         diamondBlockCoverMultipartItem = new CoverMultipartItem(NAMESPACE.id("diamond_cover"), Block.DIAMOND_BLOCK).setTranslationKey(NAMESPACE, "diamond_cover");
+
+        itemWithCustomOutlineRenderer = new ItemWithCustomOutlineRenderer(NAMESPACE.id("custom_outline_renderer")).setTranslationKey(NAMESPACE, "custom_outline_renderer");
     }
 
     @EventListener
