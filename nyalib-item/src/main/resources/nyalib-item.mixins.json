@@ -10,7 +10,6 @@
     "item.DispenserBlockEntityMixin",
     "item.EntityMixin",
     "item.FurnaceBlockEntityMixin",
-    "item.InteractionManagerMixin",
     "item.ItemMixin",
     "item.ItemStackMixin",
     "item.PlayerInventoryMixin",
@@ -21,6 +20,7 @@
     "item.ServerPlayNetworkHandlerMixin"
   ],
   "client": [
+    "item.InteractionManagerMixin",
     "item.MultiplayerInteractionManagerMixin"
   ],
   "injectors": {
