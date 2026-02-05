@@ -14,16 +14,6 @@ base {
     archivesName = project.archives_base_name
 }
 
-babric {
-    disablePomOverride.set(true)
-}
-
-loom {
-    mixin {
-        useLegacyMixinAp = false
-    }
-}
-
 allprojects {
     apply plugin: "maven-publish"
     apply plugin: "fabric-loom"
@@ -33,6 +23,7 @@ allprojects {
         toolchain {
             languageVersion = JavaLanguageVersion.of(17)
         }
+        withSourcesJar()
     }
 
     babric {
@@ -173,13 +164,6 @@ allprojects {
         }
     }
 
-    sourceSets {
-        test {
-            compileClasspath += sourceSets.main.compileClasspath + sourceSets.main.output
-            runtimeClasspath += sourceSets.main.runtimeClasspath + sourceSets.main.output
-        }
-    }
-
     tasks.named("processResources", ProcessResources) {
         def ver = project.properties["mod_version"]
 
@@ -194,25 +178,25 @@ allprojects {
         }
     }
 
-    java {
-        withSourcesJar()
-    }
-
-    tasks.named("jar", Jar) {
-        from("LICENSE") {
-            rename { "${it}_${project.properties['archivesBaseName']}" }
-        }
-    }
-
     tasks.withType(JavaCompile).configureEach {
         it.options.release = 17
         it.options.encoding = "UTF-8"
     }
+    
+    // Disables the generation of the .module file
+    tasks.withType(GenerateModuleMetadata).configureEach {
+        enabled = false
+    }
 
-    tasks.named('compileJava', JavaCompile) {
-        options.compilerArgs.add('-XDignore.symbol.file')
-        options.fork = true
-        options.forkOptions.executable = System.getProperty('java.home') + '/bin/javac' + (System.getProperty('os.name').startsWith('Windows') ? '.exe' : '')
+    // Gradle 9 fails the build if there are no tests, but we are using the test package for a test mod
+    tasks.withType(Test).configureEach {
+        failOnNoDiscoveredTests = false
+    }
+    
+    tasks.named("jar", Jar) {
+        from("LICENSE") {
+            rename { "${it}_${project.properties['archivesBaseName']}" }
+        }
     }
 
     // Maven Publishing
@@ -254,17 +238,6 @@ allprojects {
             }
         }
     }
-
-    tasks.withType(GenerateModuleMetadata).tap {
-        configureEach {
-            enabled = false
-        }
-    }
-
-    tasks.withType(Test).configureEach {
-        failOnNoDiscoveredTests = false
-    }
-
 }
 
 subprojects {
@@ -318,12 +291,6 @@ subprojects {
     }
 }
 
-tasks.named('compileJava', JavaCompile) {
-    options.compilerArgs.add('-XDignore.symbol.file')
-    options.fork = true
-    options.forkOptions.executable = System.getProperty('java.home') + '/bin/javac' + (System.getProperty('os.name').startsWith('Windows') ? '.exe' : '')
-}
-
 publishing {
     publications {
         mavenJava {
@@ -338,23 +305,11 @@ publishing {
                 
                 project.subprojects.each { subproject ->
                     println("Adding subproject as a dependency: ${subproject.name}")
-                    
+
+                    //noinspection GroovyAssignabilityCheck
                     addDependencyXML(xml.asNode(), "compile", subproject)
                 }
             }
-        }
-    }
-}
-
-loom {
-    runs {
-        register('runTestmodClient') {
-            source 'test'
-            client()
-        }
-        register('runTestmodServer') {
-            source 'test'
-            server()
         }
     }
 }
@@ -363,14 +318,6 @@ tasks.register('testJar', Jar) {
     from sourceSets.test.output
     archiveClassifier.convention('test')
     archiveClassifier.set('test')
-}
-
-tasks.withType(GenerateModuleMetadata).configureEach {
-    enabled = false
-}
-
-tasks.withType(JavaCompile).configureEach {
-    it.options.release = 17
 }
 
 // Modrinth Publishing
