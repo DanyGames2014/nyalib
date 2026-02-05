@@ -93,6 +93,7 @@ allprojects {
 
     configurations {
         transitiveImplementation
+        //noinspection GroovyAssignabilityCheck
         implementation.extendsFrom configurations.transitiveImplementation
     }
 
@@ -265,8 +266,11 @@ subprojects {
     }
 
     artifacts {
+        //noinspection ConfigurationAvoidance
         add("out", tasks.getByName("remapJar"))
+        //noinspection ConfigurationAvoidance
         add("dev", tasks.getByName("jar"))
+        //noinspection ConfigurationAvoidance
         add("test", tasks.getByName("testJar"))
     }
 
