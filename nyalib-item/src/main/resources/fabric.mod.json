@@ -31,10 +31,5 @@
   "accessWidener": "nyalib-item.accesswidener",
   "depends": {
     "minecraft": "1.0.0-beta.7.3"
-  },
-  "custom": {
-    "loom:injected_interfaces": {
-      "net/minecraft/class_133": ["net/danygames2014/nyalib/inventory/slot/LockableSlot"]
-    }
   }
 }

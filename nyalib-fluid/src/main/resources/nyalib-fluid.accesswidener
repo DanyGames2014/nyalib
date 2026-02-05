@@ -1,5 +1,11 @@
-accessWidener v2 named
+classTweaker v1 named
 
 accessible field net/minecraft/server/network/ServerPlayNetworkHandler transactions Ljava/util/Map;
 accessible field net/minecraft/client/resource/language/TranslationStorage translations Ljava/util/Properties;
 accessible method net/minecraft/block/LiquidBlock getFlow (Lnet/minecraft/world/BlockView;III)Lnet/minecraft/util/math/Vec3d;
+
+transitive-inject-interface net/minecraft/screen/ScreenHandlerListener net/danygames2014/nyalib/screen/FluidScreenHandlerListener
+transitive-inject-interface net/minecraft/screen/ScreenHandler net/danygames2014/nyalib/screen/FluidScreenHandler
+transitive-inject-interface net/minecraft/client/InteractionManager net/danygames2014/nyalib/client/FluidInteractionManager
+transitive-inject-interface net/minecraft/item/BucketItem net/danygames2014/nyalib/fluid/FluidBucket
+transitive-inject-interface net/minecraft/entity/Entity net/danygames2014/nyalib/entity/FluidEntity
