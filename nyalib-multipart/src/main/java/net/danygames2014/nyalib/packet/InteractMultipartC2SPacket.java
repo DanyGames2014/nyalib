@@ -116,14 +116,14 @@ public class InteractMultipartC2SPacket extends Packet implements ManagedPacket<
         ServerPlayNetworkHandler serverNetworkHandler = (ServerPlayNetworkHandler) networkHandler;
         MinecraftServer server = serverNetworkHandler.server;
         ServerPlayerEntity player = (ServerPlayerEntity) PlayerHelper.getPlayerFromPacketHandler(networkHandler);
-        ServerWorld serverWorld = server.getWorld(player.dimensionId);
+        ServerWorld world = server.getWorld(player.dimensionId);
         
         ItemStack selectedItem = player.inventory.getSelectedItem();
-        boolean canInteract = serverWorld.bypassSpawnProtection = serverWorld.dimension.id != 0 || server.playerManager.isOperator(player.name);
+        boolean canInteract = world.bypassSpawnProtection = world.dimension.id != 0 || server.playerManager.isOperator(player.name);
         boolean multipartInteracted = false;
 
         // Interact with Multipart
-        Vec3i spawnPos = serverWorld.getSpawnPos();
+        Vec3i spawnPos = world.getSpawnPos();
         int xDistanceFromSpawn = (int) MathHelper.abs((float)(x - spawnPos.x));
         int zDistanceFromSpawn = (int) MathHelper.abs((float)(x - spawnPos.z));
         if (xDistanceFromSpawn > zDistanceFromSpawn) {
@@ -131,12 +131,12 @@ public class InteractMultipartC2SPacket extends Packet implements ManagedPacket<
         }
 
         if (serverNetworkHandler.teleported && player.getSquaredDistance((double)x + (double)0.5F, (double)y + (double)0.5F, (double)z + (double)0.5F) < (double)64.0F && (zDistanceFromSpawn > 16 || canInteract)) {
-            multipartInteracted = interactMultipart(player, serverWorld, selectedItem);
+            multipartInteracted = interactMultipart(player, world, selectedItem);
         }
         
         // If we didnt interact with multipart, trigger the item interaction
         if (!multipartInteracted && stack != null) {
-            player.interactionManager.interactItem(player, serverWorld, selectedItem);
+            player.interactionManager.interactItem(player, world, selectedItem);
         }
 
         // Update the player's inventory
@@ -154,7 +154,7 @@ public class InteractMultipartC2SPacket extends Packet implements ManagedPacket<
             serverNetworkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(player.currentScreenHandler.syncId, selectedSlot.id, player.inventory.getSelectedItem()));
         }
 
-        serverWorld.bypassSpawnProtection = false;
+        world.bypassSpawnProtection = false;
     }
 
     public boolean interactMultipart(PlayerEntity player, World world, ItemStack selectedItem) {

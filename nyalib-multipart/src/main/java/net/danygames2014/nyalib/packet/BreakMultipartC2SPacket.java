@@ -7,7 +7,11 @@ import net.fabricmc.api.Environment;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.NetworkHandler;
 import net.minecraft.network.packet.Packet;
-import net.minecraft.world.World;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayNetworkHandler;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.ServerWorld;
 import net.modificationstation.stationapi.api.entity.player.PlayerHelper;
 import net.modificationstation.stationapi.api.network.packet.ManagedPacket;
 import net.modificationstation.stationapi.api.network.packet.PacketHelper;
@@ -69,15 +73,30 @@ public class BreakMultipartC2SPacket extends Packet implements ManagedPacket<Bre
 
     @Environment(EnvType.SERVER)
     public void handleServer(NetworkHandler networkHandler) {
+        ServerPlayNetworkHandler serverNetworkHandler = (ServerPlayNetworkHandler) networkHandler;
+        MinecraftServer server = serverNetworkHandler.server;
         PlayerEntity player = PlayerHelper.getPlayerFromPacketHandler(networkHandler);
-        World world = player.world;
-        
-        MultipartState state = world.getMultipartState(x,y,z);
-        if (state != null) {
-            state.removeComponent(componentIndex, true);
-            // TODO: actually do logic on the server to see if the player can mine the component
-            PacketHelper.sendTo(player, new MultipartDataS2CPacket(world, x, y, z));
+        ServerWorld world = server.getWorld(player.dimensionId);
+
+        boolean canInteract = world.bypassSpawnProtection = world.dimension.id != 0 || server.playerManager.isOperator(player.name);
+
+        // Break the multipart
+        Vec3i spawnPos = world.getSpawnPos();
+        int xDistanceFromSpawn = (int) MathHelper.abs((float)(x - spawnPos.x));
+        int zDistanceFromSpawn = (int) MathHelper.abs((float)(x - spawnPos.z));
+        if (xDistanceFromSpawn > zDistanceFromSpawn) {
+            zDistanceFromSpawn = xDistanceFromSpawn;
         }
+
+        if (serverNetworkHandler.teleported && player.getSquaredDistance((double)x + (double)0.5F, (double)y + (double)0.5F, (double)z + (double)0.5F) < (double)64.0F && (zDistanceFromSpawn > 16 || canInteract)) {
+            MultipartState state = world.getMultipartState(x,y,z);
+            if (state != null) {
+                state.removeComponent(componentIndex, true);
+                PacketHelper.sendTo(player, new MultipartDataS2CPacket(world, x, y, z));
+            }
+        }
+
+        world.bypassSpawnProtection = false;
     }
 
     @Override
