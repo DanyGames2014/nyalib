@@ -7,6 +7,7 @@
     "item.BlockEntityMixin",
     "item.BlockWithEntityMixin",
     "item.ChestBlockEntityMixin",
+    "item.CraftingResultSlotMixin",
     "item.DispenserBlockEntityMixin",
     "item.EntityMixin",
     "item.FurnaceBlockEntityMixin",
