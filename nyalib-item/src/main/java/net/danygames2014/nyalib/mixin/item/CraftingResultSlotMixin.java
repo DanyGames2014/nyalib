@@ -26,6 +26,7 @@ public class CraftingResultSlotMixin {
     public void injectResultItem(Inventory inventory, int slot, ItemStack stack, Operation<Void> original, @Local(ordinal = 1) ItemStack resultStack) {
         if (resultStack.getItem() instanceof HasCraftingReturnStack hasReturnStack) {
             inventory.setStack(slot, hasReturnStack.getCraftingReturnStack(resultStack));
+            return;
         }
         
         original.call(inventory, slot, stack);
