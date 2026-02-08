@@ -96,9 +96,26 @@ public class MultipartState {
 
     // Collision and Bounds checking
     public void getCollisionBoxes(ObjectArrayList<Box> boxes) {
-        for (var component : components) {
+        for (MultipartComponent component : components) {
             component.getCollisionBoxes(boxes);
         }
+    }
+    
+    public boolean isBoxOccupied(Box box) {
+        ObjectArrayList<Box> boxes = new ObjectArrayList<>();
+        
+        for (MultipartComponent component : components) {
+            boxes.clear();
+            component.getCollisionBoxes(boxes);
+            
+            for (Box compBox : boxes) {
+                if (compBox.intersects(box)) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
     }
 
     // Rendering

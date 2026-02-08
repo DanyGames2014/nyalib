@@ -1,11 +1,13 @@
 package net.danygames2014.nyalibtest.energy;
 
 import net.danygames2014.nyalib.energy.template.block.EnergyWireBlockTemplate;
+import net.danygames2014.nyalib.multipart.MultipartState;
 import net.danygames2014.nyalib.network.Network;
 import net.danygames2014.nyalib.network.NetworkComponentEntry;
 import net.danygames2014.nyalib.network.NetworkManager;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.Identifier;
 
@@ -30,6 +32,19 @@ public class WireBlock extends EnergyWireBlockTemplate {
         }
 
         return super.onUse(world, x, y, z, player);
+    }
+
+    @Override
+    public boolean canPlaceAt(World world, int x, int y, int z) {
+        MultipartState multipartState = world.getMultipartState(x,y,z);
+        
+        if (multipartState != null) {
+            if (multipartState.isBoxOccupied(Box.create(x, y, z, x + 1, y + 1, z + 1))) {
+                return false;
+            }
+        }
+        
+        return super.canPlaceAt(world, x, y, z);
     }
 
     @Override
