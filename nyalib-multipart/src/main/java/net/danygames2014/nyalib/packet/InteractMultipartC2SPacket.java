@@ -119,26 +119,27 @@ public class InteractMultipartC2SPacket extends Packet implements ManagedPacket<
         ServerWorld serverWorld = server.getWorld(player.dimensionId);
         
         ItemStack selectedItem = player.inventory.getSelectedItem();
-        boolean var4 = serverWorld.bypassSpawnProtection = serverWorld.dimension.id != 0 || server.playerManager.isOperator(player.name);
-        if (side == 255) {
-            if (selectedItem == null) {
-                return;
-            }
+        boolean canInteract = serverWorld.bypassSpawnProtection = serverWorld.dimension.id != 0 || server.playerManager.isOperator(player.name);
+        boolean multipartInteracted = false;
 
-            player.interactionManager.interactItem(player, serverWorld, selectedItem);
-        } else {
-            Vec3i spawnPos = serverWorld.getSpawnPos();
-            int xDistanceFromSpawn = (int) MathHelper.abs((float)(x - spawnPos.x));
-            int zDistanceFromSpawn = (int) MathHelper.abs((float)(x - spawnPos.z));
-            if (xDistanceFromSpawn > zDistanceFromSpawn) {
-                zDistanceFromSpawn = xDistanceFromSpawn;
-            }
-
-            if (serverNetworkHandler.teleported && player.getSquaredDistance((double)x + (double)0.5F, (double)y + (double)0.5F, (double)z + (double)0.5F) < (double)64.0F && (zDistanceFromSpawn > 16 || var4)) {
-                interactMultipart(player, serverWorld);
-            }
+        // Interact with Multipart
+        Vec3i spawnPos = serverWorld.getSpawnPos();
+        int xDistanceFromSpawn = (int) MathHelper.abs((float)(x - spawnPos.x));
+        int zDistanceFromSpawn = (int) MathHelper.abs((float)(x - spawnPos.z));
+        if (xDistanceFromSpawn > zDistanceFromSpawn) {
+            zDistanceFromSpawn = xDistanceFromSpawn;
         }
 
+        if (serverNetworkHandler.teleported && player.getSquaredDistance((double)x + (double)0.5F, (double)y + (double)0.5F, (double)z + (double)0.5F) < (double)64.0F && (zDistanceFromSpawn > 16 || canInteract)) {
+            multipartInteracted = interactMultipart(player, serverWorld, selectedItem);
+        }
+        
+        // If we didnt interact with multipart, trigger the item interaction
+        if (!multipartInteracted && stack != null) {
+            player.interactionManager.interactItem(player, serverWorld, selectedItem);
+        }
+
+        // Update the player's inventory
         selectedItem = player.inventory.getSelectedItem();
         if (selectedItem != null && selectedItem.count == 0) {
             player.inventory.main[player.inventory.selectedSlot] = null;
@@ -156,12 +157,20 @@ public class InteractMultipartC2SPacket extends Packet implements ManagedPacket<
         serverWorld.bypassSpawnProtection = false;
     }
 
-    public void interactMultipart(PlayerEntity player, World world) {
+    public boolean interactMultipart(PlayerEntity player, World world, ItemStack selectedItem) {
         MultipartState state = world.getMultipartState(x,y,z);
 
-        if (state != null && stack != null) {
-            stack.useOnMultipart(player, world, x, y, z, Direction.byId(side), hitVec, state.components.get(componentIndex));
+        if (state != null) {
+            MultipartComponent component = state.components.get(componentIndex);
+            
+            if (selectedItem != null) {
+                return selectedItem.useOnMultipart(player, world, x, y, z, Direction.byId(side), hitVec, component);
+            } else {
+                return component.onUse(player, hitVec, Direction.byId(side));
+            }
         }
+        
+        return false;
     }
 
     @Override

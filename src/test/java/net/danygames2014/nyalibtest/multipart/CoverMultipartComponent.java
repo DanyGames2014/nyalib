@@ -65,11 +65,11 @@ public class CoverMultipartComponent extends MultipartComponent {
     }
 
     @Override
-    public boolean onUse(PlayerEntity player, Vec3d pos, Direction face) {
-        System.out.println(pos + " " + face);
+    public boolean onUse(PlayerEntity player, Vec3d hitVec, Direction face) {
+        System.out.println("player = " + player + ", hitVec = " + hitVec + ", face = " + face);
         return true;
     }
-
+    
     @Override
     public ObjectArrayList<Box> getBoundingBoxes() {
         ObjectArrayList<Box> boxes = new ObjectArrayList<>();

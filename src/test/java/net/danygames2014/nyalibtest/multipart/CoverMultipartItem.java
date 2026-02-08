@@ -23,7 +23,14 @@ public class CoverMultipartItem extends TemplateItem implements EnhancedPlacemen
 
     @Override
     public boolean useOnMultipart(ItemStack stack, PlayerEntity player, World world, int x, int y, int z, Direction face, Vec3d hitPos, MultipartComponent component) {
-        return useOnBlock(stack, player, world, x, y, z, face.ordinal(), hitPos);
+        System.out.println("stack = " + stack + ", player = " + player + ", world = " + world + ", x = " + x + ", y = " + y + ", z = " + z + ", face = " + face + ", hitPos = " + hitPos + ", component = " + component);
+        return super.useOnMultipart(stack, player, world, x, y, z, face, hitPos, component);
+    }
+
+    @Override
+    public ItemStack use(ItemStack stack, World world, PlayerEntity user) {
+        System.out.println("stack = " + stack + ", world = " + world + ", user = " + user);
+        return super.use(stack, world, user);
     }
 
     @Override
