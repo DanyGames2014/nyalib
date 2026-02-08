@@ -60,7 +60,7 @@ public class InteractMultipartC2SPacket extends Packet implements ManagedPacket<
             this.y = stream.readInt();
             this.z = stream.readInt();
             this.side = stream.read();
-            
+
             int itemId = stream.readInt();
             if (itemId >= 0) {
                 byte count = stream.readByte();
@@ -87,7 +87,7 @@ public class InteractMultipartC2SPacket extends Packet implements ManagedPacket<
             stream.writeInt(this.y);
             stream.writeInt(this.z);
             stream.write(this.side);
-            
+
             if (this.stack == null) {
                 stream.writeInt(-1);
             } else {
@@ -99,7 +99,7 @@ public class InteractMultipartC2SPacket extends Packet implements ManagedPacket<
             stream.writeDouble(hitVec.x);
             stream.writeDouble(hitVec.y);
             stream.writeDouble(hitVec.z);
-            
+
             stream.writeInt(componentIndex);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -108,7 +108,8 @@ public class InteractMultipartC2SPacket extends Packet implements ManagedPacket<
 
     @Override
     public void apply(NetworkHandler networkHandler) {
-        SideUtil.run(() -> {}, () -> handleServer(networkHandler));
+        SideUtil.run(() -> {
+        }, () -> handleServer(networkHandler));
     }
 
     @Environment(EnvType.SERVER)
@@ -117,23 +118,23 @@ public class InteractMultipartC2SPacket extends Packet implements ManagedPacket<
         MinecraftServer server = serverNetworkHandler.server;
         ServerPlayerEntity player = (ServerPlayerEntity) PlayerHelper.getPlayerFromPacketHandler(networkHandler);
         ServerWorld world = server.getWorld(player.dimensionId);
-        
+
         ItemStack selectedItem = player.inventory.getSelectedItem();
         boolean canInteract = world.bypassSpawnProtection = world.dimension.id != 0 || server.playerManager.isOperator(player.name);
         boolean multipartInteracted = false;
 
         // Interact with Multipart
         Vec3i spawnPos = world.getSpawnPos();
-        int xDistanceFromSpawn = (int) MathHelper.abs((float)(x - spawnPos.x));
-        int zDistanceFromSpawn = (int) MathHelper.abs((float)(x - spawnPos.z));
+        int xDistanceFromSpawn = (int) MathHelper.abs((float) (x - spawnPos.x));
+        int zDistanceFromSpawn = (int) MathHelper.abs((float) (x - spawnPos.z));
         if (xDistanceFromSpawn > zDistanceFromSpawn) {
             zDistanceFromSpawn = xDistanceFromSpawn;
         }
 
-        if (serverNetworkHandler.teleported && player.getSquaredDistance((double)x + (double)0.5F, (double)y + (double)0.5F, (double)z + (double)0.5F) < (double)64.0F && (zDistanceFromSpawn > 16 || canInteract)) {
+        if (serverNetworkHandler.teleported && player.getSquaredDistance((double) x + (double) 0.5F, (double) y + (double) 0.5F, (double) z + (double) 0.5F) < (double) 64.0F && (zDistanceFromSpawn > 16 || canInteract)) {
             multipartInteracted = interactMultipart(player, world, selectedItem);
         }
-        
+
         // If we didnt interact with multipart, trigger the item interaction
         if (!multipartInteracted && stack != null) {
             player.interactionManager.interactItem(player, world, selectedItem);
@@ -158,18 +159,20 @@ public class InteractMultipartC2SPacket extends Packet implements ManagedPacket<
     }
 
     public boolean interactMultipart(PlayerEntity player, World world, ItemStack selectedItem) {
-        MultipartState state = world.getMultipartState(x,y,z);
+        MultipartState state = world.getMultipartState(x, y, z);
 
         if (state != null) {
             MultipartComponent component = state.components.get(componentIndex);
-            
+
             if (selectedItem != null) {
-                return selectedItem.useOnMultipart(player, world, x, y, z, Direction.byId(side), hitVec, component);
-            } else {
-                return component.onUse(player, hitVec, Direction.byId(side));
+                if (selectedItem.useOnMultipart(player, world, x, y, z, Direction.byId(side), hitVec, component)) {
+                    return true;
+                }
             }
+
+            return component.onUse(player, hitVec, Direction.byId(side));
         }
-        
+
         return false;
     }
 
