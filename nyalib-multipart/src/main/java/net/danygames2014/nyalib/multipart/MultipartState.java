@@ -146,6 +146,7 @@ public class MultipartState {
 
         NbtList componentNbtList = nbt.getList("components");
         for (int i = 0; i < componentNbtList.size(); i++) {
+            // TODO: try-catch
             NbtCompound componentNbt = (NbtCompound) componentNbtList.get(i);
 
             MultipartComponentFactory factory = MultipartComponentRegistry.get(Identifier.of(componentNbt.getString("id"))).factory;

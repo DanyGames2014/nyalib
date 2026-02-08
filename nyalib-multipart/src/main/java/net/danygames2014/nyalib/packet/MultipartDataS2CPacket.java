@@ -98,6 +98,7 @@ public class MultipartDataS2CPacket extends Packet implements ManagedPacket<Mult
         PlayerEntity player = PlayerHelper.getPlayerFromPacketHandler(networkHandler);
         World world = player.world;
 
+        // TODO: call onStateUpdated
         if (stateNbt != null) {
             MultipartState state = new MultipartState();
             world.setMultipartState(x, y, z, state);

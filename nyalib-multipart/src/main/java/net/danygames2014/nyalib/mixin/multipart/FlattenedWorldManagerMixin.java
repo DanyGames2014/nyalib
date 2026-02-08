@@ -33,6 +33,7 @@ public class FlattenedWorldManagerMixin {
         // Write all the multipart states in the chunk
         NbtList multipartNbtList = new NbtList();
         for (MultipartState multipartState : multipartStates) {
+            // TODO: try-catch
             NbtCompound multipartNbtCompound = new NbtCompound();
             
             multipartNbtCompound.putInt("x", multipartState.x & 15);
