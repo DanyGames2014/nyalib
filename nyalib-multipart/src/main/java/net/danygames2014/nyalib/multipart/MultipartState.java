@@ -2,6 +2,7 @@ package net.danygames2014.nyalib.multipart;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.nyalib.NyaLibMultipart;
+import net.danygames2014.nyalib.util.BoxUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
@@ -118,6 +119,16 @@ public class MultipartState {
         return false;
     }
 
+    public boolean isBoxFullyCoevered(Box box) {
+        ObjectArrayList<Box> boxes = new ObjectArrayList<>();
+
+        for (MultipartComponent component : components) {
+            component.getCollisionBoxes(boxes);
+        }
+        
+        return BoxUtil.isFullyCovered(box, boxes);
+    }
+    
     // Rendering
     public boolean render(Tessellator tessellator, BlockRenderManager blockRenderManager, int renderLayer) {
         boolean rendered = false;
