@@ -119,7 +119,7 @@ public class MultipartState {
         return false;
     }
 
-    public boolean isBoxFullyCoevered(Box box) {
+    public boolean isBoxFullyCovered(Box box) {
         ObjectArrayList<Box> boxes = new ObjectArrayList<>();
 
         for (MultipartComponent component : components) {
