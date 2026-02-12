@@ -103,6 +103,9 @@ public class MultipartDataS2CPacket extends Packet implements ManagedPacket<Mult
             MultipartState state = new MultipartState();
             world.setMultipartState(x, y, z, state);
             state.readNbt(stateNbt);
+            for (var comp : state.components) {
+                comp.onStateUpdated(null, MultipartState.StateUpdateType.SERVER_UPDATE);
+            }
             state.markDirty();
         } else {
             world.setMultipartState(x, y, z, null);

@@ -188,6 +188,8 @@ public class MultipartState {
     
     public enum StateUpdateType {
         COMPONENT_ADD,
-        COMPONENT_REMOVE
+        COMPONENT_REMOVE,
+        COMPONENT_UPDATE,
+        SERVER_UPDATE
     }
 }

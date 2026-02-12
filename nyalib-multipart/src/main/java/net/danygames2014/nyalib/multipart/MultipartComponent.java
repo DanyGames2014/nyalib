@@ -59,12 +59,21 @@ public abstract class MultipartComponent {
     }
 
     /**
-     * Gets called when the {@link MultipartState} this component is in is updated
+     * Gets called when the {@link MultipartState} this component is in, is updated
      * @param updateSource The component which caused the update
      * @param updateType The type of the update (If a component was added, removed etc.)
      */
-    public void onStateUpdated(MultipartComponent updateSource, MultipartState.StateUpdateType updateType) {
+    public void onStateUpdated(@Nullable MultipartComponent updateSource, MultipartState.StateUpdateType updateType) {
 
+    }
+
+    /**
+     * Gets called when a {@link MultipartComponent} in a neighboring {@link MultipartState} triggers a neighbor update
+     * @param updateSource The {@link MultipartComponent} which triggered the neighbor update
+     * @param direction The direction in which the {@link MultipartState} housing the updateSource is in relative to this component
+     */
+    public void neighborUpdate(MultipartComponent updateSource, Direction direction) {
+        
     }
 
     /**
@@ -196,6 +205,18 @@ public abstract class MultipartComponent {
     // Rendering
     public boolean render(Tessellator tessellator, BlockRenderManager blockRenderManager, int renderLayer) {
         return false;
+    }
+    
+    // Helper Methods
+    public void notifyNeighbors() {
+        for (Direction side : Direction.values()) {
+            MultipartState multipartState = world.getMultipartState(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ());
+            if (multipartState != null) {
+                for (MultipartComponent component : multipartState.components) {
+                    component.neighborUpdate(this, side.getOpposite());
+                }
+            }
+        }
     }
 
     @Override
