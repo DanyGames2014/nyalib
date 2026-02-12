@@ -164,13 +164,13 @@ public class InteractMultipartC2SPacket extends Packet implements ManagedPacket<
         if (state != null) {
             MultipartComponent component = state.components.get(componentIndex);
 
-            if (selectedItem != null) {
-                if (selectedItem.useOnMultipart(player, world, x, y, z, Direction.byId(side), hitVec, component)) {
-                    return true;
-                }
+            if (component.onUse(player, hitVec, Direction.byId(side))) {
+                return true;
             }
-
-            return component.onUse(player, hitVec, Direction.byId(side));
+            
+            if (selectedItem != null) {
+                return selectedItem.useOnMultipart(player, world, x, y, z, Direction.byId(side), hitVec, component);
+            }
         }
 
         return false;
