@@ -1,6 +1,7 @@
 package net.danygames2014.nyalib.mixin.multipart;
 
 import it.unimi.dsi.fastutil.objects.ObjectCollection;
+import net.danygames2014.nyalib.NyaLibMultipart;
 import net.danygames2014.nyalib.multipart.MultipartState;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
@@ -33,16 +34,24 @@ public class FlattenedWorldManagerMixin {
         // Write all the multipart states in the chunk
         NbtList multipartNbtList = new NbtList();
         for (MultipartState multipartState : multipartStates) {
-            // TODO: try-catch
-            NbtCompound multipartNbtCompound = new NbtCompound();
-            
-            multipartNbtCompound.putInt("x", multipartState.x & 15);
-            multipartNbtCompound.putInt("y", multipartState.y);
-            multipartNbtCompound.putInt("z", multipartState.z & 15);
-            multipartState.writeNbt(multipartNbtCompound);
-            
-            multipartNbtList.add(multipartNbtCompound);
+            try {
+                NbtCompound multipartNbtCompound = new NbtCompound();
+
+                multipartNbtCompound.putInt("x", multipartState.x & 15);
+                multipartNbtCompound.putInt("y", multipartState.y);
+                multipartNbtCompound.putInt("z", multipartState.z & 15);
+                multipartState.writeNbt(multipartNbtCompound);
+
+                multipartNbtList.add(multipartNbtCompound);
+            } catch (Exception e) {
+                NyaLibMultipart.LOGGER.error("Error saving MultipartState", e);
+            }
         }
+        
+        if (multipartNbtList.size() == 0) {
+            return;
+        }
+        
         multipartNbt.put("states", multipartNbtList);
         
         // Add the multipart tag to the chunk
@@ -64,16 +73,20 @@ public class FlattenedWorldManagerMixin {
         // Read all the multipart states
         NbtList multipartNbtList = multipartNbt.getList("states");
         for (int i = 0; i < multipartNbtList.size(); i++) {
-            NbtCompound multipartNbtCompound = (NbtCompound) multipartNbtList.get(i);
-            
-            int x = multipartNbtCompound.getInt("x");
-            int y = multipartNbtCompound.getInt("y");
-            int z = multipartNbtCompound.getInt("z");
-            
-            MultipartState state = new MultipartState();
-            chunk.setMultipartState(x, y, z, state);
-            if (multipartNbtCompound.contains("components")) {
-                state.readNbt(multipartNbtCompound);
+            try {
+                NbtCompound multipartNbtCompound = (NbtCompound) multipartNbtList.get(i);
+
+                int x = multipartNbtCompound.getInt("x");
+                int y = multipartNbtCompound.getInt("y");
+                int z = multipartNbtCompound.getInt("z");
+
+                MultipartState state = new MultipartState();
+                chunk.setMultipartState(x, y, z, state);
+                if (multipartNbtCompound.contains("components")) {
+                    state.readNbt(multipartNbtCompound);
+                }
+            } catch (Exception e) {
+                NyaLibMultipart.LOGGER.error("Error loading MultipartState", e);
             }
         }
     }

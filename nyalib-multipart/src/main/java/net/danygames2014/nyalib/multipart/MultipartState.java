@@ -157,19 +157,22 @@ public class MultipartState {
 
         NbtList componentNbtList = nbt.getList("components");
         for (int i = 0; i < componentNbtList.size(); i++) {
-            // TODO: try-catch
-            NbtCompound componentNbt = (NbtCompound) componentNbtList.get(i);
+            try {
+                NbtCompound componentNbt = (NbtCompound) componentNbtList.get(i);
 
-            MultipartComponentFactory factory = MultipartComponentRegistry.get(Identifier.of(componentNbt.getString("id"))).factory;
+                MultipartComponentFactory factory = MultipartComponentRegistry.get(Identifier.of(componentNbt.getString("id"))).factory;
 
-            if (factory == null) {
-                NyaLibMultipart.LOGGER.warn("Could not find MultipartComponent with id " + componentNbt.getString("id"));
-                continue;
+                if (factory == null) {
+                    NyaLibMultipart.LOGGER.warn("Could not find MultipartComponent with id " + componentNbt.getString("id"));
+                    continue;
+                }
+
+                MultipartComponent component = factory.create();
+                addComponent(component, false);
+                component.readNbt(componentNbt);
+            } catch (Exception e) {
+                NyaLibMultipart.LOGGER.error("Error reading MultipartComponent", e);
             }
-
-            MultipartComponent component = factory.create();
-            addComponent(component, false);
-            component.readNbt(componentNbt);
         }
     }
 
