@@ -168,8 +168,8 @@ public class MultipartState {
                 }
 
                 MultipartComponent component = factory.create();
-                addComponent(component, false);
                 component.readNbt(componentNbt);
+                addComponent(component, false);
             } catch (Exception e) {
                 NyaLibMultipart.LOGGER.error("Error reading MultipartComponent", e);
             }

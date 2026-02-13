@@ -20,14 +20,14 @@ public class FlattenedWorldManagerMixin {
     @Inject(method = "saveChunk", at = @At(value = "TAIL"))
     private static void saveMultipart(FlattenedChunk chunk, World world, NbtCompound chunkTag, CallbackInfo ci) {
         ObjectCollection<MultipartState> multipartStates = chunk.getMultipartStates();
-        
+
         // If there are no multiparts, do not bother
         if (multipartStates == null || multipartStates.isEmpty()) {
             return;
         }
 
         multipartStates.removeIf(multipartState -> multipartState.components.isEmpty());
-        
+
         // Save the multipart data
         NbtCompound multipartNbt = new NbtCompound();
 
@@ -47,46 +47,57 @@ public class FlattenedWorldManagerMixin {
                 NyaLibMultipart.LOGGER.error("Error saving MultipartState", e);
             }
         }
-        
+
         if (multipartNbtList.size() == 0) {
             return;
         }
-        
+
         multipartNbt.put("states", multipartNbtList);
-        
+
         // Add the multipart tag to the chunk
         chunkTag.put("NyaLibMultipart", multipartNbt);
     }
-    
+
     @Inject(method = "loadChunk", at = @At("RETURN"))
-    private static void loadMultipart(World world, NbtCompound chunkTag, CallbackInfoReturnable<Chunk> cir){
+    private static void loadMultipart(World world, NbtCompound chunkTag, CallbackInfoReturnable<Chunk> cir) {
         // If there is no multipart data, do not bother
         if (!chunkTag.contains("NyaLibMultipart")) {
             return;
         }
-        
+
         Chunk chunk = cir.getReturnValue();
-        
+
         // Get the multipart tag from the chunk
         NbtCompound multipartNbt = chunkTag.getCompound("NyaLibMultipart");
-        
+
         // Read all the multipart states
         NbtList multipartNbtList = multipartNbt.getList("states");
         for (int i = 0; i < multipartNbtList.size(); i++) {
+            int x = Integer.MIN_VALUE;
+            int y = Integer.MIN_VALUE;
+            int z = Integer.MIN_VALUE;
+
             try {
                 NbtCompound multipartNbtCompound = (NbtCompound) multipartNbtList.get(i);
 
-                int x = multipartNbtCompound.getInt("x");
-                int y = multipartNbtCompound.getInt("y");
-                int z = multipartNbtCompound.getInt("z");
+                x = multipartNbtCompound.getInt("x");
+                y = multipartNbtCompound.getInt("y");
+                z = multipartNbtCompound.getInt("z");
 
                 MultipartState state = new MultipartState();
                 chunk.setMultipartState(x, y, z, state);
                 if (multipartNbtCompound.contains("components")) {
                     state.readNbt(multipartNbtCompound);
                 }
+
+                if (state.components.isEmpty()) {
+                    chunk.setMultipartState(x, y, z, null);
+                }
             } catch (Exception e) {
                 NyaLibMultipart.LOGGER.error("Error loading MultipartState", e);
+                if (x != Integer.MIN_VALUE && y != Integer.MIN_VALUE && z != Integer.MIN_VALUE) {
+                    chunk.setMultipartState(x, y, z, null);
+                }
             }
         }
     }
