@@ -92,7 +92,10 @@ public class FlattenedWorldManagerMixin {
 
                 if (state.components.isEmpty()) {
                     chunk.setMultipartState(x, y, z, null);
+                    continue;
                 }
+                
+                state.init();
             } catch (Exception e) {
                 NyaLibMultipart.LOGGER.error("Error loading MultipartState", e);
                 if (x != Integer.MIN_VALUE && y != Integer.MIN_VALUE && z != Integer.MIN_VALUE) {

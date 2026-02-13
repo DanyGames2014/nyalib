@@ -27,6 +27,12 @@ public class MultipartState {
     public MultipartState() {
         this.components = new ObjectArrayList<>();
     }
+    
+    public void init() {
+        for (MultipartComponent component : components) {
+            component.init();
+        }
+    }
 
     public boolean addComponent(MultipartComponent component, boolean notify) {
         component.world = world;

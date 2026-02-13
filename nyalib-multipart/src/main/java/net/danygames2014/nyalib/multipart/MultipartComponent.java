@@ -43,6 +43,10 @@ public abstract class MultipartComponent {
     // Properties
     public float hardness = 1.0F;
 
+    public void init() {
+        
+    }
+    
     /**
      * Marks the component dirty, subsequently marking the {@link MultipartState} dirty causing an update to be sent
      */
