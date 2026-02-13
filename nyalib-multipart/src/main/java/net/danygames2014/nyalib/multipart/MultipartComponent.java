@@ -75,6 +75,10 @@ public abstract class MultipartComponent {
     public void neighborUpdate(MultipartComponent updateSource, Direction direction) {
         
     }
+    
+    public void neighborBlockUpdate() {
+        
+    }
 
     /**
      * Called when a player right clicks this component

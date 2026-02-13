@@ -3,7 +3,9 @@ package net.danygames2014.nyalibtest.multipart;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.nyalib.multipart.MultipartComponent;
 import net.danygames2014.nyalib.util.BoxUtil;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.entity.player.PlayerEntity;
@@ -107,6 +109,15 @@ public class CoverMultipartComponent extends MultipartComponent {
 //        }
 //        direction = Direction.byId(dir);
 //        System.out.println(direction);
+    }
+
+    @Override
+    public void neighborBlockUpdate() {
+        if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+            for (int i = 0; i < 10; i++) {
+                Minecraft.INSTANCE.worldRenderer.addParticle("lava", x + 0.5D, y, z + 0.5D, 0.0D, 0.2D, 0.0D);
+            }
+        }
     }
 
     @Override

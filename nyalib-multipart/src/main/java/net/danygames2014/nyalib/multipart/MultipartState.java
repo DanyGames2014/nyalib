@@ -95,6 +95,12 @@ public class MultipartState {
         }
     }
 
+    public void neighborBlockUpdate() {
+        for (MultipartComponent component : components) {
+            component.neighborBlockUpdate();
+        }
+    }
+    
     // Collision and Bounds checking
     public void getCollisionBoxes(ObjectArrayList<Box> boxes) {
         for (MultipartComponent component : components) {

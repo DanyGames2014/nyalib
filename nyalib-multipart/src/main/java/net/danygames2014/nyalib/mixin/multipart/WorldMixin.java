@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.danygames2014.nyalib.mixininterface.MultipartWorld;
 import net.danygames2014.nyalib.multipart.MultipartHitResult;
 import net.danygames2014.nyalib.multipart.MultipartState;
 import net.minecraft.block.Block;
@@ -12,12 +13,14 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.util.math.Direction;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
@@ -25,7 +28,7 @@ import java.util.List;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 @Mixin(World.class)
-public class WorldMixin {
+public abstract class WorldMixin implements MultipartWorld {
     @Shadow
     private ArrayList tempCollisionBoxes;
 
@@ -133,5 +136,21 @@ public class WorldMixin {
     )
     void resetLastHitMultipart(Vec3d end, Vec3d bl, boolean bl2, boolean par4, CallbackInfoReturnable<HitResult> cir){
         MultipartHitResult.lastHit = null;
+    }
+    
+    @Inject(method = "blockUpdate", at = @At(value = "TAIL"))
+    public void triggerMultipartUpdate2(int x, int y, int z, int blockId, CallbackInfo ci) {
+        multipartBlockUpdate(x,y,z);
+        for (var side : Direction.values()) {
+            multipartBlockUpdate(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ());
+        }
+    }
+    
+    @Unique
+    private void multipartBlockUpdate(int x, int y, int z) {
+        MultipartState state = this.getMultipartState(x, y, z);
+        if (state != null) {
+            state.neighborBlockUpdate();
+        }
     }
 }
