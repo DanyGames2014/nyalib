@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectCollection;
 import net.danygames2014.nyalib.mixininterface.ChunkWithMultipart;
 import net.danygames2014.nyalib.multipart.MultipartState;
+import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.modificationstation.stationapi.api.world.chunk.StationFlatteningChunk;
@@ -46,6 +47,7 @@ public abstract class FlattenedChunkMixin implements ChunkWithMultipart, Station
         
         if (state == null) {
             multipartStates.remove(hashCode);
+            updateLightLevel((this.x * 16) + chunkX, y, (this.z * 16) + chunkZ);
             return true;
         }
         
@@ -56,6 +58,14 @@ public abstract class FlattenedChunkMixin implements ChunkWithMultipart, Station
         multipartStates.put(hashCode, state);
         state.markDirty();
         return true;
+    }
+
+    @Unique
+    private void updateLightLevel(int x, int y, int z) {
+        world.queueLightUpdate(LightType.BLOCK, x, y, z, x, y, z);
+        if (!world.dimension.hasCeiling) {
+            world.queueLightUpdate(LightType.SKY, x, y, z, x, y, z);
+        }
     }
 
     @Override

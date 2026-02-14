@@ -12,6 +12,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.Box;
+import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.SideUtil;
@@ -27,7 +28,7 @@ public class MultipartState {
     public MultipartState() {
         this.components = new ObjectArrayList<>();
     }
-    
+
     public void init() {
         for (MultipartComponent component : components) {
             component.init();
@@ -42,11 +43,12 @@ public class MultipartState {
         component.state = this;
         if (components.add(component)) {
             component.onPlaced();
-            
+
             for (var comp : components) {
                 comp.onStateUpdated(component, StateUpdateType.COMPONENT_ADD);
+                updateLightLevel();
             }
-            
+
             if (notify) {
                 this.markDirty();
                 world.notifyNeighbors(x, y, z, world.getBlockId(x, y, z));
@@ -60,17 +62,18 @@ public class MultipartState {
     public boolean removeComponent(int index, boolean notify) {
         return removeComponent(components.get(index), notify);
     }
-    
+
     public boolean removeComponent(MultipartComponent component, boolean notify) {
         if (components.remove(component)) {
             if (components.isEmpty()) {
                 world.setMultipartState(x, y, z, null);
             }
-            
+
             for (var comp : components) {
                 comp.onStateUpdated(component, StateUpdateType.COMPONENT_REMOVE);
+                updateLightLevel();
             }
-            
+
             if (notify) {
                 this.markDirty();
                 world.notifyNeighbors(x, y, z, world.getBlockId(x, y, z));
@@ -86,10 +89,11 @@ public class MultipartState {
             if (!world.isRemote) {
                 world.blockUpdateEvent(x, y, z);
                 //noinspection Convert2MethodRef
-                SideUtil.run(() -> {}, () -> sendUpdateToClient());
+                SideUtil.run(() -> {
+                }, () -> sendUpdateToClient());
             }
-            
-            world.setBlockDirty(x,y,z);
+
+            world.setBlockDirty(x, y, z);
         }
     }
 
@@ -105,29 +109,30 @@ public class MultipartState {
         for (MultipartComponent component : components) {
             component.neighborBlockUpdate();
         }
+        updateLightLevel();
     }
-    
+
     // Collision and Bounds checking
     public void getCollisionBoxes(ObjectArrayList<Box> boxes) {
         for (MultipartComponent component : components) {
             component.getCollisionBoxes(boxes);
         }
     }
-    
+
     public boolean isBoxOccupied(Box box) {
         ObjectArrayList<Box> boxes = new ObjectArrayList<>();
-        
+
         for (MultipartComponent component : components) {
             boxes.clear();
             component.getCollisionBoxes(boxes);
-            
+
             for (Box compBox : boxes) {
                 if (compBox.intersects(box)) {
                     return true;
                 }
             }
         }
-        
+
         return false;
     }
 
@@ -137,10 +142,10 @@ public class MultipartState {
         for (MultipartComponent component : components) {
             component.getCollisionBoxes(boxes);
         }
-        
+
         return BoxUtil.isFullyCovered(box, boxes);
     }
-    
+
     // Rendering
     public boolean render(Tessellator tessellator, BlockRenderManager blockRenderManager, int renderLayer) {
         boolean rendered = false;
@@ -148,6 +153,29 @@ public class MultipartState {
             rendered |= component.render(tessellator, blockRenderManager, renderLayer);
         }
         return rendered;
+    }
+
+    public float getLuminance() {
+        float highestLuminance = 0;
+        for (MultipartComponent component : components) {
+            highestLuminance = Math.max(highestLuminance, component.getLuminance());
+        }
+        return highestLuminance;
+    }
+
+    public int getLightLevel() {
+        int highestLightLevel = 0;
+        for (MultipartComponent component : components) {
+            highestLightLevel = Math.max(highestLightLevel, component.getLightLevel());
+        }
+        return highestLightLevel;
+    }
+
+    public void updateLightLevel() {
+        world.queueLightUpdate(LightType.BLOCK, x, y, z, x, y, z);
+        if (!world.dimension.hasCeiling) {
+            world.queueLightUpdate(LightType.SKY, x, y, z, x, y, z);
+        }
     }
 
     // NBT
@@ -200,7 +228,7 @@ public class MultipartState {
 
         return sb.toString();
     }
-    
+
     public enum StateUpdateType {
         COMPONENT_ADD,
         COMPONENT_REMOVE,

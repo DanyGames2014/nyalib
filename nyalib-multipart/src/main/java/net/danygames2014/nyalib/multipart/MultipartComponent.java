@@ -215,6 +215,14 @@ public abstract class MultipartComponent {
         return false;
     }
     
+    public float getLuminance() {
+        return 0.0F;
+    }
+    
+    public int getLightLevel() {
+        return 0;
+    }
+    
     // Helper Methods
     public void notifyNeighbors() {
         for (Direction side : Direction.values()) {

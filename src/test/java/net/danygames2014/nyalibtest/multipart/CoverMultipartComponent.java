@@ -101,6 +101,11 @@ public class CoverMultipartComponent extends MultipartComponent {
     }
 
     @Override
+    public int getLightLevel() {
+        return 15;
+    }
+    
+    @Override
     public void onBreakStart(PlayerEntity player) {
 //        int dir = direction.getId();
 //        dir++;

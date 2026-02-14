@@ -13,6 +13,7 @@
     "multipart.FlattenedWorldManagerMixin",
     "multipart.ItemMixin",
     "multipart.ItemStackMixin",
+    "multipart.LightUpdateMixin",
     "multipart.MultipartWorldMixin",
     "multipart.PistonBlockMixin",
     "multipart.PlayerEntityMixin",
