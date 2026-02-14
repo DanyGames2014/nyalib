@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-@Mixin(LightUpdate.class)
+@Mixin(value = LightUpdate.class, priority = 1100)
 public class LightUpdateMixin {
     @ModifyVariable(
             method = "updateLight(Lnet/minecraft/world/World;)V",
