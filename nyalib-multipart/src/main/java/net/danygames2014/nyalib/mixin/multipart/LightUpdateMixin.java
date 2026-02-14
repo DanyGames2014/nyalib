@@ -18,7 +18,7 @@ public class LightUpdateMixin {
             ),
             index = 20
     )
-    private int stationapi_getStateLuminance(int original, @Local World world, @Local(index = 10) int x, @Local(index = 15) int y, @Local(index = 11) int z) {
+    private int getMultipartLuminance(int original, @Local World world, @Local(index = 10) int x, @Local(index = 15) int y, @Local(index = 11) int z) {
         MultipartState state = world.getMultipartState(x,y,z);
         if (state != null) {
             return Math.max(original, state.getLightLevel());
