@@ -40,6 +40,10 @@ public class SoundHelper {
      * Play a sound to a given player at a given position
      */
     public static void playSound(PlayerEntity player, double x, double y, double z, String sound, float volume, float pitch) {
+        if (sound == null) {
+            return;
+        }
+        
         PacketHelper.sendTo(player, new SoundPacket(x, y, z, volume, pitch, sound));
     }
 
@@ -47,6 +51,10 @@ public class SoundHelper {
      * Play a sound to a given player at their position
      */
     public static void playSound(PlayerEntity player, String sound, float volume, float pitch) {
+        if (sound == null) {
+            return;
+        }
+        
         PacketHelper.sendTo(player, new SoundPacket(player.x, player.y, player.z, volume, pitch, sound));
     }
 
