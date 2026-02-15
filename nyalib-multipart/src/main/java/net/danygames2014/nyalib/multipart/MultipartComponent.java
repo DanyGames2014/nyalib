@@ -138,7 +138,7 @@ public abstract class MultipartComponent {
                 }
             }
 
-            SoundHelper.playSound(world, x + 0.5, y + 0.5, z + 0.5, getSoundGroup().getBreakSound(), (getSoundGroup().getVolume() + 1.0F) / 2.0F, getSoundGroup().getPitch() * 0.8F);
+            SoundHelper.playSound(world, x + 0.5, y + 0.5, z + 0.5, this.getBreakSound(), (getSoundGroup().getVolume() + 1.0F) / 2.0F, getSoundGroup().getPitch() * 0.8F);
         }
         markDirty();
     }
@@ -166,6 +166,17 @@ public abstract class MultipartComponent {
 
     public BlockSoundGroup getSoundGroup() {
         return Block.DEFAULT_SOUND_GROUP;
+    }
+    
+    public String getBreakSound() {
+        BlockSoundGroup soundGroup = getSoundGroup();
+        if (soundGroup == Block.GLASS_SOUND_GROUP) {
+            return "random.glass";
+        } else if (soundGroup == Block.SAND_SOUND_GROUP) {
+            return "step.gravel";
+        } else {
+            return soundGroup.getSound();
+        }
     }
     
     // Drop List
