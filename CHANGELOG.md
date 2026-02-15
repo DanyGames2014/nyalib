@@ -1,1 +1,1 @@
-* Fix a crash when right clicking a block with empty hand in multiplayer
+* Fix MultipartComponent.onBreak not being called on server and sounds not working
