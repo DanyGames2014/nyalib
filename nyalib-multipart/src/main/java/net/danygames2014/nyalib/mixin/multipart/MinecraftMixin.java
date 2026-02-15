@@ -117,8 +117,7 @@ public class MinecraftMixin {
         // Process the action
         if (holdingAttack && button == 0) {
             this.interactionManager.processMultipartBreakingAction(blockX, blockY, blockZ, pos, face, component);
-            // TODO: multipart breaking particles
-            //this.particleManager.addBlockBreakingParticles(blockX, blockY, blockZ, face.getId());
+            component.onBeingBroken(this.player, pos, face);
         } else {
             this.interactionManager.cancelMultipartBreaking(true);
         }

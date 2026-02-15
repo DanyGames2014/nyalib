@@ -2,11 +2,14 @@ package net.danygames2014.nyalib.multipart;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.nyalib.sound.SoundHelper;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -101,6 +104,16 @@ public abstract class MultipartComponent {
      */
     public void onBreakStart(PlayerEntity player) {
 
+    }
+
+
+    /**
+     * Called when this component is being broken
+     * This should primarily be used for spawning breaking particles
+     */
+    @Environment(EnvType.CLIENT)
+    public void onBeingBroken(ClientPlayerEntity player, Vec3d hitVec, Direction face) {
+        
     }
 
     /**
