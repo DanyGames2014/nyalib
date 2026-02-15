@@ -3,6 +3,8 @@ package net.danygames2014.nyalibtest.multipart;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.nyalib.multipart.MultipartComponent;
 import net.danygames2014.nyalib.util.BoxUtil;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -116,6 +118,7 @@ public class CoverMultipartComponent extends MultipartComponent {
 //        System.out.println(direction);
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public void neighborBlockUpdate() {
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
