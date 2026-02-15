@@ -14,8 +14,8 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(value = MultiplayerInteractionManager.class, priority = 1100)
 public class MultiplayerInteractionManagerMixin {
     @WrapOperation(method = "interactBlock", at = @At(value = "NEW", target = "(IIIILnet/minecraft/item/ItemStack;)Lnet/minecraft/network/packet/c2s/play/PlayerInteractBlockC2SPacket;"))
-    public PlayerInteractBlockC2SPacket useEnhancedPlacementConext(int x, int y, int z, int side, ItemStack stack, Operation<PlayerInteractBlockC2SPacket> original) {
-        if (stack.getItem() instanceof EnhancedPlacementContextItem) {
+    public PlayerInteractBlockC2SPacket useEnhancedPlacementContext(int x, int y, int z, int side, ItemStack stack, Operation<PlayerInteractBlockC2SPacket> original) {
+        if (stack != null && stack.getItem() instanceof EnhancedPlacementContextItem) {
             return new EnhancedPlayerInteractBlockC2SPacket(x, y, z, side, stack, Minecraft.INSTANCE.crosshairTarget.pos);
         }
         
