@@ -1,1 +1,1 @@
-* Fix a crash on server when using buckets
+* Fix a crash when right clicking a block with empty hand in multiplayer
