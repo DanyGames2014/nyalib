@@ -33,7 +33,6 @@ public abstract class ChunkMapMixin implements MultipartChunkMap {
             ChunkMap.TrackedChunk chunk = this.getOrCreateChunk(chunkX, chunkZ, false);
             if (chunk != null) {
                 chunk.updatePlayerMultipart(pos.x, pos.y, pos.z);
-                System.err.println("Sending update for block " + pos.x + ", " + pos.y + ", " + pos.z);
             }
         }
         
