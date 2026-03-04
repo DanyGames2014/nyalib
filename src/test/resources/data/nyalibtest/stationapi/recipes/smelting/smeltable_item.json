@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "nyalibtest:smelting_return_item"
+  },
+  "result": {
+    "item": "minecraft:diamond",
+    "count": 1
+  }
+}

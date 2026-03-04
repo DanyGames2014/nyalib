@@ -124,6 +124,7 @@ public class NyaLibTest {
     public static Item itemYoinker;
     public static Item managedItemBag;
     public static Block managedInventoryBlock;
+    public static Item smeltingReturnItem;
     
     public static Item multipartItem;
     public static Item stoneCoverMultipartItem;
@@ -225,6 +226,7 @@ public class NyaLibTest {
         
         itemYoinker = new YoinkerItem(NAMESPACE.id("item_yoinker")).setTranslationKey(NAMESPACE, "item_yoinker");
         managedItemBag = new ManagedItemBag(NAMESPACE.id("managed_item_bag")).setTranslationKey(NAMESPACE, "managed_item_bag");
+        smeltingReturnItem = new SmeltReturnItem(NAMESPACE.id("smelting_return_item")).setTranslationKey(NAMESPACE, "smelting_return_item");
         
         fluidPippeteItem = new FluidPipetteItem(NAMESPACE.id("fluid_pipette")).setTranslationKey(NAMESPACE, "fluid_pipette");
         managedfluidPipetteItem = new ManagedFluidPipetteItem(NAMESPACE.id("managed_fluid_pipette")).setTranslationKey(NAMESPACE, "managed_fluid_pipette");
