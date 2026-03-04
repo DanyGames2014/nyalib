@@ -11,6 +11,7 @@
     "item.DispenserBlockEntityMixin",
     "item.EntityMixin",
     "item.FurnaceBlockEntityMixin",
+    "item.FurnaceBlockEntityMixinItemApiImpl",
     "item.ItemMixin",
     "item.ItemStackMixin",
     "item.PlayerInventoryMixin",
