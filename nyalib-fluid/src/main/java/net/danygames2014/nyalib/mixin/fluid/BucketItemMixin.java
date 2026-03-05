@@ -51,11 +51,13 @@ public class BucketItemMixin implements FluidBucket {
     public void playEmptySound(ItemStack stack, World world, PlayerEntity player, CallbackInfoReturnable<ItemStack> cir) {
         Fluid fluid = getFluid();
         
-        if (!fluid.isPlaceableInWorld()) {
-            cir.setReturnValue(stack);
-        }
+        if (fluid != null) {
+            if (!fluid.isPlaceableInWorld()) {
+                cir.setReturnValue(stack);
+            }
 
-        SoundHelper.playSound(world, player.x, player.y, player.z, fluid.getEmptySound(), 0.5F, 1.0F, 16);
+            SoundHelper.playSound(world, player.x, player.y, player.z, fluid.getEmptySound(), 0.5F, 1.0F, 16);
+        }
     }
 
     @Override
