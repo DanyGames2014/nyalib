@@ -2,12 +2,14 @@ package net.danygames2014.nyalib.fluid;
 
 import net.danygames2014.nyalib.NyaLib;
 import net.minecraft.block.Block;
+import net.minecraft.block.LiquidBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.util.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -43,7 +45,7 @@ public final class Fluid {
      * If it is null, the fluid won't be taken from world
      */
     private Item bucketItem;
-    
+
     private FluidBucketFactory fluidBucketFactory;
 
     /**
@@ -76,7 +78,7 @@ public final class Fluid {
      * The default light level this fluid emits
      */
     private int lightLevel = 0;
-    
+
     /**
      * The tick rate governs how fast the fluid will spread.
      * It is the interval in ticks between each spread.
@@ -101,6 +103,8 @@ public final class Fluid {
      * Determines the default behavior of if entities will drown in this fluid.
      */
     private boolean willDrown = true;
+
+    private int spreadPriority = 1000;
 
     /**
      * The default color multiplier for this fluid.
@@ -165,11 +169,11 @@ public final class Fluid {
         this.bucketItem = bucketItem;
         return this;
     }
-    
+
     public FluidBucketFactory getFluidBucketFactory() {
         return fluidBucketFactory;
     }
-    
+
     public Fluid setFluidBucketFactory(FluidBucketFactory fluidBucketFactory) {
         this.fluidBucketFactory = fluidBucketFactory;
         return this;
@@ -284,12 +288,12 @@ public final class Fluid {
             this.lightLevel = 0;
             return this;
         }
-        
-        if  (lightLevel > 15) {
+
+        if (lightLevel > 15) {
             this.lightLevel = 15;
             return this;
         }
-        
+
         this.lightLevel = lightLevel;
         return this;
     }
@@ -325,21 +329,47 @@ public final class Fluid {
         this.movementSpeedMultiplier = movementSpeedMultiplier;
         return this;
     }
-    
+
     public boolean willDrown(LivingEntity livingEntity) {
         return willDrown && !livingEntity.canBreatheInWater();
     }
-    
+
     public Fluid setWillDrown(boolean willDrown) {
         this.willDrown = willDrown;
         return this;
     }
+
+    // Fluid Interactions
+
+    /**
+     * Called when the LiquidBlock is checking for interactions with blocks around it.
+     * For example when lava is being turned into obsidian/cobblestone
+     *
+     * @param block The block of the fluid
+     * @param world The world the block is in
+     * @param x     The x-position of the block
+     * @param y     The y-position of the block
+     * @param z     The z-position of the block
+     * @return <code>true</code> to cancel the vanilla code, <code>false</code> to allow the vanilla code to run
+     */
+    public boolean checkBlockInteractions(LiquidBlock block, World world, int x, int y, int z) {
+        return false;
+    }
     
+    public int getSpreadPriority() {
+        return spreadPriority;
+    }
+    
+    public Fluid setSpreadPriority(int spreadPriority) {
+        this.spreadPriority = spreadPriority;
+        return this;
+    }
+
     // Rendering
     public int getColorMultiplier(BlockView blockView, int x, int y, int z) {
         return colorMultiplier;
     }
-    
+
     public int setColorMultiplier(int colorMultiplier) {
         this.colorMultiplier = colorMultiplier;
         return this.colorMultiplier;

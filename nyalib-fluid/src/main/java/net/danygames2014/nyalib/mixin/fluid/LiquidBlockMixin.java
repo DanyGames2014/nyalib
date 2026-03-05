@@ -8,19 +8,27 @@ import net.danygames2014.nyalib.fluid.Fluid;
 import net.danygames2014.nyalib.fluid.FluidRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.block.Block;
 import net.minecraft.block.LiquidBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LiquidBlock.class)
-public class LiquidBlockMixin {
+public class LiquidBlockMixin extends Block {
     @Environment(EnvType.CLIENT)
     @Unique
     private static Fluid fluid;
+
+    public LiquidBlockMixin(int id, Material material) {
+        super(id, material);
+    }
 
     @Environment(EnvType.CLIENT)
     @WrapOperation(method = "getFlowingAngle", at = @At(value = "FIELD", target = "Lnet/minecraft/block/material/Material;WATER:Lnet/minecraft/block/material/Material;", ordinal = 0))
@@ -30,19 +38,30 @@ public class LiquidBlockMixin {
         if (fluid != null && fluid.getFlowingBlock() != null) {
             return fluid.getFlowingBlock().material;
         }
-        
+
         return original.call();
     }
-    
+
     @Environment(EnvType.CLIENT)
     @WrapOperation(method = "getFlowingAngle", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/LiquidBlock;getFlow(Lnet/minecraft/world/BlockView;III)Lnet/minecraft/util/math/Vec3d;", ordinal = 0))
-    private static Vec3d calculateFlow(LiquidBlock instance, BlockView blockView, int x, int y, int z, Operation<Vec3d> original){
+    private static Vec3d calculateFlow(LiquidBlock instance, BlockView blockView, int x, int y, int z, Operation<Vec3d> original) {
         if (fluid != null && fluid.getFlowingBlock() instanceof FlowingFluidBlock flowingFluidBlock) {
-            Vec3d flow = flowingFluidBlock.getFlow(blockView, x,y,z);
+            Vec3d flow = flowingFluidBlock.getFlow(blockView, x, y, z);
             fluid = null;
             return flow;
         }
-        
+
         return original.call(instance, blockView, x, y, z);
+    }
+
+    @Inject(method = "checkBlockCollisions", at = @At(value = "HEAD"), cancellable = true)
+    public void checkBlockInteractions(World world, int x, int y, int z, CallbackInfo ci) {
+        if (world.getBlockId(x, y, z) == this.id) {
+            Fluid fluid = FluidRegistry.get(this.id);
+
+            if (fluid.checkBlockInteractions((LiquidBlock) (Object) this, world, x, y, z)) {
+                ci.cancel();
+            }
+        }
     }
 }

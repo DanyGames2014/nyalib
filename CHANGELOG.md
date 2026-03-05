@@ -1,1 +1,2 @@
-* Fix MultipartComponent.onBreak not being called on server and sounds not working
+* Fix a crash in BucketItemMixin.playEmptySound 
+* Add HasSmeltingReturnStack

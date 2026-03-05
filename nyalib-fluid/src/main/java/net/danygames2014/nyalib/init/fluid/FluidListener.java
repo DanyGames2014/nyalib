@@ -26,6 +26,7 @@ public class FluidListener {
                         .setColor(0xFFE6913C)
                         .disableAutomaticBucketRegistration()
                         .setFluidBucketFactory(fluid -> Item.LAVA_BUCKET)
+                        .setSpreadPriority(2000)
         );
         
         event.register(
