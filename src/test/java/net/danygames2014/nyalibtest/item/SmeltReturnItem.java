@@ -13,6 +13,10 @@ public class SmeltReturnItem extends TemplateItem implements HasSmeltingReturnSt
 
     @Override
     public ItemStack getSmeltingReturnStack(ItemStack stack) {
-        return new ItemStack(Item.ARROW, 54);
+        if (stack.count == 1) {
+            return new ItemStack(Item.COAL, 1, 1);
+        }
+
+        return stack;
     }
 }
