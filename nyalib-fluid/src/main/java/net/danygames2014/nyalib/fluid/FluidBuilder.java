@@ -1,6 +1,7 @@
 package net.danygames2014.nyalib.fluid;
 
 import net.danygames2014.nyalib.NyaLib;
+import net.danygames2014.nyalib.NyaLibFluid;
 import net.danygames2014.nyalib.block.FluidBlockManager;
 import net.danygames2014.nyalib.util.MapColorUtil;
 import net.minecraft.block.Block;
@@ -47,7 +48,7 @@ public class FluidBuilder {
 
     /**
      * Start a builder for a fluid using the fluid textures
-     * Block implementations and textures will be automatically registered
+     * <p> Block implementations and textures will be automatically registered
      *
      * @param identifier     The {@link Identifier} of the fluid
      * @param stillTexture   The texture for the still state of the fluid
@@ -59,6 +60,23 @@ public class FluidBuilder {
         this.flowingBlock = null;
         this.stillTexture = stillTexture;
         this.flowingTexture = flowingTexture;
+    }
+
+    /**
+     * Start a builder for fluid using its color
+     * <p> Block implementations will be automatically registered using a default texture
+     *
+     * @param identifier The {@link Identifier} of the fluid
+     * @param color      The color of the fluid
+     */
+    public FluidBuilder(Identifier identifier, int color) {
+        this.identifier = identifier;
+        this.stillBlock = null;
+        this.flowingBlock = null;
+        this.stillTexture = NyaLibFluid.NAMESPACE.id("block/fluid_still");
+        this.flowingTexture = NyaLibFluid.NAMESPACE.id("block/fluid_flowing");
+        this.color = color;
+        this.colorMultiplier = color;
     }
 
     /**
@@ -330,13 +348,13 @@ public class FluidBuilder {
      * <p> Sets the default spread priority of this fluid.
      * <p> This won't have any effect if you override {@link Fluid#getSpreadPriority(Fluid, Block)} in the Fluid class
      * <p> The default priority is set to 1000, same as water and milk, but lower than Lava
-     * 
+     *
      * @param spreadPriority The spread priority to set as default
      * @return The Fluid Builder for chaining
      */
     public FluidBuilder spreadPriority(int spreadPriority) {
         this.spreadPriority = spreadPriority;
-        return this;   
+        return this;
     }
 
     public Fluid build() {
@@ -442,7 +460,7 @@ public class FluidBuilder {
         if (spreadPriority != null) {
             fluid.setSpreadPriority(spreadPriority);
         }
-        
+
         return fluid;
     }
 

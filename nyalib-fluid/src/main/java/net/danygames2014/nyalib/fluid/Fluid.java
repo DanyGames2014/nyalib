@@ -122,12 +122,8 @@ public final class Fluid {
 
     // TODO: Color multiplier of block applying to particles
     // TODO: Also just customizable splash particles
-    // TODO: LiquidBlock.randomDisplayTick
+    // TODO: Apply color multiplier of fluid to the BlockItem
     // TODO: Entity.isWet
-    // TODO: Entity.isTouchingLava
-    // TODO: LiquidBlock.checkBlockCollisions
-    // TODO: LiquidBlock.fizz?
-    // TODO: Automatic block using only color multiplier?
     // TODO: Temperature Per Fluid?
     // TODO: Interactions -> Vaporization in Nether
     // TODO: Methods with world/stack contexts
