@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.danygames2014.nyalib.block.FlowingFluidBlock;
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.danygames2014.nyalib.fluid.FluidRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.block.FlowingLiquidBlock;
 import net.minecraft.block.LiquidBlock;
 import net.minecraft.block.material.Material;
@@ -37,6 +38,7 @@ public abstract class FlowingLiquidBlockMixin extends LiquidBlock {
     public void handleFluidInteractions(World world, int x, int y, int z, CallbackInfoReturnable<Boolean> cir) {
         Fluid fluid = FluidRegistry.get(this.id);
         Fluid otherFluid = FluidRegistry.get(world.getBlockId(x, y, z));
+        Block otherBlock = world.getBlockState(x, y, z).getBlock();
 
         // Neither of the fluids are NyaLib managed fluids
         if (fluid == null && otherFluid == null) {
@@ -47,7 +49,7 @@ public abstract class FlowingLiquidBlockMixin extends LiquidBlock {
         if (fluid == null) {
             // A modded fluid is trying to spread into NyaLib fluid
             // If the NyaLib fluid has less priority than default, we allow it
-            cir.setReturnValue(otherFluid.getSpreadPriority() < 1000);
+            cir.setReturnValue(otherFluid.getSpreadPriority(null, this) < 1000);
             return;
         }
 
@@ -64,6 +66,6 @@ public abstract class FlowingLiquidBlockMixin extends LiquidBlock {
         }
 
         // If this fluid has higher spread priority, allow its spread over the other fluid
-        cir.setReturnValue(fluid.getSpreadPriority() > otherFluid.getSpreadPriority());
+        cir.setReturnValue(fluid.getSpreadPriority(otherFluid, otherBlock) > otherFluid.getSpreadPriority(fluid, this));
     }
 }

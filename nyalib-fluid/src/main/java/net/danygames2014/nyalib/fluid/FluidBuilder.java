@@ -37,12 +37,13 @@ public class FluidBuilder {
     private String emptySound = null;
     private Integer color = null;
     private MapColor mapColor = null;
+    private Integer colorMultiplier = null;
+    private Integer lightLevel = null;
     private Integer tickRate = null;
     private Boolean canSwimIn = null;
     private Double movementSpeedMultiplier = null;
     private Boolean willDrown = null;
-    private Integer lightLevel = null;
-    private Integer colorMultiplier = null;
+    private Integer spreadPriority = null;
 
     /**
      * Start a builder for a fluid using the fluid textures
@@ -90,43 +91,6 @@ public class FluidBuilder {
     }
 
     /**
-     * <p> Set the color that this block will have on a map
-     * <p> If this is not set, a map color will be automatically generated from the provided color in {@link #color(int)} or {@link #color(Color)}
-     *
-     * @param mapColor The map color to use on a map
-     * @return The Fluid Builder for chaining
-     */
-    public FluidBuilder mapColor(MapColor mapColor) {
-        this.mapColor = mapColor;
-        return this;
-    }
-
-    /**
-     * <p> Set the color that represents this fluid.
-     * <p> This can also be written as a hex value in the format <code>0xAARRGGBB</code>, for example <code>0xFFCCAA00</code>
-     * <p> This will be used for the bucket, WhatsThis and if you don't set one manually, the map color
-     *
-     * @param color The color to use
-     * @return The Fluid Builder for chaining
-     */
-    public FluidBuilder color(int color) {
-        this.color = color;
-        return this;
-    }
-
-    /**
-     * <p> Set the color that represents this fluid.
-     * <p> This will be used for the bucket, WhatsThis and if you don't set one manually, the map color
-     *
-     * @param color The color to use
-     * @return The Fluid Builder for chaining
-     */
-    public FluidBuilder color(Color color) {
-        this.color = color.getRGB();
-        return this;
-    }
-
-    /**
      * <p> Set the amount of fluid in mB that a bucket of this fluid will represent
      * <p> If this is not set, the default value will be used
      *
@@ -152,7 +116,6 @@ public class FluidBuilder {
         return this;
     }
 
-
     /**
      * <p> Set if a bucket can place this fluid into the world
      * <p> If this is not set, the placement is allowed
@@ -165,7 +128,6 @@ public class FluidBuilder {
         return this;
     }
 
-
     /**
      * Disabled the automatic registration of a bucket for this fluid
      *
@@ -175,6 +137,7 @@ public class FluidBuilder {
         this.automaticBucketRegistration = false;
         return this;
     }
+
 
     /**
      * Sets the sound played when a bucket of this fluid is filled
@@ -243,6 +206,70 @@ public class FluidBuilder {
     }
 
     /**
+     * <p> Set the color that represents this fluid.
+     * <p> This can also be written as a hex value in the format <code>0xAARRGGBB</code>, for example <code>0xFFCCAA00</code>
+     * <p> This will be used for the bucket, WhatsThis and if you don't set one manually, the map color
+     *
+     * @param color The color to use
+     * @return The Fluid Builder for chaining
+     */
+    public FluidBuilder color(int color) {
+        this.color = color;
+        return this;
+    }
+
+    /**
+     * <p> Set the color that represents this fluid.
+     * <p> This will be used for the bucket, WhatsThis and if you don't set one manually, the map color
+     *
+     * @param color The color to use
+     * @return The Fluid Builder for chaining
+     */
+    public FluidBuilder color(Color color) {
+        this.color = color.getRGB();
+        return this;
+    }
+
+    /**
+     * <p> Set the color that this block will have on a map
+     * <p> If this is not set, a map color will be automatically generated from the provided color in {@link #color(int)} or {@link #color(Color)}
+     *
+     * @param mapColor The map color to use on a map
+     * @return The Fluid Builder for chaining
+     */
+    public FluidBuilder mapColor(MapColor mapColor) {
+        this.mapColor = mapColor;
+        return this;
+    }
+
+    /**
+     * <p> Sets the default color multiplier of the fluid used for fluid blocks in world
+     * <p> This can also be written as a hex value in the format <code>0xRRGGBB</code>, for example <code>0xCCAA00</code>
+     * <p> This won't have any effect if you override {@link Fluid#getColorMultiplier(BlockView, int, int, int)} in the Fluid class
+     * <p> If this is not set, no color multiplier will be applied
+     *
+     * @param colorMultiplier The color multiplier
+     * @return The Fluid Builder for chaining
+     */
+    public FluidBuilder colorMultiplier(int colorMultiplier) {
+        this.colorMultiplier = colorMultiplier;
+        return this;
+    }
+
+    /**
+     * <p> Sets the default light level of the fluid
+     * <p> This won't have any effect if you override {@link Fluid#getLightLevel(BlockState)} in the Fluid class
+     * <p> If this is not set, the fluid won't emit any light
+     *
+     * @param lightLevel The light level in the range of 0-15 to set the fluid to
+     * @return The Fluid Builder for chaining
+     */
+    public FluidBuilder lightLevel(int lightLevel) {
+        this.lightLevel = lightLevel;
+        return this;
+    }
+
+    /**
      * <p> Sets the tick rate of this fluid. This determines how quickly it spreads.
      * <p> If this is not set, the fluid will default to the tick rate of Water
      * <p>
@@ -298,31 +325,18 @@ public class FluidBuilder {
         return this;
     }
 
-    /**
-     * <p> Sets the default light level of the fluid
-     * <p> This won't have any effect if you override {@link Fluid#getLightLevel(BlockState)} in the Fluid class
-     * <p> If this is not set, the fluid won't emit any light
-     *
-     * @param lightLevel The light level in the range of 0-15 to set the fluid to
-     * @return The Fluid Builder for chaining
-     */
-    public FluidBuilder lightLevel(int lightLevel) {
-        this.lightLevel = lightLevel;
-        return this;
-    }
 
     /**
-     * <p> Sets the default color multiplier of the fluid used for fluid blocks in world
-     * <p> This can also be written as a hex value in the format <code>0xRRGGBB</code>, for example <code>0xCCAA00</code>
-     * <p> This won't have any effect if you override {@link Fluid#getColorMultiplier(BlockView, int, int, int)} in the Fluid class
-     * <p> If this is not set, no color multiplier will be applied
+     * <p> Sets the default spread priority of this fluid.
+     * <p> This won't have any effect if you override {@link Fluid#getSpreadPriority(Fluid, Block)} in the Fluid class
+     * <p> The default priority is set to 1000, same as water and milk, but lower than Lava
      * 
-     * @param colorMultiplier The color multiplier
+     * @param spreadPriority The spread priority to set as default
      * @return The Fluid Builder for chaining
      */
-    public FluidBuilder colorMultiplier(int colorMultiplier) {
-        this.colorMultiplier = colorMultiplier;
-        return this;
+    public FluidBuilder spreadPriority(int spreadPriority) {
+        this.spreadPriority = spreadPriority;
+        return this;   
     }
 
     public Fluid build() {
@@ -362,6 +376,11 @@ public class FluidBuilder {
             fluid.setColor(color);
         } else {
             NyaLib.LOGGER.warn("Fluid " + identifier + " has no color set!");
+        }
+
+        // Color Multiplier
+        if (colorMultiplier != null) {
+            fluid.setColorMultiplier(colorMultiplier);
         }
 
         // Bucket Size
@@ -418,12 +437,12 @@ public class FluidBuilder {
         if (lightLevel != null) {
             fluid.setLightLevel(lightLevel);
         }
-        
-        // Color Multiplier
-        if (colorMultiplier != null) {
-            fluid.setColorMultiplier(colorMultiplier);
-        }
 
+        // Spread Priority
+        if (spreadPriority != null) {
+            fluid.setSpreadPriority(spreadPriority);
+        }
+        
         return fluid;
     }
 

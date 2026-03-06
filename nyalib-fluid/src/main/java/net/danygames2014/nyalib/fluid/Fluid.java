@@ -46,6 +46,9 @@ public final class Fluid {
      */
     private Item bucketItem;
 
+    /**
+     * The factory interface that will be used to create the {@link #bucketItem}
+     */
     private FluidBucketFactory fluidBucketFactory;
 
     /**
@@ -74,6 +77,11 @@ public final class Fluid {
      */
     private int color = 0xFFFFFFFF;
 
+    /**
+     * The default color multiplier for this fluid.
+     */
+    private int colorMultiplier = 0xFFFFFF;
+    
     /**
      * The default light level this fluid emits
      */
@@ -104,12 +112,13 @@ public final class Fluid {
      */
     private boolean willDrown = true;
 
+    /**
+     * The spread priority of this fluid.
+     * <p>If the spread priority is the same as another fluid, they will not overwrite each other.
+     * <p>If it is higher than the another fluid, it will flow into its place.
+     */
     private int spreadPriority = 1000;
 
-    /**
-     * The default color multiplier for this fluid.
-     */
-    private int colorMultiplier = 0xFFFFFF;
 
     // TODO: Color multiplier of block applying to particles
     // TODO: Also just customizable splash particles
@@ -118,7 +127,6 @@ public final class Fluid {
     // TODO: Entity.isTouchingLava
     // TODO: LiquidBlock.checkBlockCollisions
     // TODO: LiquidBlock.fizz?
-    // TODO: Custom fluid interactions
     // TODO: Automatic block using only color multiplier?
     // TODO: Temperature Per Fluid?
     // TODO: Interactions -> Vaporization in Nether
@@ -355,11 +363,20 @@ public final class Fluid {
     public boolean checkBlockInteractions(LiquidBlock block, World world, int x, int y, int z) {
         return false;
     }
-    
-    public int getSpreadPriority() {
+
+    /**
+     * <p>Get the spread priority of this fluid.</p>
+     * <p>If the spread priority is the same as the other fluid, they will not overwrite each other.</p>
+     * <p>If a spread priority is higher than the other fluid, it will overwrite it.</p>
+     *
+     * @param otherFluid The {@link Fluid} of the other fluid, this can be <code>null</code> if the other fluid is not managed by NyaLib
+     * @param otherBlock The {@link Block} of the other fluid, mostly useful in case of non-NyaLib fluids
+     * @return The spread priority of this fluid
+     */
+    public int getSpreadPriority(@Nullable Fluid otherFluid, Block otherBlock) {
         return spreadPriority;
     }
-    
+
     public Fluid setSpreadPriority(int spreadPriority) {
         this.spreadPriority = spreadPriority;
         return this;
