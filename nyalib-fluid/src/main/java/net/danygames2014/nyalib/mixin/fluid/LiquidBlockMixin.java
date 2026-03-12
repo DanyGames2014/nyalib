@@ -59,6 +59,10 @@ public class LiquidBlockMixin extends Block {
         if (world.getBlockId(x, y, z) == this.id) {
             Fluid fluid = FluidRegistry.get(this.id);
 
+            if (fluid == null) {
+                return;
+            }
+            
             if (fluid.checkBlockInteractions((LiquidBlock) (Object) this, world, x, y, z)) {
                 ci.cancel();
             }
