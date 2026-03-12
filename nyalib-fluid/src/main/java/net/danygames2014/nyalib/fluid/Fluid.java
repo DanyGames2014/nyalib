@@ -127,6 +127,7 @@ public final class Fluid {
     // TODO: Temperature Per Fluid?
     // TODO: Interactions -> Vaporization in Nether
     // TODO: Methods with world/stack contexts
+    // TODO: Slower mining in fluids
 
     // Base constructor
     public Fluid(Identifier identifier, Block still, Block flowing) {

@@ -3,11 +3,13 @@ package net.danygames2014.nyalib.block;
 import it.unimi.dsi.fastutil.ints.IntIntImmutablePair;
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.material.FluidMaterial;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.resource.language.TranslationStorage;
+import net.modificationstation.stationapi.api.client.event.color.item.ItemColorsRegisterEvent;
 import net.modificationstation.stationapi.api.client.event.texture.TextureRegisterEvent;
 import net.modificationstation.stationapi.api.client.resource.ReloadableAssetsManager;
 import net.modificationstation.stationapi.api.resource.Resource;
@@ -21,8 +23,8 @@ import java.util.Optional;
 public class FluidBlockManager {
     private static final HashMap<Fluid, FluidBlockEntry> fluidBlocks = new HashMap<>();
 
-    public static void requestBlock(Fluid fluid, Identifier stillTexture, Identifier flowingTexture, Identifier overlayTexture, MapColor mapColor) {
-        fluidBlocks.put(fluid, new FluidBlockEntry(fluid, stillTexture, flowingTexture, overlayTexture, mapColor));
+    public static void requestBlock(Fluid fluid, Identifier stillTexture, Identifier flowingTexture, Identifier overlayTexture, MapColor mapColor, Integer blockItemColorMultiplier) {
+        fluidBlocks.put(fluid, new FluidBlockEntry(fluid, stillTexture, flowingTexture, overlayTexture, mapColor, blockItemColorMultiplier));
     }
 
     public static void registerBlocks() {
@@ -51,6 +53,7 @@ public class FluidBlockManager {
         }
     }
 
+    @Environment(EnvType.CLIENT)
     public static void registerTextures(TextureRegisterEvent event) {
         for (var entry : fluidBlocks.entrySet()) {
             FluidBlockEntry fluidEntry = entry.getValue();
@@ -69,6 +72,19 @@ public class FluidBlockManager {
         }
     }
 
+    @Environment(EnvType.CLIENT)
+    public static void registerColorMultipliers(ItemColorsRegisterEvent event) {
+        for (var fluidEntry : fluidBlocks.entrySet()) {
+            if (fluidEntry.getValue().blockItemColorMultiplier != null) {
+                event.itemColors.register(
+                        (stack, layer) -> fluidEntry.getValue().blockItemColorMultiplier,
+                        fluidEntry.getKey().getStillBlock().asItem(), fluidEntry.getKey().getFlowingBlock().asItem()
+                );
+            }
+        }
+    }
+
+    @Environment(EnvType.CLIENT)
     public static IntIntImmutablePair getTextureSize(Identifier identifier) {
         Optional<Resource> resource = ReloadableAssetsManager.INSTANCE.getResource(Identifier.of("/assets/" + identifier.namespace + "/stationapi/textures/" + identifier.path + ".png"));
 
@@ -104,13 +120,15 @@ public class FluidBlockManager {
         public Identifier flowingTexture;
         public Identifier overlayTexture;
         public MapColor mapColor;
+        public Integer blockItemColorMultiplier = null;
 
-        public FluidBlockEntry(Fluid fluid, Identifier stillTexture, Identifier flowingTexture, Identifier overlayTexture, MapColor mapColor) {
+        public FluidBlockEntry(Fluid fluid, Identifier stillTexture, Identifier flowingTexture, Identifier overlayTexture, MapColor mapColor, Integer blockItemColorMultiplier) {
             this.fluid = fluid;
             this.stillTexture = stillTexture;
             this.flowingTexture = flowingTexture;
             this.overlayTexture = overlayTexture;
             this.mapColor = mapColor;
+            this.blockItemColorMultiplier = blockItemColorMultiplier;
         }
 
         public void setTextureHolder(FluidBlockTextureHolder textureHolder) {

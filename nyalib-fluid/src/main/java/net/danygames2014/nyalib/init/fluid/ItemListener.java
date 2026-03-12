@@ -1,5 +1,6 @@
 package net.danygames2014.nyalib.init.fluid;
 
+import net.danygames2014.nyalib.block.FluidBlockManager;
 import net.danygames2014.nyalib.block.JsonOverrideRegistry;
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.danygames2014.nyalib.fluid.FluidRegistry;
@@ -60,6 +61,7 @@ public class ItemListener {
             );
         }
 
+        FluidBlockManager.registerColorMultipliers(event);
     }
 
     public static void registerTranslations() {

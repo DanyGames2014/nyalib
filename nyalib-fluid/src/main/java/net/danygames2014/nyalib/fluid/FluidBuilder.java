@@ -39,6 +39,7 @@ public class FluidBuilder {
     private Integer color = null;
     private MapColor mapColor = null;
     private Integer colorMultiplier = null;
+    private Integer blockItemColorMultiplier = null;
     private Integer lightLevel = null;
     private Integer tickRate = null;
     private Boolean canSwimIn = null;
@@ -77,6 +78,7 @@ public class FluidBuilder {
         this.flowingTexture = NyaLibFluid.NAMESPACE.id("block/fluid_flowing");
         this.color = color;
         this.colorMultiplier = color;
+        this.blockItemColorMultiplier = color;
     }
 
     /**
@@ -384,7 +386,7 @@ public class FluidBuilder {
                 this.mapColor = MapColorUtil.getMapColor(color);
             }
 
-            FluidBlockManager.requestBlock(fluid, stillTexture, flowingTexture, overlayTexture, mapColor);
+            FluidBlockManager.requestBlock(fluid, stillTexture, flowingTexture, overlayTexture, mapColor, blockItemColorMultiplier);
         } else {
             throw new IllegalStateException("Tried to build a Fluid that has not been initialized with blocks or textures");
         }
