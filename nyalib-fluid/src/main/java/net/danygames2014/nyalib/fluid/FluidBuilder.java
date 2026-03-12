@@ -409,6 +409,7 @@ public class FluidBuilder {
         // Bucket Item
         if (bucketItemFactory != null) {
             fluid.setFluidBucketFactory(bucketItemFactory);
+            automaticBucketRegistration = Boolean.FALSE;
         }
 
         // Placeable in World
