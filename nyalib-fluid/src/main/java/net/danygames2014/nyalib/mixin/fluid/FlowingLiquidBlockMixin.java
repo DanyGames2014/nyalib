@@ -11,16 +11,12 @@ import net.minecraft.block.LiquidBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(FlowingLiquidBlock.class)
 public abstract class FlowingLiquidBlockMixin extends LiquidBlock {
-    @Shadow
-    protected abstract boolean isLiquidBreaking(World world, int x, int y, int z);
-
     public FlowingLiquidBlockMixin(int i, Material material) {
         super(i, material);
     }
