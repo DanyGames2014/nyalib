@@ -1,5 +1,4 @@
-* Fix a crash in BucketItemMixin.playEmptySound 
-* Add HasSmeltingReturnStack
-* Custom block interactions with fluids
-* Fluids can now specify which one has a priority when they want to spread into the same block
-* Added a way to create a fluid using only a color multiplier
+* Fix a crash when checking block interactions with non NyaLib fluids
+* Don't register a bucket automatically if a item bucket is provided
+* Add a block item color multiplier to automatically registered fluids with color
+* Fix a crash in ItemHandlerInventoryBlockCapability
