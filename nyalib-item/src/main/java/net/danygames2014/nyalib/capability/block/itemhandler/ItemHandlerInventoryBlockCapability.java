@@ -63,14 +63,20 @@ class ItemHandlerInventoryBlockCapability extends ItemHandlerBlockCapability {
                 break;
             }
 
+            ItemStack slotStack = getItem(i, side);
+            
+            if (slotStack == null) {
+                continue;
+            }
+            
             if (currentStack != null) {
-                if (this.getItem(i, side).isItemEqual(currentStack)) {
+                if (slotStack.isItemEqual(currentStack)) {
                     ItemStack extractedStack = extractItem(i, remaining, side);
                     remaining -= extractedStack.count;
                     currentStack.count += extractedStack.count;
                 }
             } else {
-                if (getItem(i, side).isOf(item) && (meta == -1 || getItem(i, side).getDamage() == meta)) {
+                if (slotStack.isOf(item) && (meta == -1 || slotStack.getDamage() == meta)) {
                     ItemStack extractedStack = extractItem(i, remaining, side);
                     remaining -= extractedStack.count;
                     currentStack = extractedStack;
