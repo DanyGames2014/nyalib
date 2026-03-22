@@ -121,7 +121,15 @@ public abstract class ChestBlockEntityMixin extends BlockEntity implements ItemH
 
     @Override
     public ItemStack[] getInventory(@Nullable Direction side) {
-        return this.inventory;
+        boolean isDoubleChest = isDoubleChest();
+
+        ItemStack[] stacks = new ItemStack[isDoubleChest ? this.size() + getSecondChest().size() : this.size()];
+        System.arraycopy(this.inventory, 0, stacks, 0, this.size());
+        if (isDoubleChest) {
+            System.arraycopy(getSecondChest().inventory, 0, stacks, 27, getSecondChest().size());
+        }
+        
+        return stacks;
     }
 
     // Double Chest Helper Methods

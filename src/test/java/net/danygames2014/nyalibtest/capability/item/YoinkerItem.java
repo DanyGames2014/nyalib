@@ -16,6 +16,8 @@ import net.modificationstation.stationapi.api.template.item.TemplateItem;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
+import java.util.Arrays;
+
 public class YoinkerItem extends TemplateItem {
     public YoinkerItem(Identifier identifier) {
         super(identifier);
@@ -47,7 +49,16 @@ public class YoinkerItem extends TemplateItem {
     }
 
     @Override
-    public boolean useOnBlock(ItemStack stack, PlayerEntity user, World world, int x, int y, int z, int side) {
+    public boolean useOnBlock(ItemStack stack, PlayerEntity player, World world, int x, int y, int z, int side) {
+        if (player.isSneaking()) {
+            ItemHandlerBlockCapability capability = CapabilityHelper.getCapability(world, x, y, z, ItemHandlerBlockCapability.class);
+            
+            if (capability != null) {
+                ItemStack[] stacks = capability.getInventory(null);
+                player.sendMessage("Stacks! (" + stacks.length + ") : " + Arrays.toString(stacks));
+            }
+        }
+        
         blockYoink(world, x, y, z, side);
         return true;
     }
