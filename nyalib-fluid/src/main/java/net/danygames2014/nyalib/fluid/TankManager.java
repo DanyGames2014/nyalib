@@ -78,16 +78,19 @@ public class TankManager {
         return true;
     }
 
+    @SuppressWarnings("CommentedOutCode")
     public int getFluidSlots(@Nullable Direction side) {
-        int slotCount = 0;
-
-        for (FluidSlotEntry fluidSlotEntry : fluidSlotEntries) {
-            if (fluidSlotEntry.isSideAllowed(side)) {
-                slotCount++;
-            }
-        }
-
-        return slotCount;
+        return fluidSlotEntries.length;
+        
+//        int slotCount = 0;
+//
+//        for (FluidSlotEntry fluidSlotEntry : fluidSlotEntries) {
+//            if (fluidSlotEntry.isSideAllowed(side)) {
+//                slotCount++;
+//            }
+//        }
+//
+//        return slotCount;
     }
 
     public FluidStack[] getFluids(@Nullable Direction side) {
