@@ -1,9 +1,11 @@
 package net.danygames2014.nyalib.mixin.fluid;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.danygames2014.nyalib.NyaLib;
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.danygames2014.nyalib.fluid.FluidBucket;
 import net.danygames2014.nyalib.fluid.FluidRegistry;
+import net.danygames2014.nyalib.fluid.Fluids;
 import net.danygames2014.nyalib.sound.SoundHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BucketItem;
@@ -17,13 +19,25 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @SuppressWarnings("AddedMixinMembersNamePattern")
 @Mixin(BucketItem.class)
-public class BucketItemMixin implements FluidBucket {
+public class BucketItemMixin extends Item implements FluidBucket {
     @Shadow
     private int fluidBlockId;
+
+    public BucketItemMixin(int id) {
+        super(id);
+    }
+    
+    @Inject(method = "<init>", at = @At(value = "TAIL"))
+    public void injectMilkId(int id, int fluidBlockId, CallbackInfo ci) {
+        if (id == 79 && fluidBlockId < 0 && NyaLib.FLUID_CONFIG.allowPlacingMilkInWorld) {
+            this.fluidBlockId = Fluids.MILK.getFlowingBlock().id;
+        }
+    }
 
     @Inject(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getMaterial(III)Lnet/minecraft/block/material/Material;", ordinal = 0, shift = At.Shift.BEFORE), cancellable = true)
     public void fillTheBucket(ItemStack stack, World world, PlayerEntity player, CallbackInfoReturnable<ItemStack> cir, @Local HitResult hitResult) {
@@ -62,6 +76,10 @@ public class BucketItemMixin implements FluidBucket {
 
     @Override
     public Fluid getFluid() {
+        if (this.fluidBlockId < 0 && this.id == Item.MILK_BUCKET.id) {
+            return Fluids.MILK;
+        }
+        
         return FluidRegistry.get(fluidBlockId);
     }
 
