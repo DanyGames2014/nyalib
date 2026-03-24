@@ -1,6 +1,7 @@
 package net.danygames2014.nyalibtest.mixin;
 
 import net.danygames2014.nyalib.fluid.FluidStack;
+import net.danygames2014.nyalib.fluid.FluidTankInfoProvider;
 import net.danygames2014.nyalib.fluid.entity.ManagedFluidHandlerEntity;
 import net.danygames2014.nyalib.item.entity.ManagedItemHandlerEntity;
 import net.danygames2014.nyalibtest.NyaLibTest;
@@ -17,8 +18,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+@SuppressWarnings("AddedMixinMembersNamePattern")
 @Mixin(SheepEntity.class)
-public abstract class SheepEntityMixin extends Entity implements ManagedFluidHandlerEntity, ManagedItemHandlerEntity {
+public abstract class SheepEntityMixin extends Entity implements ManagedFluidHandlerEntity, ManagedItemHandlerEntity, FluidTankInfoProvider {
     public SheepEntityMixin(World world) {
         super(world);
     }
@@ -28,7 +30,17 @@ public abstract class SheepEntityMixin extends Entity implements ManagedFluidHan
         addFluidSlot(2500).setAllowedFluids(NyaLibTest.glowstoneFluid);
         addItemSlot();
     }
+
+    @Override
+    public String getFluidTankName(int slot) {
+        return "Glowtank";
+    }
     
+    @Override
+    public String getFluidTankUnits(int slot) {
+        return "ml";
+    }
+
     @Inject(method = "interact", at = @At("HEAD"))
     public void addGlowstoneFluid(PlayerEntity player, CallbackInfoReturnable<Boolean> cir) {
         this.insertFluid(new FluidStack(NyaLibTest.glowstoneFluid, 50));

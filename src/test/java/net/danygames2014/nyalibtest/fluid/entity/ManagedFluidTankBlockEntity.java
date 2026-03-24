@@ -1,5 +1,6 @@
 package net.danygames2014.nyalibtest.fluid.entity;
 
+import net.danygames2014.nyalib.fluid.FluidTankInfoProvider;
 import net.danygames2014.nyalib.fluid.Fluids;
 import net.danygames2014.nyalib.fluid.block.ManagedFluidHandler;
 import net.minecraft.block.entity.BlockEntity;
@@ -8,7 +9,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
-public class ManagedFluidTankBlockEntity extends BlockEntity implements ManagedFluidHandler, Inventory {
+public class ManagedFluidTankBlockEntity extends BlockEntity implements ManagedFluidHandler, Inventory, FluidTankInfoProvider {
     public ManagedFluidTankBlockEntity() {
         this.addFluidSlot(2000).setAllowedSides(Direction.UP, Direction.NORTH).setAllowedFluids(Fluids.WATER);
         this.addFluidSlot(18000);
@@ -49,5 +50,24 @@ public class ManagedFluidTankBlockEntity extends BlockEntity implements ManagedF
     @Override
     public boolean canPlayerUse(PlayerEntity player) {
         return true;
+    }
+
+    @Override
+    public String getFluidTankName(int slot) {
+        return switch (slot) {
+            case 0 -> "Water Reservoir";
+            case 1 -> "Tank";
+            case 2 -> "THE MILK TANK";
+            default -> "Unknown";
+        };
+    }
+
+    @Override
+    public String getFluidTankUnits(int slot) {
+        if (slot == 2) {
+            return "Milkers";
+        }
+        
+        return "mB";
     }
 }

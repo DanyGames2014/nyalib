@@ -5,7 +5,11 @@ import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.entity.fluidhandler.FluidHandlerEntityCapability;
 import net.danygames2014.nyalib.compat.whatsthis.elements.ElementTankGauge;
 import net.danygames2014.nyalib.fluid.FluidStack;
-import net.danygames2014.whatsthis.api.*;
+import net.danygames2014.nyalib.fluid.FluidTankInfoProvider;
+import net.danygames2014.whatsthis.api.IProbeHitEntityData;
+import net.danygames2014.whatsthis.api.IProbeInfo;
+import net.danygames2014.whatsthis.api.IProbeInfoEntityProvider;
+import net.danygames2014.whatsthis.api.ProbeMode;
 import net.danygames2014.whatsthis.config.Config;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,21 +34,27 @@ public class FluidEntityProbeInfoProvider implements IProbeInfoEntityProvider {
     @Override
     public void addProbeEntityInfo(ProbeMode mode, IProbeInfo probeInfo, PlayerEntity player, World world, Entity entity, IProbeHitEntityData data) {
         FluidHandlerEntityCapability fluidHandler = CapabilityHelper.getCapability(entity, FluidHandlerEntityCapability.class);
+        
         if (fluidHandler != null) {
+            FluidTankInfoProvider tankInfoProvider = entity instanceof FluidTankInfoProvider ? (FluidTankInfoProvider) entity : null;
+            
             IProbeInfo vertical = probeInfo.vertical();
             
-            for (int i = 0; i < fluidHandler.getFluidSlots(); i++) {
-                FluidStack fluidStack = fluidHandler.getFluid(i);
-                int capacity = fluidHandler.getFluidCapacity(i);
+            for (int slot = 0; slot < fluidHandler.getFluidSlots(); slot++) {
+                FluidStack fluidStack = fluidHandler.getFluid(slot);
+                int capacity = fluidHandler.getFluidCapacity(slot);
+
+                String tankName = tankInfoProvider != null ? tankInfoProvider.getFluidTankName(slot) : "Tank";
+                String tankUnits = tankInfoProvider != null ? tankInfoProvider.getFluidTankUnits(slot) : "mB";
 
                 if (fluidStack != null) {
                     vertical.element(
                             new ElementTankGauge(
-                                    "Tank",
+                                    tankName,
                                     fluidStack.fluid.getTranslatedName(),
                                     fluidStack.amount,
                                     capacity,
-                                    "mB",
+                                    tankUnits,
                                     fluidStack.fluid.getColor(),
                                     mode == ProbeMode.EXTENDED
                             )
@@ -52,11 +62,11 @@ public class FluidEntityProbeInfoProvider implements IProbeInfoEntityProvider {
                 } else {
                     vertical.element(
                             new ElementTankGauge(
-                                    "Tank",
+                                    tankName,
                                     "",
                                     0,
                                     capacity,
-                                    "",
+                                    tankUnits,
                                     0xFF777777,
                                     mode == ProbeMode.EXTENDED
                             )
