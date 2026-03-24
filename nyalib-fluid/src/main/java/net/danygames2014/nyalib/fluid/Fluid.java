@@ -128,7 +128,6 @@ public final class Fluid {
     // TODO: Interactions -> Vaporization in Nether
     // TODO: Methods with world/stack contexts
     // TODO: Slower mining in fluids
-    // TODO: getTankName(slot) for NyaLib fluid WhatsThis integrate
 
     // Base constructor
     public Fluid(Identifier identifier, Block still, Block flowing) {
