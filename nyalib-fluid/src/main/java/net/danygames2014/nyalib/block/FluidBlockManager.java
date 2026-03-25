@@ -120,7 +120,7 @@ public class FluidBlockManager {
         public Identifier flowingTexture;
         public Identifier overlayTexture;
         public MapColor mapColor;
-        public Integer blockItemColorMultiplier = null;
+        public Integer blockItemColorMultiplier;
 
         public FluidBlockEntry(Fluid fluid, Identifier stillTexture, Identifier flowingTexture, Identifier overlayTexture, MapColor mapColor, Integer blockItemColorMultiplier) {
             this.fluid = fluid;

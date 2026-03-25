@@ -7,7 +7,6 @@ import net.danygames2014.nyalib.block.FlowingFluidBlock;
 import net.danygames2014.nyalib.block.StillFluidBlock;
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.minecraft.block.Block;
-import net.minecraft.block.LiquidBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;

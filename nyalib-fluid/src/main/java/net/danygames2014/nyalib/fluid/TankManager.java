@@ -156,7 +156,7 @@ public class TankManager {
         }
     }
 
-    @SuppressWarnings({"UnusedReturnValue"})
+    @SuppressWarnings({"UnusedReturnValue", "BooleanMethodIsAlwaysInverted"})
     public static class FluidSlotEntry {
         public ObjectArrayList<Fluid> allowedFluids;
         public ObjectArrayList<Direction> allowedSides;

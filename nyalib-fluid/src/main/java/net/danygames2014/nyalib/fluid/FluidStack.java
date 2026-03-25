@@ -74,11 +74,7 @@ public class FluidStack {
         
         return stack;
     }
-    
-//    public ItemStack asItemStack() {
-//        
-//    }
-    
+
     // Localization
     public String getTranslationKey() {
         return fluid.getTranslationKey(this);

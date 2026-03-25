@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-@SuppressWarnings({"rawtypes", "StringConcatenationArgumentToLogCall", "DuplicatedCode", "unchecked", "LoggingSimilarMessage"})
+@SuppressWarnings({"rawtypes", "StringConcatenationArgumentToLogCall", "unchecked", "LoggingSimilarMessage"})
 public class BlockCapabilityRegistry {
     private static BlockCapabilityRegistry INSTANCE;
 

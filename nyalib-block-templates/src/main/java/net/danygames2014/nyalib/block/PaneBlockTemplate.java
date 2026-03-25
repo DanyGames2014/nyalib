@@ -178,6 +178,7 @@ public class PaneBlockTemplate extends TemplateBlock {
             return true;
         }
 
+        //noinspection RedundantIfStatement
         if (state.getMaterial().suffocates() && state.getBlock().isFullCube()) {
             return true;
         }

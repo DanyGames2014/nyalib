@@ -116,6 +116,7 @@ public class BoxUtil {
     }
 
     // normal facing is expected to be east (+x)
+    @SuppressWarnings("RedundantLabeledSwitchRuleCodeBlock")
     public static Box rotate(Box box, Direction direction){
         Box origin = box.copy();
         switch (direction){

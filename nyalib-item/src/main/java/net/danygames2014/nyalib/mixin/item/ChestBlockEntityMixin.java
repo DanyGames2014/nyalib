@@ -31,7 +31,8 @@ public abstract class ChestBlockEntityMixin extends BlockEntity implements ItemH
 
     // API Methods
 
-    @Shadow private ItemStack[] inventory;
+    @Shadow
+    public ItemStack[] inventory;
 
     @Override
     public boolean canExtractItem(@Nullable Direction side) {
@@ -94,7 +95,7 @@ public abstract class ChestBlockEntityMixin extends BlockEntity implements ItemH
         for (int i = 0; i < this.getItemSlots(side); ++i) {
             insertedStack = insertItem(insertedStack, i, side);
             if (insertedStack == null) {
-                return insertedStack;
+                return null;
             }
         }
 

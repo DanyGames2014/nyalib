@@ -1,7 +1,6 @@
 package net.danygames2014.nyalib.energy;
 
 import net.minecraft.item.ItemStack;
-import net.modificationstation.stationapi.api.util.math.Direction;
 
 /**
  * A base interface to implement on an Item which can store energy

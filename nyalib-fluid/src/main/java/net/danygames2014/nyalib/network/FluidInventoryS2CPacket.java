@@ -101,7 +101,7 @@ public class FluidInventoryS2CPacket extends Packet implements ManagedPacket<Flu
 
     @Override
     public int size() {
-        return 0;
+        return this.size;
     }
 
     @Override

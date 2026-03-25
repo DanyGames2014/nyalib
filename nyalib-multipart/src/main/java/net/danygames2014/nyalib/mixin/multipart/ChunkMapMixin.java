@@ -3,7 +3,6 @@ package net.danygames2014.nyalib.mixin.multipart;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.danygames2014.nyalib.mixininterface.MultipartChunkMap;
 import net.minecraft.server.ChunkMap;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -12,11 +11,10 @@ import org.spongepowered.asm.mixin.Unique;
 @SuppressWarnings("AddedMixinMembersNamePattern")
 @Mixin(ChunkMap.class)
 public abstract class ChunkMapMixin implements MultipartChunkMap {
+    @SuppressWarnings("SameParameterValue")
     @Shadow
     protected abstract ChunkMap.TrackedChunk getOrCreateChunk(int chunkX, int chunkZ, boolean createIfAbsent);
 
-    @Shadow
-    private MinecraftServer server;
     @Unique
     public ObjectOpenHashSet<BlockPos> multipartUpdateQueue = new ObjectOpenHashSet<>();
     

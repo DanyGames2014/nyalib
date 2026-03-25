@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@SuppressWarnings("ClassCanBeRecord")
 public final class Line {
     private final Vec3d start;
     private final Vec3d end;

@@ -35,7 +35,7 @@ public class ScreenHandlerFluidSlotUpdateS2CPacket extends Packet implements Man
     public ScreenHandlerFluidSlotUpdateS2CPacket(int syncId, int slot, FluidStack stack) {
         this.syncId = syncId;
         this.slot = slot;
-        this.stack = stack == null ? stack : stack.copy();
+        this.stack = stack == null ? null : stack.copy();
     }
 
     @Override
@@ -83,6 +83,7 @@ public class ScreenHandlerFluidSlotUpdateS2CPacket extends Packet implements Man
         SideUtil.run(() -> handleClient(networkHandler), () -> {});
     }
     
+    @SuppressWarnings("RedundantLabeledSwitchRuleCodeBlock")
     @Environment(EnvType.CLIENT)
     public void handleClient(NetworkHandler networkHandler){
         PlayerEntity player = PlayerHelper.getPlayerFromPacketHandler(networkHandler);

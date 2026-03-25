@@ -43,13 +43,6 @@ public class ButtonBlockTemplate extends TemplateBlock {
     public ButtonBlockTemplate(Identifier identifier, Block baseBlock) {
         this(identifier, baseBlock, null);
     }
-    
-//    public ButtonBlockTemplate registerRecipe() {
-//        TemplateBlockRecipeRegistry.registerRecipeCallback(() -> {
-//            TemplateBlockRecipeRegistry.registerShapeless(new ItemStack(this, 1), baseBlock);
-//        });
-//        return this;
-//    }
 
     // Blockstate Properties
     @Override
@@ -116,6 +109,7 @@ public class ButtonBlockTemplate extends TemplateBlock {
         return 20;
     }
 
+    @SuppressWarnings("RedundantLabeledSwitchRuleCodeBlock")
     @Override
     public void onTick(World world, int x, int y, int z, Random random) {
         if (world.isRemote) {
@@ -159,6 +153,7 @@ public class ButtonBlockTemplate extends TemplateBlock {
         this.onUse(world, x, y, z, player);
     }
 
+    @SuppressWarnings("RedundantLabeledSwitchRuleCodeBlock")
     @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
         if (world.isRemote) {

@@ -23,6 +23,7 @@ import java.util.concurrent.Executor;
 
 import static net.modificationstation.stationapi.impl.client.texture.StationRenderImpl.LOGGER;
 
+@SuppressWarnings("rawtypes")
 @Environment(EnvType.CLIENT)
 @Mixin(value = BakedModelManager.class, remap = false)
 public class BakedModelManagerMixin {

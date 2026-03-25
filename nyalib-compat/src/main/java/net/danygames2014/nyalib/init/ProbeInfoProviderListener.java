@@ -3,7 +3,6 @@ package net.danygames2014.nyalib.init;
 import net.danygames2014.nyalib.compat.whatsthis.elements.ElementTankGauge;
 import net.danygames2014.nyalib.compat.whatsthis.providers.*;
 import net.danygames2014.whatsthis.WhatsThis;
-import net.danygames2014.whatsthis.apiimpl.TheOneProbeImp;
 import net.danygames2014.whatsthis.event.BlockProbeInfoProviderRegistryEvent;
 import net.danygames2014.whatsthis.event.EntityProbeInfoProviderRegistryEvent;
 import net.mine_diver.unsafeevents.listener.EventListener;

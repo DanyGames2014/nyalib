@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.*;
 
 
-@SuppressWarnings("UnusedReturnValue")
+@SuppressWarnings({"UnusedReturnValue", "BooleanMethodIsAlwaysInverted"})
 public final class Fluid {
     /**
      * The unique identifier of the fluid

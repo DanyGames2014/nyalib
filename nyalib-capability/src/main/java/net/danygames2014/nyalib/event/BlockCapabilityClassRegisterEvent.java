@@ -6,7 +6,7 @@ import net.mine_diver.unsafeevents.Event;
 import net.modificationstation.stationapi.api.util.Identifier;
 
 public class BlockCapabilityClassRegisterEvent extends Event {
-    public BlockCapabilityRegistry registry;
+    public final BlockCapabilityRegistry registry;
 
     public BlockCapabilityClassRegisterEvent() {
         registry = BlockCapabilityRegistry.getInstance();

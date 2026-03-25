@@ -23,7 +23,7 @@ public class ExplosionMixin {
     public Entity source;
     
     @Unique
-    private ObjectOpenHashSet<MultipartComponent> damagedComponents = new ObjectOpenHashSet<>();
+    private final ObjectOpenHashSet<MultipartComponent> damagedComponents = new ObjectOpenHashSet<>();
 
     @Inject(method = "explode", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getBlockId(III)I", ordinal = 0))
     void addDamagedMultipartComponents(CallbackInfo ci, @Local(ordinal = 1) float remainingPower, @Local(ordinal = 4)int x, @Local(ordinal = 5)int y, @Local(ordinal = 6)int z, @Local(ordinal = 2) float var21){

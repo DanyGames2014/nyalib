@@ -3,7 +3,10 @@ package net.danygames2014.nyalib.compat.whatsthis.providers;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.entity.itemhandler.ItemHandlerEntityCapability;
 import net.danygames2014.whatsthis.Util;
-import net.danygames2014.whatsthis.api.*;
+import net.danygames2014.whatsthis.api.ElementAlignment;
+import net.danygames2014.whatsthis.api.IProbeConfig;
+import net.danygames2014.whatsthis.api.IProbeInfo;
+import net.danygames2014.whatsthis.api.ProbeMode;
 import net.danygames2014.whatsthis.apiimpl.styles.ItemStyle;
 import net.danygames2014.whatsthis.apiimpl.styles.LayoutStyle;
 import net.danygames2014.whatsthis.config.Config;
@@ -58,7 +61,7 @@ public class EntityInventoryInfo {
     }
 
     private static void showInventoryContents(IProbeInfo probeInfo, World world, Entity entity, List<ItemStack> stacks, boolean detailed) {
-        IProbeInfo vertical = null;
+        IProbeInfo vertical;
         IProbeInfo horizontal = null;
 
         int rows = 0;

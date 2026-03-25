@@ -127,6 +127,7 @@ public class InventoryManager {
         }
     }
     
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static class ItemSlotEntry {
         public ObjectArrayList<Item> allowedItems;
         public ObjectArrayList<Direction> allowedSides;

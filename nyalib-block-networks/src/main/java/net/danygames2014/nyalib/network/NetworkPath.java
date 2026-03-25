@@ -3,6 +3,7 @@ package net.danygames2014.nyalib.network;
 import net.minecraft.util.math.Vec3i;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
+@SuppressWarnings("ClassCanBeRecord")
 public class NetworkPath {
     /**
      * The starting component

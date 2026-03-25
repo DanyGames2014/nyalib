@@ -1,18 +1,16 @@
 package net.modificationstation.stationapi.gradle;
 
 import groovy.util.Node;
-import groovy.util.NodeList;
-import groovy.xml.XmlUtil;
 import net.fabricmc.loom.util.GroovyXmlUtil;
 import org.gradle.api.Project;
-import org.gradle.api.XmlProvider;
 import org.gradle.api.artifacts.Dependency;
 import org.gradle.api.publish.PublishingExtension;
 import org.gradle.api.publish.maven.MavenPublication;
-import org.gradle.internal.impldep.org.codehaus.plexus.util.xml.XmlReader;
 
-import java.util.*;
-import java.util.stream.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class SubprojectHelpers {
 
@@ -24,9 +22,7 @@ public class SubprojectHelpers {
         modules.forEach(dependency -> project.getDependencies().add("implementation", dependency));
 
         MavenPublication publishing = (MavenPublication) project.getExtensions().getByType(PublishingExtension.class).getPublications().getByName("mavenJava");
-        publishing.pom((e) -> e.withXml((f) -> {
-            addDependencies(f.asNode(), "implementation", modules);
-        }));
+        publishing.pom((e) -> e.withXml((f) -> addDependencies(f.asNode(), "implementation", modules)));
     }
 
     public static void addDependencyXML(Node xml, String scope, Project dependency) {

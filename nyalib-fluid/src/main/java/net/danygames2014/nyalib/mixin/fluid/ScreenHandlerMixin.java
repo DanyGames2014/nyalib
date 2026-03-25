@@ -28,7 +28,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("AddedMixinMembersNamePattern")
+@SuppressWarnings({"AddedMixinMembersNamePattern", "BooleanMethodIsAlwaysInverted", "rawtypes"})
 @Mixin(ScreenHandler.class)
 public abstract class ScreenHandlerMixin implements FluidScreenHandler {
     @Shadow
@@ -113,6 +113,7 @@ public abstract class ScreenHandlerMixin implements FluidScreenHandler {
                 FluidStack itemFluidStack = item.getFluid(0);
                 FluidStack invFluidStack = inv.getFluid(index, null);
 
+                //noinspection StatementWithEmptyBody
                 if (itemFluidStack == null && invFluidStack == null) {
                     // Both are empty. Do Nothing
 
@@ -145,6 +146,7 @@ public abstract class ScreenHandlerMixin implements FluidScreenHandler {
                 Fluid bucketFluid = bucket.getFluid();
                 FluidStack invFluidStack = inv.getFluid(index, null);
 
+                //noinspection StatementWithEmptyBody
                 if (bucketFluid == null && invFluidStack == null) {
                     // Both are empty. Do Nothing
 

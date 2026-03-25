@@ -102,6 +102,7 @@ public class WallBlockTemplate extends TemplateBlock {
         }
 
         Block block = state.getBlock();
+        //noinspection RedundantIfStatement
         if (block instanceof TorchBlock || block instanceof RedstoneTorchBlock || block instanceof FenceBlock || block instanceof FenceBlockTemplate) {
             return true;
         }
@@ -119,6 +120,7 @@ public class WallBlockTemplate extends TemplateBlock {
             return true;
         }
 
+        //noinspection RedundantIfStatement
         if (state.getMaterial().suffocates() && state.getBlock().isFullCube()) {
             return true;
         }

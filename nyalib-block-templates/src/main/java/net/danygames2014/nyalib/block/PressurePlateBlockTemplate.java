@@ -110,6 +110,7 @@ public class PressurePlateBlockTemplate extends TemplateBlock {
         }
     }
 
+    @SuppressWarnings("RedundantLabeledSwitchRuleCodeBlock")
     private void updatePlateState(World world, int x, int y, int z) {
         @SuppressWarnings("rawtypes")
         List foundEntities = null;

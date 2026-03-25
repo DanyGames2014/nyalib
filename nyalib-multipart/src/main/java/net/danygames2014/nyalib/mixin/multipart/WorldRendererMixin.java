@@ -24,6 +24,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.List;
 
+@SuppressWarnings("AddedMixinMembersNamePattern")
 @Mixin(WorldRenderer.class)
 public abstract class WorldRendererMixin implements MultipartWorldRenderer {
 

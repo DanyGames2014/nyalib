@@ -1,5 +1,6 @@
 package net.danygames2014.nyalib.packet;
 
+import net.danygames2014.nyalib.NyaLib;
 import net.danygames2014.nyalib.multipart.MultipartState;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -50,7 +51,7 @@ public class MultipartDataS2CPacket extends Packet implements ManagedPacket<Mult
                 stateNbt = NbtIo.readCompressed(new ByteArrayInputStream(bytes));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            NyaLib.LOGGER.warn("Error reading MultipartDataS2CPacket", e);
             throw new RuntimeException(e);
         }
     }
@@ -79,7 +80,7 @@ public class MultipartDataS2CPacket extends Packet implements ManagedPacket<Mult
                 stream.write(bytes); // nbt data
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            NyaLib.LOGGER.warn("Error writing MultipartDataS2CPacket", e);
             throw new RuntimeException(e);
         }
     }

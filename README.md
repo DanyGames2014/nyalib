@@ -1,12 +1,20 @@
 # NyaLib
 
 ## Features
-* Block networking system
-* Universal Item and Energy Handlers
+* Generic block networking
+* Energy API and Energy Networks
+* Item API
+* Fluid API
+* Block Capabilities
+* Server driven particles and sounds/music
+* Block Templates in the form of template classes and template models
+* Basic structures with collision checking and rotation
+* Multipart API
+* Many utility features (e.g HasCraftingReturnStack, Slot Locking, EnhancedPlacement ContextItem etc.)
 
 ## How to Use  
 
-1. Add NyaRepo under `repositories`
+#### Add NyaRepo under `repositories`
 ```groovy
 maven {
 	name = "NyaRepo"
@@ -22,14 +30,14 @@ maven {
 ```
 
 &nbsp;
-2. Add NyaLib as a dependency in `dependencies`
+#### Add NyaLib as a dependency in `dependencies`
 ```groovy
 modImplementation "net.danygames2014:NyaLib:${project.nyalib_version}"
 ```
 
 &nbsp;
-3. Specify the version in `gradle.properties`
+#### Specify the version in `gradle.properties`
 ```properties
-nyalib_version=0.9.0
+nyalib_version=0.20.0
 ```
 

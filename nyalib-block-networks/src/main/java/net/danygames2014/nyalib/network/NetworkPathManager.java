@@ -7,7 +7,6 @@ import net.minecraft.util.math.Vec3i;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class NetworkPathManager {
     Network network;

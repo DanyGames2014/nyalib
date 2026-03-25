@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BlockWithEntity.class)
 public class BlockWithEntityMixin extends BlockMixin {
-    @SuppressWarnings({"unchecked", "ConstantValue"})
+    @SuppressWarnings({"unchecked", "ConstantValue", "RedundantCast"})
     @Inject(method = "onPlaced(Lnet/minecraft/world/World;III)V", at = @At(value = "TAIL"))
     public <T extends Block & NetworkComponent> void addToNetOnPlaced(World world, int x, int y, int z, CallbackInfo ci) {
         if ((Object) this instanceof Block && (Object) this instanceof NetworkComponent) {
@@ -23,7 +23,7 @@ public class BlockWithEntityMixin extends BlockMixin {
         }
     }
 
-    @SuppressWarnings({"ConstantValue", "unchecked"})
+    @SuppressWarnings({"ConstantValue", "unchecked", "RedundantCast"})
     @Inject(method = "onBreak", at = @At(value = "HEAD"))
     public <T extends Block & NetworkComponent> void removeFromNetOnPlaced(World world, int x, int y, int z, CallbackInfo ci) {
         if ((Object) this instanceof Block && (Object) this instanceof NetworkComponent) {

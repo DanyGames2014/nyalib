@@ -169,7 +169,7 @@ class ItemHandlerPlayerEntityCapability extends ItemHandlerEntityCapability {
 
     @Override
     public ItemStack[] getInventory() {
-        ArrayList<ItemStack> inventory = new ArrayList<ItemStack>(player.inventory.size());
+        ArrayList<ItemStack> inventory = new ArrayList<>(player.inventory.size());
 
         for (int i = 0; i < player.inventory.size(); i++) {
             inventory.add(player.inventory.getStack(i));

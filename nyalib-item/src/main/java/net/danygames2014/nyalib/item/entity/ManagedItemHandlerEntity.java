@@ -102,7 +102,7 @@ public interface ManagedItemHandlerEntity extends ItemHandlerEntity {
         for (int i = 0; i < this.getItemSlots(); ++i) {
             insertedStack = insertItem(insertedStack, i);
             if (insertedStack == null) {
-                return insertedStack;
+                return null;
             }
         }
 

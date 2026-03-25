@@ -144,6 +144,7 @@ public abstract class FurnaceBlockEntityMixinItemApiImpl extends BlockEntity imp
         return stack;
     }
 
+    @SuppressWarnings("RedundantLabeledSwitchRuleCodeBlock")
     @Override
     public ItemStack insertItem(ItemStack stack, @Nullable Direction side) {
         ItemStack insertedStack = stack.copy();
@@ -175,7 +176,7 @@ public abstract class FurnaceBlockEntityMixinItemApiImpl extends BlockEntity imp
             for (int i = 0; i < this.getItemSlots(side); ++i) {
                 insertedStack = insertItem(insertedStack, i, side);
                 if (insertedStack == null) {
-                    return insertedStack;
+                    return null;
                 }
             }
         }

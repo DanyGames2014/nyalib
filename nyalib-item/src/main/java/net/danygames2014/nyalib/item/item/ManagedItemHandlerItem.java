@@ -103,7 +103,7 @@ public interface ManagedItemHandlerItem extends ItemHandlerItem {
         for (int i = 0; i < this.getItemSlots(thiz); ++i) {
             insertedStack = insertItem(thiz, insertedStack, i);
             if (insertedStack == null) {
-                return insertedStack;
+                return null;
             }
         }
 
