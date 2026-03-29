@@ -45,9 +45,9 @@ public class FluidBlockProbeInfoProvider implements IProbeInfoProvider {
             
             IProbeInfo vertical = probeInfo.vertical();
             
-            for (int slot = 0; slot < fluidHandler.getFluidSlots(data.getSideHit()); slot++) {
-                FluidStack fluidStack = fluidHandler.getFluid(slot, data.getSideHit());
-                int capacity = fluidHandler.getFluidCapacity(slot, data.getSideHit());
+            for (int slot = 0; slot < fluidHandler.getFluidSlots(null); slot++) {
+                FluidStack fluidStack = fluidHandler.getFluid(slot, null);
+                int capacity = fluidHandler.getFluidCapacity(slot, null);
                 
                 String tankName = tankInfoProvider != null ? tankInfoProvider.getFluidTankName(slot) : "Tank";
                 String tankUnits = tankInfoProvider != null ? tankInfoProvider.getFluidTankUnits(slot) : "mB";
