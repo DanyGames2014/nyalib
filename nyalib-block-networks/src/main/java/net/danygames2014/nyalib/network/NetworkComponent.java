@@ -103,10 +103,10 @@ public interface NetworkComponent {
      * @param y       The y-position of this component
      * @param z       The z-position of this component
      * @param network The network the component is in
-     * @return The pathing cost of this component
+     * @return The pathing cost of this component between <code>0.1</code> and <code>Double.MAX_VALUE</code>
      */
-    default int getPathingCost(World world, int x, int y, int z, @Nullable Network network) {
-        return 1;
+    default double getPathingCost(World world, int x, int y, int z, @Nullable Network network) {
+        return 1.0D;
     }
 
     /**

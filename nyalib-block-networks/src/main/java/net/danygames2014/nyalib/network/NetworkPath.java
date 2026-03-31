@@ -26,14 +26,14 @@ public class NetworkPath {
      * The cost of the path, unless modified this is 1 unit / block
      * Higher Cost = Worse Path
      */
-    public final int cost;
+    public final double cost;
     
     /**
      * The path taken. Including the start and end edges/nodes
      */
     public final Vec3i[] path;
 
-    public NetworkPath(Vec3i start, Direction startFace, Vec3i end, Direction endFace, Vec3i[] path, int cost) {
+    public NetworkPath(Vec3i start, Direction startFace, Vec3i end, Direction endFace, Vec3i[] path, double cost) {
         this.start = start;
         this.startFace = startFace;
         this.end = end;

@@ -7,6 +7,7 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.function.ToDoubleFunction;
 
 public class AStar {
     Vec3i start;
@@ -14,6 +15,8 @@ public class AStar {
     Object2ObjectOpenHashMap<Vec3i, AStarNode> open;
     Object2ObjectOpenHashMap<Vec3i, AStarNode> closed;
     Object2ObjectOpenHashMap<Vec3i, AStarNode> validNodes;
+
+    ToDoubleFunction<Vec3i> pathCostFunction = value -> 1.0D;
 
     public AStar(Vec3i start, Vec3i end, Vec3i[] avalibleNodes) {
         this.open = new Object2ObjectOpenHashMap<>();
@@ -31,6 +34,11 @@ public class AStar {
         startNode.gCost = 0;
         startNode.fCost = manhattanDistance(start, end);
         open.put(start, startNode);
+    }
+
+    public AStar(Vec3i start, Vec3i end, Vec3i[] avalibleNodes, ToDoubleFunction<Vec3i> pathCostFunction) {
+        this(start, end, avalibleNodes);
+        this.pathCostFunction = pathCostFunction;
     }
 
     public Vec3i[] calculate() {
@@ -55,20 +63,26 @@ public class AStar {
             for (Direction direction : Direction.values()) {
                 Vec3i neighbor = new Vec3i(current.position.x + direction.getOffsetX(), current.position.y + direction.getOffsetY(), current.position.z + direction.getOffsetZ());
 
-                if (!validNodes.containsKey(neighbor) || closed.containsKey(neighbor)) {
+                if (!validNodes.containsKey(neighbor)) {
                     continue;
                 }
 
                 // We check what the cost would be to this neighbor
-                double candidateGCost = current.gCost + getNodeCost(neighbor);
+                double candidateGCost = current.gCost + pathCostFunction.applyAsDouble(neighbor);
                 AStarNode neighborNode = validNodes.get(neighbor);
 
-                // Check is its a shorter path
+                if (closed.containsKey(neighbor) && candidateGCost >= neighborNode.gCost) {
+                    continue;
+                }
+
+                // Check if its a shorter path
                 if (candidateGCost < neighborNode.gCost) {
                     neighborNode.parent = current;
                     neighborNode.gCost = candidateGCost;
                     neighborNode.fCost = candidateGCost + manhattanDistance(neighbor, end);
 
+                    closed.remove(neighbor);
+                    
                     if (!open.containsKey(neighbor)) {
                         open.put(neighbor, neighborNode);
                     }
@@ -105,13 +119,9 @@ public class AStar {
 
         return bestNode;
     }
-    
-    double getNodeCost(Vec3i node) {
-        return 1.0D;
-    }
 
     static double manhattanDistance(Vec3i a, Vec3i b) {
-        return Math.abs(a.x - b.x) + Math.abs(a.y - b.y) + Math.abs(a.z - b.z);
+        return (Math.abs(a.x - b.x) + Math.abs(a.y - b.y) + Math.abs(a.z - b.z)) * 0.1D;
     }
 }
 

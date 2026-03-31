@@ -11,10 +11,7 @@ import net.danygames2014.nyalib.fluid.FluidRegistry;
 import net.danygames2014.nyalib.network.NetworkType;
 import net.danygames2014.nyalibtest.capability.block.ItemHandlerBlockCapabilityTesterBlock;
 import net.danygames2014.nyalibtest.capability.item.YoinkerItem;
-import net.danygames2014.nyalibtest.energy.EnergyConsumerBlock;
-import net.danygames2014.nyalibtest.energy.EnergySourceBlock;
-import net.danygames2014.nyalibtest.energy.MultimeterItem;
-import net.danygames2014.nyalibtest.energy.WireBlock;
+import net.danygames2014.nyalibtest.energy.*;
 import net.danygames2014.nyalibtest.energy.entity.EnergyConsumerBlockEntity;
 import net.danygames2014.nyalibtest.energy.entity.EnergySourceBlockEntity;
 import net.danygames2014.nyalibtest.fluid.FluidTankBlock;
@@ -84,6 +81,8 @@ public class NyaLibTest {
     public static Block energyGeneratorBlock;
     public static Block energyConsumerBlock;
     public static Block energyWireBlock;
+    public static Block lowResistanceEnergyWireBlock;
+    public static Block highResistanceEnergyWireBlock;
     public static Item multimeter;
 
     public static Block fluidTankBlock;
@@ -164,6 +163,8 @@ public class NyaLibTest {
         energyGeneratorBlock = new EnergySourceBlock(NAMESPACE.id("energy_source"), Material.METAL).setTranslationKey(NAMESPACE, "energy_source");
         energyConsumerBlock = new EnergyConsumerBlock(NAMESPACE.id("energy_consumer"), Material.METAL).setTranslationKey(NAMESPACE, "energy_consumer");
         energyWireBlock = new WireBlock(NAMESPACE.id("energy_wire")).setTranslationKey(NAMESPACE, "energy_wire");
+        lowResistanceEnergyWireBlock = new LowResistanceWireBlock(NAMESPACE.id("low_resistance_energy_wire")).setTranslationKey(NAMESPACE, "low_resistance_energy_wire");
+        highResistanceEnergyWireBlock = new HighResistanceWireBlock(NAMESPACE.id("high_resistance_energy_wire")).setTranslationKey(NAMESPACE, "high_resistance_energy_wire");
 
         // Block Templates
         spongeStairs = new StairsBlockTemplate(NAMESPACE.id("sponge_stairs"), Block.SPONGE).setTranslationKey(NAMESPACE, "sponge_stairs");

@@ -54,13 +54,22 @@ public class NetworkPathManager {
 
         return network.isPathValid(path);
     }
+    
+    public double getComponentPathingCost(Vec3i pos) {
+        NetworkComponent component = network.components.get(pos).component();
+        if (component != null) {
+            return Math.max(component.getPathingCost(network.world, pos.x, pos.y, pos.z, network), 0.1D);
+        }
+        
+        return 1.0D;
+    }
 
     public NetworkPath computePath(Vec3i from, Vec3i to) {
         // Calculate Path
         ObjectSet<Vec3i> availibleNodes = new ObjectOpenHashSet<>(network.getNonEdgeNodes().keySet());
         availibleNodes.add(from);
         availibleNodes.add(to);
-        AStar aStar = new AStar(from, to, availibleNodes.toArray(new Vec3i[0]));
+        AStar aStar = new AStar(from, to, availibleNodes.toArray(new Vec3i[0]), this::getComponentPathingCost);
         Vec3i[] path = aStar.calculate();
 
         if (path == null || path.length == 0) {
@@ -68,10 +77,11 @@ public class NetworkPathManager {
         }
 
         // Calculate Path Cost
-        int cost = 0;
+        double cost = 0;
         for (Vec3i pos : path) {
-            if (network.world.getBlockState(pos.x, pos.y, pos.z).getBlock() instanceof NetworkComponent component) {
-                cost += component.getPathingCost(network.world, pos.x, pos.y, pos.z, network);
+            NetworkComponent component = network.components.get(pos).component();
+            if (component != null) {
+                cost += Math.max(component.getPathingCost(network.world, pos.x, pos.y, pos.z, network), 0.1D);
             }
         }
 

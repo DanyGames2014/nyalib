@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "nyalibtest:block/low_resistance_energy_wire" }
+  }
+}
