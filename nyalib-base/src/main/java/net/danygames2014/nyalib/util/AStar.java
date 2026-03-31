@@ -1,25 +1,24 @@
 package net.danygames2014.nyalib.util;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.danygames2014.nyalib.NyaLib;
 import net.minecraft.util.math.Vec3i;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 public class AStar {
     Vec3i start;
     Vec3i end;
-    HashMap<Vec3i, AStarNode> open;
-    HashMap<Vec3i, AStarNode> closed;
-    HashMap<Vec3i, AStarNode> validNodes;
+    Object2ObjectOpenHashMap<Vec3i, AStarNode> open;
+    Object2ObjectOpenHashMap<Vec3i, AStarNode> closed;
+    Object2ObjectOpenHashMap<Vec3i, AStarNode> validNodes;
 
     public AStar(Vec3i start, Vec3i end, Vec3i[] avalibleNodes) {
-        this.open = new HashMap<>();
-        this.closed = new HashMap<>();
-        this.validNodes = new HashMap<>();
+        this.open = new Object2ObjectOpenHashMap<>();
+        this.closed = new Object2ObjectOpenHashMap<>();
+        this.validNodes = new Object2ObjectOpenHashMap<>();
         this.start = start;
         this.end = end;
 
@@ -27,13 +26,17 @@ public class AStar {
             validNodes.put(node, new AStarNode(node, null));
         }
 
-        open.put(start, new AStarNode(start, null));
+        // Initialize the starting node
+        AStarNode startNode = new AStarNode(start, null);
+        startNode.gCost = 0;
+        startNode.fCost = manhattanDistance(start, end);
+        open.put(start, startNode);
     }
 
     public Vec3i[] calculate() {
         AStarNode endNode = null;
 
-        while (endNode == null) {
+        while (!open.isEmpty()) {
             AStarNode current = getLowestFCost();
 
             if (current == null) {
@@ -46,31 +49,39 @@ public class AStar {
 
             if (current.position.equals(end)) {
                 endNode = current;
+                break;
             }
 
             for (Direction direction : Direction.values()) {
                 Vec3i neighbor = new Vec3i(current.position.x + direction.getOffsetX(), current.position.y + direction.getOffsetY(), current.position.z + direction.getOffsetZ());
+
                 if (!validNodes.containsKey(neighbor) || closed.containsKey(neighbor)) {
                     continue;
                 }
 
+                // We check what the cost would be to this neighbor
+                double candidateGCost = current.gCost + getNodeCost(neighbor);
                 AStarNode neighborNode = validNodes.get(neighbor);
-                double neighborCost = neighborNode.fCost;
-                double newCost = neighborNode.calculateCost(start, end);
 
-                if (newCost < neighborCost || !open.containsKey(neighbor)) {
-                    neighborNode.fCost = newCost;
+                // Check is its a shorter path
+                if (candidateGCost < neighborNode.gCost) {
                     neighborNode.parent = current;
+                    neighborNode.gCost = candidateGCost;
+                    neighborNode.fCost = candidateGCost + manhattanDistance(neighbor, end);
+
                     if (!open.containsKey(neighbor)) {
                         open.put(neighbor, neighborNode);
                     }
                 }
-
             }
         }
 
-        AStarNode traversedNode = endNode;
+        if (endNode == null) {
+            return null;
+        }
+
         ArrayList<Vec3i> path = new ArrayList<>();
+        AStarNode traversedNode = endNode;
 
         while (traversedNode != null) {
             path.add(traversedNode.position);
@@ -78,7 +89,6 @@ public class AStar {
         }
 
         Collections.reverse(path);
-
         return path.toArray(new Vec3i[0]);
     }
 
@@ -86,21 +96,22 @@ public class AStar {
         double lowestCost = Double.MAX_VALUE;
         AStarNode bestNode = null;
 
-        if (open.isEmpty()) {
-            NyaLib.LOGGER.debug("Lowest F cost requested for empty path.");
-            return null;
-        }
-
-        for (Map.Entry<Vec3i, AStarNode> nodeEntry : open.entrySet()) {
-            AStarNode node = nodeEntry.getValue();
-            double cost = node.calculateCost(start, end);
-            if (cost < lowestCost) {
-                lowestCost = node.fCost = cost;
+        for (AStarNode node : open.values()) {
+            if (node.fCost < lowestCost) {
+                lowestCost = node.fCost;
                 bestNode = node;
             }
         }
 
         return bestNode;
+    }
+    
+    double getNodeCost(Vec3i node) {
+        return 1.0D;
+    }
+
+    static double manhattanDistance(Vec3i a, Vec3i b) {
+        return Math.abs(a.x - b.x) + Math.abs(a.y - b.y) + Math.abs(a.z - b.z);
     }
 }
 
@@ -110,17 +121,13 @@ public class AStar {
 class AStarNode {
     Vec3i position;
     AStarNode parent;
+    double gCost;
     double fCost;
 
     public AStarNode(Vec3i position, AStarNode parent) {
         this.position = position;
         this.parent = parent;
+        this.gCost = Double.MAX_VALUE;
         this.fCost = Double.MAX_VALUE;
-    }
-
-    public double calculateCost(Vec3i start, Vec3i end) {
-        double gCostT = position.distanceTo(start.x, start.y, start.z);
-        double hCostT = position.distanceTo(end.x, end.y, end.z);
-        return gCostT + hCostT;
     }
 }
