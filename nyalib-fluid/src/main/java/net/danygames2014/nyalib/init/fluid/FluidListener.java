@@ -27,6 +27,7 @@ public class FluidListener {
                         .disableAutomaticBucketRegistration()
                         .setFluidBucketFactory(fluid -> Item.LAVA_BUCKET)
                         .setSpreadPriority(2000)
+                        .setWillDrown(false)
         );
         
         event.register(
