@@ -186,7 +186,21 @@ public abstract class FurnaceBlockEntityMixinItemApiImpl extends BlockEntity imp
 
     @Override
     public ItemStack getItem(int slot, @Nullable Direction side) {
+        if (slot >= getItemSlots(side) || slot < 0) {
+            return null;
+        }
+
         return this.getStack(slot);
+    }
+
+    @Override
+    public boolean setItem(ItemStack stack, int slot, @Nullable Direction side) {
+        if (slot >= getItemSlots(side) || slot < 0) {
+            return false;
+        }
+
+        this.setStack(slot, stack);
+        return true;
     }
 
     @Override
