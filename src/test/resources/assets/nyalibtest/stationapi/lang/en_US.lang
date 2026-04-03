@@ -13,6 +13,7 @@ tile.nyalibtest.energy_consumer.name=Energy Consumer
 tile.nyalibtest.energy_wire.name=Energy Wire
 tile.nyalibtest.low_resistance_energy_wire.name=Low Resistance Energy Wire
 tile.nyalibtest.high_resistance_energy_wire.name=High Resistance Energy Wire
+tile.nyalibtest.lossy_energy_wire.name=Lossy Energy Wire
 tile.nyalibtest.sponge_stairs.name=Sponge Stairs
 tile.nyalibtest.sponge_slab.name=Sponge Slab
 tile.nyalibtest.sponge_fence.name=Sponge Fence

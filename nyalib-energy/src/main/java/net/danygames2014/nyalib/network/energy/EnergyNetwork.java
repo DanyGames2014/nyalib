@@ -137,6 +137,27 @@ public class EnergyNetwork extends Network {
     }
 
     private int traverseEnergy(EnergyConsumer consumer, Direction consumerFace, NetworkPath path, int voltage, int energy) {
+        double lostEnergy = 0;
+
+        // Traverse all the nodes the energy will go thru
+        for (Vec3i node : path.path) {
+            // Get the flow entry for the given node
+            EnergyFlowEntry flowEntry = energyFlow.get(node);
+
+            // If ithe entry is null, the block doesnt have a EnergyConductor implemented on it
+            if (flowEntry != null) {
+                // Add the energy loss
+                lostEnergy += flowEntry.conductor.getEnergyLossPerBlock();
+            }
+        }
+
+        energy -= (int) Math.floor(lostEnergy);
+
+        // If all the energy would have been wasted, the transfer will not occur
+        if (energy <= 0) {
+            return 0;
+        }
+        
         int providedEnergy = consumer.receiveEnergy(consumerFace, voltage, energy);
 
         // Traverse all the nodes the energy will go thru

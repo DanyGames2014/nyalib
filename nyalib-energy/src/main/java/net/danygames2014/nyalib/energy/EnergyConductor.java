@@ -28,4 +28,8 @@ public interface EnergyConductor {
      * @param power   The power that is passing thru the conductor
      */
     void onBreakdownPower(World world, NetworkComponentEntry entry, int voltage, int power);
+
+    default double getEnergyLossPerBlock() {
+        return 0;
+    }
 }

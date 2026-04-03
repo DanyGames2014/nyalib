@@ -85,22 +85,41 @@ public class ButtonBlockTemplate extends TemplateBlock {
 
         switch (state.get(BUTTON_TYPE)) {
             case CEILING -> {
-                return canPlaceOn(world, x, y + 1, z);
+                return canPlaceOn(world, x, y + 1, z, Direction.DOWN);
             }
             case FLOOR -> {
-                return canPlaceOn(world, x, y - 1, z);
+                return canPlaceOn(world, x, y - 1, z, Direction.UP);
             }
             case WALL -> {
                 Direction side = state.get(Properties.HORIZONTAL_FACING).getOpposite();
-                return canPlaceOn(world, x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ());
+                return canPlaceOn(world, x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ(), side.getOpposite());
             }
         }
 
         return false;
     }
 
-    public boolean canPlaceOn(World world, int x, int y, int z) {
-        return world.shouldSuffocate(x, y, z);
+    @Override
+    public boolean canPlaceAt(World world, int x, int y, int z, int side) {
+        Direction dir = Direction.byId(side).getOpposite();
+        
+        return canPlaceOn(world, x + dir.getOffsetX(), y + dir.getOffsetY(), z + dir.getOffsetZ(), dir.getOpposite());
+    }
+
+    public boolean canPlaceOn(World world, int x, int y, int z, Direction face) {
+        System.out.println("world = " + world + ", x = " + x + ", y = " + y + ", z = " + z + ", side = " + face.getId());
+        
+        BlockState state = world.getBlockState(x,y,z);
+        System.err.println(state);
+        Block block = state.getBlock();
+        
+        if (state.isAir() || block == null) {
+            return false;
+        }
+        
+        boolean returned = block.isSolidFace(world, x, y, z, face.getId());
+        System.err.println(returned);
+        return returned;
     }
 
     // Ticking & Updates

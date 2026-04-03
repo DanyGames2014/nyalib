@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "nyalibtest:block/lossy_energy_wire" }
+  }
+}

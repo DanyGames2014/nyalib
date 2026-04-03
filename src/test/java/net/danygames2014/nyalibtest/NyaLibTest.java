@@ -83,6 +83,7 @@ public class NyaLibTest {
     public static Block energyWireBlock;
     public static Block lowResistanceEnergyWireBlock;
     public static Block highResistanceEnergyWireBlock;
+    public static Block lossyEnergyWireBlock;
     public static Item multimeter;
 
     public static Block fluidTankBlock;
@@ -165,6 +166,7 @@ public class NyaLibTest {
         energyWireBlock = new WireBlock(NAMESPACE.id("energy_wire")).setTranslationKey(NAMESPACE, "energy_wire");
         lowResistanceEnergyWireBlock = new LowResistanceWireBlock(NAMESPACE.id("low_resistance_energy_wire")).setTranslationKey(NAMESPACE, "low_resistance_energy_wire");
         highResistanceEnergyWireBlock = new HighResistanceWireBlock(NAMESPACE.id("high_resistance_energy_wire")).setTranslationKey(NAMESPACE, "high_resistance_energy_wire");
+        lossyEnergyWireBlock = new LossyEnergyWireBlock(NAMESPACE.id("lossy_energy_wire")).setTranslationKey(NAMESPACE, "lossy_energy_wire");
 
         // Block Templates
         spongeStairs = new StairsBlockTemplate(NAMESPACE.id("sponge_stairs"), Block.SPONGE).setTranslationKey(NAMESPACE, "sponge_stairs");
