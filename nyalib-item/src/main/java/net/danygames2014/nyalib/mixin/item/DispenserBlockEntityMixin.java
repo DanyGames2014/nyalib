@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
-@SuppressWarnings({"AddedMixinMembersNamePattern", "DuplicatedCode"})
+@SuppressWarnings({"AddedMixinMembersNamePattern", "DuplicatedCode", "ShadowNameDoesntMatchTargetClass"})
 @Mixin(DispenserBlockEntity.class)
 public abstract class DispenserBlockEntityMixin extends BlockEntity implements ItemHandler {
     @Shadow
@@ -84,6 +84,16 @@ public abstract class DispenserBlockEntityMixin extends BlockEntity implements I
     @Override
     public ItemStack getItem(int slot, @Nullable Direction side) {
         return this.getStack(slot);
+    }
+
+    @Override
+    public boolean setItem(ItemStack stack, int slot, @Nullable Direction side) {
+        if (slot >= getItemSlots(side) || slot < 0) {
+            return false;
+        }
+
+        this.setStack(slot, stack);
+        return true;
     }
 
     @Override

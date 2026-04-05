@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
-@SuppressWarnings({"AddedMixinMembersNamePattern", "DuplicatedCode"})
+@SuppressWarnings({"AddedMixinMembersNamePattern", "DuplicatedCode", "ShadowNameDoesntMatchTargetClass"})
 @Mixin(ChestBlockEntity.class)
 public abstract class ChestBlockEntityMixin extends BlockEntity implements ItemHandler {
 
@@ -28,9 +28,7 @@ public abstract class ChestBlockEntityMixin extends BlockEntity implements ItemH
     @Shadow
     public abstract void setStack(int slot, ItemStack stack);
 
-
     // API Methods
-
     @Shadow
     public ItemStack[] inventory;
 
@@ -109,6 +107,20 @@ public abstract class ChestBlockEntityMixin extends BlockEntity implements ItemH
         }
 
         return this.getStack(slot);
+    }
+
+    @Override
+    public boolean setItem(ItemStack stack, int slot, @Nullable Direction side) {
+        if (slot >= getItemSlots(side) || slot < 0) {
+            return false;
+        }
+        
+        if (slot > 26 && isDoubleChest()) {
+            getSecondChest().setStack(slot - 27, stack);
+        }
+
+        this.setStack(slot, stack);
+        return true;
     }
 
     @Override
