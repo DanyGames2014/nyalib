@@ -150,16 +150,16 @@ public class Network {
     }
 
     /**
-     * Called before entities/block entities are ticked
+     * Called before block entities are ticked
      */
     public void tick() {
 
     }
 
     /**
-     * Called after entities/block entities are ticked
+     * Called after block entities are ticked
      */
-    public void postEntityTick() {
+    public void postTick() {
 
     }
 

@@ -23,7 +23,7 @@ public class WorldMixin {
 
     @Shadow public boolean isRemote;
 
-    @Inject(method = "tickEntities", at = @At(value = "HEAD"))
+    @Inject(method = "tickEntities", at = @At(value = "INVOKE", target = "Ljava/util/List;iterator()Ljava/util/Iterator;", ordinal = 0))
     public void tickNetworks_preEntity(CallbackInfo ci) {
         if (isRemote) {
             return;
@@ -49,7 +49,7 @@ public class WorldMixin {
         if (networks != null) {
             for (ArrayList<Network> networkTypes : networks.values()) {
                 for (Network network : networkTypes) {
-                    network.postEntityTick();
+                    network.postTick();
                 }
             }
         }
