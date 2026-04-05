@@ -57,9 +57,15 @@ public abstract class HandledScreenMixin extends Screen {
         }
     }
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawForeground()V"))
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;render(IIF)V", shift = At.Shift.AFTER))
     public void renderTooltip(int mouseX, int mouseY, float delta, CallbackInfo ci, @Local(ordinal = 2) int screenX, @Local(ordinal = 3) int screenY) {
         if (hoveredSlot != null) {
+            GL11.glPushMatrix();
+            
+            int startX = (this.width - this.backgroundWidth) / 2;
+            int startY = (this.height - this.backgroundHeight) / 2;
+            GL11.glTranslatef((float)startX, (float)startY, 0.0F);
+            
             String[] tooltip;
 
             if (!hoveredSlot.hasStack()) {
@@ -93,6 +99,8 @@ public abstract class HandledScreenMixin extends Screen {
                     this.textRenderer.drawWithShadow(line, x, y + (i * 12), -1);
                 }
             }
+            
+            GL11.glPopMatrix();
         }
     }
 
