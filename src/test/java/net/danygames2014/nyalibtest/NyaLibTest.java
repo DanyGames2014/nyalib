@@ -40,10 +40,6 @@ import net.danygames2014.nyalibtest.screen.FluidTankScreen;
 import net.danygames2014.nyalibtest.screen.ManagedFluidTankScreen;
 import net.danygames2014.nyalibtest.screen.ManagedInventoryScreen;
 import net.danygames2014.nyalibtest.screen.SimpleFluidTankScreen;
-import net.danygames2014.nyalibtest.simpleenergy.SimpleEnergyReceiverBlock;
-import net.danygames2014.nyalibtest.simpleenergy.SimpleInfiniteEnergyBlock;
-import net.danygames2014.nyalibtest.simpleenergy.entity.InfiniteSimpleEnergyBlockEntity;
-import net.danygames2014.nyalibtest.simpleenergy.entity.SimpleEnergyReceiverBlockEntity;
 import net.danygames2014.nyalibtest.sound.ServerSoundBlock;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -141,10 +137,6 @@ public class NyaLibTest {
 
     @EventListener
     public void registerBlock(BlockRegistryEvent event) {
-        // Simple Energy
-        simpleInfiniteEnergyBlock = new SimpleInfiniteEnergyBlock(NAMESPACE.id("simple_infinite_energy")).setTranslationKey(NAMESPACE, "simple_infinite_energy");
-        simpleEnergyReceiverBlock = new SimpleEnergyReceiverBlock(NAMESPACE.id("simple_energy_receiver")).setTranslationKey(NAMESPACE, "simple_energy_receiver");
-
         // Item
         sideHopper = new SideHopperBlock(NAMESPACE.id("side_hopper")).setTranslationKey(NAMESPACE, "side_hopper");
         managedInventoryBlock = new ManagedInventoryBlock(NAMESPACE.id("managed_inventory"), Material.METAL).setTranslationKey(NAMESPACE, "managed_inventory");
@@ -254,8 +246,6 @@ public class NyaLibTest {
 
     @EventListener
     public void registerBlockEntites(BlockEntityRegisterEvent event) {
-        event.register(InfiniteSimpleEnergyBlockEntity.class, "simple_infinite_energy");
-        event.register(SimpleEnergyReceiverBlockEntity.class, "simple_energy_receiver");
         event.register(SideHopperBlockEntity.class, "side_hopper");
         event.register(FluidTankBlockEntity.class, "fluid_tank");
         event.register(InfiniteWaterBlockEntity.class, "infinite_water_block");
