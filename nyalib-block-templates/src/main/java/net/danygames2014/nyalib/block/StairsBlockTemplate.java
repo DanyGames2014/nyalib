@@ -43,7 +43,7 @@ public class StairsBlockTemplate extends TemplateBlock {
         PlayerEntity player = context.getPlayer();
         BlockState state = getDefaultState();
 
-        Direction facing = context.getSide();
+        Direction facing;// = context.getSide();
 
 //        System.out.println("Facing : " + facing + " | Horizontal : " + facing.getAxis().isHorizontal() + " | Vertical : " + facing.getAxis().isVertical());
 

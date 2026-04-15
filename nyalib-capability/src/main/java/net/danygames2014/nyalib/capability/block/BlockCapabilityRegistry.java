@@ -167,8 +167,8 @@ public class BlockCapabilityRegistry {
 
     public static class CapabilityRegistryEntry {
         public Identifier identifier;
-        public ArrayList<BlockCapabilityProvider> providers;
-        public Class<? extends BlockCapability> capabilityClass;
+        public final ArrayList<BlockCapabilityProvider> providers;
+        public final Class<? extends BlockCapability> capabilityClass;
 
 
         public CapabilityRegistryEntry(Identifier identifier, ArrayList<BlockCapabilityProvider> providers, Class<? extends BlockCapability> capabilityClass) {

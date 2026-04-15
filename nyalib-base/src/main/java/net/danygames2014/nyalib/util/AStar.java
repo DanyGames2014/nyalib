@@ -10,11 +10,11 @@ import java.util.Collections;
 import java.util.function.ToDoubleFunction;
 
 public class AStar {
-    Vec3i start;
-    Vec3i end;
-    Object2ObjectOpenHashMap<Vec3i, AStarNode> open;
-    Object2ObjectOpenHashMap<Vec3i, AStarNode> closed;
-    Object2ObjectOpenHashMap<Vec3i, AStarNode> validNodes;
+    final Vec3i start;
+    final Vec3i end;
+    final Object2ObjectOpenHashMap<Vec3i, AStarNode> open;
+    final Object2ObjectOpenHashMap<Vec3i, AStarNode> closed;
+    final Object2ObjectOpenHashMap<Vec3i, AStarNode> validNodes;
 
     ToDoubleFunction<Vec3i> pathCostFunction = value -> 1.0D;
 
@@ -129,7 +129,7 @@ public class AStar {
 // hCost = Distance from end Node
 // fCost = gCost + hCost
 class AStarNode {
-    Vec3i position;
+    final Vec3i position;
     AStarNode parent;
     double gCost;
     double fCost;

@@ -16,7 +16,7 @@ public abstract class ChunkMapMixin implements MultipartChunkMap {
     protected abstract ChunkMap.TrackedChunk getOrCreateChunk(int chunkX, int chunkZ, boolean createIfAbsent);
 
     @Unique
-    public ObjectOpenHashSet<BlockPos> multipartUpdateQueue = new ObjectOpenHashSet<>();
+    public final ObjectOpenHashSet<BlockPos> multipartUpdateQueue = new ObjectOpenHashSet<>();
     
     @Override
     public void markMultipartForUpdate(int x, int y, int z) {

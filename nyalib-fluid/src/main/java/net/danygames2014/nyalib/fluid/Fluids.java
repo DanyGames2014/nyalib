@@ -11,5 +11,5 @@ public class Fluids {
     /**
      * A default fluid material used when a fluid doesn't have a material
      */
-    public static FluidMaterial DEFAULT_FLUID_MATERIAL = new FluidMaterial(MapColor.GRAY);
+    public static final FluidMaterial DEFAULT_FLUID_MATERIAL = new FluidMaterial(MapColor.GRAY);
 }

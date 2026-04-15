@@ -8,6 +8,7 @@ import net.modificationstation.stationapi.api.util.Identifier;
 
 import java.util.HashMap;
 
+@SuppressWarnings("UnnecessaryReturnStatement")
 public class TemplateBlockRegistry {
     // Block Identifier -> Texture Identifier
     public static HashMap<Identifier, Identifier> stairs = new HashMap<>();

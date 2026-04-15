@@ -52,12 +52,9 @@ public interface EnergyStorageEntity {
         // If the desired energy is higher than the capacity, try to set the energy to maximum
         if (desiredEnergy > this.getEnergyCapacity()) {
             this.setEnergy(this.getEnergyCapacity());
-        } else if (desiredEnergy < 0) {
-            this.setEnergy(0);
         } else {
-            this.setEnergy(desiredEnergy);
+            this.setEnergy(Math.max(desiredEnergy, 0));
         }
-
 
         // Calculate by how much the energy has changed and return
         int newEnergy = this.getEnergyStored();

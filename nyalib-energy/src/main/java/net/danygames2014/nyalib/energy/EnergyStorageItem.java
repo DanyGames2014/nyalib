@@ -54,10 +54,8 @@ public interface EnergyStorageItem {
         // If the desired energy is higher than the capacity, try to set the energy to maximum
         if (desiredEnergy > this.getEnergyCapacity(stack)) {
             this.setEnergy(stack, this.getEnergyCapacity(stack));
-        } else if (desiredEnergy < 0) {
-            this.setEnergy(stack, 0);
         } else {
-            this.setEnergy(stack, desiredEnergy);
+            this.setEnergy(stack, Math.max(desiredEnergy, 0));
         }
 
 
