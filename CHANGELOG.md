@@ -9,4 +9,6 @@
 * Fix Furnace/Dispenser/Chest Item API impl
 * Added Energy Loss to cables
 * Fix fluid tooltips rendering below buttons
-* Change how networks are ticker
+* Change how networks are ticked
+* Remove the long deprecated and unused SimpleEnergyHandler
+* Cleanup code
