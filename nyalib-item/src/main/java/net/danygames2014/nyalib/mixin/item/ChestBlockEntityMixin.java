@@ -117,9 +117,10 @@ public abstract class ChestBlockEntityMixin extends BlockEntity implements ItemH
         
         if (slot > 26 && isDoubleChest()) {
             getSecondChest().setStack(slot - 27, stack);
+        } else {
+            this.setStack(slot, stack);
         }
 
-        this.setStack(slot, stack);
         return true;
     }
 
