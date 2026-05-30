@@ -71,19 +71,19 @@ public class PaneBlockTemplate extends TemplateBlock {
         float maxY = 1.0F;
         float maxZ = 0.5625F;
 
-        if (state.get(WEST)) {
+        if (state.get(SOUTH)) {
             maxZ = 1.0F;
         }
 
-        if (state.get(EAST)) {
+        if (state.get(NORTH)) {
             minZ = 0.0F;
         }
 
-        if (state.get(NORTH)) {
+        if (state.get(WEST)) {
             minX = 0.0F;
         }
 
-        if (state.get(SOUTH)) {
+        if (state.get(EAST)) {
             maxX = 1.0F;
         }
 
@@ -98,22 +98,22 @@ public class PaneBlockTemplate extends TemplateBlock {
             return;
         }
 
-        if (state.get(WEST)) {
+        if (state.get(SOUTH)) {
             this.setBoundingBox(0.4375F, 0.0F, 0.4375F, 0.5625F, 1.0F, 1.0F);
             super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
         }
 
-        if (state.get(EAST)) {
+        if (state.get(NORTH)) {
             this.setBoundingBox(0.4375F, 0.0F, 0.0F, 0.5625F, 1.0F, 0.5625F);
             super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
         }
 
-        if (state.get(SOUTH)) {
+        if (state.get(EAST)) {
             this.setBoundingBox(0.4375F, 0.0F, 0.4375F, 1.0F, 1.0F, 0.5625F);
             super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
         }
 
-        if (state.get(NORTH)) {
+        if (state.get(WEST)) {
             this.setBoundingBox(0.0F, 0.0F, 0.4375F, 0.5625F, 1.0F, 0.5625F);
             super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
         }
@@ -165,7 +165,7 @@ public class PaneBlockTemplate extends TemplateBlock {
         state = getPaneState(world, x, y, z, state, Direction.NORTH, NORTH);
         state = getPaneState(world, x, y, z, state, Direction.SOUTH, SOUTH);
 
-        world.setBlockStateWithNotify(x, y, z, state);
+        world.setBlockState(x, y, z, state);
     }
 
     public boolean canConnectTo(BlockState state) {

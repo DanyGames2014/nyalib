@@ -47,7 +47,7 @@ public class BucketItemMixin extends Item implements FluidBucket {
 
         Fluid fluid = FluidRegistry.get(world.getBlockId(x, y, z));
         if (fluid != null && this.getFullBucketItem(fluid) != null) {
-            world.setBlockStateWithNotify(x, y, z, States.AIR.get());
+            world.setBlockState(x, y, z, States.AIR.get());
             SoundHelper.playSound(player, fluid.getFillSound(), 1.0F, 1.0F);
             cir.setReturnValue(new ItemStack(this.getFullBucketItem(fluid)));
         }

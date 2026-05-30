@@ -40,7 +40,7 @@ public class CustomRedstoneLevelBlock extends TemplateBlock implements RedstoneL
             state = state.cycle(REDSTONE_LEVEL);
         }
         
-        world.setBlockStateWithNotify(x, y, z, state);
+        world.setBlockState(x, y, z, state);
 
         world.notifyNeighbors(x + 1, y, z, this.id);
         world.notifyNeighbors(x - 1, y, z, this.id);

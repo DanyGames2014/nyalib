@@ -137,7 +137,7 @@ public class ButtonBlockTemplate extends TemplateBlock {
 
         BlockState state = world.getBlockState(x, y, z);
         if (state.get(Properties.POWERED)) {
-            world.setBlockStateWithNotify(x, y, z, state.with(Properties.POWERED, false));
+            world.setBlockState(x, y, z, state.with(Properties.POWERED, false));
 
             switch (state.get(BUTTON_TYPE)) {
                 case CEILING -> {
@@ -190,7 +190,7 @@ public class ButtonBlockTemplate extends TemplateBlock {
         if (!state.get(Properties.POWERED)) {
             SoundHelper.playSound(world, x + 0.5D, y + 0.5D, z + 0.5D, "random.click", 0.3F, 0.6F);
 
-            world.setBlockStateWithNotify(x, y, z, state.cycle(Properties.POWERED));
+            world.setBlockState(x, y, z, state.cycle(Properties.POWERED));
 
             switch (state.get(BUTTON_TYPE)) {
                 case CEILING -> {
@@ -293,14 +293,14 @@ public class ButtonBlockTemplate extends TemplateBlock {
         switch (state.get(BUTTON_TYPE)) {
             case CEILING -> {
                 switch (state.get(Properties.HORIZONTAL_FACING)) {
-                    case EAST, WEST -> {
+                    case NORTH, SOUTH -> {
                         if (state.get(Properties.POWERED)) {
                             setBoundingBox(0.3125F, 0.9375F, 0.375F, 0.6875F, 1.0F, 0.625F);
                         } else {
                             setBoundingBox(0.3125F, 0.875F, 0.375F, 0.6875F, 1.0F, 0.625F);
                         }
                     }
-                    case NORTH, SOUTH -> {
+                    case EAST, WEST -> {
                         if (state.get(Properties.POWERED)) {
                             setBoundingBox(0.375F, 0.9375F, 0.3125F, 0.625F, 1.0F, 0.6875F);
                         } else {
@@ -312,14 +312,14 @@ public class ButtonBlockTemplate extends TemplateBlock {
 
             case FLOOR -> {
                 switch (state.get(Properties.HORIZONTAL_FACING)) {
-                    case EAST, WEST -> {
+                    case NORTH, SOUTH -> {
                         if (state.get(Properties.POWERED)) {
                             setBoundingBox(0.3125F, 0.0F, 0.375F, 0.6875F, 0.0625F, 0.625F);
                         } else {
                             setBoundingBox(0.3125F, 0.0F, 0.375F, 0.6875F, 0.125F, 0.625F);
                         }
                     }
-                    case NORTH, SOUTH -> {
+                    case EAST, WEST -> {
                         if (state.get(Properties.POWERED)) {
                             setBoundingBox(0.375F, 0.0F, 0.3125F, 0.625F, 0.0625F, 0.6875F);
                         } else {
@@ -331,28 +331,28 @@ public class ButtonBlockTemplate extends TemplateBlock {
 
             case WALL -> {
                 switch (state.get(Properties.HORIZONTAL_FACING)) {
-                    case EAST -> {
+                    case NORTH -> {
                         if (state.get(Properties.POWERED)) {
                             setBoundingBox(0.3125F, 0.375F, 1.0F, 0.6875F, 0.625F, 0.9375F);
                         } else {
                             setBoundingBox(0.3125F, 0.375F, 1.0F, 0.6875F, 0.625F, 0.875F);
                         }
                     }
-                    case WEST -> {
+                    case SOUTH -> {
                         if (state.get(Properties.POWERED)) {
                             setBoundingBox(0.3125F, 0.375F, 0.0F, 0.6875F, 0.625F, 0.0625F);
                         } else {
                             setBoundingBox(0.3125F, 0.375F, 0.0F, 0.6875F, 0.625F, 0.125F);
                         }
                     }
-                    case NORTH -> {
+                    case WEST -> {
                         if (state.get(Properties.POWERED)) {
                             setBoundingBox(0.9375F, 0.375F, 0.3125F, 1.0F, 0.625F, 0.6875F);
                         } else {
                             setBoundingBox(0.875F, 0.375F, 0.3125F, 1.0F, 0.625F, 0.6875F);
                         }
                     }
-                    case SOUTH -> {
+                    case EAST -> {
                         if (state.get(Properties.POWERED)) {
                             setBoundingBox(0.0F, 0.375F, 0.3125F, 0.0625F, 0.625F, 0.6875F);
                         } else {

@@ -15,10 +15,10 @@ import net.modificationstation.stationapi.api.util.Identifier;
 import java.util.ArrayList;
 
 public class FenceBlockTemplate extends TemplateBlock {
-    public static final BooleanProperty NORTH = BooleanProperty.of("north"); // X--
-    public static final BooleanProperty SOUTH = BooleanProperty.of("south"); // X++
-    public static final BooleanProperty EAST = BooleanProperty.of("east"); // Z--
-    public static final BooleanProperty WEST = BooleanProperty.of("west"); // Z++
+    public static final BooleanProperty NORTH = BooleanProperty.of("north");
+    public static final BooleanProperty SOUTH = BooleanProperty.of("south");
+    public static final BooleanProperty EAST = BooleanProperty.of("east");
+    public static final BooleanProperty WEST = BooleanProperty.of("west");
 
     public FenceBlockTemplate(Identifier identifier, Block baseBlock) {
         this(identifier, baseBlock, null);
@@ -56,19 +56,19 @@ public class FenceBlockTemplate extends TemplateBlock {
         float maxY = 1.0F;
         float maxZ = 0.625F;
 
-        if (state.get(WEST)) {
+        if (state.get(SOUTH)) {
             maxZ = 1.0F;
         }
 
-        if (state.get(EAST)) {
+        if (state.get(NORTH)) {
             minZ = 0.0F;
         }
 
-        if (state.get(NORTH)) {
+        if (state.get(WEST)) {
             minX = 0.0F;
         }
 
-        if (state.get(SOUTH)) {
+        if (state.get(EAST)) {
             maxX = 1.0F;
         }
         
@@ -95,22 +95,22 @@ public class FenceBlockTemplate extends TemplateBlock {
         this.setBoundingBox(0.375F, 0.0F, 0.375F, 0.625F, 1.5F, 0.625F);
         super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
 
-        if (state.get(WEST)) {
+        if (state.get(SOUTH)) {
             this.setBoundingBox(0.375F, 0.0F, 0.375F, 0.625F, 1.5F, 1.0F);
             super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
         }
 
-        if (state.get(EAST)) {
+        if (state.get(NORTH)) {
             this.setBoundingBox(0.375F, 0.0F, 0.0F, 0.625F, 1.5F, 0.625F);
             super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
         }
 
-        if (state.get(SOUTH)) {
+        if (state.get(EAST)) {
             this.setBoundingBox(0.375F, 0.0F, 0.375F, 1.0F, 1.5F, 0.625F);
             super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
         }
 
-        if (state.get(NORTH)) {
+        if (state.get(WEST)) {
             this.setBoundingBox(0.0F, 0.0F, 0.375F, 0.625F, 1.5F, 0.625F);
             super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
         }
@@ -154,12 +154,12 @@ public class FenceBlockTemplate extends TemplateBlock {
             return;
         }
         
-        state = state.with(NORTH, canConnectTo(world.getBlockState(x - 1, y, z)));
-        state = state.with(SOUTH, canConnectTo(world.getBlockState(x + 1, y, z)));
-        state = state.with(EAST, canConnectTo(world.getBlockState(x, y, z - 1)));
-        state = state.with(WEST, canConnectTo(world.getBlockState(x, y, z + 1)));
+        state = state.with(WEST, canConnectTo(world.getBlockState(x - 1, y, z)));
+        state = state.with(EAST, canConnectTo(world.getBlockState(x + 1, y, z)));
+        state = state.with(NORTH, canConnectTo(world.getBlockState(x, y, z - 1)));
+        state = state.with(SOUTH, canConnectTo(world.getBlockState(x, y, z + 1)));
 
-        world.setBlockStateWithNotify(x, y, z, state);
+        world.setBlockState(x, y, z, state);
     }
 
     public boolean canConnectTo(BlockState state) {

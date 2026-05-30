@@ -121,11 +121,11 @@ public class NyaLibTest {
     public static Item managedItemBag;
     public static Block managedInventoryBlock;
     public static Item smeltingReturnItem;
-    
+
     public static Item multipartItem;
     public static Item stoneCoverMultipartItem;
     public static Item diamondBlockCoverMultipartItem;
-    
+
     public static Block customRedstoneLevelBlock;
 
     public static Fluid gravelFluid;
@@ -176,7 +176,7 @@ public class NyaLibTest {
         glassPane = new PaneBlockTemplate(NAMESPACE.id("glass_pane"), Block.GLASS, Identifier.of("minecraft:block/glass")).setTranslationKey(NAMESPACE, "glass_pane").setHardness(0.5F);
         tntPressurePlate = new PressurePlateBlockTemplate(NAMESPACE.id("tnt_pressure_plate"), Block.TNT, PressurePlateActivationRule.EVERYTHING, Identifier.of("minecraft:block/tnt_side")).setTranslationKey(NAMESPACE, "tnt_pressure_plate").setHardness(0.2F);
         obsidianPressurePlate = new PressurePlateBlockTemplate(NAMESPACE.id("obsidian_pressure_plate"), Block.TNT, PressurePlateActivationRule.PLAYERS, Identifier.of("minecraft:block/obsidian")).setTranslationKey(NAMESPACE, "obsidian_pressure_plate").setHardness(0.2F);
-        
+
         // Custom Redstone Level
         customRedstoneLevelBlock = new CustomRedstoneLevelBlock(NAMESPACE.id("custom_redstone_level_block"), Material.METAL).setTranslationKey(NAMESPACE, "custom_redstone_level_block");
 
@@ -207,12 +207,12 @@ public class NyaLibTest {
                 .lightLevel(15)
                 .build()
         );
-        
+
         event.register(redFluid = new FluidBuilder(NAMESPACE.id("red_fluid"), 0xFFFF0000)
                 .build()
         );
     }
-    
+
     @EventListener
     public void afterRegisterFluids(AfterFluidRegistryEvent event) {
         for (Fluid fl : FluidRegistry.getRegistry().values()) {
@@ -223,20 +223,20 @@ public class NyaLibTest {
     @EventListener
     public void registerItems(ItemRegistryEvent event) {
         multimeter = new MultimeterItem(NAMESPACE.id("multimeter")).setTranslationKey(NAMESPACE, "multimeter");
-        
+
         itemYoinker = new YoinkerItem(NAMESPACE.id("item_yoinker")).setTranslationKey(NAMESPACE, "item_yoinker");
         managedItemBag = new ManagedItemBag(NAMESPACE.id("managed_item_bag")).setTranslationKey(NAMESPACE, "managed_item_bag");
         smeltingReturnItem = new SmeltReturnItem(NAMESPACE.id("smelting_return_item")).setTranslationKey(NAMESPACE, "smelting_return_item");
-        
+
         fluidPippeteItem = new FluidPipetteItem(NAMESPACE.id("fluid_pipette")).setTranslationKey(NAMESPACE, "fluid_pipette");
         managedfluidPipetteItem = new ManagedFluidPipetteItem(NAMESPACE.id("managed_fluid_pipette")).setTranslationKey(NAMESPACE, "managed_fluid_pipette");
         emptyCellItem = new FluidCellItem(NAMESPACE.id("fluid_cell"), null).setTranslationKey(NAMESPACE, "fluid_cell");
-        
+
         for (var fluid : FluidRegistry.getRegistry().values()) {
             String id = fluid.getIdentifier().namespace + "_" + fluid.getIdentifier().path + "_cell";
             new FluidCellItem(NAMESPACE.id(id), fluid).setTranslationKey(NAMESPACE, id);
         }
-        
+
         multipartItem = new MultipartItem(NAMESPACE.id("multipart_item")).setTranslationKey(NAMESPACE, "multipart_item");
         stoneCoverMultipartItem = new CoverMultipartItem(NAMESPACE.id("stone_cover"), Block.STONE).setTranslationKey(NAMESPACE, "stone_cover");
         diamondBlockCoverMultipartItem = new CoverMultipartItem(NAMESPACE.id("diamond_cover"), Block.DIAMOND_BLOCK).setTranslationKey(NAMESPACE, "diamond_cover");
@@ -246,21 +246,21 @@ public class NyaLibTest {
 
     @EventListener
     public void registerBlockEntites(BlockEntityRegisterEvent event) {
-        event.register(SideHopperBlockEntity.class, "side_hopper");
-        event.register(FluidTankBlockEntity.class, "fluid_tank");
-        event.register(InfiniteWaterBlockEntity.class, "infinite_water_block");
-        event.register(EnergySourceBlockEntity.class, "energy_source");
-        event.register(EnergyConsumerBlockEntity.class, "energy_consumer");
-        event.register(SimpleFluidTankBlockEntity.class, "simple_fluid_tank");
-        event.register(ManagedFluidTankBlockEntity.class, "managed_fluid_tank");
-        event.register(ManagedInventoryBlockEntity.class, "managed_inventory");
+        event.register(NAMESPACE.id("side_hopper"), SideHopperBlockEntity.class);
+        event.register(NAMESPACE.id("fluid_tank"), FluidTankBlockEntity.class);
+        event.register(NAMESPACE.id("infinite_water_block"), InfiniteWaterBlockEntity.class);
+        event.register(NAMESPACE.id("energy_source"), EnergySourceBlockEntity.class);
+        event.register(NAMESPACE.id("energy_consumer"), EnergyConsumerBlockEntity.class);
+        event.register(NAMESPACE.id("simple_fluid_tank"), SimpleFluidTankBlockEntity.class);
+        event.register(NAMESPACE.id("managed_fluid_tank"), ManagedFluidTankBlockEntity.class);
+        event.register(NAMESPACE.id("managed_inventory"), ManagedInventoryBlockEntity.class);
     }
 
     @EventListener
     public void registerNetworkTypes(NetworkTypeRegistryEvent event) {
         event.register(basicNetworkType = new BasicNetworkType(NAMESPACE.id("basic")));
     }
-    
+
     @EventListener
     public void registerMultipartComponents(MultipartComponentRegistryEvent event) {
         event.register(NAMESPACE.id("test"), TestMultipartComponent.class, TestMultipartComponent::new);

@@ -82,9 +82,9 @@ public class WallBlockTemplate extends TemplateBlock {
 
         state = state.with(UP, true);
 
-        if (state.get(EAST) == WallType.NONE && state.get(WEST) == WallType.NONE && state.get(NORTH) != WallType.NONE && state.get(SOUTH) != WallType.NONE) {
+        if (state.get(NORTH) == WallType.NONE && state.get(SOUTH) == WallType.NONE && state.get(WEST) != WallType.NONE && state.get(EAST) != WallType.NONE) {
             state = state.with(UP, false);
-        } else if (state.get(NORTH) == WallType.NONE && state.get(SOUTH) == WallType.NONE && state.get(EAST) != WallType.NONE && state.get(WEST) != WallType.NONE) {
+        } else if (state.get(WEST) == WallType.NONE && state.get(EAST) == WallType.NONE && state.get(NORTH) != WallType.NONE && state.get(SOUTH) != WallType.NONE) {
             state = state.with(UP, false);
         }
 
@@ -93,7 +93,7 @@ public class WallBlockTemplate extends TemplateBlock {
             state = state.with(UP, true);
         }
 
-        world.setBlockStateWithNotify(x, y, z, state);
+        world.setBlockState(x, y, z, state);
     }
 
     public boolean canConnectPost(BlockState state) {
@@ -150,7 +150,7 @@ public class WallBlockTemplate extends TemplateBlock {
             return null;
         }
 
-        Box box = Box.create(state.get(NORTH) != WallType.NONE ? 0 : 0.25F, 0F, state.get(EAST) != WallType.NONE ? 0F : 0.25F, state.get(SOUTH) != WallType.NONE ? 1F : 0.75F, 1F, state.get(WEST) != WallType.NONE ? 1F : 0.75F);
+        Box box = Box.create(state.get(WEST) != WallType.NONE ? 0 : 0.25F, 0F, state.get(NORTH) != WallType.NONE ? 0F : 0.25F, state.get(EAST) != WallType.NONE ? 1F : 0.75F, 1F, state.get(SOUTH) != WallType.NONE ? 1F : 0.75F);
 
         box.minX += x;
         box.minY += y;

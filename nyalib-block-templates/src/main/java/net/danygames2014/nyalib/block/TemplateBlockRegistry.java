@@ -331,18 +331,18 @@ public class TemplateBlockRegistry {
     public static final String stairsStateJson = ("""
             {
               "variants": {
-                "facing=north": {
-                  "model": "PATH"
-                },
                 "facing=east": {
-                  "model": "PATH",
-                  "y": 90
+                  "model": "PATH"
                 },
                 "facing=south": {
                   "model": "PATH",
-                  "y": 180
+                  "y": 90
                 },
                 "facing=west": {
+                  "model": "PATH",
+                  "y": 180
+                },
+                "facing=north": {
                   "model": "PATH",
                   "y": 270
                 }
@@ -427,7 +427,7 @@ public class TemplateBlockRegistry {
                     "y": 270
                   },
                   "when": {
-                    "north": "true"
+                    "west": "true"
                   }
                 },
                 {
@@ -437,7 +437,7 @@ public class TemplateBlockRegistry {
                     "y": 0
                   },
                   "when": {
-                    "east": "true"
+                    "north": "true"
                   }
                 },
                 {
@@ -447,7 +447,7 @@ public class TemplateBlockRegistry {
                     "y": 90
                   },
                   "when": {
-                    "south": "true"
+                    "east": "true"
                   }
                 },
                 {
@@ -457,7 +457,7 @@ public class TemplateBlockRegistry {
                     "y": 180
                   },
                   "when": {
-                    "west": "true"
+                    "south": "true"
                   }
                 }
               ]
@@ -500,83 +500,83 @@ public class TemplateBlockRegistry {
     public static final String fenceGateStateJson = ("""
             {
               "variants": {
-                "facing=south,open=false,in_wall=false": {
+                "facing=east,open=false,in_wall=false": {
                   "model": "CLOSED",
                   "uvlock": true,
                   "y": 270
+                },
+                "facing=south,open=false,in_wall=false": {
+                  "model": "CLOSED",
+                  "uvlock": true,
+                  "y": 0
                 },
                 "facing=west,open=false,in_wall=false": {
                   "model": "CLOSED",
                   "uvlock": true,
-                  "y": 0
+                  "y": 90
                 },
                 "facing=north,open=false,in_wall=false": {
                   "model": "CLOSED",
                   "uvlock": true,
-                  "y": 90
-                },
-                "facing=east,open=false,in_wall=false": {
-                  "model": "CLOSED",
-                  "uvlock": true,
                   "y": 180
                 },
-                "facing=south,open=true,in_wall=false": {
+                "facing=east,open=true,in_wall=false": {
                   "model": "OPEN",
                   "uvlock": true,
                   "y": 270
                 },
-                "facing=west,open=true,in_wall=false": {
+                "facing=south,open=true,in_wall=false": {
                   "model": "OPEN",
                   "uvlock": true,
                   "y": 0
                 },
-                "facing=north,open=true,in_wall=false": {
+                "facing=west,open=true,in_wall=false": {
                   "model": "OPEN",
                   "uvlock": true,
                   "y": 90
                 },
-                "facing=east,open=true,in_wall=false": {
+                "facing=north,open=true,in_wall=false": {
                   "model": "OPEN",
                   "uvlock": true,
                   "y": 180
                 },
             
-                "facing=south,open=false,in_wall=true": {
+                "facing=east,open=false,in_wall=true": {
                   "model": "WALL_CL",
                   "uvlock": true,
                   "y": 270
+                },
+                "facing=south,open=false,in_wall=true": {
+                  "model": "WALL_CL",
+                  "uvlock": true,
+                  "y": 0
                 },
                 "facing=west,open=false,in_wall=true": {
                   "model": "WALL_CL",
                   "uvlock": true,
-                  "y": 0
+                  "y": 90
                 },
                 "facing=north,open=false,in_wall=true": {
                   "model": "WALL_CL",
                   "uvlock": true,
-                  "y": 90
-                },
-                "facing=east,open=false,in_wall=true": {
-                  "model": "WALL_CL",
-                  "uvlock": true,
                   "y": 180
                 },
-                "facing=south,open=true,in_wall=true": {
+                "facing=east,open=true,in_wall=true": {
                   "model": "WALL_OP",
                   "uvlock": true,
                   "y": 270
                 },
-                "facing=west,open=true,in_wall=true": {
+                "facing=south,open=true,in_wall=true": {
                   "model": "WALL_OP",
                   "uvlock": true,
                   "y": 0
                 },
-                "facing=north,open=true,in_wall=true": {
+                "facing=west,open=true,in_wall=true": {
                   "model": "WALL_OP",
                   "uvlock": true,
                   "y": 90
                 },
-                "facing=east,open=true,in_wall=true": {
+                "facing=north,open=true,in_wall=true": {
                   "model": "WALL_OP",
                   "uvlock": true,
                   "y": 180
@@ -614,121 +614,121 @@ public class TemplateBlockRegistry {
     public static final String buttonStateJson = ("""
             {
               "variants": {
-                "type=ceiling,facing=east,powered=false": {
-                  "model": "NORMAL",
-                  "x": 180,
-                  "y": 180
-                },
-                "type=ceiling,facing=east,powered=true": {
-                  "model": "PRESSED",
-                  "x": 180,
-                  "y": 180
-                },
                 "type=ceiling,facing=north,powered=false": {
                   "model": "NORMAL",
                   "x": 180,
-                  "y": 90
+                  "y": 180
                 },
                 "type=ceiling,facing=north,powered=true": {
                   "model": "PRESSED",
                   "x": 180,
-                  "y": 90
-                },
-                "type=ceiling,facing=south,powered=false": {
-                  "model": "NORMAL",
-                  "x": 180,
-                  "y": 270
-                },
-                "type=ceiling,facing=south,powered=true": {
-                  "model": "PRESSED",
-                  "x": 180,
-                  "y": 270
+                  "y": 180
                 },
                 "type=ceiling,facing=west,powered=false": {
                   "model": "NORMAL",
                   "x": 180,
-                  "y": 0
+                  "y": 90
                 },
                 "type=ceiling,facing=west,powered=true": {
                   "model": "PRESSED",
                   "x": 180,
-                  "y": 0
+                  "y": 90
                 },
-                "type=floor,facing=east,powered=false": {
+                "type=ceiling,facing=east,powered=false": {
                   "model": "NORMAL",
+                  "x": 180,
+                  "y": 270
+                },
+                "type=ceiling,facing=east,powered=true": {
+                  "model": "PRESSED",
+                  "x": 180,
+                  "y": 270
+                },
+                "type=ceiling,facing=south,powered=false": {
+                  "model": "NORMAL",
+                  "x": 180,
                   "y": 0
                 },
-                "type=floor,facing=east,powered=true": {
+                "type=ceiling,facing=south,powered=true": {
                   "model": "PRESSED",
+                  "x": 180,
                   "y": 0
                 },
                 "type=floor,facing=north,powered=false": {
                   "model": "NORMAL",
-                  "y": 270
+                  "y": 0
                 },
                 "type=floor,facing=north,powered=true": {
                   "model": "PRESSED",
-                  "y": 270
-                },
-                "type=floor,facing=south,powered=false": {
-                  "model": "NORMAL",
-                  "y": 90
-                },
-                "type=floor,facing=south,powered=true": {
-                  "model": "PRESSED",
-                  "y": 90
+                  "y": 0
                 },
                 "type=floor,facing=west,powered=false": {
                   "model": "NORMAL",
-                  "y": 180
+                  "y": 270
                 },
                 "type=floor,facing=west,powered=true": {
                   "model": "PRESSED",
+                  "y": 270
+                },
+                "type=floor,facing=east,powered=false": {
+                  "model": "NORMAL",
+                  "y": 90
+                },
+                "type=floor,facing=east,powered=true": {
+                  "model": "PRESSED",
+                  "y": 90
+                },
+                "type=floor,facing=south,powered=false": {
+                  "model": "NORMAL",
                   "y": 180
                 },
-                "type=wall,facing=east,powered=false": {
-                  "model": "NORMAL",
-                  "uvlock": true,
-                  "x": 90,
-                  "y": 0
-                },
-                "type=wall,facing=east,powered=true": {
+                "type=floor,facing=south,powered=true": {
                   "model": "PRESSED",
-                  "uvlock": true,
-                  "x": 90,
-                  "y": 0
+                  "y": 180
                 },
                 "type=wall,facing=north,powered=false": {
                   "model": "NORMAL",
                   "uvlock": true,
                   "x": 90,
-                  "y": 270
+                  "y": 0
                 },
                 "type=wall,facing=north,powered=true": {
                   "model": "PRESSED",
                   "uvlock": true,
                   "x": 90,
-                  "y": 270
-                },
-                "type=wall,facing=south,powered=false": {
-                  "model": "NORMAL",
-                  "uvlock": true,
-                  "x": 90,
-                  "y": 90
-                },
-                "type=wall,facing=south,powered=true": {
-                  "model": "PRESSED",
-                  "uvlock": true,
-                  "x": 90,
-                  "y": 90
+                  "y": 0
                 },
                 "type=wall,facing=west,powered=false": {
                   "model": "NORMAL",
                   "uvlock": true,
                   "x": 90,
-                  "y": 180
+                  "y": 270
                 },
                 "type=wall,facing=west,powered=true": {
+                  "model": "PRESSED",
+                  "uvlock": true,
+                  "x": 90,
+                  "y": 270
+                },
+                "type=wall,facing=east,powered=false": {
+                  "model": "NORMAL",
+                  "uvlock": true,
+                  "x": 90,
+                  "y": 90
+                },
+                "type=wall,facing=east,powered=true": {
+                  "model": "PRESSED",
+                  "uvlock": true,
+                  "x": 90,
+                  "y": 90
+                },
+                "type=wall,facing=south,powered=false": {
+                  "model": "NORMAL",
+                  "uvlock": true,
+                  "x": 90,
+                  "y": 180
+                },
+                "type=wall,facing=south,powered=true": {
                   "model": "PRESSED",
                   "uvlock": true,
                   "x": 90,
@@ -789,7 +789,7 @@ public class TemplateBlockRegistry {
                     "y": 270
                   },
                   "when": {
-                    "north": "low"
+                    "west": "low"
                   }
                 },
                 {
@@ -797,6 +797,16 @@ public class TemplateBlockRegistry {
                     "model": "SIDE",
                     "uvlock": true,
                     "y": 0
+                  },
+                  "when": {
+                    "north": "low"
+                  }
+                },
+                {
+                  "apply": {
+                    "model": "SIDE",
+                    "uvlock": true,
+                    "y": 90
                   },
                   "when": {
                     "east": "low"
@@ -806,20 +816,10 @@ public class TemplateBlockRegistry {
                   "apply": {
                     "model": "SIDE",
                     "uvlock": true,
-                    "y": 90
-                  },
-                  "when": {
-                    "south": "low"
-                  }
-                },
-                {
-                  "apply": {
-                    "model": "SIDE",
-                    "uvlock": true,
                     "y": 180
                   },
                   "when": {
-                    "west": "low"
+                    "south": "low"
                   }
                 },
                 {
@@ -829,7 +829,7 @@ public class TemplateBlockRegistry {
                     "y": 270
                   },
                   "when": {
-                    "north": "tall"
+                    "west": "tall"
                   }
                 },
                 {
@@ -839,7 +839,7 @@ public class TemplateBlockRegistry {
                     "y": 0
                   },
                   "when": {
-                    "east": "tall"
+                    "north": "tall"
                   }
                 },
                 {
@@ -849,7 +849,7 @@ public class TemplateBlockRegistry {
                     "y": 90
                   },
                   "when": {
-                    "south": "tall"
+                    "east": "tall"
                   }
                 },
                 {
@@ -859,7 +859,7 @@ public class TemplateBlockRegistry {
                     "y": 180
                   },
                   "when": {
-                    "west": "tall"
+                    "south": "tall"
                   }
                 }
               ]
@@ -929,7 +929,7 @@ public class TemplateBlockRegistry {
                     "y": 270
                   },
                   "when": {
-                    "north": "true"
+                    "west": "true"
                   }
                 },
                 {
@@ -938,7 +938,7 @@ public class TemplateBlockRegistry {
                     "y": 0
                   },
                   "when": {
-                    "east": "true"
+                    "north": "true"
                   }
                 },
                 {
@@ -947,7 +947,7 @@ public class TemplateBlockRegistry {
                     "y": 270
                   },
                   "when": {
-                    "south": "true"
+                    "east": "true"
                   }
                 },
                 {
@@ -956,12 +956,21 @@ public class TemplateBlockRegistry {
                     "y": 0
                   },
                   "when": {
-                    "west": "true"
+                    "south": "true"
                   }
                 },
                 {
                   "apply": {
                     "model": "N_SID",
+                    "y": 270
+                  },
+                  "when": {
+                    "west": "false"
+                  }
+                },
+                {
+                  "apply": {
+                    "model": "ANS_SID",
                     "y": 270
                   },
                   "when": {
@@ -971,19 +980,10 @@ public class TemplateBlockRegistry {
                 {
                   "apply": {
                     "model": "ANS_SID",
-                    "y": 270
-                  },
-                  "when": {
-                    "east": "false"
-                  }
-                },
-                {
-                  "apply": {
-                    "model": "ANS_SID",
                     "y": 0
                   },
                   "when": {
-                    "south": "false"
+                    "east": "false"
                   }
                 },
                 {
@@ -992,7 +992,7 @@ public class TemplateBlockRegistry {
                     "y": 180
                   },
                   "when": {
-                    "west": "false"
+                    "south": "false"
                   }
                 }
               ]

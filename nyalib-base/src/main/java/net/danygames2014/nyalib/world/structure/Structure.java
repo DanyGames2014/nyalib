@@ -155,7 +155,7 @@ public class Structure {
     }
     
     public void setState(World world, int x, int y, int z, BlockState state){
-        world.setBlockState(x, y, z, state);
+        world.setBlockStateWithoutNotifyingNeighbors(x, y, z, state);
     }
 
     // Helper method to see if material is either air or replaceable

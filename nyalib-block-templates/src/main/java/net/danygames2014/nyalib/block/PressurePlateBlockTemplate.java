@@ -132,14 +132,14 @@ public class PressurePlateBlockTemplate extends TemplateBlock {
         BlockState state = world.getBlockState(x, y, z);
 
         if (foundEntity && !pressed) {
-            world.setBlockStateWithNotify(x, y, z, state.with(Properties.POWERED, true));
+            world.setBlockState(x, y, z, state.with(Properties.POWERED, true));
             world.notifyNeighbors(x, y, z, this.id);
             world.notifyNeighbors(x, y - 1, z, this.id);
             SoundHelper.playSound(world, x + 0.5D, y + 0.1D, z + 0.5D, "random.click", 0.3F, 0.6F);
         }
 
         if (!foundEntity && pressed) {
-            world.setBlockStateWithNotify(x, y, z, state.with(Properties.POWERED, false));
+            world.setBlockState(x, y, z, state.with(Properties.POWERED, false));
             world.notifyNeighbors(x, y, z, this.id);
             world.notifyNeighbors(x, y - 1, z, this.id);
             SoundHelper.playSound(world, x + 0.5D, y + 0.1D, z + 0.5D, "random.click", 0.3F, 0.5F);

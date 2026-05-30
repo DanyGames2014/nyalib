@@ -7,6 +7,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.entity.player.PlayerEntity;
 import org.lwjgl.opengl.GL11;
 
+@SuppressWarnings("unchecked")
 public class SimpleFluidTankScreen extends HandledScreen {
     public SimpleFluidTankBlockEntity fluidTank;
     

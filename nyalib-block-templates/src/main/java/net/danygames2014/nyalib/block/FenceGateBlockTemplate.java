@@ -49,10 +49,10 @@ public class FenceGateBlockTemplate extends TemplateBlock {
         BlockState state = world.getBlockState(x, y, z);
         
         if (state.get(OPEN)) {
-            world.setBlockStateWithNotify(x, y, z, state.with(OPEN, false));
+            world.setBlockState(x, y, z, state.with(OPEN, false));
             SoundHelper.playSound(world, x, y, z, getCloseSound(world, x, y, z), 1.0F, (world.random.nextFloat() * 0.1F) + 0.9F);
         } else {
-            world.setBlockStateWithNotify(x, y, z, state.with(OPEN, true));
+            world.setBlockState(x, y, z, state.with(OPEN, true));
             SoundHelper.playSound(world, x, y, z, getOpenSound(world, x, y, z), 1.0F, (world.random.nextFloat() * 0.1F) + 0.9F);
         }
         
@@ -88,13 +88,13 @@ public class FenceGateBlockTemplate extends TemplateBlock {
             if (side.getHorizontal() != -1) {
                 if (world.getBlockState(x + side.getOffsetX(), y, z + side.getOffsetZ()).getBlock() instanceof WallBlockTemplate) {
                     state = state.with(IN_WALL, true);
-                    world.setBlockStateWithNotify(x, y, z, state);
+                    world.setBlockState(x, y, z, state);
                     return;
                 }
             }
         }
 
-        world.setBlockStateWithNotify(x, y, z, state);
+        world.setBlockState(x, y, z, state);
     }
 
     public Box generateBox(World world, int x, int y, int z, boolean collider) {
