@@ -1,1 +1,1 @@
-* Fix a crash when setting and item in a double chest
+* Update to StationAPI Alpha 6
