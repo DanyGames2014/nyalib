@@ -43,13 +43,13 @@ public class FluidStack {
         this.amount = amount;
     }
 
-    public FluidStack(Identifier id) {
-        this(id, 1000);
-    }
-
     public FluidStack(Identifier id, int amount) {
         this.fluid = FluidRegistry.get(id);
         this.amount = amount;
+    }
+
+    public FluidStack(Identifier id) {
+        this(id, 1000);
     }
 
     public FluidStack(NbtCompound nbt) {
