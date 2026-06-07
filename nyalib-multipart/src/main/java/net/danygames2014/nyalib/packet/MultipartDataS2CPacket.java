@@ -107,6 +107,7 @@ public class MultipartDataS2CPacket extends Packet implements ManagedPacket<Mult
             state.markDirty();
         } else {
             world.setMultipartState(x, y, z, null);
+            world.setBlockDirty(x, y, z);
         }
     }
 
