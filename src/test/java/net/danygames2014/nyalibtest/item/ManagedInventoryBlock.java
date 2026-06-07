@@ -1,5 +1,6 @@
 package net.danygames2014.nyalibtest.item;
 
+import net.danygames2014.nyalib.block.DropInventoryOnBreak;
 import net.danygames2014.nyalibtest.NyaLibTest;
 import net.danygames2014.nyalibtest.screen.handler.ManagedInventoryScreenHandler;
 import net.minecraft.block.entity.BlockEntity;
@@ -10,7 +11,7 @@ import net.modificationstation.stationapi.api.gui.screen.container.GuiHelper;
 import net.modificationstation.stationapi.api.template.block.TemplateBlockWithEntity;
 import net.modificationstation.stationapi.api.util.Identifier;
 
-public class ManagedInventoryBlock extends TemplateBlockWithEntity {
+public class ManagedInventoryBlock extends TemplateBlockWithEntity implements DropInventoryOnBreak {
     public ManagedInventoryBlock(Identifier identifier, Material material) {
         super(identifier, material);
     }

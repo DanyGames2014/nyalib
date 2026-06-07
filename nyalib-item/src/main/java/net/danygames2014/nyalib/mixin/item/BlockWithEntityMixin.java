@@ -21,38 +21,54 @@ public class BlockWithEntityMixin {
         if (world.isRemote) {
             return;
         }
-        
-        if (this instanceof DropInventoryOnBreak dropInventoryOnBreak) {
-            if (!dropInventoryOnBreak.shouldDropInventory(world, x, y, z)) {
-                return;
-            }
 
-            Random random = new Random();
+        DropInventoryOnBreak dropInventoryOnBreak = null;
 
-            ItemHandlerBlockCapability cap = CapabilityHelper.getCapability(world, x, y, z, ItemHandlerBlockCapability.class);
+        // See if the drop inventory is implemented on the block
+        if (this instanceof DropInventoryOnBreak dropInventoryOnBreakBlock) {
+            dropInventoryOnBreak = dropInventoryOnBreakBlock;
+        }
 
-            if (cap != null) {
-                ItemStack[] inv = cap.getInventory(null);
-                
-                for (int slot = 0; slot < cap.getInventory(null).length; ++slot) {
-                    ItemStack stack = inv[slot];
+        // See if the drop inventory is implemented on the block entity
+        if (world.getBlockEntity(x, y, z) instanceof DropInventoryOnBreak dropInventoryOnBreakEntity) {
+            dropInventoryOnBreak = dropInventoryOnBreakEntity;
+        }
 
-                    if (!dropInventoryOnBreak.shouldDropStack(world, x, y, z, slot, stack)) {
-                        continue;
-                    }
+        // If no implementation was found, return
+        if (dropInventoryOnBreak == null) {
+            return;
+        }
 
-                    if (stack != null && stack.count > 0) {
-                        float xPos = random.nextFloat() * 0.8F + 0.1F;
-                        float yPos = random.nextFloat() * 0.8F + 0.1F;
-                        float zPos = random.nextFloat() * 0.8F + 0.1F;
+        // Drop Logic
+        if (!dropInventoryOnBreak.shouldDropInventory(world, x, y, z)) {
+            return;
+        }
 
-                        ItemEntity itemEntity = new ItemEntity(world, (float) x + xPos, (float) y + yPos, (float) z + zPos, stack);
-                        itemEntity.velocityX = (float) random.nextGaussian() * 0.05F;
-                        itemEntity.velocityY = (float) random.nextGaussian() * 0.05F + 0.2F;
-                        itemEntity.velocityZ = (float) random.nextGaussian() * 0.05F;
-                        world.spawnEntity(itemEntity);
-                        cap.setItem(null, slot, null);
-                    }
+        Random random = new Random();
+
+        ItemHandlerBlockCapability cap = CapabilityHelper.getCapability(world, x, y, z, ItemHandlerBlockCapability.class);
+
+        if (cap != null) {
+            ItemStack[] inv = cap.getInventory(null);
+
+            for (int slot = 0; slot < cap.getInventory(null).length; ++slot) {
+                ItemStack stack = inv[slot];
+
+                if (!dropInventoryOnBreak.shouldDropStack(world, x, y, z, slot, stack)) {
+                    continue;
+                }
+
+                if (stack != null && stack.count > 0) {
+                    float xPos = random.nextFloat() * 0.8F + 0.1F;
+                    float yPos = random.nextFloat() * 0.8F + 0.1F;
+                    float zPos = random.nextFloat() * 0.8F + 0.1F;
+
+                    ItemEntity itemEntity = new ItemEntity(world, (float) x + xPos, (float) y + yPos, (float) z + zPos, stack);
+                    itemEntity.velocityX = (float) random.nextGaussian() * 0.05F;
+                    itemEntity.velocityY = (float) random.nextGaussian() * 0.05F + 0.2F;
+                    itemEntity.velocityZ = (float) random.nextGaussian() * 0.05F;
+                    world.spawnEntity(itemEntity);
+                    cap.setItem(null, slot, null);
                 }
             }
         }

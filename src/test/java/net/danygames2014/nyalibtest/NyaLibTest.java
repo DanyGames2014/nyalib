@@ -273,7 +273,7 @@ public class NyaLibTest {
         event.register(NAMESPACE.id("fluid_tank"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openFluidTank, FluidTankBlockEntity::new));
         event.register(NAMESPACE.id("simple_fluid_tank"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openSimpleFluidTank, SimpleFluidTankBlockEntity::new));
         event.register(NAMESPACE.id("managed_fluid_tank"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openManagedFluidTank, ManagedFluidTankBlockEntity::new));
-        event.register(NAMESPACE.id("managed_inventory"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openManagedInventory, ManagedFluidTankBlockEntity::new));
+        event.register(NAMESPACE.id("managed_inventory"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openManagedInventory, ManagedInventoryBlockEntity::new));
     }
 
     @Environment(EnvType.CLIENT)
