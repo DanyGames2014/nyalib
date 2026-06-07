@@ -18,6 +18,10 @@ import java.util.Random;
 public class BlockWithEntityMixin {
     @Inject(method = "onBreak", at = @At(value = "HEAD"))
     public void dropIt(World world, int x, int y, int z, CallbackInfo ci) {
+        if (world.isRemote) {
+            return;
+        }
+        
         if (this instanceof DropInventoryOnBreak dropInventoryOnBreak) {
             if (!dropInventoryOnBreak.shouldDropInventory(world, x, y, z)) {
                 return;
