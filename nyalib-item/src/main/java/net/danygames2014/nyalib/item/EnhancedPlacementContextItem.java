@@ -12,4 +12,6 @@ import net.minecraft.world.World;
  */
 public interface EnhancedPlacementContextItem {
     boolean useOnBlock(ItemStack stack, PlayerEntity player, World world, int x, int y, int z, int side, Vec3d hitVec);
+    
+    // TODO: onBlockBreakStart
 }
