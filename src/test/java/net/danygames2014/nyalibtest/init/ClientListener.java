@@ -1,6 +1,6 @@
 package net.danygames2014.nyalibtest.init;
 
-import net.danygames2014.nyalib.block.JsonOverrideRegistry;
+import net.danygames2014.nyalib.registry.JsonOverrideRegistry;
 import net.danygames2014.nyalibtest.fluid.item.FluidCellItem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

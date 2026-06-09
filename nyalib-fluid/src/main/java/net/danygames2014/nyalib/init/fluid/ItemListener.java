@@ -1,9 +1,9 @@
 package net.danygames2014.nyalib.init.fluid;
 
 import net.danygames2014.nyalib.block.FluidBlockManager;
-import net.danygames2014.nyalib.block.JsonOverrideRegistry;
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.danygames2014.nyalib.fluid.FluidRegistry;
+import net.danygames2014.nyalib.registry.JsonOverrideRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;

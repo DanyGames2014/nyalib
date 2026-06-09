@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.danygames2014.nyalib.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "templates.ItemMixin"
+  ],
+  "server": [
+  ],
+  "client": [
+    "templates.BakedModelManagerMixin",
+    "templates.JsonUnbakedModelAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

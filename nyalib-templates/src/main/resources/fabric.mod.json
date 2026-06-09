@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "nyalib-templates",
+  "version": "${version}",
+
+  "name": "NyaLib Templates",
+  "description": "A module providing templates for easy creation of blocks, items etc.",
+  "authors": [
+    "DanyGames2014"
+  ],
+
+  "license": "MIT",
+  "icon": "assets/nyalib-templates/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "stationapi:event_bus": [
+    ],
+    "stationapi:event_bus_client": [
+      "net.danygames2014.nyalib.init.blocktemplates.UnbakedModelListener",
+      "net.danygames2014.nyalib.init.blocktemplates.RecipeListener"
+    ],
+    "stationapi:event_bus_server": [
+    ]
+  },
+  "accessWidener": "nyalib-templates.accesswidener",
+  "mixins": [
+    "nyalib-templates.mixins.json"
+  ],
+  "depends": {
+    "minecraft": "1.0.0-beta.7.3"
+  }
+}

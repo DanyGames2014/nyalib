@@ -222,7 +222,7 @@ public class NyaLibTest {
 
     @EventListener
     public void registerItems(ItemRegistryEvent event) {
-        multimeter = new MultimeterItem(NAMESPACE.id("multimeter")).setTranslationKey(NAMESPACE, "multimeter");
+        multimeter = new MultimeterItem(NAMESPACE.id("multimeter")).setTranslationKey(NAMESPACE, "multimeter").registerAutomaticModel();
 
         itemYoinker = new YoinkerItem(NAMESPACE.id("item_yoinker")).setTranslationKey(NAMESPACE, "item_yoinker");
         managedItemBag = new ManagedItemBag(NAMESPACE.id("managed_item_bag")).setTranslationKey(NAMESPACE, "managed_item_bag");

@@ -1,15 +1,13 @@
 import static net.modificationstation.stationapi.gradle.SubprojectHelpers.addModuleDependencies
 import static net.modificationstation.stationapi.gradle.SubprojectHelpers.getSubprojectVersion
 
-archives_base_name = "nyalib-fluid"
+archives_base_name = "nyalib-templates"
 version = getSubprojectVersion(project, "1.0.0")
 
 loom {
-    accessWidenerPath = file("src/main/resources/nyalib-fluid.accesswidener")
+    accessWidenerPath = file("src/main/resources/nyalib-templates.accesswidener")
 }
 
 addModuleDependencies(project,
-        "nyalib-base",
-        "nyalib-capability",
-        "nyalib-templates"
+        "nyalib-base"
 )
