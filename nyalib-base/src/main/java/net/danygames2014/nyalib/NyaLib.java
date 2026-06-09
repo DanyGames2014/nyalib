@@ -20,5 +20,4 @@ public class NyaLib {
     // TODO: ItemDrainer (unify Bucket and Handler logic with min/max withdrawal and deposit)
     // TODO: ManagedEnergyHandler (idk about this one)
     // TODO: Implement FluidHandler on buckets
-    // TODO: remove the ability to redefine the fundamental of the Metric system (what is a mB)
 }

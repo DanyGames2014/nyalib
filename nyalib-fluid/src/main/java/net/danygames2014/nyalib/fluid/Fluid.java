@@ -35,12 +35,6 @@ public final class Fluid {
     private Block flowing;
 
     /**
-     * This determines how much of a fluid in mB does a bucket hold.
-     * This will be used when a fluid is placed into the world or taken from it.
-     */
-    private int bucketSize = 1000;
-
-    /**
      * This is the item that will be returned when the fluid is taken from world
      * If it is null, the fluid won't be taken from world
      */
@@ -157,15 +151,6 @@ public final class Fluid {
     }
 
     // Buckets
-    public int getBucketSize() {
-        return bucketSize;
-    }
-
-    public Fluid setBucketSize(int bucketSize) {
-        this.bucketSize = bucketSize;
-        return this;
-    }
-
     public @Nullable Item getBucketItem() {
         return bucketItem;
     }

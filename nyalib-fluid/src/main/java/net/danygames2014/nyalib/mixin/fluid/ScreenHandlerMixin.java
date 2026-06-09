@@ -3,10 +3,7 @@ package net.danygames2014.nyalib.mixin.fluid;
 import net.danygames2014.nyalib.NyaLib;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.item.fluidhandler.FluidHandlerItemCapability;
-import net.danygames2014.nyalib.fluid.Fluid;
-import net.danygames2014.nyalib.fluid.FluidBucket;
-import net.danygames2014.nyalib.fluid.FluidSlot;
-import net.danygames2014.nyalib.fluid.FluidStack;
+import net.danygames2014.nyalib.fluid.*;
 import net.danygames2014.nyalib.fluid.block.FluidHandler;
 import net.danygames2014.nyalib.screen.FluidScreenHandler;
 import net.fabricmc.api.EnvType;
@@ -162,11 +159,11 @@ public abstract class ScreenHandlerMixin implements FluidScreenHandler {
                             }
 
                             // Check if there is enough fluid for another bucket
-                            if (inv.getFluid(index, null).amount >= invFluidStack.fluid.getBucketSize()) {
-                                FluidStack extractedStack = inv.extractFluid(index, invFluidStack.fluid.getBucketSize(), null);
+                            if (inv.getFluid(index, null).amount >= Fluids.BUCKET_SIZE) {
+                                FluidStack extractedStack = inv.extractFluid(index, Fluids.BUCKET_SIZE, null);
 
                                 if (extractedStack != null) {
-                                    if (extractedStack.amount >= invFluidStack.fluid.getBucketSize()) {
+                                    if (extractedStack.amount >= Fluids.BUCKET_SIZE) {
                                         player.inventory.getCursorStack().count--;
                                         if (!pushItemBuffer(bucket.getFullBucketItem(invFluidStack.fluid), player)) {
                                             iterationLimit = 0;
@@ -177,7 +174,7 @@ public abstract class ScreenHandlerMixin implements FluidScreenHandler {
                                         }
 
                                         // Subtract the bucket size amount from the inventory fluid stack
-                                        extractedStack.amount -= invFluidStack.fluid.getBucketSize();
+                                        extractedStack.amount -= Fluids.BUCKET_SIZE;
                                     } else {
                                         // We havent managed to retrieve enough fluid for another bucket, so we stop
                                         iterationLimit = 0;
@@ -207,12 +204,12 @@ public abstract class ScreenHandlerMixin implements FluidScreenHandler {
                             }
 
                             // If the fluid wont fit, break
-                            if (inv.getRemainingFluidCapacity(index, null) < bucketFluid.getBucketSize()) {
+                            if (inv.getRemainingFluidCapacity(index, null) < Fluids.BUCKET_SIZE) {
                                 break;
                             }
 
                             // If the fluid cannot be inserted, break
-                            FluidStack fluidStack = new FluidStack(bucketFluid, bucketFluid.getBucketSize());
+                            FluidStack fluidStack = new FluidStack(bucketFluid, Fluids.BUCKET_SIZE);
                             if (!slot.canInsert(fluidStack)) {
                                 break;
                             }
@@ -221,7 +218,7 @@ public abstract class ScreenHandlerMixin implements FluidScreenHandler {
                             FluidStack remainderStack = inv.insertFluid(fluidStack, index, null);
                             if (remainderStack != null && remainderStack.amount > 0) {
                                 // If nothing was inserted, cancel the operation
-                                if (remainderStack.amount == bucketFluid.getBucketSize()) {
+                                if (remainderStack.amount == Fluids.BUCKET_SIZE) {
                                     break;
                                 }
                                 

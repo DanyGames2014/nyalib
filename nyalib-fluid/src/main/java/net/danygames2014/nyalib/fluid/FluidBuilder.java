@@ -30,7 +30,6 @@ public class FluidBuilder {
     private Identifier overlayTexture = null;
 
     // Fluid Parameters
-    private Integer bucketSize = null;
     private FluidBucketFactory bucketItemFactory = null;
     private Boolean placeableInWorld = null;
     private Boolean automaticBucketRegistration = null;
@@ -107,18 +106,6 @@ public class FluidBuilder {
      */
     public FluidBuilder overlayTexture(Identifier overlayTexture) {
         this.overlayTexture = overlayTexture;
-        return this;
-    }
-
-    /**
-     * <p> Set the amount of fluid in mB that a bucket of this fluid will represent
-     * <p> If this is not set, the default value will be used
-     *
-     * @param bucketSize The amount of fluid in mB
-     * @return The Fluid Builder for chaining
-     */
-    public FluidBuilder bucketSize(int bucketSize) {
-        this.bucketSize = bucketSize;
         return this;
     }
 
@@ -401,11 +388,6 @@ public class FluidBuilder {
         // Color Multiplier
         if (colorMultiplier != null) {
             fluid.setColorMultiplier(colorMultiplier);
-        }
-
-        // Bucket Size
-        if (bucketSize != null) {
-            fluid.setBucketSize(bucketSize);
         }
 
         // Bucket Item

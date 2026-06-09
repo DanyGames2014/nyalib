@@ -12,4 +12,9 @@ public class Fluids {
      * A default fluid material used when a fluid doesn't have a material
      */
     public static final FluidMaterial DEFAULT_FLUID_MATERIAL = new FluidMaterial(MapColor.GRAY);
+
+    /**
+     * The amount of mB contained in a single bucket or a placed fluid in world
+     */
+    public static final int BUCKET_SIZE = 1000;
 }
