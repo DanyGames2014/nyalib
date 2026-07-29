@@ -33,8 +33,8 @@ public class ElementTankGauge implements IElement {
         this.amount = amount;
         this.capacity = capacity;
         this.suffix = suffix;
-        this.color1 = color1;
-        this.color2 = new Color(this.color1).darker().hashCode();
+        this.color1 = new Color(color1).getRGB();
+        this.color2 = new Color(this.color1).darker().getRGB();
         this.sneaking = sneaking;
     }
 
@@ -44,8 +44,8 @@ public class ElementTankGauge implements IElement {
         this.amount = stream.readInt();
         this.capacity = stream.readInt();
         this.suffix = stream.readUTF();
-        this.color1 = stream.readInt();
-        this.color2 = new Color(this.color1).darker().hashCode();
+        this.color1 = new Color(stream.readInt()).getRGB();
+        this.color2 = new Color(this.color1).darker().getRGB();
         this.sneaking = stream.readBoolean();
     }
 

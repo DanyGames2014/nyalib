@@ -132,6 +132,7 @@ public class NyaLibTest {
     public static Fluid fuelFluid;
     public static Fluid glowstoneFluid;
     public static Fluid redFluid;
+    public static Fluid blackFluid;
 
     public static NetworkType basicNetworkType;
 
@@ -209,6 +210,10 @@ public class NyaLibTest {
         );
 
         event.register(redFluid = new FluidBuilder(NAMESPACE.id("red_fluid"), 0xFFFF0000)
+                .build()
+        );
+        
+        event.register(blackFluid = new FluidBuilder(NAMESPACE.id("black_fluid"), 0x000000)
                 .build()
         );
     }
