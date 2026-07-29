@@ -1,7 +1,6 @@
 package net.danygames2014.nyalib.mixin.item;
 
 import net.danygames2014.nyalib.item.block.ItemHandler;
-import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.item.ItemStack;
@@ -188,7 +187,7 @@ public abstract class ChestBlockEntityMixin extends BlockEntity implements ItemH
 
     @Unique
     public boolean isChestAtPos(int x, int y, int z) {
-        return world.getBlockId(x, y, z) == Block.CHEST.id;
+        return world.getBlockId(x, y, z) == world.getBlockId(this.x, this.y, this.z);
     }
 
     @Override
