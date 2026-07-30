@@ -20,4 +20,8 @@ public class NyaLib {
     // TODO: ItemDrainer (unify Bucket and Handler logic with min/max withdrawal and deposit)
     // TODO: ManagedEnergyHandler (idk about this one)
     // TODO: Implement FluidHandler on buckets
+    
+    // TODO: CapabilityProvider writeNbt/readNbt with storing to a .dat file in the data folder
+    // TODO: Modder will then implement and call writeNbt/readNbt on their capabilities if they cache them
+    // TODO: Could have an SavingCapability interface to have those implemented and somehow handle the saving for them
 }

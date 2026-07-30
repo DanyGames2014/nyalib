@@ -121,6 +121,7 @@ public class NyaLibTest {
     public static Item managedItemBag;
     public static Block managedInventoryBlock;
     public static Item smeltingReturnItem;
+    public static Item improperCapabilityTester;
 
     public static Item multipartItem;
     public static Item stoneCoverMultipartItem;
@@ -186,6 +187,7 @@ public class NyaLibTest {
 
         // Capability
         itemHandlerBlockCapabilityTester = new ItemHandlerBlockCapabilityTesterBlock(NAMESPACE.id("item_handler_block_capability")).setTranslationKey(NAMESPACE, "item_handler_block_capability");
+        improperCapabilityTester = new ImproperCapabilityTesterItem(NAMESPACE.id("improper_capability_tester")).setTranslationKey(NAMESPACE, "improper_capability_tester").registerAutomaticModel();
     }
 
     @EventListener
