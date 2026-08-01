@@ -95,8 +95,10 @@ public interface ItemHandler extends ItemCapable {
             } else {
                 if (getItem(i, side) != null && getItem(i, side).isOf(item) && (meta == -1 || getItem(i, side).getDamage() == meta)) {
                     ItemStack extractedStack = extractItem(i, remaining, side);
-                    remaining -= extractedStack.count;
-                    currentStack = extractedStack;
+                    if (extractedStack != null) {
+                        remaining -= extractedStack.count;
+                        currentStack = extractedStack;
+                    }
                 }
             }
         }
