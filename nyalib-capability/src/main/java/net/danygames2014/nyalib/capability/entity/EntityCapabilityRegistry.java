@@ -36,7 +36,7 @@ public class EntityCapabilityRegistry {
         if (r.containsKey(identifier)) {
             NyaLib.LOGGER.warn("Attempted to register a entity capability class for " + identifier + " but a class has already been registered before.");
             NyaLib.LOGGER.warn("Already registered class:" + r.get(identifier).capabilityClass.getName());
-            NyaLib.LOGGER.warn("Class being registered:" + r.get(identifier).capabilityClass.getName());
+            NyaLib.LOGGER.warn("Class being registered:" + capabilityClass.getName());
             return;
         }
 
