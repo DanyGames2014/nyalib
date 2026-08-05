@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "nyalib-abilities",
+  "version": "${version}",
+
+  "name": "NyaLib Abilities",
+  "description": "A module providing an API for entities to have abilities",
+  "authors": [
+    "DanyGames2014"
+  ],
+
+  "license": "MIT",
+  "icon": "assets/nyalib-abilities/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "stationapi:event_bus": [
+    ],
+    "stationapi:event_bus_client": [
+    ],
+    "stationapi:event_bus_server": [
+    ]
+  },
+  "mixins": [
+    "nyalib-abilities.mixins.json"
+  ],
+  "accessWidener": "nyalib-abilities.accesswidener",
+  "depends": {
+    "minecraft": "1.0.0-beta.7.3"
+  }
+}

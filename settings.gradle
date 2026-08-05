@@ -25,3 +25,5 @@ include 'nyalib-templates'
 include 'nyalib-compat'
 include 'nyalib-multipart'
 include 'nyalib-block'
+
+include 'nyalib-abilities'
