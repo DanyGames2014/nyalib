@@ -5,9 +5,15 @@ import net.minecraft.entity.Entity;
 import net.modificationstation.stationapi.api.util.Identifier;
 
 public class Ability<T extends Entity, V extends AbilityValue<?>> {
-    private final Identifier identifier;
+    public final Identifier identifier;
+    public final AbilityRule abilityRule;
 
     public Ability(Identifier identifier) {
+        this(identifier, AbilityRule.OR);
+    }
+
+    public Ability(Identifier identifier, AbilityRule abilityRule) {
         this.identifier = identifier;
+        this.abilityRule = abilityRule;
     }
 }

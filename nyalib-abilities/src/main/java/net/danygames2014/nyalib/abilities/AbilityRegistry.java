@@ -34,4 +34,8 @@ public class AbilityRegistry {
         r.abilityClassToIdentifier.put(ability, identifier);
         NyaLib.LOGGER.info("Registered ability " + ability.getClass().getName() + " for " + identifier);
     }
+    
+    public static Ability<?, ?> getAbility(Identifier identifier) {
+        return getInstance().abilities.getOrDefault(identifier, null);
+    }
 }
