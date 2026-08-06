@@ -18,8 +18,12 @@ public class AbilityManager {
         return INSTANCE;
     }
 
+    long startTime = System.nanoTime();
+    
     @Nullable
     public <F, H extends AbilityValue<F>, G extends Entity> F get(G entity, Ability<G, H> ability) {
+        startTime = System.nanoTime();
+        
         // Retrieve the entity map or compute it if it doesn't exist yet
         Reference2ObjectOpenHashMap<Ability<?, ?>, Object> valueCache = abilityValues.computeIfAbsent(entity, e -> new Reference2ObjectOpenHashMap<>());
 
@@ -30,14 +34,20 @@ public class AbilityManager {
         if (cachedValue == null) {
             F abilityValue = compute(entity, ability);
             valueCache.put(ability, abilityValue);
+            long endTime = System.nanoTime();
+            System.out.println("AbilityManager.get took: " + (endTime - startTime) / 1000 + "us");
             return abilityValue;
         }
 
+        long endTime = System.nanoTime();
+        System.out.println("AbilityManager.get took: " + (endTime - startTime) / 1000 + "us");
+        
         // Return computed value
         //noinspection unchecked
         return (F) cachedValue;
     }
 
+    @Nullable
     private <F, H extends AbilityValue<F>, G extends Entity> F compute(G entity, Ability<G, H> ability) {
         Object2ObjectOpenHashMap<Identifier, AbilityProvider> providers = entity.getAbilityProviders();
 
@@ -69,6 +79,10 @@ public class AbilityManager {
                     }
                 }
             }
+        }
+        
+        if (value == null) {
+            value = ability.getDefaultValue().get();
         }
 
         return value;

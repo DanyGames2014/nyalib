@@ -9,6 +9,7 @@ import net.danygames2014.nyalib.fluid.Fluid;
 import net.danygames2014.nyalib.fluid.FluidBuilder;
 import net.danygames2014.nyalib.fluid.FluidRegistry;
 import net.danygames2014.nyalib.network.NetworkType;
+import net.danygames2014.nyalibtest.abilities.AbilityStick;
 import net.danygames2014.nyalibtest.capability.block.ItemHandlerBlockCapabilityTesterBlock;
 import net.danygames2014.nyalibtest.capability.item.YoinkerItem;
 import net.danygames2014.nyalibtest.energy.*;
@@ -134,6 +135,9 @@ public class NyaLibTest {
     public static Fluid glowstoneFluid;
     public static Fluid redFluid;
     public static Fluid blackFluid;
+    
+    public static Item abilityStick1;
+    public static Item abilityStick2;
 
     public static NetworkType basicNetworkType;
 
@@ -188,6 +192,10 @@ public class NyaLibTest {
         // Capability
         itemHandlerBlockCapabilityTester = new ItemHandlerBlockCapabilityTesterBlock(NAMESPACE.id("item_handler_block_capability")).setTranslationKey(NAMESPACE, "item_handler_block_capability");
         improperCapabilityTester = new ImproperCapabilityTesterItem(NAMESPACE.id("improper_capability_tester")).setTranslationKey(NAMESPACE, "improper_capability_tester").registerAutomaticModel();
+        
+        // Ability
+        abilityStick1 = new AbilityStick(NAMESPACE.id("ability_stick_1"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
+        abilityStick2 = new AbilityStick(NAMESPACE.id("ability_stick_2"), NyaLibTest.NAMESPACE.id("stick2")).registerAutomaticModel();
     }
 
     @EventListener

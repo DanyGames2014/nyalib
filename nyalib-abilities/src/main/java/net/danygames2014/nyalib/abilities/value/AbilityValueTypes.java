@@ -1,14 +1,11 @@
-package net.danygames2014.nyalib.abilities.value.type;
+package net.danygames2014.nyalib.abilities.value;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.danygames2014.nyalib.abilities.value.AbilityValue;
-import net.danygames2014.nyalib.abilities.value.AbilityValueFactory;
-import net.danygames2014.nyalib.abilities.value.BooleanAbilityValue;
-import net.danygames2014.nyalib.abilities.value.IntAbilityValue;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 
 public class AbilityValueTypes {
     public static Object2ObjectOpenHashMap<String, AbilityValueFactory<?>> TYPE_TO_FACTORY = new Object2ObjectOpenHashMap<>();
-    public static Object2ObjectOpenHashMap<Class<? extends AbilityValue<?>>, String> CLASS_TO_TYPE = new Object2ObjectOpenHashMap<>();
+    public static Reference2ObjectOpenHashMap<Class<? extends AbilityValue<?>>, String> CLASS_TO_TYPE = new Reference2ObjectOpenHashMap<>();
     
     static {
         register("integer", IntAbilityValue::new, IntAbilityValue.class);

@@ -17,9 +17,17 @@ public class IntAbilityValue extends AbilityValue<Integer> {
     public Integer get() {
         return value;
     }
+    
+    public int getInt() {
+        return value;
+    }
 
     @Override
     public void set(Integer value) {
+        this.value = value;
+    }
+    
+    public void setInt(int value) {
         this.value = value;
     }
 

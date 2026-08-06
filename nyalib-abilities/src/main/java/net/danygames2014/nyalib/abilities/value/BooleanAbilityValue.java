@@ -17,9 +17,17 @@ public class BooleanAbilityValue extends AbilityValue<Boolean>{
     public Boolean get() {
         return value;
     }
+    
+    public boolean getBoolean() {
+        return value;
+    }
 
     @Override
     public void set(Boolean value) {
+        this.value = value;
+    }
+    
+    public void setBoolean(boolean value) {
         this.value = value;
     }
 
