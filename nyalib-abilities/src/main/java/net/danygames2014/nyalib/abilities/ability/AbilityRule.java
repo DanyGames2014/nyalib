@@ -1,4 +1,4 @@
-package net.danygames2014.nyalib.abilities;
+package net.danygames2014.nyalib.abilities.ability;
 
 public enum AbilityRule {
     /**

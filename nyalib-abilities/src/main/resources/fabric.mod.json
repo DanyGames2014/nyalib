@@ -15,7 +15,9 @@
   "environment": "*",
   "entrypoints": {
     "stationapi:event_bus": [
-      "net.danygames2014.nyalib.abilities.init.InitListenerAbilities"
+      "net.danygames2014.nyalib.abilities.init.InitListenerAbilities",
+      "net.danygames2014.nyalib.abilities.init.AbilityValueTypeListener",
+      "net.danygames2014.nyalib.abilities.init.AbilityListener"
     ],
     "stationapi:event_bus_client": [
     ],

@@ -1,6 +1,7 @@
-package net.danygames2014.nyalib.abilities;
+package net.danygames2014.nyalib.abilities.ability;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.danygames2014.nyalib.NyaLib;
 import net.modificationstation.stationapi.api.util.Identifier;
@@ -8,8 +9,14 @@ import net.modificationstation.stationapi.api.util.Identifier;
 public class AbilityRegistry {
     private static final AbilityRegistry INSTANCE = new AbilityRegistry();
 
+    // Abilities
     private final Object2ObjectOpenHashMap<Identifier, Ability<?, ?>> abilities = new Object2ObjectOpenHashMap<>();
     private final Reference2ObjectOpenHashMap<Ability<?, ?>, Identifier> abilityToIdentifier = new Reference2ObjectOpenHashMap<>();
+    
+    // Ability Providers
+    private final ObjectOpenHashSet<Identifier> abilityProviders = new ObjectOpenHashSet<>();
+    
+    // Ability Implementations
     private final Object2ObjectOpenHashMap<Identifier, AbilityImplementation<?>> abilityImplementations = new Object2ObjectOpenHashMap<>();
 
     private AbilityRegistry() {}
@@ -18,8 +25,9 @@ public class AbilityRegistry {
         return INSTANCE;
     }
 
+    // Abilities
     public static void registerAbility(Identifier identifier, Ability<?, ?> ability) {
-        AbilityRegistry r = getInstance();
+        AbilityRegistry r = INSTANCE;
 
         Ability<?, ?> existing = r.abilities.get(identifier);
         if (existing != null) {
@@ -40,5 +48,25 @@ public class AbilityRegistry {
 
     public static Identifier getIdentifier(Ability<?, ?> ability) {
         return INSTANCE.abilityToIdentifier.get(ability);
+    }
+    
+    // Ability Providers
+    public static void registerAbilityProvider(Identifier identifier) {
+        AbilityRegistry r = INSTANCE;
+
+        Identifier existing = r.abilityProviders.get(identifier);
+        if (existing != null) {
+            NyaLib.LOGGER.warn("Attempted to register an ability provider {} but an ability provider with that identifier already exists!", identifier);
+            NyaLib.LOGGER.warn("Existing ability provider: {}", existing);
+            NyaLib.LOGGER.warn("Ability provider being registered: {}", identifier);
+            return;
+        }
+
+        r.abilityProviders.add(identifier);
+        NyaLib.LOGGER.info("Registered ability provider {}", identifier);
+    }
+    
+    public static boolean abilityProviderRegistered(Identifier identifier) {
+        return INSTANCE.abilityProviders.contains(identifier);
     }
 }

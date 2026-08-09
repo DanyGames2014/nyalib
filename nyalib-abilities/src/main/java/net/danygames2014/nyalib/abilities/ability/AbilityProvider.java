@@ -1,4 +1,4 @@
-package net.danygames2014.nyalib.abilities;
+package net.danygames2014.nyalib.abilities.ability;
 
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
@@ -6,7 +6,7 @@ import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.danygames2014.nyalib.NyaLib;
 import net.danygames2014.nyalib.abilities.value.AbilityValue;
 import net.danygames2014.nyalib.abilities.value.AbilityValueFactory;
-import net.danygames2014.nyalib.abilities.value.AbilityValueTypes;
+import net.danygames2014.nyalib.abilities.value.AbilityValueTypeRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
@@ -19,17 +19,15 @@ public class AbilityProvider {
     public Entity entity;
     private final Reference2ObjectOpenHashMap<Ability<?, ?>, AbilityValue<?>> values;
     
-    // TODO: Register ability providers so they can be cleared out during load when mod gets removed
-
     public AbilityProvider(AbilityManager manager, Identifier identifier, Entity entity) {
+        if (!AbilityRegistry.abilityProviderRegistered(identifier)) {
+            throw new IllegalStateException("Ability provider " + identifier + " is not registered!");
+        }
+        
         this.manager = manager;
         this.identifier = identifier;
         this.entity = entity;
         this.values = new Reference2ObjectOpenHashMap<>();
-    }
-    
-    public AbilityProvider(AbilityManager manager, Entity entity) {
-        this(manager, null, entity);
     }
 
     public <G extends Entity, H extends AbilityValue<?>> void set(Ability<G, H> ability, AbilityValue<?> value) {
@@ -70,7 +68,7 @@ public class AbilityProvider {
             
             // Write the value
             AbilityValue<?> value = entry.getValue();
-            valueNbt.putString("valueType", AbilityValueTypes.CLASS_TO_TYPE.get(value.getClass()));
+            valueNbt.putString("valueType", AbilityValueTypeRegistry.CLASS_TO_TYPE.get(value.getClass()));
             value.writeNbt(valueNbt);
             
             // Add to the list of values
@@ -81,14 +79,6 @@ public class AbilityProvider {
     }
     
     public void readNbt(NbtCompound nbt) {
-        // If the nbt does not contain an identifier then something went wrong
-        if (!nbt.contains("identifier")) {
-            NyaLib.LOGGER.warn("AbilityProvider nbt does not contain an identifier!");
-            return;
-        }
-        
-        identifier = Identifier.of(nbt.getString("identifier"));
-        
         NbtList valuesList = nbt.getList("values");
         for (int i = 0; i < valuesList.size(); i++) {
             NbtCompound valueNbt = (NbtCompound) valuesList.get(i);
@@ -103,7 +93,7 @@ public class AbilityProvider {
             }
             
             // Read the value
-            AbilityValueFactory<?> valueFactory = AbilityValueTypes.TYPE_TO_FACTORY.get(valueNbt.getString("valueType"));
+            AbilityValueFactory<?> valueFactory = AbilityValueTypeRegistry.TYPE_TO_FACTORY.get(valueNbt.getString("valueType"));
             if (valueFactory == null) {
                 NyaLib.LOGGER.error("Value type {} not found while loading ability {}. Has the modlist been changed? Skipping the loading of this ability.", valueNbt.getString("valueType"), abilityId);
                 continue;

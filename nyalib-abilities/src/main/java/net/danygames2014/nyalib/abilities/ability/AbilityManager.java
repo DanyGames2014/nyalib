@@ -1,11 +1,10 @@
-package net.danygames2014.nyalib.abilities;
+package net.danygames2014.nyalib.abilities.ability;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.danygames2014.nyalib.abilities.value.AbilityValue;
 import net.minecraft.entity.Entity;
 import net.modificationstation.stationapi.api.util.Identifier;
-import org.jetbrains.annotations.Nullable;
 
 public class AbilityManager {
     private static final AbilityManager INSTANCE = new AbilityManager();
@@ -20,7 +19,6 @@ public class AbilityManager {
 
     long startTime = System.nanoTime();
     
-    @Nullable
     public <F, H extends AbilityValue<F>, G extends Entity> F get(G entity, Ability<G, H> ability) {
         startTime = System.nanoTime();
         
@@ -35,19 +33,24 @@ public class AbilityManager {
             F abilityValue = compute(entity, ability);
             valueCache.put(ability, abilityValue);
             long endTime = System.nanoTime();
-            System.out.println("AbilityManager.get took: " + (endTime - startTime) / 1000 + "us");
+            long elapsed = (endTime - startTime) / 1000;
+            if (elapsed > 1) {
+                System.out.println("AbilityManager.get took: " + (endTime - startTime) / 1000 + "us for ability " + ability.identifier);
+            }
             return abilityValue;
         }
 
         long endTime = System.nanoTime();
-        System.out.println("AbilityManager.get took: " + (endTime - startTime) / 1000 + "us");
-        
+        long elapsed = (endTime - startTime) / 1000;
+        if (elapsed > 1) {
+            System.out.println("AbilityManager.get took: " + (endTime - startTime) / 1000 + "us for ability " + ability.identifier);
+        }
+
         // Return computed value
         //noinspection unchecked
         return (F) cachedValue;
     }
 
-    @Nullable
     private <F, H extends AbilityValue<F>, G extends Entity> F compute(G entity, Ability<G, H> ability) {
         Object2ObjectOpenHashMap<Identifier, AbilityProvider> providers = entity.getAbilityProviders();
 
@@ -82,7 +85,8 @@ public class AbilityManager {
         }
         
         if (value == null) {
-            value = ability.getDefaultValue().get();
+            //noinspection DataFlowIssue
+            value = ability.defaultValue.get();
         }
 
         return value;

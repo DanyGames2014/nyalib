@@ -1,9 +1,11 @@
-package net.danygames2014.nyalib.mixin.abilities;
+package net.danygames2014.nyalib.abilities.mixin;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.danygames2014.nyalib.abilities.AbilityManager;
-import net.danygames2014.nyalib.abilities.AbilityProvider;
-import net.danygames2014.nyalib.mixininterface.NyaLibAbilitiesEntity;
+import net.danygames2014.nyalib.NyaLib;
+import net.danygames2014.nyalib.abilities.ability.AbilityManager;
+import net.danygames2014.nyalib.abilities.ability.AbilityProvider;
+import net.danygames2014.nyalib.abilities.ability.AbilityRegistry;
+import net.danygames2014.nyalib.abilities.mixininterface.NyaLibAbilitiesEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.util.Identifier;
@@ -74,7 +76,17 @@ public abstract class EntityMixin implements NyaLibAbilitiesEntity {
         abilityProviders = new Object2ObjectOpenHashMap<>();
         for (Object providerO : abilitiesNbt.values()) {
             if (providerO instanceof NbtCompound providerNbt) {
-                AbilityProvider provider = new AbilityProvider(AbilityManager.getInstance(), (Entity) (Object) this);
+                if (!providerNbt.contains("identifier")) {
+                    continue;
+                }
+                
+                Identifier providerId = Identifier.of(providerNbt.getString("identifier"));
+                if (!AbilityRegistry.abilityProviderRegistered(providerId)) {
+                    NyaLib.LOGGER.warn("AbilityProvider {} not found in registry. Skipping the loading of this provider.", providerId);
+                    continue;
+                }
+                
+                AbilityProvider provider = new AbilityProvider(AbilityManager.getInstance(), providerId, (Entity) (Object) this);
                 provider.readNbt(providerNbt);
                 abilityProviders.put(provider.identifier, provider);
             }

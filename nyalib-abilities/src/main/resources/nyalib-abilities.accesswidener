@@ -1,3 +1,4 @@
 classTweaker v2 named
 
-transitive-inject-interface net/minecraft/entity/Entity net/danygames2014/nyalib/mixininterface/NyaLibAbilitiesEntity
+transitive-inject-interface net/minecraft/entity/Entity net/danygames2014/nyalib/abilities/mixininterface/NyaLibAbilitiesEntity
+transitive-inject-interface net/minecraft/entity/player/PlayerEntity net/danygames2014/nyalib/abilities/mixininterface/NyaLibFlyingPlayer

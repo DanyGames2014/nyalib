@@ -1,7 +1,7 @@
-package net.danygames2014.nyalib.mixininterface;
+package net.danygames2014.nyalib.abilities.mixininterface;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.danygames2014.nyalib.abilities.AbilityProvider;
+import net.danygames2014.nyalib.abilities.ability.AbilityProvider;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.Util;
 
