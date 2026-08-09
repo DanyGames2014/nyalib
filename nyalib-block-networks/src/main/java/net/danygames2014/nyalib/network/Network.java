@@ -217,7 +217,9 @@ public class Network {
             }
 
             // Add the position to closed and remove it from open
-            closed.add(pos);
+            if (!closed.contains(pos)) {
+                closed.add(pos);
+            }
             open.remove(pos);
         }
 
