@@ -37,6 +37,7 @@ public class FluidBlockManager {
             // Create the Still Block and register its item model
             Identifier stillBlockIdentifier = fluid.getIdentifier().withSuffixedPath("_still");
             StillFluidBlock stillBlock = new StillFluidBlock(stillBlockIdentifier, fluidMaterial, fluid);
+            stillBlock.disableTrackingStatistics();
             fluid.setStillBlock(stillBlock);
             if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
                 JsonOverrideRegistry.registerItemModelOverride(stillBlockIdentifier, fluidInventoryJson);
@@ -46,6 +47,7 @@ public class FluidBlockManager {
             // Create the Flowing Block and register its item model
             Identifier flowingBlockIdentifier = fluid.getIdentifier().withSuffixedPath("_flowing");
             FlowingFluidBlock flowingFluidBlock = new FlowingFluidBlock(flowingBlockIdentifier, fluidMaterial, fluid);
+            flowingFluidBlock.disableTrackingStatistics();
             fluid.setFlowingBlock(flowingFluidBlock);
             if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
                 JsonOverrideRegistry.registerItemModelOverride(flowingBlockIdentifier, fluidInventoryJson);

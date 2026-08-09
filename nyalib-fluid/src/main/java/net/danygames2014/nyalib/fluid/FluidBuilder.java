@@ -360,6 +360,8 @@ public class FluidBuilder {
 
         if (stillBlock != null && flowingBlock != null) {
             fluid = factory.create(identifier, stillBlock, flowingBlock);
+            stillBlock.disableTrackingStatistics();
+            flowingBlock.disableTrackingStatistics();
         } else if (stillTexture != null && flowingTexture != null) {
             fluid = factory.create(identifier, null, null);
 

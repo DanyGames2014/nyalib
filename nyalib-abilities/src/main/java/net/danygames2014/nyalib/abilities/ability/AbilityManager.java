@@ -85,7 +85,6 @@ public class AbilityManager {
         }
         
         if (value == null) {
-            //noinspection DataFlowIssue
             value = ability.defaultValue.get();
         }
 

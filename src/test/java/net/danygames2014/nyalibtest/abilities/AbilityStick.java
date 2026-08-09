@@ -19,6 +19,10 @@ public class AbilityStick extends TemplateItem {
 
     @Override
     public ItemStack use(ItemStack stack, World world, PlayerEntity user) {
+        if (world.isRemote) {
+            return stack;
+        }
+        
         AbilityProvider abilityProvider = user.getAbilityProvider(providerId);
         
         if (user.isSneaking()) {
