@@ -16,6 +16,7 @@ import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.SideUtil;
+import org.jetbrains.annotations.Nullable;
 
 public class MultipartState {
     public int x;
@@ -23,6 +24,7 @@ public class MultipartState {
     public int z;
     public World world;
 
+    public MultipartComponent[] slottedMultiparts = null;
     public int slotState;
 
     public ObjectArrayList<MultipartComponent> components;
@@ -46,8 +48,12 @@ public class MultipartState {
         if (components.add(component)) {
             component.onPlaced();
 
-            if(component instanceof SlottedMultipart slottedMultipart) {
+            if(component instanceof SlottedMultipart slottedMultipart && slottedMultipart.getSlot() != MultipartSlot.CUSTOM) {
                 this.slotState |= slottedMultipart.getMask();
+                if(this.slottedMultiparts == null) {
+                    this.slottedMultiparts = new MultipartComponent[27];
+                }
+                this.slottedMultiparts[slottedMultipart.getSlot().slotIndex] = component;
             }
 
             for (var comp : components) {
@@ -72,8 +78,16 @@ public class MultipartState {
     public boolean removeComponent(MultipartComponent component, boolean notify) {
         if (components.remove(component)) {
 
-            if(component instanceof SlottedMultipart slottedMultipart) {
+            if(component instanceof SlottedMultipart slottedMultipart && slottedMultipart.getSlot() != MultipartSlot.CUSTOM) {
                 this.slotState &= ~slottedMultipart.getMask();
+
+                if(this.slottedMultiparts != null) {
+                    this.slottedMultiparts[slottedMultipart.getSlot().slotIndex] = null;
+                }
+
+                if(slotState == 0) {
+                    this.slottedMultiparts = null;
+                }
             }
 
             if (components.isEmpty()) {
@@ -128,6 +142,15 @@ public class MultipartState {
             return false;
         }
         return (this.slotState & slot.mask) != 0;
+    }
+
+    @Nullable
+    public MultipartComponent getSlottedMultipartComponent(MultipartSlot slot) {
+        if(slot == null || this.slottedMultiparts == null || slot == MultipartSlot.CUSTOM) {
+            return null;
+        }
+
+        return this.slottedMultiparts[slot.slotIndex];
     }
 
     // Collision and Bounds checking
@@ -212,6 +235,9 @@ public class MultipartState {
 
     public void readNbt(NbtCompound nbt) {
         components.clear();
+
+        this.slotState = 0;
+        this.slottedMultiparts = null;
 
         NbtList componentNbtList = nbt.getList("components");
         for (int i = 0; i < componentNbtList.size(); i++) {
