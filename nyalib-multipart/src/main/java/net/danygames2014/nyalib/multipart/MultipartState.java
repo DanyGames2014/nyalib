@@ -23,6 +23,8 @@ public class MultipartState {
     public int z;
     public World world;
 
+    public int slotState;
+
     public ObjectArrayList<MultipartComponent> components;
 
     public MultipartState() {
@@ -43,6 +45,10 @@ public class MultipartState {
         component.state = this;
         if (components.add(component)) {
             component.onPlaced();
+
+            if(component instanceof SlottedMultipart slottedMultipart) {
+                this.slotState |= slottedMultipart.getMask();
+            }
 
             for (var comp : components) {
                 comp.onStateUpdated(component, StateUpdateType.COMPONENT_ADD);
@@ -65,6 +71,11 @@ public class MultipartState {
 
     public boolean removeComponent(MultipartComponent component, boolean notify) {
         if (components.remove(component)) {
+
+            if(component instanceof SlottedMultipart slottedMultipart) {
+                this.slotState &= ~slottedMultipart.getMask();
+            }
+
             if (components.isEmpty()) {
                 world.setMultipartState(x, y, z, null);
             }
@@ -110,6 +121,13 @@ public class MultipartState {
             component.neighborBlockUpdate();
         }
         updateLightLevel();
+    }
+
+    public boolean isSlotOccupied(MultipartSlot slot) {
+        if (slot == null || slot.slotIndex < 0) {
+            return false;
+        }
+        return (this.slotState & slot.mask) != 0;
     }
 
     // Collision and Bounds checking
