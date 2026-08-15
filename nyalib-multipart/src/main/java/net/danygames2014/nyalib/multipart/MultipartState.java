@@ -57,17 +57,19 @@ public class MultipartState {
                 component.onPlaced();
             }
 
-            if(component instanceof SlottedMultipart slottedMultipart && MultipartSlot.fromMask(slottedMultipart.getMask()) != MultipartSlot.CUSTOM) {
+            if(component instanceof SlottedMultipart slottedMultipart && MultipartSlot.fromMask(slottedMultipart.getMask()).slotIndex >= 0) {
                 this.slotState |= slottedMultipart.getMask();
                 if(this.slottedMultiparts == null) {
                     this.slottedMultiparts = new MultipartComponent[27];
                 }
-                this.slottedMultiparts[MultipartSlot.fromSlotIndex(slottedMultipart.getMask()).slotIndex] = component;
+                this.slottedMultiparts[MultipartSlot.fromMask(slottedMultipart.getMask()).slotIndex] = component;
             }
 
-            for (var comp : components) {
-                comp.onStateUpdated(component, StateUpdateType.COMPONENT_ADD);
-                updateLightLevel();
+            if(placed) {
+                for (var comp : components) {
+                    comp.onStateUpdated(component, StateUpdateType.COMPONENT_ADD);
+                    updateLightLevel();
+                }
             }
 
             if (notify) {
@@ -87,7 +89,7 @@ public class MultipartState {
     public boolean removeComponent(MultipartComponent component, boolean notify) {
         if (components.remove(component)) {
 
-            if(component instanceof SlottedMultipart slottedMultipart && MultipartSlot.fromMask(slottedMultipart.getMask()) != MultipartSlot.CUSTOM) {
+            if(component instanceof SlottedMultipart slottedMultipart && MultipartSlot.fromMask(slottedMultipart.getMask()).slotIndex >= 0) {
                 this.slotState &= ~slottedMultipart.getMask();
 
                 if(this.slottedMultiparts != null) {
@@ -155,7 +157,7 @@ public class MultipartState {
 
     @Nullable
     public MultipartComponent getSlottedMultipartComponent(MultipartSlot slot) {
-        if(slot == null || this.slottedMultiparts == null || slot == MultipartSlot.CUSTOM) {
+        if(slot == null || this.slottedMultiparts == null || slot.slotIndex < 0) {
             return null;
         }
 

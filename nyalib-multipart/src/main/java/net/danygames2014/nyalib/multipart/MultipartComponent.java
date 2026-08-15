@@ -120,8 +120,8 @@ public abstract class MultipartComponent {
      * Called when this component is exploded
      */
     public void onExploded() {
-        onBreak();
         state.removeComponent(this, true);
+        onBreak();
     }
 
     /**
