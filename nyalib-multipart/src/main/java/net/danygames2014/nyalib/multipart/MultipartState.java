@@ -3,6 +3,7 @@ package net.danygames2014.nyalib.multipart;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.nyalib.NyaLibMultipart;
 import net.danygames2014.nyalib.util.BoxUtil;
+import net.danygames2014.nyalib.util.MultipartDirectionUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
@@ -16,6 +17,7 @@ import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.SideUtil;
+import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
 public class MultipartState {
@@ -48,12 +50,12 @@ public class MultipartState {
         if (components.add(component)) {
             component.onPlaced();
 
-            if(component instanceof SlottedMultipart slottedMultipart && slottedMultipart.getSlot() != MultipartSlot.CUSTOM) {
+            if(component instanceof SlottedMultipart slottedMultipart && MultipartSlot.fromMask(slottedMultipart.getMask()) != MultipartSlot.CUSTOM) {
                 this.slotState |= slottedMultipart.getMask();
                 if(this.slottedMultiparts == null) {
                     this.slottedMultiparts = new MultipartComponent[27];
                 }
-                this.slottedMultiparts[slottedMultipart.getSlot().slotIndex] = component;
+                this.slottedMultiparts[MultipartSlot.fromSlotIndex(slottedMultipart.getMask()).slotIndex] = component;
             }
 
             for (var comp : components) {
@@ -78,11 +80,11 @@ public class MultipartState {
     public boolean removeComponent(MultipartComponent component, boolean notify) {
         if (components.remove(component)) {
 
-            if(component instanceof SlottedMultipart slottedMultipart && slottedMultipart.getSlot() != MultipartSlot.CUSTOM) {
+            if(component instanceof SlottedMultipart slottedMultipart && MultipartSlot.fromMask(slottedMultipart.getMask()) != MultipartSlot.CUSTOM) {
                 this.slotState &= ~slottedMultipart.getMask();
 
                 if(this.slottedMultiparts != null) {
-                    this.slottedMultiparts[slottedMultipart.getSlot().slotIndex] = null;
+                    this.slottedMultiparts[MultipartSlot.fromMask(slottedMultipart.getMask()).slotIndex] = null;
                 }
 
                 if(slotState == 0) {
@@ -217,6 +219,58 @@ public class MultipartState {
         if (!world.dimension.hasCeiling) {
             world.queueLightUpdate(LightType.SKY, x, y, z, x, y, z);
         }
+    }
+
+    // Redstone
+
+    int getStrongPowerLevel(Direction side) {
+        int level = 0;
+        for(MultipartComponent component : components) {
+            if(component instanceof MultipartRedstone redstone) {
+                level = Math.max(level, redstone.getStrongPowerLevel(side));
+            }
+        }
+        return level;
+    }
+
+    public int getPowerLevel(Direction direction) {
+
+    }
+
+    public int powerLevel(Direction side, int mask) {
+
+    }
+
+    public int getConnectionMask(Direction side) {
+
+    }
+
+    public int getRedstoneMask(Direction side) {
+        int mask = 0x10;
+
+        for(int i = 0; i < 4; i++) {
+            if(edgeRedstonePassthrough(MultipartSlot.fromSlotIndex(MultipartSlot.edgeBetween(side.getId(), MultipartDirectionUtil.getAdjacentSide(side, i).getId())))) {
+                mask |= 1 << i;
+            }
+        }
+
+        return mask & faceRedstonePassthrough(side);
+    }
+
+    private int faceRedstonePassthrough(Direction direction) {
+        MultipartComponent component = getSlottedMultipartComponent(MultipartSlot.fromSlotIndex(direction.getId()));
+        if(component instanceof FaceMultipartRedstonePassthrough passthrough) {
+            return passthrough.getRedstonePassthroughMask();
+        }
+        return 0x1F;
+    }
+
+    private boolean edgeRedstonePassthrough(MultipartSlot slot) {
+        MultipartComponent component = getSlottedMultipartComponent(slot);
+        if(component instanceof EdgeMultipartRedstonePassthrough passthrough) {
+            return passthrough.redstonePassthrough();
+        }
+        return component == null;
     }
 
     // NBT

@@ -65,6 +65,20 @@ public enum MultipartSlot {
         return CUSTOM;
     }
 
+    public static MultipartSlot fromMask(int mask) {
+        if (mask <= 0 || (mask & (mask - 1)) != 0) {
+            return CUSTOM;
+        }
+
+        int index = Integer.numberOfTrailingZeros(mask);
+
+        if (index < 27) {
+            return VALUES[index];
+        }
+
+        return CUSTOM;
+    }
+
     public int getPriority() {
         if(ordinal() < 6) {
             return  2;
