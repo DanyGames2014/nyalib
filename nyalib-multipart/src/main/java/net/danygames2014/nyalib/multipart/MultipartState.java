@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.nyalib.NyaLibMultipart;
 import net.danygames2014.nyalib.util.BoxUtil;
 import net.danygames2014.nyalib.util.MultipartDirectionUtil;
+import net.danygames2014.nyalib.util.MultipartRedstoneUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
@@ -222,8 +223,7 @@ public class MultipartState {
     }
 
     // Redstone
-
-    int getStrongPowerLevel(Direction side) {
+    public int getStrongPowerLevel(Direction side) {
         int level = 0;
         for(MultipartComponent component : components) {
             if(component instanceof MultipartRedstone redstone) {
@@ -233,16 +233,35 @@ public class MultipartState {
         return level;
     }
 
-    public int getPowerLevel(Direction direction) {
+    public int getPowerLevel(Direction side) {
+        return this.powerLevel(side, MultipartRedstoneUtil.getOtherBlockConnectionMask(world, x, y, z, side, true));
+    }
 
+    public boolean connectRedstone(Direction side) {
+        return (getConnectionMask(side) & MultipartRedstoneUtil.getOtherBlockConnectionMask(world, x, y, z, side, true)) > 0;
     }
 
     public int powerLevel(Direction side, int mask) {
-
+        int redstoneMask = this.getRedstoneMask(side) & mask;
+        int level = 0;
+        for (MultipartComponent component : components) {
+            if ((MultipartRedstoneUtil.getMultipartComponentConnectionMask(component, side) & redstoneMask) > 0) {
+                int l = ((MultipartRedstone) component).getPowerLevel(side);
+                if (l > level) {
+                    level = l;
+                }
+            }
+        }
+        return level;
     }
 
     public int getConnectionMask(Direction side) {
-
+        int redstoneMask = getRedstoneMask(side);
+        int mask = 0;
+        for (MultipartComponent component : components) {
+            mask |= MultipartRedstoneUtil.getMultipartComponentConnectionMask(component, side) & redstoneMask;
+        }
+        return mask;
     }
 
     public int getRedstoneMask(Direction side) {
