@@ -246,6 +246,10 @@ public abstract class MultipartComponent {
     public int getLightLevel() {
         return 0;
     }
+
+    public int getColor() {
+        return 0xFFFFFFFF;
+    }
     
     // Helper Methods
     public void notifyNeighbors() {

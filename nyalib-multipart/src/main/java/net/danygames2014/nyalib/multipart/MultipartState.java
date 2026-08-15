@@ -43,13 +43,19 @@ public class MultipartState {
     }
 
     public boolean addComponent(MultipartComponent component, boolean notify) {
+        return this.addComponent(component, notify, true);
+    }
+
+    public boolean addComponent(MultipartComponent component, boolean notify, boolean placed) {
         component.world = world;
         component.x = x;
         component.y = y;
         component.z = z;
         component.state = this;
         if (components.add(component)) {
-            component.onPlaced();
+            if(placed) {
+                component.onPlaced();
+            }
 
             if(component instanceof SlottedMultipart slottedMultipart && MultipartSlot.fromMask(slottedMultipart.getMask()) != MultipartSlot.CUSTOM) {
                 this.slotState |= slottedMultipart.getMask();
@@ -326,7 +332,7 @@ public class MultipartState {
 
                 MultipartComponent component = factory.create();
                 component.readNbt(componentNbt);
-                addComponent(component, false);
+                addComponent(component, false, false);
             } catch (Exception e) {
                 NyaLibMultipart.LOGGER.error("Error reading MultipartComponent", e);
             }
