@@ -145,6 +145,11 @@ public abstract class WorldMixin implements MultipartWorld {
             multipartBlockUpdate(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ());
         }
     }
+
+    @Inject(method = "neighborUpdate", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;neighborUpdate(Lnet/minecraft/world/World;IIII)V"))
+    public void triggerMultipartUpdate(int x, int y, int z, int blockId, CallbackInfo ci) {
+        multipartBlockUpdate(x, y, z);
+    }
     
     @Unique
     private void multipartBlockUpdate(int x, int y, int z) {
