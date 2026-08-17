@@ -91,8 +91,9 @@ public class BreakMultipartC2SPacket extends Packet implements ManagedPacket<Bre
         if (serverNetworkHandler.teleported && player.getSquaredDistance((double)x + (double)0.5F, (double)y + (double)0.5F, (double)z + (double)0.5F) < (double)64.0F && (zDistanceFromSpawn > 16 || canInteract)) {
             MultipartState state = world.getMultipartState(x,y,z);
             if (state != null) {
+                MultipartComponent component = state.components.get(componentIndex);
                 state.removeComponent(componentIndex, true);
-                state.components.get(componentIndex).onBreak();
+                component.onBreak();
                 PacketHelper.sendTo(player, new MultipartDataS2CPacket(world, x, y, z));
             }
         }
