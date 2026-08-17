@@ -1,13 +1,10 @@
 package net.danygames2014.nyalib.mixin.block;
 
-import net.danygames2014.nyalib.block.RedstoneLevelProvider;
 import net.danygames2014.nyalib.impl.RedstoneLevelWorldImpl;
 import net.danygames2014.nyalib.mixininterface.RedstoneLevelWorld;
-import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.world.StationFlatteningWorld;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -19,12 +16,6 @@ public abstract class WorldMixin implements RedstoneLevelWorld, StationFlattenin
 
     @Unique
     private final RedstoneLevelWorldImpl redstoneLevelWorldImpl = new RedstoneLevelWorldImpl((World) (Object)this);
-
-    @Shadow
-    public abstract int getBlockId(int x, int y, int z);
-
-    @Shadow
-    public abstract boolean shouldSuffocate(int x, int y, int z);
 
     @Override
     public int getStrongPowerLevelOnSide(int x, int y, int z, int side) {
