@@ -81,7 +81,7 @@ public class MultipartRedstoneUtil {
             return power ? 0x1F : 4;
         }
 
-        if(block == Block.REPEATER) {
+        if(block == Block.REPEATER || block == Block.POWERED_REPEATER) {
             Direction facing = Direction.byId(Facings.TO_DIR[meta & 3]);
 
             if(facing.getAxis() == side.getAxis()) {
@@ -91,8 +91,7 @@ public class MultipartRedstoneUtil {
             return 0;
         }
 
-        boolean isTorch = block == Block.REDSTONE_TORCH || block == Block.LIT_REDSTONE_TORCH;
-        if (isTorch) {
+        if (block == Block.REDSTONE_TORCH || block == Block.LIT_REDSTONE_TORCH) {
             if (power) return 0x1F;
 
             Direction attachment = MultipartDirectionUtil.getAttachmentDirectionFromWallMountedBlockMeta(meta);
