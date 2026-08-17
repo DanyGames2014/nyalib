@@ -53,16 +53,16 @@ public class MultipartState {
         component.z = z;
         component.state = this;
         if (components.add(component)) {
-            if(placed) {
-                component.onPlaced();
-            }
-
             if(component instanceof SlottedMultipart slottedMultipart && MultipartSlot.fromMask(slottedMultipart.getMask()).slotIndex >= 0) {
                 this.slotState |= slottedMultipart.getMask();
                 if(this.slottedMultiparts == null) {
                     this.slottedMultiparts = new MultipartComponent[27];
                 }
                 this.slottedMultiparts[MultipartSlot.fromMask(slottedMultipart.getMask()).slotIndex] = component;
+            }
+
+            if(placed) {
+                component.onPlaced();
             }
 
             if(placed) {

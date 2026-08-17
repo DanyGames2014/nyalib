@@ -3,6 +3,19 @@ package net.danygames2014.nyalib.util;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 public class MultipartDirectionUtil {
+
+    private static final int[] ROTATION_MAP = new int[] {
+            -1, -1, 2, 0,
+            1, 3, -1, -1,
+            2, 0, 3, 1,
+            2, 0, -1, -1,
+            3, 1, 2, 0,
+            -1, -1, 1, 3,
+            2, 0, 1, 3,
+            -1, -1, 2, 0,
+            3, 1, -1, -1
+    };
+
     public static Direction getAdjacentSide(Direction side, int index) {
         Direction.Axis faceAxis = side.getAxis();
 
@@ -18,15 +31,25 @@ public class MultipartDirectionUtil {
         };
     }
 
-    // TODO: confirm this works
+    public static int rotateTo(Direction.Axis axis, Direction direction) {
+        Direction baseDir = Direction.from(axis, Direction.AxisDirection.NEGATIVE);
+        return rotateTo(baseDir, direction);
+    }
+
     public static int rotateTo(Direction dir1, Direction dir2) {
-        Direction current = dir1.getAxis().isVertical() ? Direction.NORTH : dir1;
-        for (int rotation = 0; rotation < 4; rotation++) {
-            if (current == dir2) {
-                return rotation;
-            }
-            current = current.rotateYClockwise();
+        if (dir1.getAxis() == dir2.getAxis()) {
+            throw new IllegalArgumentException("Faces " + dir1 + " and " + dir2 + " are in the same axis or opposite");
         }
-        return -1;
+        return ROTATION_MAP[dir1.getId() * 6 + dir2.getId()];
+    }
+
+    public static Direction getAttachmentDirectionFromWallMountedBlockMeta(int meta) {
+        return switch (meta) {
+            case 1 -> Direction.WEST;
+            case 2 -> Direction.EAST;
+            case 3 -> Direction.NORTH;
+            case 4 -> Direction.SOUTH;
+            default -> Direction.DOWN;
+        };
     }
 }
