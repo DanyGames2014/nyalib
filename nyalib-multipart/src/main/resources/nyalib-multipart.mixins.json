@@ -18,6 +18,7 @@
     "multipart.PistonBlockMixin",
     "multipart.PlayerEntityMixin",
     "multipart.PlayerInventoryMixin",
+    "multipart.RedstoneLevelWorldImplMixin",
     "multipart.WorldMixin"
   ],
   "server": [

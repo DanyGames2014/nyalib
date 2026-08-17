@@ -33,7 +33,7 @@ public class MultipartRedstoneUtil {
 
         int vanillaMask = vanillaConnectionMask(world, x, y, z, side, true);
         if ((vanillaMask & mask) > 0) {
-            return world.getPowerLevelOnSide(x, y, z, side.getId());
+            return world.getPowerLevelOnSide(x, y, z, side.getOpposite().getId());
         }
 
         return 0;
@@ -104,24 +104,22 @@ public class MultipartRedstoneUtil {
                 return 4;
             }
 
-            Direction facing = attachment.getOpposite();
-
-            if (side.getAxis() == facing.getAxis()) {
+            if (side.getAxis() == attachment.getAxis()) {
                 return 0x10;
             }
 
-            return 1 << MultipartDirectionUtil.rotateTo(side.getAxis(), facing);
+            return 1 << MultipartDirectionUtil.rotateTo(side.getAxis(), attachment);
         }
 
         if (block instanceof ButtonBlock || block instanceof LeverBlock) {
             if (power) return 0x1F;
 
-            Direction facing = MultipartDirectionUtil.getAttachmentDirectionFromWallMountedBlockMeta(meta & 7).getOpposite();
+            Direction facing = MultipartDirectionUtil.getAttachmentDirectionFromWallMountedBlockMeta(meta & 7);
             if(facing.getAxis() == side.getAxis()) {
                 return 0x10;
             }
 
-            return  1 << MultipartDirectionUtil.rotateTo(side.getAxis(), facing);
+            return 1 << MultipartDirectionUtil.rotateTo(side.getAxis(), facing);
 
         }
 
