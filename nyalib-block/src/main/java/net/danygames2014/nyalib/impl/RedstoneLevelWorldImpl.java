@@ -23,9 +23,9 @@ public class RedstoneLevelWorldImpl implements RedstoneLevelWorld{
         Block block = Block.BLOCKS[blockId];
 
         if (block instanceof RedstoneLevelProvider redstoneLevelProvider) {
-            return redstoneLevelProvider.getSideStrongPowerLevel(World.class.cast(this), x, y, z, side);
+            return redstoneLevelProvider.getSideStrongPowerLevel(world, x, y, z, side);
         } else {
-            return block.isStrongPoweringSide(World.class.cast(this), x, y, z, side) ? 15 : 0;
+            return block.isStrongPoweringSide(world, x, y, z, side) ? 15 : 0;
         }
     }
 
@@ -84,12 +84,12 @@ public class RedstoneLevelWorldImpl implements RedstoneLevelWorld{
         Block block = Block.BLOCKS[blockId];
 
         if (block instanceof RedstoneLevelProvider redstoneLevelProvider) {
-            int level = redstoneLevelProvider.getSidePowerLevel(World.class.cast(this), x, y, z, side);
+            int level = redstoneLevelProvider.getSidePowerLevel(world, x, y, z, side);
             if (level > powerLevel) {
                 powerLevel = level;
             }
         } else {
-            int level = block.isPoweringSide(World.class.cast(this), x, y, z, side) ? 15 : 0;
+            int level = block.isPoweringSide(world, x, y, z, side) ? 15 : 0;
             if (level > powerLevel) {
                 powerLevel = level;
             }
