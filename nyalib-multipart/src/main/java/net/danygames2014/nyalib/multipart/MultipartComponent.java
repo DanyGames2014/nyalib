@@ -1,6 +1,7 @@
 package net.danygames2014.nyalib.multipart;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.danygames2014.nyalib.block.voxelshape.VoxelShape;
 import net.danygames2014.nyalib.sound.SoundHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -249,6 +250,19 @@ public abstract class MultipartComponent {
 
     public int getColor() {
         return 0xFFFFFFFF;
+    }
+
+    /**
+     * Return true if the given component can be added to the same MultipartState as the current component
+     */
+    // Occlusion
+    public boolean occlusionTest(MultipartComponent component) {
+        return true;
+    }
+
+    @Nullable
+    public VoxelShape getOcclusionShape() {
+        return null;
     }
     
     // Helper Methods

@@ -2,8 +2,11 @@ package net.danygames2014.nyalib.multipart;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.nyalib.NyaLibMultipart;
+import net.danygames2014.nyalib.block.voxelshape.VoxelShape;
+import net.danygames2014.nyalib.block.voxelshape.VoxelShapes;
 import net.danygames2014.nyalib.util.BoxUtil;
 import net.danygames2014.nyalib.util.MultipartDirectionUtil;
+import net.danygames2014.nyalib.util.MultipartOcclusionUtil;
 import net.danygames2014.nyalib.util.MultipartRedstoneUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -339,6 +342,30 @@ public class MultipartState {
                 NyaLibMultipart.LOGGER.error("Error reading MultipartComponent", e);
             }
         }
+    }
+
+    // Occlusion
+
+    public boolean canAddComponent(MultipartComponent component) {
+        return !components.contains(component) && occlusionTest(components, component);
+    }
+
+    public boolean canReplaceComponent(MultipartComponent existingComponent, MultipartComponent newComponent) {
+        if(existingComponent != newComponent && components.contains(newComponent)) {
+            return false;
+        }
+        ObjectArrayList<MultipartComponent> remainingComponents = components.stream().filter(component -> component != existingComponent).collect(ObjectArrayList.toList());
+        return occlusionTest(remainingComponents, newComponent);
+    }
+
+    public boolean occlusionTest(ObjectArrayList<MultipartComponent> existingComponents, MultipartComponent newComponent) {
+        if(newComponent instanceof PartialOcclusionComponent partial) {
+            if(!MultipartOcclusionUtil.partialOcclusionTest(existingComponents, partial)) {
+                return false;
+            }
+        }
+
+        return existingComponents.stream().allMatch((component -> component.occlusionTest(newComponent) && newComponent.occlusionTest(component)));
     }
 
     @Override
