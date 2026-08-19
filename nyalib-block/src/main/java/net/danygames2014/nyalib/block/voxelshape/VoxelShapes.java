@@ -51,8 +51,8 @@ public class VoxelShapes {
             return null;
         }
 
-        ObjectArrayList<Box> remainingBoxes = new ObjectArrayList<>(shape1.getOffsetBoxes());
-        ObjectArrayList<Box> cutterBoxes = new ObjectArrayList<>(shape2.getOffsetBoxes());
+        ObjectArrayList<Box> remainingBoxes = new ObjectArrayList<>(shape1.getBoxes());
+        ObjectArrayList<Box> cutterBoxes = new ObjectArrayList<>(shape2.getBoxes());
 
         for(Box cutter : cutterBoxes) {
             ObjectArrayList<Box> cutBoxes = new ObjectArrayList<>();
