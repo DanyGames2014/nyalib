@@ -195,13 +195,6 @@ public class NyaLibTest {
 
         // Capability
         itemHandlerBlockCapabilityTester = new ItemHandlerBlockCapabilityTesterBlock(NAMESPACE.id("item_handler_block_capability")).setTranslationKey(NAMESPACE, "item_handler_block_capability");
-        improperCapabilityTester = new ImproperCapabilityTesterItem(NAMESPACE.id("improper_capability_tester")).setTranslationKey(NAMESPACE, "improper_capability_tester").registerAutomaticModel();
-        
-        // Ability
-        abilityStick1 = new AbilityStick(NAMESPACE.id("ability_stick_1"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
-        abilityStick2 = new AbilityStick(NAMESPACE.id("ability_stick_2"), NyaLibTest.NAMESPACE.id("stick2")).registerAutomaticModel();
-        fireImmunityStick = new FireImmunityStick(NAMESPACE.id("fire_immunity_stick"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
-        flightStick = new FlightStick(NAMESPACE.id("flight_stick"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
     }
 
     @EventListener
@@ -263,6 +256,15 @@ public class NyaLibTest {
         diamondBlockCoverMultipartItem = new CoverMultipartItem(NAMESPACE.id("diamond_cover"), Block.DIAMOND_BLOCK).setTranslationKey(NAMESPACE, "diamond_cover");
 
         itemWithCustomOutlineRenderer = new ItemWithCustomOutlineRenderer(NAMESPACE.id("custom_outline_renderer")).setTranslationKey(NAMESPACE, "custom_outline_renderer");
+
+        // Capability
+        improperCapabilityTester = new ImproperCapabilityTesterItem(NAMESPACE.id("improper_capability_tester")).setTranslationKey(NAMESPACE, "improper_capability_tester").registerAutomaticModel();
+        
+        // Ability
+        abilityStick1 = new AbilityStick(NAMESPACE.id("ability_stick_1"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
+        abilityStick2 = new AbilityStick(NAMESPACE.id("ability_stick_2"), NyaLibTest.NAMESPACE.id("stick2")).registerAutomaticModel();
+        fireImmunityStick = new FireImmunityStick(NAMESPACE.id("fire_immunity_stick"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
+        flightStick = new FlightStick(NAMESPACE.id("flight_stick"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
     }
 
     @EventListener
