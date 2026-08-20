@@ -40,15 +40,15 @@ public class MultipartRedstoneUtil {
     }
 
     public static int getMultipartComponentConnectionMask(MultipartComponent component, Direction side) {
-        if(component instanceof MultipartRedstone redstone && redstone.canConnectRedstone(side)) {
-            if(component instanceof FaceMultipartRedstone face) {
+        if(component instanceof RedstoneComponent redstone && redstone.canConnectRedstone(side)) {
+            if(component instanceof FaceRedstoneComponent face) {
                 if (side.getAxis() == face.getFace().getAxis()) {
                     return 0x10;
                 }
 
                 return 1 << MultipartDirectionUtil.rotateTo(side.getAxis(), face.getFace());
             }
-            if(component instanceof MaskedMultipartRedstone maskedRedstone) {
+            if(component instanceof MaskedRedstoneComponent maskedRedstone) {
                 return maskedRedstone.getConnectionMask(side);
             }
             return 0x1F;

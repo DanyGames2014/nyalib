@@ -2,6 +2,6 @@ package net.danygames2014.nyalib.multipart;
 
 import net.modificationstation.stationapi.api.util.math.Direction;
 
-public interface FaceMultipartRedstone extends MultipartRedstone{
-    Direction getFace();
+public interface MaskedRedstoneComponent extends RedstoneComponent {
+    int getConnectionMask(Direction side);
 }

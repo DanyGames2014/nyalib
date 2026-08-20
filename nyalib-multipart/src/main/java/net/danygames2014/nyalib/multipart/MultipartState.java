@@ -2,8 +2,6 @@ package net.danygames2014.nyalib.multipart;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.nyalib.NyaLibMultipart;
-import net.danygames2014.nyalib.block.voxelshape.VoxelShape;
-import net.danygames2014.nyalib.block.voxelshape.VoxelShapes;
 import net.danygames2014.nyalib.util.BoxUtil;
 import net.danygames2014.nyalib.util.MultipartDirectionUtil;
 import net.danygames2014.nyalib.util.MultipartOcclusionUtil;
@@ -56,12 +54,12 @@ public class MultipartState {
         component.z = z;
         component.state = this;
         if (components.add(component)) {
-            if(component instanceof SlottedMultipart slottedMultipart && MultipartSlot.fromMask(slottedMultipart.getMask()).slotIndex >= 0) {
-                this.slotState |= slottedMultipart.getMask();
+            if(component instanceof SlottedComponent slottedComponent && MultipartSlot.fromMask(slottedComponent.getMask()).slotIndex >= 0) {
+                this.slotState |= slottedComponent.getMask();
                 if(this.slottedMultiparts == null) {
                     this.slottedMultiparts = new MultipartComponent[27];
                 }
-                this.slottedMultiparts[MultipartSlot.fromMask(slottedMultipart.getMask()).slotIndex] = component;
+                this.slottedMultiparts[MultipartSlot.fromMask(slottedComponent.getMask()).slotIndex] = component;
             }
 
             if(placed) {
@@ -92,11 +90,11 @@ public class MultipartState {
     public boolean removeComponent(MultipartComponent component, boolean notify) {
         if (components.remove(component)) {
 
-            if(component instanceof SlottedMultipart slottedMultipart && MultipartSlot.fromMask(slottedMultipart.getMask()).slotIndex >= 0) {
-                this.slotState &= ~slottedMultipart.getMask();
+            if(component instanceof SlottedComponent slottedComponent && MultipartSlot.fromMask(slottedComponent.getMask()).slotIndex >= 0) {
+                this.slotState &= ~slottedComponent.getMask();
 
                 if(this.slottedMultiparts != null) {
-                    this.slottedMultiparts[MultipartSlot.fromMask(slottedMultipart.getMask()).slotIndex] = null;
+                    this.slottedMultiparts[MultipartSlot.fromMask(slottedComponent.getMask()).slotIndex] = null;
                 }
 
                 if(slotState == 0) {
@@ -237,7 +235,7 @@ public class MultipartState {
     public int getStrongPowerLevel(Direction side) {
         int level = 0;
         for(MultipartComponent component : components) {
-            if(component instanceof MultipartRedstone redstone) {
+            if(component instanceof RedstoneComponent redstone) {
                 level = Math.max(level, redstone.getStrongPowerLevel(side));
             }
         }
@@ -257,7 +255,7 @@ public class MultipartState {
         int level = 0;
         for (MultipartComponent component : components) {
             if ((MultipartRedstoneUtil.getMultipartComponentConnectionMask(component, side) & redstoneMask) > 0) {
-                int l = ((MultipartRedstone) component).getPowerLevel(side);
+                int l = ((RedstoneComponent) component).getPowerLevel(side);
                 if (l > level) {
                     level = l;
                 }
@@ -289,7 +287,7 @@ public class MultipartState {
 
     private int faceRedstonePassthrough(Direction direction) {
         MultipartComponent component = getSlottedMultipartComponent(MultipartSlot.fromSlotIndex(direction.getId()));
-        if(component instanceof FaceMultipartRedstonePassthrough passthrough) {
+        if(component instanceof FaceComponentRedstonePassthrough passthrough) {
             return passthrough.getRedstonePassthroughMask();
         }
         return 0x1F;
@@ -297,7 +295,7 @@ public class MultipartState {
 
     private boolean edgeRedstonePassthrough(MultipartSlot slot) {
         MultipartComponent component = getSlottedMultipartComponent(slot);
-        if(component instanceof EdgeMultipartRedstonePassthrough passthrough) {
+        if(component instanceof EdgeComponentRedstonePassthrough passthrough) {
             return passthrough.redstonePassthrough();
         }
         return component == null;

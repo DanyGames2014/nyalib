@@ -1,5 +1,5 @@
 package net.danygames2014.nyalib.multipart;
 
-public interface SlottedMultipart {
+public interface SlottedComponent {
     int getMask();
 }
