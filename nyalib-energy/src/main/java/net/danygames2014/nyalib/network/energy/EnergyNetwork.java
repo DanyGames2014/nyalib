@@ -41,15 +41,15 @@ public class EnergyNetwork extends Network {
         // Build Caches
         for (NetworkComponentEntry componentEntry : components.values()) {
             // For network edges, check if theyre valid consumers
-            if (componentEntry.component() instanceof NetworkEdgeComponent) {
-                if (world.getBlockEntity(componentEntry.pos().x, componentEntry.pos().y, componentEntry.pos().z) instanceof EnergyConsumer consumer) {
-                    consumers.put(componentEntry.pos(), new ConsumerEntry(componentEntry, consumer));
+            if (componentEntry.component instanceof NetworkEdgeComponent) {
+                if (world.getBlockEntity(componentEntry.pos.x, componentEntry.pos.y, componentEntry.pos.z) instanceof EnergyConsumer consumer) {
+                    consumers.put(componentEntry.pos, new ConsumerEntry(componentEntry, consumer));
                 }
 
                 // For nodes, check if theyre valid conductors
-            } else if (componentEntry.component() instanceof NetworkNodeComponent) {
-                if (componentEntry.block() instanceof EnergyConductor conductor) {
-                    energyFlow.put(componentEntry.pos(), new EnergyFlowEntry(componentEntry, conductor, 0));
+            } else if (componentEntry.component instanceof NetworkNodeComponent) {
+                if (componentEntry.block instanceof EnergyConductor conductor) {
+                    energyFlow.put(componentEntry.pos, new EnergyFlowEntry(componentEntry, conductor, 0));
                 }
             }
         }

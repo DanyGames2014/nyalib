@@ -56,7 +56,7 @@ public class NetworkPathManager {
     }
     
     public double getComponentPathingCost(Vec3i pos) {
-        NetworkComponent component = network.components.get(pos).component();
+        NetworkComponent component = network.components.get(pos).component;
         if (component != null) {
             return Math.max(component.getPathingCost(network.world, pos.x, pos.y, pos.z, network), 0.1D);
         }
@@ -79,7 +79,7 @@ public class NetworkPathManager {
         // Calculate Path Cost
         double cost = 0;
         for (Vec3i pos : path) {
-            NetworkComponent component = network.components.get(pos).component();
+            NetworkComponent component = network.components.get(pos).component;
             if (component != null) {
                 cost += Math.max(component.getPathingCost(network.world, pos.x, pos.y, pos.z, network), 0.1D);
             }

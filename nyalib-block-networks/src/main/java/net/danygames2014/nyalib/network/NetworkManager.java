@@ -314,11 +314,11 @@ public class NetworkManager {
                         // Check if the components can connect to each other
                         if (component.canConnectTo(world, x, y, z, potentialNet, direction)) {
                             NetworkComponentEntry componentEntry = potentialNet.getEntry(side);
-                            if (componentEntry.component().canConnectTo(world, side.x, side.y, side.z, null, direction.getOpposite())) {
+                            if (componentEntry.component.canConnectTo(world, side.x, side.y, side.z, null, direction.getOpposite())) {
                                 // If they can connect to each other, then its a valid neighbor
-                                if (componentEntry.component() instanceof NetworkNodeComponent) {
+                                if (componentEntry.component instanceof NetworkNodeComponent) {
                                     nodeNeighbors.add(new PotentialNeighbor(componentEntry, potentialNet, side));
-                                } else if (componentEntry.component() instanceof NetworkEdgeComponent) {
+                                } else if (componentEntry.component instanceof NetworkEdgeComponent) {
                                     edgeNeighbors.add(new PotentialNeighbor(componentEntry, potentialNet, side));
                                 }
                             }
@@ -343,7 +343,7 @@ public class NetworkManager {
                     // If there are some networks, connect to all of them
                     default -> {
                         for (PotentialNeighbor neighbor : nodeNeighbors) {
-                            if (neighbor.entry.component() instanceof NetworkNodeComponent) {
+                            if (neighbor.entry.component instanceof NetworkNodeComponent) {
                                 neighbor.network.addBlock(x, y, z, component, true);
                                 neighbor.network.update();
                             }
@@ -394,7 +394,7 @@ public class NetworkManager {
 
                         // If the neighbor is not a stub, add it to the network, but also leave it in its own network
                     } else if (neighbor.network.components.size() > 1 && networkToJoin != null) {
-                        networkToJoin.addBlock(neighbor.position.x, neighbor.position.y, neighbor.position.z, neighbor.entry.block(), true);
+                        networkToJoin.addBlock(neighbor.position.x, neighbor.position.y, neighbor.position.z, neighbor.entry.block, true);
                         networkToJoin.update();
                     }
 

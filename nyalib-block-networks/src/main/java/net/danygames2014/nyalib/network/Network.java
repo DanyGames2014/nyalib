@@ -67,7 +67,7 @@ public class Network {
         Object2ObjectOpenHashMap<Vec3i, NetworkComponentEntry> edges = new Object2ObjectOpenHashMap<>();
 
         for (Map.Entry<Vec3i, NetworkComponentEntry> entry : components.entrySet()) {
-            if (entry.getValue().block() instanceof NetworkEdgeComponent) {
+            if (entry.getValue().block instanceof NetworkEdgeComponent) {
                 edges.put(entry.getKey(), entry.getValue());
             }
         }
@@ -82,7 +82,7 @@ public class Network {
         Object2ObjectOpenHashMap<Vec3i, NetworkComponentEntry> nodes = new Object2ObjectOpenHashMap<>();
 
         for (Map.Entry<Vec3i, NetworkComponentEntry> entry : components.entrySet()) {
-            if (!(entry.getValue().block() instanceof NetworkEdgeComponent)) {
+            if (!(entry.getValue().block instanceof NetworkEdgeComponent)) {
                 nodes.put(entry.getKey(), entry.getValue());
             }
         }
@@ -109,7 +109,7 @@ public class Network {
      * @return The NetworkPath if it was found. <code>null</code> if it was now
      */
     public NetworkPath getPath(NetworkComponentEntry from, NetworkComponentEntry to) {
-        return getPath(from.pos(), to.pos());
+        return getPath(from.pos, to.pos);
     }
 
     /**
@@ -138,7 +138,7 @@ public class Network {
         if (components.containsKey(pos)) {
 
             if (notify) {
-                if (components.get(pos).block() instanceof NetworkComponent component) {
+                if (components.get(pos).block instanceof NetworkComponent component) {
                     component.onRemovedFromNet(world, x, y, z, this);
                 }
             }
@@ -179,7 +179,7 @@ public class Network {
         for (Map.Entry<Vec3i, NetworkComponentEntry> block : components.entrySet()) {
             Vec3i pos = block.getKey();
 
-            if (block.getValue().block() instanceof NetworkComponent component) {
+            if (block.getValue().block instanceof NetworkComponent component) {
                 component.update(world, pos.x, pos.y, pos.z, this);
             }
         }
@@ -204,9 +204,9 @@ public class Network {
                 Vec3i side = new Vec3i(pos.x + dir.getOffsetX(), pos.y + dir.getOffsetY(), pos.z + dir.getOffsetZ());
                 if (components.containsKey(side) && !closed.contains(side)) {
                     // Check if the side block can connect to this block and reverse
-                    if (getEntry(pos).component().canConnectTo(world, pos.x, pos.y, pos.z, this, dir) && getEntry(side).component().canConnectTo(world, side.x, side.y, side.z, this, dir.getOpposite())) {
+                    if (getEntry(pos).component.canConnectTo(world, pos.x, pos.y, pos.z, this, dir) && getEntry(side).component.canConnectTo(world, side.x, side.y, side.z, this, dir.getOpposite())) {
                         // Check if the component is an edge, or a node
-                        NetworkComponent component = getEntry(side).component();
+                        NetworkComponent component = getEntry(side).component;
                         if (component instanceof NetworkNodeComponent) {
                             open.add(side);
                         } else if (component instanceof NetworkEdgeComponent) {
@@ -249,11 +249,11 @@ public class Network {
             blockNbt.putInt("y", pos.y);
             blockNbt.putInt("z", pos.z);
 
-            if (entry.getValue().block() instanceof NetworkComponent component) {
+            if (entry.getValue().block instanceof NetworkComponent component) {
                 component.writeNbt(world, pos.x, pos.y, pos.z, this, blockNbt);
             }
 
-            blockNbt.put("entryData", entry.getValue().data());
+            blockNbt.put("entryData", entry.getValue().data);
 
             blocksNbt.add(blockNbt);
         }
