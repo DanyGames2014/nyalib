@@ -2,6 +2,7 @@ package net.danygames2014.nyalib.mixininterface;
 
 import net.danygames2014.nyalib.multipart.MultipartComponent;
 import net.danygames2014.nyalib.multipart.MultipartState;
+import net.danygames2014.nyalib.multipart.TickableComponent;
 import net.modificationstation.stationapi.api.util.Util;
 
 public interface MultipartWorld {
@@ -14,6 +15,14 @@ public interface MultipartWorld {
     }
     
     default boolean addMultipartComponent(int x, int y, int z, MultipartComponent component) {
+        return Util.assertImpl();
+    }
+
+    default boolean addTickableMultipartComponent(TickableComponent component) {
+        return Util.assertImpl();
+    }
+
+    default boolean removeTickableMultipartComponent(TickableComponent component) {
         return Util.assertImpl();
     }
 }

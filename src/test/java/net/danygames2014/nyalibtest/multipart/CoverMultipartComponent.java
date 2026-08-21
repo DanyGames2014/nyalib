@@ -2,6 +2,9 @@ package net.danygames2014.nyalibtest.multipart;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.nyalib.multipart.MultipartComponent;
+import net.danygames2014.nyalib.multipart.MultipartState;
+import net.danygames2014.nyalib.multipart.TickableComponent;
+import net.danygames2014.nyalib.particle.ParticleHelper;
 import net.danygames2014.nyalib.util.BoxUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -19,8 +22,9 @@ import net.minecraft.util.math.Vec3d;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
+import org.jetbrains.annotations.NotNull;
 
-public class CoverMultipartComponent extends MultipartComponent {
+public class CoverMultipartComponent extends MultipartComponent implements TickableComponent {
     public Block block;
     public Direction direction;
     public Box bounds = Box.create(0f, 0f, 0f, 1f / 16f, 1f, 1f);
@@ -131,5 +135,15 @@ public class CoverMultipartComponent extends MultipartComponent {
     @Override
     public String toString() {
         return this.getClass().getSimpleName() + " { x=" + x + ", y=" + y + ", z=" + z + ", world=" + world + ", block= " + block + "}";
+    }
+
+    @Override
+    public void tick() {
+        ParticleHelper.addParticle(world, "note", x, y, z);
+    }
+
+    @Override
+    public @NotNull MultipartState getState() {
+        return state;
     }
 }

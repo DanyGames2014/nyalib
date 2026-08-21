@@ -33,6 +33,8 @@ public class MultipartState {
 
     public ObjectArrayList<MultipartComponent> components;
 
+    public boolean removed = false;
+
     public MultipartState() {
         this.components = new ObjectArrayList<>();
     }
@@ -60,6 +62,10 @@ public class MultipartState {
                     this.slottedMultiparts = new MultipartComponent[27];
                 }
                 this.slottedMultiparts[MultipartSlot.fromMask(slottedComponent.getMask()).slotIndex] = component;
+            }
+
+            if(component instanceof TickableComponent tickable) {
+                world.addTickableMultipartComponent(tickable);
             }
 
             if(placed) {
@@ -102,8 +108,13 @@ public class MultipartState {
                 }
             }
 
+            if(component instanceof TickableComponent tickable) {
+                world.removeTickableMultipartComponent(tickable);
+            }
+
             if (components.isEmpty()) {
                 world.setMultipartState(x, y, z, null);
+                removed = true;
             }
 
             for (var comp : components) {

@@ -34,6 +34,13 @@ public abstract class FlattenedChunkMixin implements ChunkWithMultipart, Station
     public void initMultipartStates(World world, int xPos, int zPos, CallbackInfo ci) {
         multipartStates = new Int2ObjectOpenHashMap<>();
     }
+
+    @Inject(method = "unload", at = @At("TAIL"))
+    public void setMultipartStatesUnloaded(CallbackInfo ci) {
+        for(MultipartState state : multipartStates.values()) {
+            state.removed = true;
+        }
+    }
     
     @Override
     public MultipartState getMultipartState(int chunkX, int y, int chunkZ) {
