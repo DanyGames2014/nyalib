@@ -8,6 +8,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.block.BlockState;
+import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
@@ -126,7 +128,7 @@ public class Network {
     public void addBlock(int x, int y, int z, Block block, boolean notify) {
         if (block instanceof NetworkComponent component) {
             Vec3i pos = new Vec3i(x, y, z);
-            components.put(pos, new NetworkComponentEntry(pos, block, component, new NbtCompound()));
+            components.put(pos, new NetworkComponentEntry(world, pos, block, component, new NbtCompound()));
             if (notify) {
                 component.onAddedToNet(world, x, y, z, this);
             }
@@ -248,6 +250,11 @@ public class Network {
             blockNbt.putInt("x", pos.x);
             blockNbt.putInt("y", pos.y);
             blockNbt.putInt("z", pos.z);
+            
+            Identifier blockId = BlockRegistry.INSTANCE.getId(entry.getValue().getBlock());
+            if (blockId != null) {
+                blockNbt.putString("blockId", String.valueOf(blockId));
+            }
 
             if (entry.getValue().block instanceof NetworkComponent component) {
                 component.writeNbt(world, pos.x, pos.y, pos.z, this, blockNbt);
@@ -296,8 +303,17 @@ public class Network {
             Vec3i pos = new Vec3i(blockNbt.getInt("x"), blockNbt.getInt("y"), blockNbt.getInt("z"));
 
             // Fetch the type of the block
-            Block block = world.getBlockState(pos.x, pos.y, pos.z).getBlock();
+            BlockState state = world.getBlockState(pos.x, pos.y, pos.z);
+            Block block = state.getBlock();
 
+            // If the NBT data contains the blockId and the block is not loaded in world, use it to load the block definition
+            if ((state.isAir() || block == null) && blockNbt.contains("blockId")) {
+                System.err.println("Block not found, loading from NBT: " + block);
+                Identifier blockId = Identifier.of(blockNbt.getString("blockId"));
+                block = BlockRegistry.INSTANCE.get(blockId);
+                System.err.println("Loaded block " + blockId + " -> " + block);
+            }
+            
             // Load the block into network
             if (block instanceof NetworkComponent component) {
                 // Mod NBT
@@ -306,7 +322,7 @@ public class Network {
                 // Put the block in Network
                 network.components.put(
                         pos,
-                        new NetworkComponentEntry(pos, block, component, blockNbt.getCompound("entryData"))
+                        new NetworkComponentEntry(world, pos, block, component, blockNbt.getCompound("entryData"))
                 );
 
                 component.onAddedToNet(world, pos.x, pos.y, pos.z, network);
@@ -346,6 +362,7 @@ public class Network {
             if (foundBlocks.size() != network.components.size()) {
                 NyaLib.LOGGER.warn("Unable to verify that all blocks in network {} are present.", network.id);
             }
+            
             if (continuousSegments.size() == 1) {
                 NyaLib.LOGGER.info("All of the blocks in the network {} are a single continuous segment.", network.id);
             } else {

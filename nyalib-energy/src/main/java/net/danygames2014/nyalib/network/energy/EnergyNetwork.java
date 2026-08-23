@@ -11,48 +11,28 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class EnergyNetwork extends Network {
     // Energy consumers on the network
-    private final HashMap<Vec3i, ConsumerEntry> consumers;
+    private final Object2ObjectOpenHashMap<Vec3i, ConsumerEntry> consumerCache;
 
     // Cache of paths to energy consumers
-    private final Object2ObjectOpenHashMap<Vec3i, ObjectArrayList<ConsumerPath>> consumerCache;
+    private final Object2ObjectOpenHashMap<Vec3i, ObjectArrayList<ConsumerPath>> consumerPathCache;
 
     // The energy flow values in the last tick
     private final Object2ObjectOpenHashMap<Vec3i, EnergyFlowEntry> energyFlow;
 
     public EnergyNetwork(World world, NetworkType type) {
         super(world, type);
-        consumers = new HashMap<>();
         consumerCache = new Object2ObjectOpenHashMap<>();
+        consumerPathCache = new Object2ObjectOpenHashMap<>();
         energyFlow = new Object2ObjectOpenHashMap<>();
     }
 
     @Override
     public void update() {
-        // Clear Caches
-        consumers.clear();
-        consumerCache.clear();
-        energyFlow.clear();
-
-        // Build Caches
-        for (NetworkComponentEntry componentEntry : components.values()) {
-            // For network edges, check if theyre valid consumers
-            if (componentEntry.component instanceof NetworkEdgeComponent) {
-                if (world.getBlockEntity(componentEntry.pos.x, componentEntry.pos.y, componentEntry.pos.z) instanceof EnergyConsumer consumer) {
-                    consumers.put(componentEntry.pos, new ConsumerEntry(componentEntry, consumer));
-                }
-
-                // For nodes, check if theyre valid conductors
-            } else if (componentEntry.component instanceof NetworkNodeComponent) {
-                if (componentEntry.block instanceof EnergyConductor conductor) {
-                    energyFlow.put(componentEntry.pos, new EnergyFlowEntry(componentEntry, conductor, 0));
-                }
-            }
-        }
+        buildCaches();
 
         super.update();
     }
@@ -61,8 +41,37 @@ public class EnergyNetwork extends Network {
     public void tick() {
         super.tick();
 
+        buildCaches();
+        
+        for (var componentEntry : components.values()) {
+            componentEntry.component.update(world, componentEntry.pos.x, componentEntry.pos.y, componentEntry.pos.z, this);
+        }
+        
         for (EnergyFlowEntry entry : energyFlow.values()) {
             entry.energyFlow = 0;
+        }
+    }
+    
+    public void buildCaches() {
+        // Clear Caches
+        consumerCache.clear();
+        consumerPathCache.clear();
+        energyFlow.clear();
+
+        // Build Caches
+        for (NetworkComponentEntry componentEntry : components.values()) {
+            // For network edges, check if theyre valid consumers
+            if (componentEntry.component instanceof NetworkEdgeComponent) {
+                if (world.getBlockEntity(componentEntry.pos.x, componentEntry.pos.y, componentEntry.pos.z) instanceof EnergyConsumer consumer) {
+                    consumerCache.put(componentEntry.pos, new ConsumerEntry(componentEntry, consumer));
+                }
+
+                // For nodes, check if theyre valid conductors
+            } else if (componentEntry.component instanceof NetworkNodeComponent) {
+                if (componentEntry.block instanceof EnergyConductor conductor) {
+                    energyFlow.put(componentEntry.pos, new EnergyFlowEntry(componentEntry, conductor, 0));
+                }
+            }
         }
     }
 
@@ -82,6 +91,7 @@ public class EnergyNetwork extends Network {
      * @param energy    The energy provided
      * @return The energy used
      */
+    @SuppressWarnings("unused")
     public int provideEnergy(EnergySource source, Vec3i sourcePos, int voltage, int energy) {
         // If there is no energy, immediately return
         if (energy <= 0) {
@@ -185,38 +195,49 @@ public class EnergyNetwork extends Network {
         return providedEnergy;
     }
 
+    // Empty list to return if the position is not loaded
+    private final ObjectArrayList<ConsumerPath> empty = new ObjectArrayList<>();
+    
     /**
      * Retrieves all the valid reachable consumers from the source position
      *
      * @param source The position of the source
-     * @return An ArrayList of paths to valid consumers
+     * @return An ObjectArrayList of paths to valid consumers
      */
     public ObjectArrayList<ConsumerPath> getValidConsumers(Vec3i source) {
-        if (consumerCache.containsKey(source)) {
-            return consumerCache.get(source);
-        } else {
-            ObjectArrayList<ConsumerPath> consumers = new ObjectArrayList<>();
+        // If the world position is not loaded, return empty paths
+        if (!world.isPosLoaded(source.x, source.y, source.z)) {
+            consumerPathCache.remove(source);
+            return empty;
+        }
+        
+        // If the paths are cached, return them
+        if (consumerPathCache.containsKey(source)) {
+            return consumerPathCache.get(source);
+        }
+        
+        // If it is not cached, compute the paths
+        ObjectArrayList<ConsumerPath> consumerPaths = new ObjectArrayList<>();
 
-            for (Map.Entry<Vec3i, ConsumerEntry> consumer : this.consumers.entrySet()) {
-                if (consumer.getKey().equals(source)) {
-                    continue;
-                }
-
-                NetworkPath path = this.getPath(source, consumer.getKey());
-
-                if (path == null) {
-                    NyaLib.LOGGER.debug("Path was null when getting valid consumers");
-                    continue;
-                }
-
-                if (consumer.getValue().consumer.canReceiveEnergy(path.endFace)) {
-                    consumers.add(new ConsumerPath(consumer.getValue().consumer, path));
-                }
+        for (Map.Entry<Vec3i, ConsumerEntry> consumer : this.consumerCache.entrySet()) {
+            if (consumer.getKey().equals(source)) {
+                continue;
             }
 
-            consumerCache.put(source, consumers);
-            return consumers;
+            NetworkPath path = this.getPath(source, consumer.getKey());
+
+            if (path == null) {
+                NyaLib.LOGGER.debug("Path was null when getting valid consumerPaths");
+                continue;
+            }
+
+            if (consumer.getValue().consumer.canReceiveEnergy(path.endFace)) {
+                consumerPaths.add(new ConsumerPath(consumer.getValue().consumer, path));
+            }
         }
+
+        consumerPathCache.put(source, consumerPaths);
+        return consumerPaths;
     }
 
     public EnergyFlowEntry getFlowEntry(int x, int y, int z) {

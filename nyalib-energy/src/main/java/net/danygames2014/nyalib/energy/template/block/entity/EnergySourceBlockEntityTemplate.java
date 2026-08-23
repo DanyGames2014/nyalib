@@ -27,6 +27,8 @@ public abstract class EnergySourceBlockEntityTemplate extends BlockEntity implem
     private final ArrayList<EnergyNetwork> energyNetRemoveQueue = new ArrayList<>(2);
     private final ArrayList<ObjectObjectMutablePair<EnergyNetwork, Direction>> energyNetAddQueue = new ArrayList<>(2);
 
+    boolean wasLoaded = false;
+    
     @Override
     public void tick() {
         // We are using a push system, so the machine is responsible for sending the energy
@@ -34,6 +36,11 @@ public abstract class EnergySourceBlockEntityTemplate extends BlockEntity implem
         // Reset the extracted counter
         extracted = 0;
 
+//        boolean loaded = world.isPosLoaded(x, y, z);
+//        if (wasLoaded && !loaded) {
+//            var networks = NetworkManager.getAt()
+//        }
+        
         // First check if we have anything to actually send
         if (energy > 0) {
             // If we do, first try to send to adjacent energy consumers
