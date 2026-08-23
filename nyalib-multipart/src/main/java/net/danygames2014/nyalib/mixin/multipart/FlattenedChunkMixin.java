@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectCollection;
 import net.danygames2014.nyalib.mixininterface.ChunkWithMultipart;
 import net.danygames2014.nyalib.multipart.MultipartState;
+import net.danygames2014.nyalib.multipart.MultipartTickScheduler;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -29,17 +30,27 @@ public abstract class FlattenedChunkMixin implements ChunkWithMultipart, Station
     public int z;
     @Unique
     private Int2ObjectOpenHashMap<MultipartState> multipartStates;
+
+    @Unique
+    private MultipartTickScheduler tickScheduler;
     
     @Inject(method = "<init>(Lnet/minecraft/world/World;II)V", at = @At(value = "TAIL"))
     public void initMultipartStates(World world, int xPos, int zPos, CallbackInfo ci) {
         multipartStates = new Int2ObjectOpenHashMap<>();
+        tickScheduler = new MultipartTickScheduler();
+    }
+
+    @Inject(method = "load", at = @At("TAIL"))
+    public void multipartLoad(CallbackInfo ci) {
+        world.addMultipartTickScheduler(tickScheduler);
     }
 
     @Inject(method = "unload", at = @At("TAIL"))
-    public void setMultipartStatesUnloaded(CallbackInfo ci) {
+    public void multipartUnload(CallbackInfo ci) {
         for(MultipartState state : multipartStates.values()) {
             state.removed = true;
         }
+        world.removeMultipartTickScheduler(tickScheduler);
     }
     
     @Override
@@ -78,5 +89,10 @@ public abstract class FlattenedChunkMixin implements ChunkWithMultipart, Station
     @Override
     public ObjectCollection<MultipartState> getMultipartStates() {
         return multipartStates.values();
+    }
+
+    @Override
+    public MultipartTickScheduler getMultipartTickScheduler() {
+        return tickScheduler;
     }
 }

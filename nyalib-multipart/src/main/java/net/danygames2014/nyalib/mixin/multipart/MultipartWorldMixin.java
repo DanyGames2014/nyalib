@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.danygames2014.nyalib.mixininterface.MultipartWorld;
 import net.danygames2014.nyalib.multipart.MultipartComponent;
 import net.danygames2014.nyalib.multipart.MultipartState;
+import net.danygames2014.nyalib.multipart.MultipartTickScheduler;
 import net.danygames2014.nyalib.multipart.TickableComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -21,8 +22,14 @@ public abstract class MultipartWorldMixin implements MultipartWorld, StationFlat
     @Shadow
     public abstract Chunk getChunk(int chunkX, int chunkZ);
 
+    @Shadow
+    public abstract long getTime();
+
     @Unique
     private ObjectOpenHashSet<TickableComponent> tickableComponents;
+
+    @Unique
+    private ObjectOpenHashSet<MultipartTickScheduler> tickSchedulers;
 
     @Inject(method = "tickEntities", at = @At("TAIL"))
     public void tickMultipartComponents(CallbackInfo ci) {
@@ -31,6 +38,14 @@ public abstract class MultipartWorldMixin implements MultipartWorld, StationFlat
 
         for(TickableComponent tickableComponent : tickableComponents) {
             tickableComponent.tick();
+        }
+    }
+
+    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;manageChunkUpdatesAndEvents()V"))
+    public void tickSchedulers(CallbackInfo ci) {
+        for(MultipartTickScheduler scheduler : tickSchedulers) {
+            scheduler.initializeEvents((World)(Object)this);
+            scheduler.tick(getTime());
         }
     }
 
@@ -44,6 +59,7 @@ public abstract class MultipartWorldMixin implements MultipartWorld, StationFlat
     )
     public void initializeMultipartComponentLists(CallbackInfo ci) {
         tickableComponents = new ObjectOpenHashSet<>();
+        tickSchedulers = new ObjectOpenHashSet<>();
     }
 
     @Override
@@ -92,5 +108,25 @@ public abstract class MultipartWorldMixin implements MultipartWorld, StationFlat
     @Override
     public boolean removeTickableMultipartComponent(TickableComponent component) {
         return tickableComponents.remove(component);
+    }
+
+    @Override
+    public boolean addMultipartTickScheduler(MultipartTickScheduler tickScheduler) {
+        return tickSchedulers.add(tickScheduler);
+    }
+
+    @Override
+    public boolean removeMultipartTickScheduler(MultipartTickScheduler tickScheduler) {
+        return tickSchedulers.remove(tickScheduler);
+    }
+
+    @Override
+    public MultipartTickScheduler getMultipartTickScheduler(int x, int z) {
+        if (x < -32000000 || z < -32000000 || x > 32000000 || z > 32000000) {
+            return null;
+        }
+
+        Chunk chunk = this.getChunk(x >> 4, z >> 4);
+        return chunk.getMultipartTickScheduler();
     }
 }

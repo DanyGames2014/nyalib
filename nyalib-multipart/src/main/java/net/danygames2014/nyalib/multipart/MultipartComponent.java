@@ -281,4 +281,12 @@ public abstract class MultipartComponent {
     public String toString() {
         return this.getClass().getSimpleName() + " { x=" + x + ", y=" + y + ", z=" + z + ", world=" + world + "}";
     }
+
+    public void onScheduledTick() {
+
+    }
+
+    public void scheduleTick(int ticks) {
+        world.getMultipartTickScheduler(x, z).scheduleTick(this, world.getTime() + ticks);
+    }
 }

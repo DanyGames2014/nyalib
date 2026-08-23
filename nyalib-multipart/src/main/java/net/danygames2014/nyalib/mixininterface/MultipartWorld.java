@@ -2,6 +2,7 @@ package net.danygames2014.nyalib.mixininterface;
 
 import net.danygames2014.nyalib.multipart.MultipartComponent;
 import net.danygames2014.nyalib.multipart.MultipartState;
+import net.danygames2014.nyalib.multipart.MultipartTickScheduler;
 import net.danygames2014.nyalib.multipart.TickableComponent;
 import net.modificationstation.stationapi.api.util.Util;
 
@@ -23,6 +24,18 @@ public interface MultipartWorld {
     }
 
     default boolean removeTickableMultipartComponent(TickableComponent component) {
+        return Util.assertImpl();
+    }
+
+    default boolean addMultipartTickScheduler(MultipartTickScheduler tickScheduler) {
+        return Util.assertImpl();
+    }
+
+    default boolean removeMultipartTickScheduler(MultipartTickScheduler tickScheduler) {
+        return Util.assertImpl();
+    }
+
+    default MultipartTickScheduler getMultipartTickScheduler(int x, int z) {
         return Util.assertImpl();
     }
 }

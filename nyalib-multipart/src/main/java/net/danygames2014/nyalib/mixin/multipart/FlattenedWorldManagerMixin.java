@@ -56,6 +56,8 @@ public class FlattenedWorldManagerMixin {
 
         // Add the multipart tag to the chunk
         chunkTag.put("NyaLibMultipart", multipartNbt);
+
+        chunk.getMultipartTickScheduler().writeNbt(chunkTag);
     }
 
     @Inject(method = "loadChunk", at = @At("RETURN"))
@@ -103,5 +105,7 @@ public class FlattenedWorldManagerMixin {
                 }
             }
         }
+
+        chunk.getMultipartTickScheduler().readNbt(chunkTag, world);
     }
 }

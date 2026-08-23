@@ -2,6 +2,7 @@ package net.danygames2014.nyalib.mixininterface;
 
 import it.unimi.dsi.fastutil.objects.ObjectCollection;
 import net.danygames2014.nyalib.multipart.MultipartState;
+import net.danygames2014.nyalib.multipart.MultipartTickScheduler;
 import net.modificationstation.stationapi.api.util.Util;
 
 public interface ChunkWithMultipart {
@@ -14,6 +15,10 @@ public interface ChunkWithMultipart {
     }
     
     default ObjectCollection<MultipartState> getMultipartStates() {
+        return Util.assertImpl();
+    }
+
+    default MultipartTickScheduler getMultipartTickScheduler() {
         return Util.assertImpl();
     }
 }

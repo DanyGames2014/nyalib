@@ -75,6 +75,7 @@ public class CoverMultipartComponent extends MultipartComponent implements Ticka
     @Override
     public boolean onUse(PlayerEntity player, Vec3d hitVec, Direction face) {
         System.out.println("player = " + player + ", hitVec = " + hitVec + ", face = " + face);
+        scheduleTick(world.random.nextInt(100));
         return true;
     }
     
@@ -140,6 +141,12 @@ public class CoverMultipartComponent extends MultipartComponent implements Ticka
     @Override
     public void tick() {
         ParticleHelper.addParticle(world, "note", x, y, z);
+    }
+
+    @Override
+    public void onScheduledTick() {
+        ParticleHelper.addParticle(world, "flame", x, y + 1, z);
+        System.out.println("scheduled tick on " + this);
     }
 
     @Override
