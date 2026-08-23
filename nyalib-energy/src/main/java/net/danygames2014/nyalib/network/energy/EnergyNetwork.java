@@ -2,6 +2,7 @@ package net.danygames2014.nyalib.network.energy;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.danygames2014.nyalib.NyaLib;
 import net.danygames2014.nyalib.energy.EnergyConductor;
 import net.danygames2014.nyalib.energy.EnergyConsumer;
@@ -23,8 +24,16 @@ public class EnergyNetwork extends Network {
     // The energy flow values in the last tick
     private final Object2ObjectOpenHashMap<Vec3i, EnergyFlowEntry> energyFlow;
 
+    private static int energyNetworkCount = 0;
+    private final int updateCheckOffset;
+    
     public EnergyNetwork(World world, NetworkType type) {
         super(world, type);
+        
+        energyNetworkCount++;
+        this.updateCheckOffset = energyNetworkCount % 30;
+        System.err.println("Offset: " + this.updateCheckOffset);
+        
         consumerCache = new Object2ObjectOpenHashMap<>();
         consumerPathCache = new Object2ObjectOpenHashMap<>();
         energyFlow = new Object2ObjectOpenHashMap<>();
@@ -41,11 +50,12 @@ public class EnergyNetwork extends Network {
     public void tick() {
         super.tick();
 
-        buildCaches();
-        
-        for (var componentEntry : components.values()) {
-            componentEntry.component.update(world, componentEntry.pos.x, componentEntry.pos.y, componentEntry.pos.z, this);
+        if ((world.getTime() % 30) == this.updateCheckOffset) {
+            if (checkLoadedChanged()) {
+                update();
+            }
         }
+        
         
         for (EnergyFlowEntry entry : energyFlow.values()) {
             entry.energyFlow = 0;
@@ -73,6 +83,48 @@ public class EnergyNetwork extends Network {
                 }
             }
         }
+    }
+
+    // Checking if the loaded state of part of the network has changed
+    private final ObjectOpenHashSet<Vec3i> loadedPositions = new ObjectOpenHashSet<>(32, 0.5f);
+    private final ObjectOpenHashSet<Vec3i> loadedPositionsRemoveQueue = new ObjectOpenHashSet<>(16, 0.75f);
+
+    /**
+     * Checks if the loaded state of atleast one component of the network has changed
+     * @return true if the loaded state of atleast one component of the network has changed, false otherwise
+     */
+    public boolean checkLoadedChanged() {
+        boolean changed = false;
+        
+        // Loop through all the components
+        for (NetworkComponentEntry componentEntry : components.values()) {
+            var pos = componentEntry.pos;
+            
+            // Check if the chunk is loaded
+            if (world.chunkSource.isChunkLoaded(pos.x >> 4, pos.z >> 4)) {
+                // If the chunk is loaded, check if the component was not loaded during the last check
+                if (!loadedPositions.contains(pos)) {
+                    loadedPositions.add(pos);
+                    changed = true;
+                }
+            } else {
+                // If the chunk is not loaded, check if the component was loaded during the last check
+                if (loadedPositions.contains(pos)) {
+                    loadedPositionsRemoveQueue.add(pos);
+                    changed = true;
+                }
+            }
+        }
+        
+        // Remove the unloaded positions from the loaded positions set
+        if (!loadedPositionsRemoveQueue.isEmpty()) {
+            for (Vec3i pos : loadedPositionsRemoveQueue) {
+                loadedPositions.remove(pos);
+            }
+            loadedPositionsRemoveQueue.clear();
+        }
+        
+        return changed;
     }
 
     //long time = System.nanoTime();
