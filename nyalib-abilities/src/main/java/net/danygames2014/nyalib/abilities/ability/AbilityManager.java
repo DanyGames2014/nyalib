@@ -35,7 +35,7 @@ public class AbilityManager {
             long endTime = System.nanoTime();
             long elapsed = (endTime - startTime) / 1000;
             if (elapsed > 1) {
-                System.out.println("AbilityManager.get took: " + (endTime - startTime) / 1000 + "us for ability " + ability.identifier);
+                System.out.println("Non-cached Cached AbilityManager.get took: " + (endTime - startTime) / 1000 + "us for ability " + ability.identifier);
             }
             return abilityValue;
         }
@@ -43,7 +43,7 @@ public class AbilityManager {
         long endTime = System.nanoTime();
         long elapsed = (endTime - startTime) / 1000;
         if (elapsed > 1) {
-            System.out.println("AbilityManager.get took: " + (endTime - startTime) / 1000 + "us for ability " + ability.identifier);
+            //System.out.println("Cached AbilityManager.get took: " + (endTime - startTime) / 1000 + "us for ability " + ability.identifier);
         }
 
         // Return computed value
