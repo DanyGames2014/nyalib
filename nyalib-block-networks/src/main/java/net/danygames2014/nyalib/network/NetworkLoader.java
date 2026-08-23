@@ -6,6 +6,7 @@ import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.world.ClientWorld;
+import net.minecraft.world.World;
 import net.minecraft.world.dimension.Dimension;
 import net.modificationstation.stationapi.api.event.world.WorldEvent;
 import net.modificationstation.stationapi.api.registry.DimensionRegistry;
@@ -15,7 +16,6 @@ import net.modificationstation.stationapi.api.util.SideUtil;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -25,15 +25,19 @@ public class NetworkLoader {
     public static boolean isRemote = false;
 
     @EventListener
-    public void saveNetworks(WorldEvent.Save event) {
+    public void worldSaveListener(WorldEvent.Save event) {
         // If the world or dimension are null, do not proceed
         if (event.world == null || event.world.dimension == null) {
             return;
         }
-
+        
+        saveNetworks(event.world, event.world.dimension);
+    }
+    
+    public void saveNetworks(World world, Dimension dimension) {
         // Get the dimension Identifier
-        Optional<Identifier> dimIdentifierO = DimensionRegistry.INSTANCE.getIdByLegacyId(event.world.dimension.id);
-        String dimensionId = dimIdentifierO.isPresent() ? event.world.dimension.id + " (" + dimIdentifierO.get() + ")" : String.valueOf(event.world.dimension.id);
+        Optional<Identifier> dimIdentifierO = DimensionRegistry.INSTANCE.getIdByLegacyId(dimension.id);
+        String dimensionId = dimIdentifierO.isPresent() ? dimension.id + " (" + dimIdentifierO.get() + ")" : String.valueOf(dimension.id);
         
         NyaLib.LOGGER.debug("Saving NyaLib networks in dimension " + dimensionId);
 
@@ -43,14 +47,14 @@ public class NetworkLoader {
         }
 
         // Do not save networks if the dimension networks have been marked as read-only
-        if (readOnly.contains(event.world.dimension)) {
+        if (readOnly.contains(dimension)) {
             NyaLib.LOGGER.warn("Saving NyaLib networks in dimension " + dimensionId + " prevented as they are read-only due to error when loading.");
             return;
         }
 
         // Save the networks
         try {
-            File file = event.world.storage.getWorldPropertiesFile("nyalib_networks");
+            File file = world.storage.getWorldPropertiesFile("nyalib_networks");
 
             NbtCompound tag = new NbtCompound();
             if (file.exists()) {
@@ -58,7 +62,7 @@ public class NetworkLoader {
             }
 
             tag.putInt("next_id", NetworkManager.NEXT_ID.get());
-            NetworkManager.writeNbt(event.world, tag);
+            NetworkManager.writeNbt(world, tag);
 
             NbtIo.writeCompressed(tag, new FileOutputStream(file));
             NyaLib.LOGGER.info("Saved NyaLib networks in dimension " + dimensionId);
@@ -68,18 +72,22 @@ public class NetworkLoader {
     }
 
     @EventListener
-    public void loadNetworks(WorldEvent.Init event) {
+    public void worldInitListener(WorldEvent.Init event) {
         // If the world or dimension are null, do not proceed
         if (event.world == null || event.world.dimension == null) {
             return;
         }
-
+        
+        loadNetworks(event.world, event.world.dimension);
+    }
+    
+    public void loadNetworks(World world, Dimension dimension) {
         // Get the dimension Identifier
-        Optional<Identifier> dimIdentifierO = DimensionRegistry.INSTANCE.getIdByLegacyId(event.world.dimension.id);
-        String dimensionId = dimIdentifierO.isPresent() ? event.world.dimension.id + " (" + dimIdentifierO.get() + ")" : String.valueOf(event.world.dimension.id);
+        Optional<Identifier> dimIdentifierO = DimensionRegistry.INSTANCE.getIdByLegacyId(dimension.id);
+        String dimensionId = dimIdentifierO.isPresent() ? dimension.id + " (" + dimIdentifierO.get() + ")" : String.valueOf(dimension.id);
         
         // If the world has no chunk storage (For example AMI Inventory World), do not attempt to save
-        if (event.world.storage.getChunkStorage(event.world.dimension) == null) {
+        if (world.storage.getChunkStorage(dimension) == null) {
             NyaLib.LOGGER.info("Skipping loading NyaLib networks in dimension " + dimensionId + " because there is no chunk storage");
             return;
         }
@@ -87,7 +95,7 @@ public class NetworkLoader {
         NyaLib.LOGGER.debug("Loading NyaLib networks in dimension " + dimensionId);
 
         // Detect if the world is remote
-        isRemote = SideUtil.get(() -> event.world instanceof ClientWorld, () -> false);
+        isRemote = SideUtil.get(() -> world instanceof ClientWorld, () -> false);
 
         // Do not save networks if the dimension networks have been marked as read-only
         if (isRemote) {
@@ -96,31 +104,29 @@ public class NetworkLoader {
         }
         
         // When a dimension is being loaded again from a save-file, remove its read-only status if it had one
-        readOnly.remove(event.world.dimension);
+        readOnly.remove(dimension);
 
         // Load the networks
         try {
-            File file = event.world.storage.getWorldPropertiesFile("nyalib_networks");
+            File file = world.storage.getWorldPropertiesFile("nyalib_networks");
             if (file.exists()) {
                 NbtCompound tag = NbtIo.readCompressed(new FileInputStream(file));
 
-                NetworkManager.NETWORKS = new HashMap<>();
-                NetworkManager.removeQueue = new ArrayList<>();
+                NetworkManager.NETWORKS.put(dimension, new HashMap<>());
+                NetworkManager.removeQueue.computeIfAbsent(dimension, dim -> new ObjectOpenHashSet<>());
                 NetworkManager.NEXT_ID.set(tag.getInt("next_id"));
-                NetworkManager.readNbt(event.world, tag);
+                NetworkManager.readNbt(world, tag);
 
                 int networkCount = 0;
-                for (var dimEntries : NetworkManager.NETWORKS.values()) {
-                    for (var networks : dimEntries.values()) {
-                        networkCount += networks.size();
-                    }
+                for (var typeNetworks : NetworkManager.NETWORKS.get(dimension).values()) {
+                    networkCount += typeNetworks.size();
                 }
 
                 NyaLib.LOGGER.info("Loaded {} NyaLib networks in dimension {}", networkCount, dimensionId);
             }
         } catch (Exception e) {
             NyaLib.LOGGER.error("Error occured while loading NyaLib Networks in dimension " + dimensionId + ", networks are now read only to prevent saving corrupted data", e);
-            readOnly.add(event.world.dimension);
+            readOnly.add(dimension);
         }
     }
 }

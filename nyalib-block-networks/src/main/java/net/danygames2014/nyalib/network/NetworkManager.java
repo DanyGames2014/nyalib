@@ -1,5 +1,7 @@
 package net.danygames2014.nyalib.network;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.danygames2014.nyalib.NyaLib;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NbtCompound;
@@ -23,9 +25,9 @@ public class NetworkManager {
      */
     public static HashMap<Dimension, HashMap<Identifier, ArrayList<Network>>> NETWORKS = new HashMap<>();
 
+    public static Object2ObjectOpenHashMap<Dimension, ObjectOpenHashSet<Network>> removeQueue = new Object2ObjectOpenHashMap<>();
+    
     public static AtomicInteger NEXT_ID = new AtomicInteger(0);
-
-    public static ArrayList<Network> removeQueue = new ArrayList<>();
 
     // Getting Networks
     public static ArrayList<Network> getNetworks(Dimension dimension, Identifier networkTypeIdentifier) {
@@ -54,31 +56,23 @@ public class NetworkManager {
     }
 
     // Adding a network
-    @SuppressWarnings("Java8MapApi")
     public static void addNetwork(Dimension dimension, Network network) {
         if (NetworkLoader.isRemote) {
             NyaLib.LOGGER.warn("NetworkManager.addNetwork called on client but the world is remote!");
             return;
         }
-        
-        HashMap<Identifier, ArrayList<Network>> dimNetworks = NETWORKS.get(dimension);
 
         if (network == null) {
             return;
         }
+        
+        HashMap<Identifier, ArrayList<Network>> dimNetworks = NETWORKS.computeIfAbsent(dimension, dim -> new HashMap<>());
 
-        if (dimNetworks == null) {
-            dimNetworks = new HashMap<>();
-            NETWORKS.put(dimension, dimNetworks);
+        ArrayList<Network> typeNetworks = dimNetworks.computeIfAbsent(network.type.getIdentifier(), id -> new ArrayList<>());
+
+        if (!typeNetworks.contains(network)) {
+            typeNetworks.add(network);
         }
-
-        ArrayList<Network> typeNetworks = dimNetworks.get(network.type.getIdentifier());
-        if (typeNetworks == null) {
-            typeNetworks = new ArrayList<>();
-            dimNetworks.put(network.type.getIdentifier(), typeNetworks);
-        }
-
-        typeNetworks.add(network);
     }
 
     public static Network createNetwork(Dimension dimension, NetworkType networkType) {
@@ -106,10 +100,9 @@ public class NetworkManager {
             NyaLib.LOGGER.warn("NetworkManager.removeNetwork called on client but the world is remote!");
             return;
         }
-        
-        if (!removeQueue.contains(network)) {
-            removeQueue.add(network);
-        }
+
+        ObjectOpenHashSet<Network> dimRemoveQueue = removeQueue.computeIfAbsent(network.world.dimension, dim -> new ObjectOpenHashSet<>());
+        dimRemoveQueue.add(network);
     }
 
     public static void removeQueuedNetworks() {
@@ -118,22 +111,23 @@ public class NetworkManager {
             return;
         }
         
-        for (Network toremove : removeQueue) {
-            removeNetworkInternal(toremove);
+        for (Map.Entry<Dimension, ObjectOpenHashSet<Network>> dimRemoveQueueEntry : removeQueue.entrySet()) {
+            ObjectOpenHashSet<Network> dimRemoveQueue = dimRemoveQueueEntry.getValue();
+            
+            for (Network toremove : dimRemoveQueue) {
+                removeNetworkInternal(toremove, dimRemoveQueueEntry.getKey());
+            }
+            dimRemoveQueue.clear();
         }
     }
 
-    private static boolean removeNetworkInternal(Network toRemove) {
-        for (var dimensions : NETWORKS.entrySet()) {
-            for (var networks : dimensions.getValue().entrySet()) {
-                for (var network : networks.getValue()) {
-                    if (network == toRemove) {
-                        networks.getValue().remove(network);
-                        return true;
-                    }
-                }
+    private static boolean removeNetworkInternal(Network toRemove, Dimension dimension) {
+        for (ArrayList<Network> networks : NETWORKS.get(dimension).values()) {
+            if (networks.remove(toRemove)) {
+                return true;
             }
         }
+        
         return false;
     }
 
@@ -684,7 +678,6 @@ public class NetworkManager {
                 }
             }
         }
-
     }
 
 }
