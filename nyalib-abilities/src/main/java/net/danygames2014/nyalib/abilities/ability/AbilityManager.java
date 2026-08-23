@@ -28,16 +28,23 @@ public class AbilityManager {
         return INSTANCE;
     }
 
+    /**
+     * Sets the value of an ability for an entity.
+     * <b>DO NOT USE! This is only used for multiplayer syncing</b>
+     */
     public void set(Entity entity, Ability<?, ?> ability, Object value) {
         Reference2ObjectOpenHashMap<Ability<?, ?>, Object> entityCache = abilityValues.computeIfAbsent(entity, e -> new Reference2ObjectOpenHashMap<>());
         entityCache.put(ability, value);
     }
 
-    long startTime = System.nanoTime();
-    
+    /**
+     * Retrieves the value of an ability for an entity
+     * <p> If it has not been computed yet, it will be computed
+     * @param entity The entity to retrieve the ability for
+     * @param ability The ability to retrieve the value of
+     * @return The value of the ability for the entity or the default value if there are no providers for it
+     */
     public <F, H extends AbilityValue<F>, G extends Entity> F get(G entity, Ability<G, H> ability) {
-        startTime = System.nanoTime();
-        
         // Retrieve the entity map or compute it if it doesn't exist yet
         Reference2ObjectOpenHashMap<Ability<?, ?>, Object> valueCache = abilityValues.computeIfAbsent(entity, e -> new Reference2ObjectOpenHashMap<>());
 
@@ -54,19 +61,7 @@ public class AbilityManager {
             F abilityValue = compute(entity, ability);
             valueCache.put(ability, abilityValue);
             
-            long endTime = System.nanoTime();
-            long elapsed = (endTime - startTime) / 1000;
-            if (elapsed > 2) {
-                System.out.println("Non-cached AbilityManager.get took: " + (endTime - startTime) / 1000 + "us for ability " + ability.identifier);
-            }
-            
             return abilityValue;
-        }
-
-        long endTime = System.nanoTime();
-        long elapsed = (endTime - startTime) / 1000;
-        if (elapsed > 1) {
-            //System.out.println("Cached AbilityManager.get took: " + (endTime - startTime) / 1000 + "us for ability " + ability.identifier);
         }
 
         // Return computed value
@@ -184,7 +179,11 @@ public class AbilityManager {
             }
         }
     }
-    
+
+    /**
+     * Removes the entity from the manager
+     * <p> Primarily used for clearing up entities which no longer exist
+     */
     public void removeEntity(Entity entity) {
         abilityValues.remove(entity);
     }

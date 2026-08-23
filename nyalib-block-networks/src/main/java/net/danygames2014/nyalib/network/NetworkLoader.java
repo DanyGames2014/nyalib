@@ -71,7 +71,7 @@ public class NetworkLoader {
             NetworkManager.writeNbt(world, tag);
 
             NbtIo.writeCompressed(tag, new FileOutputStream(file));
-            NyaLib.LOGGER.info("Saved NyaLib networks in dimension " + dimensionId);
+            NyaLib.LOGGER.debug("Saved NyaLib networks in dimension " + dimensionId);
         } catch (Exception e) {
             NyaLib.LOGGER.error("Error occured while saving NyaLib Networks in dimension " + dimensionId, e);
         }

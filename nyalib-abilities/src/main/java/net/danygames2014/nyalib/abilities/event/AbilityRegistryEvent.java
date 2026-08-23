@@ -1,10 +1,14 @@
 package net.danygames2014.nyalib.abilities.event;
 
 import net.danygames2014.nyalib.abilities.ability.Ability;
+import net.danygames2014.nyalib.abilities.ability.AbilityProvider;
 import net.danygames2014.nyalib.abilities.ability.AbilityRegistry;
 import net.mine_diver.unsafeevents.Event;
 import net.modificationstation.stationapi.api.util.Identifier;
 
+/**
+ * An event used for registering {@link Ability}s and {@link AbilityProvider}s
+ */
 public class AbilityRegistryEvent extends Event {
     public final AbilityRegistry registry;
     

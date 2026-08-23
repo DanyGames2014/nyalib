@@ -6,6 +6,9 @@ import net.danygames2014.nyalib.abilities.value.BooleanAbilityValue;
 import net.minecraft.entity.LivingEntity;
 import net.modificationstation.stationapi.api.util.Identifier;
 
+/**
+ * Makes the entity immune to fire damage and being set on fire
+ */
 public class FireImmunityAbility extends Ability<LivingEntity, BooleanAbilityValue> {
     public FireImmunityAbility(Identifier identifier) {
         super(identifier, BooleanAbilityValue.of(false), AbilityRule.OR);

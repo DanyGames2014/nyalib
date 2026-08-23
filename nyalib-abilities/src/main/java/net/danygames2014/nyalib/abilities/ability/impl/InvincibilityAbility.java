@@ -6,6 +6,9 @@ import net.danygames2014.nyalib.abilities.value.BooleanAbilityValue;
 import net.minecraft.entity.LivingEntity;
 import net.modificationstation.stationapi.api.util.Identifier;
 
+/**
+ * Makes the entity invincible to any kind of damage
+ */
 public class InvincibilityAbility extends Ability<LivingEntity, BooleanAbilityValue> {
     public InvincibilityAbility(Identifier identifier) {
         super(identifier, BooleanAbilityValue.of(false), AbilityRule.OR);

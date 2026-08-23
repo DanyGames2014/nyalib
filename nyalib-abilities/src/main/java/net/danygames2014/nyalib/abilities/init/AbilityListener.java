@@ -20,6 +20,7 @@ public class AbilityListener {
         
         Abilities.FLIGHT_SPEED = new FlightSpeedAbility(NyaLib.NAMESPACE.id("flight_speed"));
         Abilities.FLIGHT_SPEED.setSyncType(AbilitySyncType.PLAYER_ONLY);
+        Abilities.FLIGHT_SPEED.setSyncInstantly(true);
         event.registerAbility(Abilities.FLIGHT_SPEED);
         
         Abilities.INVINCIBILITY = new InvincibilityAbility(NyaLib.NAMESPACE.id("invincibility"));

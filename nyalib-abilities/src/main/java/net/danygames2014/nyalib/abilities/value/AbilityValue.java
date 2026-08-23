@@ -2,6 +2,9 @@ package net.danygames2014.nyalib.abilities.value;
 
 import net.minecraft.nbt.NbtCompound;
 
+/**
+ * Represents a current value of an ability
+ */
 public abstract class AbilityValue<T> {
     public abstract T get();
     

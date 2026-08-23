@@ -13,6 +13,10 @@ import net.minecraft.nbt.NbtList;
 import net.modificationstation.stationapi.api.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Allows mods to provide their desired values to abilities for the given entity
+ * <p>These abilities are then computed according to the Ability's {@link AbilityRule}
+ */
 public class AbilityProvider {
     private final AbilityManager manager;
     public Identifier identifier;
@@ -30,17 +34,28 @@ public class AbilityProvider {
         this.values = new Reference2ObjectOpenHashMap<>();
     }
 
+    /**
+     * Sets the value of the given ability in this provider
+     */
     public <G extends Entity, H extends AbilityValue<?>> void set(Ability<G, H> ability, AbilityValue<?> value) {
         values.put(ability, value);
         manager.markDirty(entity, ability);
     }
-    
+
+    /**
+     * Retrives the value of the given ability in this provider
+     * <p> Note: for retrieving the actual state of the ability, use {@link AbilityManager#get(Entity, Ability)}
+     * @return the value of the given ability in this provider, or null if it is not set by this provider
+     */
     @Nullable
     public <G extends Entity, H extends AbilityValue<?>> H get(Ability<G, H> ability) {
         //noinspection unchecked
         return (H) values.get(ability);
     }
-    
+
+    /**
+     * Removes the value of the given ability from this provider thus making this provider no longer contribute to this ability
+     */
     public <G extends Entity, H extends AbilityValue<?>> void remove(Ability<G, H> ability) {
         values.remove(ability);
         manager.markDirty(entity, ability);
