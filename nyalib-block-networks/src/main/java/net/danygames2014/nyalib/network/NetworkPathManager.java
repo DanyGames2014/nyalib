@@ -1,23 +1,23 @@
 package net.danygames2014.nyalib.network;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
 import net.danygames2014.nyalib.util.AStar;
 import net.minecraft.util.math.Vec3i;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
-import java.util.HashMap;
-
 public class NetworkPathManager {
     Network network;
-    HashMap<Vec3i, HashMap<Vec3i, NetworkPath>> pathCache;
+    Object2ObjectOpenHashMap<Vec3i, Object2ObjectOpenHashMap<Vec3i, NetworkPath>> pathCache;
 
     private NetworkPathManager() {
+        
     }
 
     public NetworkPathManager(Network network) {
         this.network = network;
-        pathCache = new HashMap<>();
+        pathCache = new Object2ObjectOpenHashMap<>();
     }
 
     public void clearCache() {
@@ -27,7 +27,7 @@ public class NetworkPathManager {
     public NetworkPath getPath(Vec3i from, Vec3i to) {
         // If there isnt a hashmap to the source component, create it
         if (!pathCache.containsKey(from)) {
-            pathCache.put(from, new HashMap<>());
+            pathCache.put(from, new Object2ObjectOpenHashMap<>());
         }
 
         // If the destination path isnt cached, compute it. If it is cached, validate it

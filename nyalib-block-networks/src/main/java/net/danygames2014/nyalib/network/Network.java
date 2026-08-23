@@ -13,13 +13,11 @@ import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings({"unused", "UnusedReturnValue"})
 public class Network {
-    protected HashMap<Vec3i, NetworkComponentEntry> components;
+    protected Object2ObjectOpenHashMap<Vec3i, NetworkComponentEntry> components;
     public NetworkPathManager pathManager;
     public World world;
     public NetworkType type;
@@ -28,7 +26,7 @@ public class Network {
     public Network(World world, NetworkType type) {
         this.world = world;
         this.type = type;
-        components = new HashMap<>();
+        components = new Object2ObjectOpenHashMap<>();
         pathManager = new NetworkPathManager(this);
     }
 
@@ -187,11 +185,11 @@ public class Network {
         }
     }
 
-    public ArrayList<Vec3i> walk(Vec3i start) {
+    public ObjectArrayList<Vec3i> walk(Vec3i start) {
         // ArrayList for list of blocks yet to explore
-        ArrayList<Vec3i> open = new ArrayList<>();
+        ObjectArrayList<Vec3i> open = new ObjectArrayList<>();
         // ArrayList for list of blocks that have been found
-        ArrayList<Vec3i> closed = new ArrayList<>();
+        ObjectArrayList<Vec3i> closed = new ObjectArrayList<>();
 
         // Add the starting position to explore
         open.add(start);
@@ -287,7 +285,7 @@ public class Network {
             return null;
         }
 
-        network.components = new HashMap<>();
+        network.components = new Object2ObjectOpenHashMap<>();
 
         network.id = tag.getInt("id");
         NbtList blocksNbt = tag.getList("blocks");
@@ -352,7 +350,7 @@ public class Network {
                 
                 // We have not yet verified this component
                 // Walk the network from this component and add it to the continuous networks
-                ArrayList<Vec3i> walk = network.walk(component);
+                ObjectArrayList<Vec3i> walk = network.walk(component);
                 continuousSegments.add(new ObjectArrayList<>(walk));
                 
                 // Add all the found blocks to found blocks in order to not verify them again

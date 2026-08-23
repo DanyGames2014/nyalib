@@ -1,5 +1,7 @@
 package net.danygames2014.nyalib.mixin.blocknetworks;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.nyalib.network.Network;
 import net.danygames2014.nyalib.network.NetworkManager;
 import net.minecraft.world.World;
@@ -11,9 +13,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 @Mixin(World.class)
 public class WorldMixin {
@@ -29,9 +28,9 @@ public class WorldMixin {
             return;
         }
 
-        HashMap<Identifier, ArrayList<Network>> networks = NetworkManager.getNetworks(this.dimension);
+        Object2ObjectOpenHashMap<Identifier, ObjectArrayList<Network>> networks = NetworkManager.getNetworks(this.dimension);
         if (networks != null) {
-            for (ArrayList<Network> networkTypes : networks.values()) {
+            for (ObjectArrayList<Network> networkTypes : networks.values()) {
                 for (Network network : networkTypes) {
                     network.tick();
                 }
@@ -45,9 +44,9 @@ public class WorldMixin {
             return;
         }
         
-        HashMap<Identifier, ArrayList<Network>> networks = NetworkManager.getNetworks(this.dimension);
+        Object2ObjectOpenHashMap<Identifier, ObjectArrayList<Network>> networks = NetworkManager.getNetworks(this.dimension);
         if (networks != null) {
-            for (ArrayList<Network> networkTypes : networks.values()) {
+            for (ObjectArrayList<Network> networkTypes : networks.values()) {
                 for (Network network : networkTypes) {
                     network.postTick();
                 }
@@ -61,9 +60,9 @@ public class WorldMixin {
             return;
         }
         
-        HashMap<Identifier, ArrayList<Network>> networks = NetworkManager.getNetworks(this.dimension);
+        Object2ObjectOpenHashMap<Identifier, ObjectArrayList<Network>> networks = NetworkManager.getNetworks(this.dimension);
         if (networks != null) {
-            for (ArrayList<Network> networkTypes : networks.values()) {
+            for (ObjectArrayList<Network> networkTypes : networks.values()) {
                 for (Network network : networkTypes) {
                     network.worldTick();
                 }

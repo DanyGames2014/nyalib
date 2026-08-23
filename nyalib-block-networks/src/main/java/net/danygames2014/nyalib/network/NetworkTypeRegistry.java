@@ -1,12 +1,11 @@
 package net.danygames2014.nyalib.network;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.modificationstation.stationapi.api.util.Identifier;
-
-import java.util.HashMap;
 
 @SuppressWarnings("unused")
 public class NetworkTypeRegistry {
-    private final HashMap<Identifier, NetworkType> registry;
+    private final Object2ObjectOpenHashMap<Identifier, NetworkType> registry;
     private static NetworkTypeRegistry INSTANCE;
 
     public static NetworkTypeRegistry getInstance() {
@@ -17,7 +16,7 @@ public class NetworkTypeRegistry {
     }
 
     public NetworkTypeRegistry() {
-        this.registry = new HashMap<>();
+        this.registry = new Object2ObjectOpenHashMap<>();
     }
 
     public static void register(Identifier identifier, NetworkType networkType) {
@@ -32,7 +31,7 @@ public class NetworkTypeRegistry {
         return getInstance().registry.getOrDefault(identifier, null);
     }
 
-    public static HashMap<Identifier, NetworkType> getRegistry() {
+    public static Object2ObjectOpenHashMap<Identifier, NetworkType> getRegistry() {
         return getInstance().registry;
     }
 }

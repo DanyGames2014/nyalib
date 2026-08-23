@@ -1,5 +1,6 @@
 package net.danygames2014.nyalib.network;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.danygames2014.nyalib.NyaLib;
 import net.mine_diver.unsafeevents.listener.EventListener;
@@ -16,7 +17,6 @@ import net.modificationstation.stationapi.api.util.SideUtil;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.HashMap;
 import java.util.Optional;
 
 @SuppressWarnings({"unused", "OptionalIsPresent"})
@@ -118,7 +118,7 @@ public class NetworkLoader {
             if (file.exists()) {
                 NbtCompound tag = NbtIo.readCompressed(new FileInputStream(file));
 
-                NetworkManager.NETWORKS.put(dimension, new HashMap<>());
+                NetworkManager.NETWORKS.put(dimension, new Object2ObjectOpenHashMap<>());
                 NetworkManager.removeQueue.computeIfAbsent(dimension, dim -> new ObjectOpenHashSet<>());
                 NetworkManager.NEXT_ID.set(tag.getInt("next_id"));
                 NetworkManager.readNbt(world, tag);

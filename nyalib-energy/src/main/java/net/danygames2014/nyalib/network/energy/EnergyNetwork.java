@@ -30,9 +30,9 @@ public class EnergyNetwork extends Network {
     public EnergyNetwork(World world, NetworkType type) {
         super(world, type);
         
+        // Offseting the updates to distribute them evenly among ticks
         energyNetworkCount++;
         this.updateCheckOffset = energyNetworkCount % 30;
-        System.err.println("Offset: " + this.updateCheckOffset);
         
         consumerCache = new Object2ObjectOpenHashMap<>();
         consumerPathCache = new Object2ObjectOpenHashMap<>();
