@@ -24,6 +24,7 @@ public class EnergyNetwork extends Network {
     // The energy flow values in the last tick
     private final Object2ObjectOpenHashMap<Vec3i, EnergyFlowEntry> energyFlow;
 
+    // TODO: use a bit-mask to eliminate the evil's of division
     private static int energyNetworkCount = 0;
     private final int updateCheckOffset;
     

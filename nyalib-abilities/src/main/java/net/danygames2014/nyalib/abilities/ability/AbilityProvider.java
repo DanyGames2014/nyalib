@@ -32,7 +32,7 @@ public class AbilityProvider {
 
     public <G extends Entity, H extends AbilityValue<?>> void set(Ability<G, H> ability, AbilityValue<?> value) {
         values.put(ability, value);
-        manager.markDirty(entity);
+        manager.markDirty(entity, ability);
     }
     
     @Nullable
@@ -43,7 +43,7 @@ public class AbilityProvider {
     
     public <G extends Entity, H extends AbilityValue<?>> void remove(Ability<G, H> ability) {
         values.remove(ability);
-        manager.markDirty(entity);
+        manager.markDirty(entity, ability);
     }
     
     public void writeNbt(NbtCompound nbt) {
