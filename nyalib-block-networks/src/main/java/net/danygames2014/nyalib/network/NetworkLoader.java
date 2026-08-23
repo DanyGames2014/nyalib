@@ -39,10 +39,9 @@ public class NetworkLoader {
         Optional<Identifier> dimIdentifierO = DimensionRegistry.INSTANCE.getIdByLegacyId(dimension.id);
         String dimensionId = dimIdentifierO.isPresent() ? dimension.id + " (" + dimIdentifierO.get() + ")" : String.valueOf(dimension.id);
         
-        NyaLib.LOGGER.debug("Saving NyaLib networks in dimension " + dimensionId);
-
         // Do not save networks on a remote world (e.g client playing on server)
         if (isRemote) {
+            NyaLib.LOGGER.info("Skipping saving NyaLib networks in dimension " + dimensionId + " because the world is remote");
             return;
         }
 
@@ -52,10 +51,17 @@ public class NetworkLoader {
             return;
         }
 
+        NyaLib.LOGGER.debug("Saving NyaLib networks in dimension " + dimensionId);
+        
         // Save the networks
         try {
             File file = world.storage.getWorldPropertiesFile("nyalib_networks");
 
+            // If the file is null, do not attempt to save
+            if (file == null) {
+                return;
+            }
+            
             NbtCompound tag = new NbtCompound();
             if (file.exists()) {
                 tag = NbtIo.readCompressed(new FileInputStream(file));
@@ -82,30 +88,30 @@ public class NetworkLoader {
     }
     
     public void loadNetworks(World world, Dimension dimension) {
+        // Detect if the world is remote
+        isRemote = SideUtil.get(() -> world instanceof ClientWorld, () -> false);
+
         // Get the dimension Identifier
         Optional<Identifier> dimIdentifierO = DimensionRegistry.INSTANCE.getIdByLegacyId(dimension.id);
         String dimensionId = dimIdentifierO.isPresent() ? dimension.id + " (" + dimIdentifierO.get() + ")" : String.valueOf(dimension.id);
+
+        // Do not save networks if the dimension networks have been marked as read-only
+        if (isRemote) {
+            NyaLib.LOGGER.info("Skipping loading NyaLib networks in dimension " + dimensionId + " because the world is remote");
+            return;
+        }
         
-        // If the world has no chunk storage (For example AMI Inventory World), do not attempt to save
+        // If the world has no chunk storage (For example AMI Inventory World), do not attempt to load
         if (world.storage.getChunkStorage(dimension) == null) {
             NyaLib.LOGGER.info("Skipping loading NyaLib networks in dimension " + dimensionId + " because there is no chunk storage");
             return;
         }
 
-        NyaLib.LOGGER.debug("Loading NyaLib networks in dimension " + dimensionId);
-
-        // Detect if the world is remote
-        isRemote = SideUtil.get(() -> world instanceof ClientWorld, () -> false);
-
-        // Do not save networks if the dimension networks have been marked as read-only
-        if (isRemote) {
-            NyaLib.LOGGER.info("Skipping loading NyaLib networks in dimension " + dimensionId + " because of the world being remote");
-            return;
-        }
-        
         // When a dimension is being loaded again from a save-file, remove its read-only status if it had one
         readOnly.remove(dimension);
 
+        NyaLib.LOGGER.debug("Loading NyaLib networks in dimension " + dimensionId);
+        
         // Load the networks
         try {
             File file = world.storage.getWorldPropertiesFile("nyalib_networks");
