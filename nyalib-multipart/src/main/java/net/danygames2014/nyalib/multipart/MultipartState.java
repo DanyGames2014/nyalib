@@ -68,6 +68,10 @@ public class MultipartState {
                 world.addTickableMultipartComponent(tickable);
             }
 
+            if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT && component instanceof DynamicRenderComponent renderer) {
+                MultipartDynamicRenderDispatcher.INSTANCE.addDynamicRenderer(renderer);
+            }
+
             if(placed) {
                 component.onPlaced();
             }
@@ -110,6 +114,10 @@ public class MultipartState {
 
             if(component instanceof TickableComponent tickable) {
                 world.removeTickableMultipartComponent(tickable);
+            }
+
+            if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT && component instanceof DynamicRenderComponent renderer) {
+                MultipartDynamicRenderDispatcher.INSTANCE.removeDynamicRenderer(renderer);
             }
 
             if (components.isEmpty()) {
@@ -375,6 +383,22 @@ public class MultipartState {
         }
 
         return existingComponents.stream().allMatch((component -> component.occlusionTest(newComponent) && newComponent.occlusionTest(component)));
+    }
+
+    public void chunkLoaded() {
+        for(MultipartComponent component : components) {
+            component.onChunkLoaded();
+        }
+    }
+
+    public void chunkUnloaded() {
+        for(MultipartComponent component : components) {
+            component.onChunkUnloaded();
+            if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT && component instanceof DynamicRenderComponent renderer) {
+                MultipartDynamicRenderDispatcher.INSTANCE.removeDynamicRenderer(renderer);
+            }
+        }
+        this.removed = true;
     }
 
     @Override

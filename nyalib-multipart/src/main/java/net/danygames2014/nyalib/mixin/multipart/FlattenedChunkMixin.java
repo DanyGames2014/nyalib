@@ -32,23 +32,25 @@ public abstract class FlattenedChunkMixin implements ChunkWithMultipart, Station
     private Int2ObjectOpenHashMap<MultipartState> multipartStates;
 
     @Unique
-    private MultipartTickScheduler tickScheduler;
+    private final MultipartTickScheduler tickScheduler = new MultipartTickScheduler();;
     
     @Inject(method = "<init>(Lnet/minecraft/world/World;II)V", at = @At(value = "TAIL"))
     public void initMultipartStates(World world, int xPos, int zPos, CallbackInfo ci) {
         multipartStates = new Int2ObjectOpenHashMap<>();
-        tickScheduler = new MultipartTickScheduler();
     }
 
     @Inject(method = "load", at = @At("TAIL"))
     public void multipartLoad(CallbackInfo ci) {
         world.addMultipartTickScheduler(tickScheduler);
+        for(MultipartState state : multipartStates.values()) {
+            state.chunkLoaded();
+        }
     }
 
     @Inject(method = "unload", at = @At("TAIL"))
     public void multipartUnload(CallbackInfo ci) {
         for(MultipartState state : multipartStates.values()) {
-            state.removed = true;
+            state.chunkUnloaded();
         }
         world.removeMultipartTickScheduler(tickScheduler);
     }

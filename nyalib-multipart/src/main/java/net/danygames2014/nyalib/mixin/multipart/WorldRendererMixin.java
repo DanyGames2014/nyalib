@@ -5,10 +5,12 @@ import net.danygames2014.nyalib.block.voxelshape.BoxToLinesConverter;
 import net.danygames2014.nyalib.block.voxelshape.Line;
 import net.danygames2014.nyalib.item.multipart.CustomMultipartOutlineRenderer;
 import net.danygames2014.nyalib.mixininterface.MultipartWorldRenderer;
+import net.danygames2014.nyalib.multipart.MultipartDynamicRenderDispatcher;
 import net.danygames2014.nyalib.multipart.MultipartHitResult;
 import net.danygames2014.nyalib.util.PlayerUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.Culler;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.render.block.BlockRenderManager;
@@ -21,6 +23,9 @@ import net.modificationstation.stationapi.api.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 
@@ -35,6 +40,9 @@ public abstract class WorldRendererMixin implements MultipartWorldRenderer {
     @Shadow private World world;
 
     @Shadow private BlockRenderManager blockRenderManager;
+
+    @Shadow
+    private Minecraft client;
 
     @SuppressWarnings("ExtractMethodRecommender")
     @Override
@@ -138,4 +146,12 @@ public abstract class WorldRendererMixin implements MultipartWorldRenderer {
             GL11.glDisable(GL11.GL_ALPHA_TEST);
         }
     }
+
+    @Inject(method = "renderEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/block/entity/BlockEntityRenderDispatcher;prepare(Lnet/minecraft/world/World;Lnet/minecraft/client/texture/TextureManager;Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/entity/LivingEntity;F)V"))
+    public void prepareMicroblockDynamicRendering(net.minecraft.util.math.Vec3d cameraPos, Culler culler, float tickDelta, CallbackInfo ci) {
+        MultipartDynamicRenderDispatcher.INSTANCE.prepare(world, client.camera, tickDelta);
+        MultipartDynamicRenderDispatcher.INSTANCE.renderComponents(tickDelta);
+    }
+
+
 }

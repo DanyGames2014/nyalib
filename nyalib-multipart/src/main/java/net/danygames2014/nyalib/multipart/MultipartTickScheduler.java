@@ -60,7 +60,9 @@ public class MultipartTickScheduler {
         ObjectArrayList<MultipartEvent> toRemove = new ObjectArrayList<>();
         for(MultipartEvent event : scheduledTicks) {
             if(event.time <= currentTime) {
-                event.component.onScheduledTick();
+                if(event.initialized && event.component.state.components.contains(event.component)) {
+                    event.component.onScheduledTick();
+                }
                 toRemove.add(event);
             }
         }

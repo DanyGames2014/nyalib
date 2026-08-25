@@ -1,6 +1,7 @@
 package net.danygames2014.nyalibtest.multipart;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.danygames2014.nyalib.multipart.DynamicRenderComponent;
 import net.danygames2014.nyalib.multipart.MultipartComponent;
 import net.danygames2014.nyalib.multipart.MultipartState;
 import net.danygames2014.nyalib.multipart.TickableComponent;
@@ -19,15 +20,19 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+import net.modificationstation.stationapi.api.client.StationRenderAPI;
+import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.opengl.GL11;
 
-public class CoverMultipartComponent extends MultipartComponent implements TickableComponent {
+public class CoverMultipartComponent extends MultipartComponent implements TickableComponent, DynamicRenderComponent {
     public Block block;
     public Direction direction;
     public Box bounds = Box.create(0f, 0f, 0f, 1f / 16f, 1f, 1f);
+    public static BlockRenderManager blockRenderManager = new BlockRenderManager();
 
     public CoverMultipartComponent(Block block, Direction direction) {
         this.block = block;
@@ -150,7 +155,20 @@ public class CoverMultipartComponent extends MultipartComponent implements Ticka
     }
 
     @Override
-    public @NotNull MultipartState getState() {
+    public @NotNull MultipartState getMultipartState() {
         return state;
+    }
+
+    @Override
+    public void renderDynamic(double offsetX, double offsetY, double offsetZ, float tickDelta) {
+        if(Minecraft.INSTANCE.player.isSneaking()) {
+            GL11.glPushMatrix();
+            GL11.glTranslated(offsetX + 0.5F, offsetY + 0.5F, offsetZ + 0.5F);
+            StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
+
+            blockRenderManager.render(Block.DIAMOND_BLOCK, 0, 1.0F);
+
+            GL11.glPopMatrix();
+        }
     }
 }

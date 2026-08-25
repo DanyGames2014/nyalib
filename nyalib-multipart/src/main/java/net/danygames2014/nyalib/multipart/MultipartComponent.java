@@ -277,16 +277,26 @@ public abstract class MultipartComponent {
         }
     }
 
-    @Override
-    public String toString() {
-        return this.getClass().getSimpleName() + " { x=" + x + ", y=" + y + ", z=" + z + ", world=" + world + "}";
-    }
-
+    // Scheduled ticks
     public void onScheduledTick() {
 
     }
 
     public void scheduleTick(int ticks) {
         world.getMultipartTickScheduler(x, z).scheduleTick(this, world.getTime() + ticks);
+    }
+
+    // Chunk loading/unloading
+    public void onChunkLoaded() {
+
+    }
+
+    public void onChunkUnloaded() {
+
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + " { x=" + x + ", y=" + y + ", z=" + z + ", world=" + world + "}";
     }
 }

@@ -5,5 +5,5 @@ import org.jetbrains.annotations.NotNull;
 public interface TickableComponent {
     void tick();
 
-    @NotNull MultipartState getState();
+    @NotNull MultipartState getMultipartState();
 }

@@ -34,7 +34,7 @@ public abstract class MultipartWorldMixin implements MultipartWorld, StationFlat
     @Inject(method = "tickEntities", at = @At("TAIL"))
     public void tickMultipartComponents(CallbackInfo ci) {
 
-        tickableComponents.removeIf(component -> component.getState().removed);
+        tickableComponents.removeIf(component -> component.getMultipartState().removed);
 
         for(TickableComponent tickableComponent : tickableComponents) {
             tickableComponent.tick();

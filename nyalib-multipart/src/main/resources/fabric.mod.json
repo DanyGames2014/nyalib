@@ -20,6 +20,7 @@
       "net.danygames2014.nyalib.init.multipart.PacketListener"
     ],
     "stationapi:event_bus_client": [
+      "net.danygames2014.nyalib.init.multipart.WorldInitListener"
     ],
     "stationapi:event_bus_server": [
     ]
