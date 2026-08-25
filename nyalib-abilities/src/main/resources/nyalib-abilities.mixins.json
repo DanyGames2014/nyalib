@@ -8,7 +8,9 @@
     "impl.fireimmunity.EntityMixin",
     "impl.fireimmunity.LivingEntityMixin",
     "impl.fly.LivingEntityMixin",
-    "impl.fly.PlayerEntityMixin"
+    "impl.fly.PlayerEntityMixin",
+    "impl.invincibility.LivingEntityMixin",
+    "impl.invincibility.PlayerEntityMixin"
   ],
   "server": [
   ],

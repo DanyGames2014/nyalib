@@ -12,6 +12,7 @@ import net.danygames2014.nyalib.network.NetworkType;
 import net.danygames2014.nyalibtest.abilities.AbilityStick;
 import net.danygames2014.nyalibtest.abilities.FireImmunityStick;
 import net.danygames2014.nyalibtest.abilities.FlightStick;
+import net.danygames2014.nyalibtest.abilities.InvincibilityStick;
 import net.danygames2014.nyalibtest.capability.block.ItemHandlerBlockCapabilityTesterBlock;
 import net.danygames2014.nyalibtest.capability.item.YoinkerItem;
 import net.danygames2014.nyalibtest.energy.*;
@@ -142,6 +143,7 @@ public class NyaLibTest {
     public static Item abilityStick2;
     public static Item fireImmunityStick;
     public static Item flightStick;
+    public static Item invicibilityStick;
 
     public static NetworkType basicNetworkType;
 
@@ -265,6 +267,7 @@ public class NyaLibTest {
         abilityStick2 = new AbilityStick(NAMESPACE.id("ability_stick_2"), NyaLibTest.NAMESPACE.id("stick2")).registerAutomaticModel();
         fireImmunityStick = new FireImmunityStick(NAMESPACE.id("fire_immunity_stick"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
         flightStick = new FlightStick(NAMESPACE.id("flight_stick"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
+        invicibilityStick = new InvincibilityStick(NAMESPACE.id("invicibility_stick"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
     }
 
     @EventListener
