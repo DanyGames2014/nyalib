@@ -6,7 +6,9 @@
   "mixins": [
     "block.RedstoneWireBlockMixin",
     "block.VoxelShapeBlockMixin",
-    "block.WorldMixin"
+    "block.WorldMixin",
+    "block.hasblockentity.BlockMixin",
+    "block.hasblockentity.ChunkMixin"
   ],
   "server": [
     "block.ServerPlayNetworkHandlerMixin"

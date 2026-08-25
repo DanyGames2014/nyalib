@@ -1,5 +1,6 @@
 package net.danygames2014.nyalibtest.fluid;
 
+import net.danygames2014.nyalib.block.HasBlockEntity;
 import net.danygames2014.nyalibtest.NyaLibTest;
 import net.danygames2014.nyalibtest.fluid.entity.ManagedFluidTankBlockEntity;
 import net.danygames2014.nyalibtest.screen.handler.ManagedFluidTankScreenHandler;
@@ -8,16 +9,16 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.gui.screen.container.GuiHelper;
-import net.modificationstation.stationapi.api.template.block.TemplateBlockWithEntity;
+import net.modificationstation.stationapi.api.template.block.TemplateBlock;
 import net.modificationstation.stationapi.api.util.Identifier;
 
-public class ManagedFluidTankBlock extends TemplateBlockWithEntity {
+public class ManagedFluidTankBlock extends TemplateBlock implements HasBlockEntity {
     public ManagedFluidTankBlock(Identifier identifier) {
         super(identifier, Material.METAL);
     }
 
     @Override
-    protected BlockEntity createBlockEntity() {
+    public BlockEntity createBlockEntity(World world, int x, int y, int z) {
         return new ManagedFluidTankBlockEntity();
     }
 
