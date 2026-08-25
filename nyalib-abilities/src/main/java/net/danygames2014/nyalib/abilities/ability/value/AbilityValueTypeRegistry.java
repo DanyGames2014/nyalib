@@ -1,4 +1,4 @@
-package net.danygames2014.nyalib.abilities.value;
+package net.danygames2014.nyalib.abilities.ability.value;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;

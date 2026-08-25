@@ -2,7 +2,7 @@ package net.danygames2014.nyalib.abilities.ability.impl;
 
 import net.danygames2014.nyalib.abilities.ability.Ability;
 import net.danygames2014.nyalib.abilities.ability.AbilityRule;
-import net.danygames2014.nyalib.abilities.value.FloatAbilityValue;
+import net.danygames2014.nyalib.abilities.ability.value.FloatAbilityValue;
 import net.minecraft.entity.player.PlayerEntity;
 import net.modificationstation.stationapi.api.util.Identifier;
 

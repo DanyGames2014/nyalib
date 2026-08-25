@@ -1,6 +1,6 @@
 package net.danygames2014.nyalib.abilities.ability;
 
-import net.danygames2014.nyalib.abilities.value.AbilityValue;
+import net.danygames2014.nyalib.abilities.ability.value.AbilityValue;
 import net.minecraft.entity.Entity;
 import net.modificationstation.stationapi.api.util.Identifier;
 

@@ -26,5 +26,7 @@ public class AbilityListener {
         Abilities.INVINCIBILITY = new InvincibilityAbility(NyaLib.NAMESPACE.id("invincibility"));
         Abilities.INVINCIBILITY.setSyncType(AbilitySyncType.PLAYER_ONLY);
         event.registerAbility(Abilities.INVINCIBILITY);
+        
+        event.registerAbilityProvider(NyaLib.NAMESPACE.id("inventory"));
     }
 }

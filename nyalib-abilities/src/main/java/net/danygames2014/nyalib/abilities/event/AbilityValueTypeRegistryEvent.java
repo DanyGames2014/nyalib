@@ -1,8 +1,8 @@
 package net.danygames2014.nyalib.abilities.event;
 
-import net.danygames2014.nyalib.abilities.value.AbilityValue;
-import net.danygames2014.nyalib.abilities.value.AbilityValueFactory;
-import net.danygames2014.nyalib.abilities.value.AbilityValueTypeRegistry;
+import net.danygames2014.nyalib.abilities.ability.value.AbilityValue;
+import net.danygames2014.nyalib.abilities.ability.value.AbilityValueFactory;
+import net.danygames2014.nyalib.abilities.ability.value.AbilityValueTypeRegistry;
 import net.mine_diver.unsafeevents.Event;
 
 /**
