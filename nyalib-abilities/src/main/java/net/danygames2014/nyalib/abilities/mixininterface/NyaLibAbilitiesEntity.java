@@ -13,7 +13,7 @@ public interface NyaLibAbilitiesEntity {
     default AbilityProvider getAbilityProvider(Identifier identifier) {
         return Util.assertImpl();   
     }
-    
+
     default void markAbilitiesDirty() {
         Util.assertImpl();
     }

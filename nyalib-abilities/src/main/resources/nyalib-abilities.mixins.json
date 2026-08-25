@@ -9,6 +9,7 @@
     "impl.fireimmunity.LivingEntityMixin",
     "impl.fly.LivingEntityMixin",
     "impl.fly.PlayerEntityMixin",
+    "impl.inventoryprovider.PlayerEntityMixin",
     "impl.invincibility.LivingEntityMixin",
     "impl.invincibility.PlayerEntityMixin"
   ],

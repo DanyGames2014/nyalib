@@ -2,6 +2,7 @@ package net.danygames2014.nyalib.abilities.event;
 
 import net.danygames2014.nyalib.abilities.ability.Ability;
 import net.danygames2014.nyalib.abilities.ability.AbilityProvider;
+import net.danygames2014.nyalib.abilities.ability.AbilityProviderFactory;
 import net.danygames2014.nyalib.abilities.ability.AbilityRegistry;
 import net.mine_diver.unsafeevents.Event;
 import net.modificationstation.stationapi.api.util.Identifier;
@@ -25,6 +26,10 @@ public class AbilityRegistryEvent extends Event {
     }
     
     public void registerAbilityProvider(Identifier identifier) {
-        AbilityRegistry.registerAbilityProvider(identifier);
+        registerAbilityProvider(identifier, AbilityProvider::new);
+    }
+    
+    public void registerAbilityProvider(Identifier identifier, AbilityProviderFactory factory) {
+        AbilityRegistry.registerAbilityProvider(identifier, factory);
     }
 }

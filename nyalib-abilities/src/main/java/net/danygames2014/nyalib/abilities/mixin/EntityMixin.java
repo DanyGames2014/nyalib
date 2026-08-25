@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.danygames2014.nyalib.NyaLib;
 import net.danygames2014.nyalib.abilities.ability.AbilityManager;
 import net.danygames2014.nyalib.abilities.ability.AbilityProvider;
+import net.danygames2014.nyalib.abilities.ability.AbilityProviderFactory;
 import net.danygames2014.nyalib.abilities.ability.AbilityRegistry;
 import net.danygames2014.nyalib.abilities.mixininterface.NyaLibAbilitiesEntity;
 import net.minecraft.entity.Entity;
@@ -32,8 +33,9 @@ public abstract class EntityMixin implements NyaLibAbilitiesEntity {
 
     @Override
     public AbilityProvider getAbilityProvider(Identifier identifier) {
+        AbilityProviderFactory factory = AbilityRegistry.getProviderFactory(identifier);
         return getAbilityProviders().computeIfAbsent(identifier, id ->
-                new AbilityProvider(AbilityManager.getInstance(), (Identifier) id, (Entity) (Object) this)
+                factory.create(AbilityManager.getInstance(), (Identifier) id, (Entity) (Object) this)
         );
     }
 
@@ -86,7 +88,8 @@ public abstract class EntityMixin implements NyaLibAbilitiesEntity {
                     continue;
                 }
                 
-                AbilityProvider provider = new AbilityProvider(AbilityManager.getInstance(), providerId, (Entity) (Object) this);
+                AbilityProviderFactory factory = AbilityRegistry.getProviderFactory(providerId);
+                AbilityProvider provider = factory.create(AbilityManager.getInstance(), providerId, (Entity) (Object) this);
                 provider.readNbt(providerNbt);
                 abilityProviders.put(provider.identifier, provider);
             }

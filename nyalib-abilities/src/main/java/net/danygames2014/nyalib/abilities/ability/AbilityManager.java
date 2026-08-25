@@ -1,6 +1,7 @@
 package net.danygames2014.nyalib.abilities.ability;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.danygames2014.nyalib.abilities.ability.value.AbilityValue;
@@ -13,6 +14,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.modificationstation.stationapi.api.network.packet.PacketHelper;
 import net.modificationstation.stationapi.api.util.Identifier;
+
+import java.util.List;
 
 public class AbilityManager {
     private static final AbilityManager INSTANCE = new AbilityManager();
@@ -71,13 +74,25 @@ public class AbilityManager {
 
     private <F, H extends AbilityValue<F>, G extends Entity> F compute(G entity, Ability<G, H> ability) {
         Object2ObjectOpenHashMap<Identifier, AbilityProvider> providers = entity.getAbilityProviders();
-
+        ObjectArrayList<H> values = new ObjectArrayList<>();
+        
         F value = null;
 
+        // Query the values of all providers
+        for (AbilityProvider provider : providers.values()) {
+            if (provider instanceof MultipleValueAbilityProvider multipleValueProvider) {
+                List<H> multipleValues = multipleValueProvider.getMulitple(ability);
+                if (multipleValues != null) {
+                    values.addAll(multipleValues);
+                }
+            } else {
+                values.add(provider.get(ability));
+            }
+        }
+        
         switch (ability.abilityRule) {
             case AND -> {
-                for (AbilityProvider provider : providers.values()) {
-                    H providerValue = provider.get(ability);
+                for (H providerValue : values) {
                     if (providerValue == null) continue;
 
                     if (value == null) {
@@ -89,8 +104,7 @@ public class AbilityManager {
             }
 
             case OR -> {
-                for (AbilityProvider provider : providers.values()) {
-                    H providerValue = provider.get(ability);
+                for (H providerValue : values) {
                     if (providerValue == null) continue;
 
                     if (value == null) {
@@ -142,6 +156,9 @@ public class AbilityManager {
      */
     public <F, H extends AbilityValue<F>, G extends Entity> void markDirty(Entity entity, Ability<?, ?> ability) {
         Reference2ObjectOpenHashMap<Ability<?, ?>, Object> entityCache = abilityValues.get(entity);
+        if (entityCache == null) {
+            return;
+        }
         
         entityCache.remove(ability);
         
@@ -156,27 +173,29 @@ public class AbilityManager {
      */
     public <F, H extends AbilityValue<F>, G extends Entity> void markDirty(Entity entity) {
         Reference2ObjectOpenHashMap<Ability<?, ?>, Object> entityCache = abilityValues.get(entity);
-        if (entityCache != null) {
-            // Gather all the abilities that need to be instantly synced to the clients
-            if (serverSide) {
-                for (Ability<?, ?> ability : entityCache.keySet()) {
-                    if (ability.syncInstantly) {
-                        instantSyncAbilities.add(ability);
-                    }
+        if (entityCache == null) {
+            return;
+        }
+        
+        // Gather all the abilities that need to be instantly synced to the clients
+        if (serverSide) {
+            for (Ability<?, ?> ability : entityCache.keySet()) {
+                if (ability.syncInstantly) {
+                    instantSyncAbilities.add(ability);
                 }
             }
-            
-            entityCache.clear();
-            
-            // For abilities which need to be synced instantly, compute them
-            if (serverSide && !instantSyncAbilities.isEmpty()) {
-                for (Ability<?, ?> ability : instantSyncAbilities) {
-                    //noinspection unchecked
-                    get((G) entity, (Ability<G, H>) ability);
-                }
+        }
 
-                instantSyncAbilities.clear();
+        entityCache.clear();
+
+        // For abilities which need to be synced instantly, compute them
+        if (serverSide && !instantSyncAbilities.isEmpty()) {
+            for (Ability<?, ?> ability : instantSyncAbilities) {
+                //noinspection unchecked
+                get((G) entity, (Ability<G, H>) ability);
             }
+
+            instantSyncAbilities.clear();
         }
     }
 

@@ -50,7 +50,21 @@ public class FloatAbilityValue extends AbilityValue<Float> {
     public void readNbt(NbtCompound nbt) {
         this.value = nbt.getFloat("value");
     }
-    
+
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof FloatAbilityValue floatAbilityValue) {
+            return floatAbilityValue.value == this.value;
+        }
+        
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Float.hashCode(value);
+    }
+
     public static FloatAbilityValue of(float value) {
         return new FloatAbilityValue(value);
     }

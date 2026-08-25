@@ -1,7 +1,6 @@
 package net.danygames2014.nyalib.abilities.ability;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.danygames2014.nyalib.NyaLib;
 import net.modificationstation.stationapi.api.util.Identifier;
@@ -14,7 +13,7 @@ public class AbilityRegistry {
     private final Reference2ObjectOpenHashMap<Ability<?, ?>, Identifier> abilityToIdentifier = new Reference2ObjectOpenHashMap<>();
     
     // Ability Providers
-    private final ObjectOpenHashSet<Identifier> abilityProviders = new ObjectOpenHashSet<>();
+    private final Object2ObjectOpenHashMap<Identifier, AbilityProviderFactory> abilityProviders = new Object2ObjectOpenHashMap<>();
     
     // Ability Implementations
     private final Object2ObjectOpenHashMap<Identifier, AbilityImplementation<?>> abilityImplementations = new Object2ObjectOpenHashMap<>();
@@ -51,22 +50,26 @@ public class AbilityRegistry {
     }
     
     // Ability Providers
-    public static void registerAbilityProvider(Identifier identifier) {
+    public static void registerAbilityProvider(Identifier identifier, AbilityProviderFactory factory) {
         AbilityRegistry r = INSTANCE;
 
-        Identifier existing = r.abilityProviders.get(identifier);
+        AbilityProviderFactory existing = r.abilityProviders.get(identifier);
         if (existing != null) {
             NyaLib.LOGGER.warn("Attempted to register an ability provider {} but an ability provider with that identifier already exists!", identifier);
             NyaLib.LOGGER.warn("Existing ability provider: {}", existing);
-            NyaLib.LOGGER.warn("Ability provider being registered: {}", identifier);
+            NyaLib.LOGGER.warn("Ability provider being registered: {}", factory);
             return;
         }
 
-        r.abilityProviders.add(identifier);
+        r.abilityProviders.put(identifier, factory);
         NyaLib.LOGGER.info("Registered ability provider {}", identifier);
     }
     
     public static boolean abilityProviderRegistered(Identifier identifier) {
-        return INSTANCE.abilityProviders.contains(identifier);
+        return INSTANCE.abilityProviders.containsKey(identifier);
+    }
+    
+    public static AbilityProviderFactory getProviderFactory(Identifier identifier) {
+        return INSTANCE.abilityProviders.getOrDefault(identifier, AbilityProvider::new);
     }
 }

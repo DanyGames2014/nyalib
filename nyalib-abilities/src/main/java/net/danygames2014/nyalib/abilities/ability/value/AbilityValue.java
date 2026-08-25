@@ -17,4 +17,10 @@ public abstract class AbilityValue<T> {
     public abstract void writeNbt(NbtCompound nbt);
     
     public abstract void readNbt(NbtCompound nbt);
+
+    @Override
+    public abstract boolean equals(Object other);
+    
+    @Override
+    public abstract int hashCode();
 }

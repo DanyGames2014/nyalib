@@ -51,6 +51,20 @@ public class IntAbilityValue extends AbilityValue<Integer> {
         this.value = nbt.getInt("value");
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof IntAbilityValue intAbilityValue) {
+            return intAbilityValue.value == this.value;
+        }
+        
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return value;
+    }
+
     public static IntAbilityValue of(int value) {
         return new IntAbilityValue(value);
     }

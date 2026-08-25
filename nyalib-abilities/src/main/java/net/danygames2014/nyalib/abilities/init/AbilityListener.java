@@ -2,6 +2,7 @@ package net.danygames2014.nyalib.abilities.init;
 
 import net.danygames2014.nyalib.NyaLib;
 import net.danygames2014.nyalib.abilities.ability.AbilitySyncType;
+import net.danygames2014.nyalib.abilities.ability.MultipleValueAbilityProvider;
 import net.danygames2014.nyalib.abilities.ability.impl.*;
 import net.danygames2014.nyalib.abilities.event.AbilityRegistryEvent;
 import net.mine_diver.unsafeevents.listener.EventListener;
@@ -27,6 +28,6 @@ public class AbilityListener {
         Abilities.INVINCIBILITY.setSyncType(AbilitySyncType.PLAYER_ONLY);
         event.registerAbility(Abilities.INVINCIBILITY);
         
-        event.registerAbilityProvider(NyaLib.NAMESPACE.id("inventory"));
+        event.registerAbilityProvider(NyaLib.NAMESPACE.id("inventory"), MultipleValueAbilityProvider::new);
     }
 }

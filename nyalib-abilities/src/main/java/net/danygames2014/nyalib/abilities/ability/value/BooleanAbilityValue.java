@@ -51,6 +51,20 @@ public class BooleanAbilityValue extends AbilityValue<Boolean>{
         this.value = nbt.getBoolean("value");
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof BooleanAbilityValue booleanAbilityValue) {
+            return booleanAbilityValue.value == this.value;
+        }
+        
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Boolean.hashCode(value);
+    }
+
     public static BooleanAbilityValue of(boolean value) {
         return new BooleanAbilityValue(value);
     }
