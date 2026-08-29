@@ -39,7 +39,7 @@ public class NyaLibInventoryAbilityProvider {
 
         queryAbilities();
         long endTime = System.nanoTime();
-        System.err.println("Time: " + (endTime - startTime) + "ns");
+        //System.err.println("Time: " + (endTime - startTime) + "ns");
     }
     
     private final Reference2ObjectOpenHashMap<Ability<?, ?>, ObjectArrayList<AbilityValue<?>>> abilities = new Reference2ObjectOpenHashMap<>();
