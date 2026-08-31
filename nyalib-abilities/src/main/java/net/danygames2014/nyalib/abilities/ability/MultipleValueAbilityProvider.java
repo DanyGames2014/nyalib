@@ -16,6 +16,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/**
+ * A special type of {@link AbilityProvider} that allows multiple values to be set for a single ability
+ */
 public class MultipleValueAbilityProvider extends AbilityProvider {
     private final Reference2ObjectOpenHashMap<Ability<?, ?>, List<AbilityValue<?>>> values;
     

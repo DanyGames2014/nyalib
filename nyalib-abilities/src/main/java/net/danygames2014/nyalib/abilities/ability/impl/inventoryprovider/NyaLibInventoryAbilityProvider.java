@@ -14,11 +14,18 @@ import net.minecraft.item.ItemStack;
 import java.util.Arrays;
 import java.util.Map;
 
+/**
+ * A wrapper for {@link net.danygames2014.nyalib.abilities.ability.AbilityProvider} which provides abilities from {@link InventoryAbilityItem}s
+ * This is used internally by NyaLib to service the {@link InventoryAbilityItem}s
+ */
 public class NyaLibInventoryAbilityProvider {
     private final PlayerEntity player;
     private final PlayerInventory playerInventory;
     private final MultipleValueAbilityProvider abilityProvider;
 
+    /**
+     * Holds all of the {@link InventoryAbilityItem}s that are currently being tracked by this provider
+     */
     private final ObjectArrayList<TrackedItemEntry> trackedItems = new ObjectArrayList<>();
     private int lastInventoryHash = -1;
     private int lastArmorHash = -1;
@@ -29,23 +36,37 @@ public class NyaLibInventoryAbilityProvider {
         this.abilityProvider = (MultipleValueAbilityProvider) player.getAbilityProvider(NyaLib.NAMESPACE.id("inventory"));
     }
 
+    /**
+     * Called during the {@link PlayerEntity#tick()} method
+     */
     public void tick() {
+        // Check if the inventory has changed
         if (checkInventoryChanged()) {
+            // If it has changed, rebuild the list of tracked items
             rebuildTrackedItems();
         }
 
+        // Query the abilities from the tracked items
         queryAbilities();
     }
-    
+
+    /**
+     * A reused object to keep track of the ability values supplied by the {@link InventoryAbilityItem}s
+     */
     private final Reference2ObjectOpenHashMap<Ability<?, ?>, ObjectArrayList<AbilityValue<?>>> abilities = new Reference2ObjectOpenHashMap<>();
-    
+
+    /**
+     * Queries the abilities from all of the currently tracked {@link InventoryAbilityItem}s
+     */
     public void queryAbilities() {
         boolean changed = false;
         
+        // Loops thru all of the tracked items and makes them query their ability values and if those have changed since the last tick
         for (TrackedItemEntry trackedItem : trackedItems) {
             changed |= trackedItem.queryAbilities(player, playerInventory);
         }
         
+        // If any of the values have changed, then the ability values in the provider are updated
         if (changed) {
             abilities.clear();
             
@@ -61,6 +82,9 @@ public class NyaLibInventoryAbilityProvider {
         }
     }
 
+    /**
+     * @return {@code true} if the inventory has changed since the last tick, {@code false} otherwise
+     */
     public boolean checkInventoryChanged() {
         int inventoryHash = Arrays.hashCode(playerInventory.main);
         int armorHash = Arrays.hashCode(playerInventory.armor);
@@ -74,6 +98,9 @@ public class NyaLibInventoryAbilityProvider {
         return false;
     }
 
+    /**
+     * Queries the player's inventory to collect all of the items to be tracked by this provider
+     */
     public void rebuildTrackedItems() {
         abilityProvider.clear();
         trackedItems.clear();
@@ -106,7 +133,10 @@ public class NyaLibInventoryAbilityProvider {
             }
         }
     }
-    
+
+    /**
+     * Represents a currently tracked item in the inventory
+     */
     public static class TrackedItemEntry {
         public final ItemStack stack;
         public final Item item;
@@ -126,6 +156,9 @@ public class NyaLibInventoryAbilityProvider {
             this.slot = slot;
         }
 
+        /**
+         * Queries the ability values for the provided abilities and returns {@code true} if any of the values have changed compared to their last values
+         */
         public boolean queryAbilities(PlayerEntity player, PlayerInventory playerInventory) {
             for (Ability<?, ?> ability : providedAbilities) {
                 AbilityValue<?> value = inventoryAbility.getAbilityValue(ability, player, playerInventory, stack, slotType, slot);

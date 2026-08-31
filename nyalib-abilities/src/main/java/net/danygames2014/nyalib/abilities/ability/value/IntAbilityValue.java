@@ -2,6 +2,9 @@ package net.danygames2014.nyalib.abilities.ability.value;
 
 import net.minecraft.nbt.NbtCompound;
 
+/**
+ * An ability value which stores an int value
+ */
 public class IntAbilityValue extends AbilityValue<Integer> {
     public int value;
     
@@ -17,7 +20,10 @@ public class IntAbilityValue extends AbilityValue<Integer> {
     public Integer get() {
         return value;
     }
-    
+
+    /**
+     * Get the int value of this AbilityValue without boxing
+     */
     public int getInt() {
         return value;
     }
@@ -26,7 +32,10 @@ public class IntAbilityValue extends AbilityValue<Integer> {
     public void set(Integer value) {
         this.value = value;
     }
-    
+
+    /**
+     * Set the int value of this AbilityValue without boxing
+     */
     public void setInt(int value) {
         this.value = value;
     }
@@ -65,6 +74,9 @@ public class IntAbilityValue extends AbilityValue<Integer> {
         return value;
     }
 
+    /**
+     * Create a new IntAbilityValue with the given value
+     */
     public static IntAbilityValue of(int value) {
         return new IntAbilityValue(value);
     }

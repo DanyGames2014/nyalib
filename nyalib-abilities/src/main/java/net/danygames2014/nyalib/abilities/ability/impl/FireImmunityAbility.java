@@ -8,6 +8,9 @@ import net.modificationstation.stationapi.api.util.Identifier;
 
 /**
  * Makes the entity immune to fire damage and being set on fire
+ * <p> Applicable to entities extending {@link LivingEntity}
+ * <p> Default value: <code>false</code>
+ * <p> Ability rule: <code>OR</code>
  */
 public class FireImmunityAbility extends Ability<LivingEntity, BooleanAbilityValue> {
     public FireImmunityAbility(Identifier identifier) {

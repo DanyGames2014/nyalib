@@ -17,6 +17,10 @@ import net.modificationstation.stationapi.api.util.Identifier;
 
 import java.util.List;
 
+/**
+ * The ability manager is responsible for querying {@link AbilityProvider}s for {@link AbilityValue}s, computing their final values and storing them
+ * <p> You will mostly be interested in the {@link #get(Entity, Ability)} method which is used to retrieve the value of an {@link Ability} for an entity
+ */
 public class AbilityManager {
     private static final AbilityManager INSTANCE = new AbilityManager();
     private final boolean serverSide;

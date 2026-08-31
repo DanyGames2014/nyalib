@@ -8,6 +8,9 @@ import net.modificationstation.stationapi.api.util.Identifier;
 
 /**
  * If the player can fly, determines the speed of the player's flight
+ * <p> Applicable to entities extending {@link PlayerEntity}
+ * <p> Default value: <code>0.05F</code>
+ * <p> Ability rule: <code>AND</code>
  */
 public class FlightSpeedAbility extends Ability<PlayerEntity, FloatAbilityValue> {
     public FlightSpeedAbility(Identifier identifier) {

@@ -2,6 +2,9 @@ package net.danygames2014.nyalib.abilities.ability.value;
 
 import net.minecraft.nbt.NbtCompound;
 
+/**
+ * An ability value which stores a float value
+ */
 public class FloatAbilityValue extends AbilityValue<Float> {
     public float value;
 
@@ -17,7 +20,10 @@ public class FloatAbilityValue extends AbilityValue<Float> {
     public Float get() {
         return value;
     }
-    
+
+    /**
+     * Get the float value of this AbilityValue without boxing
+     */
     public float getFloat() {
         return value;
     }
@@ -26,7 +32,10 @@ public class FloatAbilityValue extends AbilityValue<Float> {
     public void set(Float value) {
         this.value = value;
     }
-    
+
+    /**
+     * Set the float value of this AbilityValue without boxing
+     */
     public void setFloat(float value) {
         this.value = value;
     }
@@ -65,6 +74,9 @@ public class FloatAbilityValue extends AbilityValue<Float> {
         return Float.hashCode(value);
     }
 
+    /**
+     * Create a new FloatAbilityValue with the given value
+     */
     public static FloatAbilityValue of(float value) {
         return new FloatAbilityValue(value);
     }

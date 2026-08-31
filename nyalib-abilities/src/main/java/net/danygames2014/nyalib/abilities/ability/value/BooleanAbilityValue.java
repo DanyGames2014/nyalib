@@ -2,6 +2,9 @@ package net.danygames2014.nyalib.abilities.ability.value;
 
 import net.minecraft.nbt.NbtCompound;
 
+/**
+ * An ability value which stores a boolean value
+ */
 public class BooleanAbilityValue extends AbilityValue<Boolean>{
     public boolean value;
 
@@ -17,7 +20,10 @@ public class BooleanAbilityValue extends AbilityValue<Boolean>{
     public Boolean get() {
         return value;
     }
-    
+
+    /**
+     * Get the boolean value of this AbilityValue without boxing
+     */
     public boolean getBoolean() {
         return value;
     }
@@ -26,7 +32,10 @@ public class BooleanAbilityValue extends AbilityValue<Boolean>{
     public void set(Boolean value) {
         this.value = value;
     }
-    
+
+    /**
+     * Set the boolean value of this AbilityValue without boxing
+     */
     public void setBoolean(boolean value) {
         this.value = value;
     }
@@ -65,6 +74,9 @@ public class BooleanAbilityValue extends AbilityValue<Boolean>{
         return Boolean.hashCode(value);
     }
 
+    /**
+     * Create a new BooleanAbilityValue with the given value
+     */
     public static BooleanAbilityValue of(boolean value) {
         return new BooleanAbilityValue(value);
     }
