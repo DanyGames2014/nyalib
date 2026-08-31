@@ -20,18 +20,22 @@ import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Optional;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings({"unused", "OptionalIsPresent"})
 public class NetworkLoader {
-    // TODO: Flush the executor when quitting world, maybe during loading?
-    private static final ExecutorService SAVE_EXECUTOR = Executors.newSingleThreadExecutor(r -> {
-        Thread thread = new Thread(r);
-        thread.setName("NyaLib Block Networks Save Thread");
-        thread.setDaemon(true);
-        return thread;
-    });
+    private static final ThreadPoolExecutor SAVE_EXECUTOR = new ThreadPoolExecutor(
+            1, 1,
+            0L, TimeUnit.MILLISECONDS,
+            new LinkedBlockingQueue<>(),
+            r -> {
+                Thread thread = new Thread(r);
+                thread.setName("NyaLib Block Networks Save Thread");
+                thread.setDaemon(true);
+                return thread;
+            });
     public static ObjectOpenHashSet<Dimension> readOnly = new ObjectOpenHashSet<>();
     public static boolean isRemote = false;
 
@@ -81,7 +85,7 @@ public class NetworkLoader {
         }
 
         tag.putInt("next_id", NetworkManager.NEXT_ID.get());
-        
+
         try {
             NetworkManager.writeNbt(world, tag);
         } catch (Exception e) {
@@ -117,7 +121,7 @@ public class NetworkLoader {
                     return;
                 }
 
-                NyaLib.LOGGER.info("Saved NyaLib networks in dimension " + dimensionId);
+                NyaLib.LOGGER.debug("Saved NyaLib networks in dimension " + dimensionId);
             } catch (Exception e) {
                 NyaLib.LOGGER.error("Error occured while saving NyaLib Networks in dimension " + dimensionId, e);
             }
@@ -131,6 +135,15 @@ public class NetworkLoader {
             return;
         }
 
+        // Wait for the previous save operations to finish, if they take too long, cancel them
+        try {
+            SAVE_EXECUTOR.submit(() -> {}).get(3000, TimeUnit.MILLISECONDS);
+        } catch (Exception e) {
+            NyaLib.LOGGER.error("Previous Block Network save operations took too long, cacncelling tasks", e);
+            SAVE_EXECUTOR.getQueue().clear();
+            SAVE_EXECUTOR.purge();
+        }
+        
         loadNetworks(event.world, event.world.dimension);
     }
 
