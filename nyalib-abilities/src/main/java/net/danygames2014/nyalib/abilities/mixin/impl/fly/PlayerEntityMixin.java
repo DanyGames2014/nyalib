@@ -75,4 +75,22 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin implements Nya
     public boolean cancelFallDamage(LivingEntity instance, float fallDistance) {
         return !this.nyalib$canFly();
     }
+
+    @Override
+    public boolean cancelWaterMovement(LivingEntity instance, Operation<Boolean> original) {
+        if (nyalib$flying) {
+            return false;
+        }
+        
+        return super.cancelWaterMovement(instance, original);
+    }
+
+    @Override
+    public boolean cancelLavaMovement(LivingEntity instance, Operation<Boolean> original) {
+        if (nyalib$flying) {
+            return false;
+        }
+        
+        return super.cancelLavaMovement(instance, original);
+    }
 }

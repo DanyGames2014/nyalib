@@ -24,4 +24,13 @@ public class Abilities {
      * <p> Applicable to entities extending {@link net.minecraft.entity.LivingEntity}
      */
     public static InvincibilityAbility INVINCIBILITY;
+    
+    // TODO: Extra Hearts Ability
+    // TODO: Sprint Ability
+    // TODO: Reach Ability
+    // TODO: Step Height Ability
+    // TODO: Damage Boost Ability
+    // TODO: Damage Resistance Ability
+    // TODO: Speed Boost Ability
+    // TODO: Water Breathing Ability
 }
