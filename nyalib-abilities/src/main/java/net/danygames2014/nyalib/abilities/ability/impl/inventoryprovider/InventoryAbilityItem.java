@@ -24,11 +24,24 @@ public interface InventoryAbilityItem {
      *
      * @param ability         The ability currently being queried
      * @param player          The player which has the item in their inventory
-     * @param playerInventory The player inventory
+     * @param playerInventory The player's inventory
      * @param stack           The {@link net.minecraft.item.ItemStack} of this {@link net.minecraft.item.Item}
      * @param slotType        The slot type the item is currently in
      * @param slot            The slot index this item is in
      * @return The value of the ability to provide
      */
     AbilityValue<?> getAbilityValue(Ability<?, ?> ability, PlayerEntity player, PlayerInventory playerInventory, ItemStack stack, InventoryAbilityItemSlot slotType, int slot);
+
+    /**
+     * Called when the player inventory contents have changed and the tracked ability items are rebuilt
+     *
+     * @param player          The player which has the item in their inventory
+     * @param playerInventory The player's inventory
+     * @param stack           The {@link net.minecraft.item.ItemStack} of this {@link net.minecraft.item.Item}
+     * @param slotType        The slot type the item is currently in
+     * @param slot            The slot index this item is in
+     */
+    default void onInventoryChanged(PlayerEntity player, PlayerInventory playerInventory, ItemStack stack, InventoryAbilityItemSlot slotType, int slot) {
+
+    }
 }

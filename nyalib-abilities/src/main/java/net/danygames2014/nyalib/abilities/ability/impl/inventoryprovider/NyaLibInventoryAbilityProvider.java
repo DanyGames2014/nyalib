@@ -132,6 +132,11 @@ public class NyaLibInventoryAbilityProvider {
                 }
             }
         }
+        
+        // Notify all the tracked items
+        for (TrackedItemEntry trackedItem : trackedItems) {
+            trackedItem.inventoryAbility.onInventoryChanged(player, playerInventory, trackedItem.stack, trackedItem.slotType, trackedItem.slot);
+        }
     }
 
     /**
