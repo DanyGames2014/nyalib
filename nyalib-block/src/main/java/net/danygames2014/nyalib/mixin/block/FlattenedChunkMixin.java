@@ -1,4 +1,4 @@
-package net.danygames2014.nyalib.mixin;
+package net.danygames2014.nyalib.mixin.block;
 
 import net.danygames2014.nyalib.block.BlockEntityInit;
 import net.minecraft.block.entity.BlockEntity;

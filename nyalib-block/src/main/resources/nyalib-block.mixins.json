@@ -4,6 +4,7 @@
   "package": "net.danygames2014.nyalib.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "block.FlattenedChunkMixin",
     "block.RedstoneWireBlockMixin",
     "block.VoxelShapeBlockMixin",
     "block.WorldMixin",
