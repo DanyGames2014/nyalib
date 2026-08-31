@@ -30,16 +30,11 @@ public class NyaLibInventoryAbilityProvider {
     }
 
     public void tick() {
-        long startTime = System.nanoTime();
-
         if (checkInventoryChanged()) {
-            System.err.println("Inventory changed!");
             rebuildTrackedItems();
         }
 
         queryAbilities();
-        long endTime = System.nanoTime();
-        //System.err.println("Time: " + (endTime - startTime) + "ns");
     }
     
     private final Reference2ObjectOpenHashMap<Ability<?, ?>, ObjectArrayList<AbilityValue<?>>> abilities = new Reference2ObjectOpenHashMap<>();
