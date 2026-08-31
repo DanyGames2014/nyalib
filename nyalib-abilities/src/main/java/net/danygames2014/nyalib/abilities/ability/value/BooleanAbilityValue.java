@@ -5,13 +5,13 @@ import net.minecraft.nbt.NbtCompound;
 /**
  * An ability value which stores a boolean value
  */
-public class BooleanAbilityValue extends AbilityValue<Boolean>{
+public class BooleanAbilityValue extends AbilityValue<Boolean> {
     public boolean value;
 
     public BooleanAbilityValue(boolean value) {
         this.value = value;
     }
-    
+
     public BooleanAbilityValue() {
         this(false);
     }
@@ -65,7 +65,7 @@ public class BooleanAbilityValue extends AbilityValue<Boolean>{
         if (other instanceof BooleanAbilityValue booleanAbilityValue) {
             return booleanAbilityValue.value == this.value;
         }
-        
+
         return false;
     }
 

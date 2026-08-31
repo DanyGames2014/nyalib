@@ -21,13 +21,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class EntityMixin implements NyaLibAbilitiesEntity {
     @Unique
     public Object2ObjectOpenHashMap<Identifier, AbilityProvider> abilityProviders;
-    
+
     @Override
     public Object2ObjectOpenHashMap<Identifier, AbilityProvider> getAbilityProviders() {
         if (abilityProviders == null) {
             abilityProviders = new Object2ObjectOpenHashMap<>();
         }
-        
+
         return abilityProviders;
     }
 
@@ -48,7 +48,7 @@ public abstract class EntityMixin implements NyaLibAbilitiesEntity {
     public void removeEntityFromAbilityManager(CallbackInfo ci) {
         AbilityManager.getInstance().removeEntity((Entity) (Object) this);
     }
-    
+
     // Saving and Loading
     @Inject(method = "write", at = @At(value = "TAIL"))
     public void writeAbilityNbt(NbtCompound nbt, CallbackInfo ci) {
@@ -66,7 +66,7 @@ public abstract class EntityMixin implements NyaLibAbilitiesEntity {
 
         nbt.put("nyalib:abilities", abilitiesNbt);
     }
-    
+
     @Inject(method = "read", at = @At(value = "TAIL"))
     public void readAbilityNbt(NbtCompound nbt, CallbackInfo ci) {
         if (!nbt.contains("nyalib:abilities")) {
@@ -74,20 +74,20 @@ public abstract class EntityMixin implements NyaLibAbilitiesEntity {
         }
 
         NbtCompound abilitiesNbt = nbt.getCompound("nyalib:abilities");
-        
+
         abilityProviders = new Object2ObjectOpenHashMap<>();
         for (Object providerO : abilitiesNbt.values()) {
             if (providerO instanceof NbtCompound providerNbt) {
                 if (!providerNbt.contains("identifier")) {
                     continue;
                 }
-                
+
                 Identifier providerId = Identifier.of(providerNbt.getString("identifier"));
                 if (!AbilityRegistry.abilityProviderRegistered(providerId)) {
                     NyaLib.LOGGER.warn("AbilityProvider {} not found in registry. Skipping the loading of this provider.", providerId);
                     continue;
                 }
-                
+
                 AbilityProviderFactory factory = AbilityRegistry.getProviderFactory(providerId);
                 AbilityProvider provider = factory.create(AbilityManager.getInstance(), providerId, (Entity) (Object) this);
                 provider.readNbt(providerNbt);

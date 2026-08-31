@@ -7,11 +7,11 @@ import net.minecraft.nbt.NbtCompound;
  */
 public class IntAbilityValue extends AbilityValue<Integer> {
     public int value;
-    
+
     public IntAbilityValue(int value) {
         this.value = value;
     }
-    
+
     public IntAbilityValue() {
         this(0);
     }
@@ -65,7 +65,7 @@ public class IntAbilityValue extends AbilityValue<Integer> {
         if (other instanceof IntAbilityValue intAbilityValue) {
             return intAbilityValue.value == this.value;
         }
-        
+
         return false;
     }
 

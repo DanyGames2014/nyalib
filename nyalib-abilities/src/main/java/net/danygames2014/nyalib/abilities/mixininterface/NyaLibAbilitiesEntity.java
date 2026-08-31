@@ -9,9 +9,9 @@ public interface NyaLibAbilitiesEntity {
     default Object2ObjectOpenHashMap<Identifier, AbilityProvider> getAbilityProviders() {
         return Util.assertImpl();
     }
-    
+
     default AbilityProvider getAbilityProvider(Identifier identifier) {
-        return Util.assertImpl();   
+        return Util.assertImpl();
     }
 
     default void markAbilitiesDirty() {

@@ -10,7 +10,7 @@ public interface NyaLibFlyingPlayer {
     default boolean nyalib$isFlying() {
         return Util.assertImpl();
     }
-    
+
     default void nyalib$setFlying(boolean flying) {
         Util.assertImpl();
     }

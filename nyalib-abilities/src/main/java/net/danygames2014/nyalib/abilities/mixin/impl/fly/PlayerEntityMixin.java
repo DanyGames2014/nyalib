@@ -43,11 +43,11 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin implements Nya
     @WrapOperation(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;travel(FF)V"))
     public void fly(PlayerEntity instance, float x, float z, Operation<Void> original) {
         PlayerEntity playerEntity = (PlayerEntity) (Object) this;
-        
+
         if (nyalib$flying && !nyalib$canFly()) {
             this.nyalib$setFlying(false);
         }
-        
+
         if (nyalib$flying && this.vehicle == null && AbilityManager.getInstance().get(playerEntity, Abilities.FLIGHT)) {
             double d3 = this.velocityY;
             float f = this.jumpMovementFactor;
@@ -70,7 +70,7 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin implements Nya
 
         return super.modifySpeedInAir(original);
     }
-    
+
     @WrapWithCondition(method = "onLanding", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;onLanding(F)V"))
     public boolean cancelFallDamage(LivingEntity instance, float fallDistance) {
         return !this.nyalib$canFly();

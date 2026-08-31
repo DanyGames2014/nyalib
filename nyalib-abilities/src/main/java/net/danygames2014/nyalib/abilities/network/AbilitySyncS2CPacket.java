@@ -33,13 +33,13 @@ public class AbilitySyncS2CPacket extends Packet implements ManagedPacket<Abilit
     public Identifier abilityIdentifier;
     public String abilityValueType;
     public NbtCompound abilityValueNbt;
-    
+
     int size = 0;
-    
+
     public AbilitySyncS2CPacket() {
-        
+
     }
-    
+
     public AbilitySyncS2CPacket(int entityId, Ability<?, ?> ability, AbilityValue<?> value) {
         this.entityId = entityId;
         this.abilityIdentifier = ability.identifier;
@@ -68,18 +68,18 @@ public class AbilitySyncS2CPacket extends Packet implements ManagedPacket<Abilit
     public void write(DataOutputStream stream) {
         try {
             int initialSize = stream.size();
-            
+
             if (abilityValueNbt == null) {
                 stream.writeBoolean(false);
                 return;
             }
-            
+
             stream.writeBoolean(true);
             stream.writeInt(entityId);
             stream.writeUTF(abilityIdentifier.toString());
             stream.writeUTF(abilityValueType);
             NbtIo.write(abilityValueNbt, stream);
-            
+
             size = stream.size() - initialSize;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -88,15 +88,16 @@ public class AbilitySyncS2CPacket extends Packet implements ManagedPacket<Abilit
 
     @Override
     public void apply(NetworkHandler networkHandler) {
-        SideUtil.run(() -> handleClient(networkHandler), () -> {});
+        SideUtil.run(() -> handleClient(networkHandler), () -> {
+        });
     }
-    
+
     @Environment(EnvType.CLIENT)
     public void handleClient(NetworkHandler networkHandler) {
         PlayerEntity player = PlayerHelper.getPlayerFromPacketHandler(networkHandler);
 
         Entity targetEntity = null;
-        
+
         if (entityId == -1) {
             targetEntity = player;
         } else {
@@ -112,16 +113,16 @@ public class AbilitySyncS2CPacket extends Packet implements ManagedPacket<Abilit
         if (targetEntity == null) {
             return;
         }
-        
+
         Ability<?, ?> ability = AbilityRegistry.getAbility(abilityIdentifier);
         if (ability == null) {
             return;
         }
-        
+
         AbilityValueFactory<?> abilityValueFactory = AbilityValueTypeRegistry.getFactory(abilityValueType);
         AbilityValue<?> abilityValue = abilityValueFactory.create();
         abilityValue.readNbt(abilityValueNbt);
-        
+
         AbilityManager.getInstance().set(targetEntity, ability, abilityValue.get());
         System.err.println("Received AbilitySyncS2CPacket: " + abilityIdentifier + " -> " + abilityValue.get());
     }

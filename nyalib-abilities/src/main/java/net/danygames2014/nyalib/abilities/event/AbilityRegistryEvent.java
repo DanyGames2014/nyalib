@@ -12,7 +12,7 @@ import net.modificationstation.stationapi.api.util.Identifier;
  */
 public class AbilityRegistryEvent extends Event {
     public final AbilityRegistry registry;
-    
+
     public AbilityRegistryEvent() {
         this.registry = AbilityRegistry.getInstance();
     }
@@ -20,15 +20,15 @@ public class AbilityRegistryEvent extends Event {
     public void registerAbility(Ability<?, ?> ability) {
         registerAbility(ability.identifier, ability);
     }
-    
+
     public void registerAbility(Identifier identifier, Ability<?, ?> ability) {
         AbilityRegistry.registerAbility(identifier, ability);
     }
-    
+
     public void registerAbilityProvider(Identifier identifier) {
         registerAbilityProvider(identifier, AbilityProvider::new);
     }
-    
+
     public void registerAbilityProvider(Identifier identifier, AbilityProviderFactory factory) {
         AbilityRegistry.registerAbilityProvider(identifier, factory);
     }

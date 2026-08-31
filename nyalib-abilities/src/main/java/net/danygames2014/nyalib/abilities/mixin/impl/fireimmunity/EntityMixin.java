@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public class EntityMixin {
     @Shadow
     public int fireTicks;
-    
+
     @WrapOperation(method = "baseTick", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;fireImmune:Z", opcode = Opcodes.GETFIELD))
     public boolean baseTickFireImmune(Entity instance, Operation<Boolean> original) {
         return original.call(instance);

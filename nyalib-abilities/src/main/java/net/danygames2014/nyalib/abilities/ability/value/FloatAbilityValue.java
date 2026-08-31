@@ -65,7 +65,7 @@ public class FloatAbilityValue extends AbilityValue<Float> {
         if (other instanceof FloatAbilityValue floatAbilityValue) {
             return floatAbilityValue.value == this.value;
         }
-        
+
         return false;
     }
 

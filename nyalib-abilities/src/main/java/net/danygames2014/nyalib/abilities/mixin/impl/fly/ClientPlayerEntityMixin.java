@@ -20,7 +20,7 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntity {
 
     @Unique
     private int pressedJumpTwiceTimer = 0;
-    
+
     @Unique
     private boolean wasJumping = false;
 
@@ -34,12 +34,12 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntity {
             --this.pressedJumpTwiceTimer;
         }
     }
-    
+
     @Inject(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/input/Input;update(Lnet/minecraft/entity/player/PlayerEntity;)V"))
     public void getPreviousJumpingState(CallbackInfo ci) {
         wasJumping = this.input.jumping;
     }
-    
+
     @Inject(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;tickMovement()V"))
     public void engageFlight(CallbackInfo ci) {
         if (this.nyalib$canFly() && !wasJumping && this.input.jumping) {

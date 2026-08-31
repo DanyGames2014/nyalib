@@ -10,11 +10,11 @@ import net.mine_diver.unsafeevents.Event;
  */
 public class AbilityValueTypeRegistryEvent extends Event {
     /**
-     * @param type id of the value type
-     * @param factory factory for creating the {@link AbilityValue} of the type
-     * @param valueClass class of the {@link AbilityValue}
+     * @param type           id of the value type
+     * @param factory        factory for creating the {@link AbilityValue} of the type
+     * @param valueClass     class of the {@link AbilityValue}
      * @param valueTypeClass class of the value type held in the {@link AbilityValue}
-     * @param <T> the type held in the {@link AbilityValue}
+     * @param <T>            the type held in the {@link AbilityValue}
      */
     public <T> void register(String type, AbilityValueFactory<T> factory, Class<? extends AbilityValue<?>> valueClass, Class<?> valueTypeClass) {
         AbilityValueTypeRegistry.register(type, factory, valueClass, valueTypeClass);

@@ -7,6 +7,7 @@ import net.modificationstation.stationapi.api.util.Identifier;
 /**
  * Represents an ability that can be applied to an entity
  * <p> The value of this ability is determined by the {@link AbilityProvider}s and is computed according to the {@link AbilityRule} in the {@link AbilityManager}
+ *
  * @param <T> The type of entity this ability can be applied to
  * @param <V> The type of value this ability provides. For example {@link net.danygames2014.nyalib.abilities.ability.value.BooleanAbilityValue}
  */

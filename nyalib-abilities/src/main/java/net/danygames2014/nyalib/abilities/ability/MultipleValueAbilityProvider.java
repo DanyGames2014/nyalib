@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class MultipleValueAbilityProvider extends AbilityProvider {
     private final Reference2ObjectOpenHashMap<Ability<?, ?>, List<AbilityValue<?>>> values;
-    
+
     public MultipleValueAbilityProvider(AbilityManager manager, Identifier identifier, Entity entity) {
         super(manager, identifier, entity);
         this.values = new Reference2ObjectOpenHashMap<>();
@@ -45,6 +45,7 @@ public class MultipleValueAbilityProvider extends AbilityProvider {
     /**
      * Retrives the values of the given ability in this provider
      * <p> Note: for retrieving the actual state of the ability, use {@link AbilityManager#get(Entity, Ability)}
+     *
      * @return the values of the given ability in this provider, or null if it is not set by this provider
      */
     @Nullable
@@ -108,7 +109,7 @@ public class MultipleValueAbilityProvider extends AbilityProvider {
                 valueNbt.putString("valueType", AbilityValueTypeRegistry.CLASS_TO_TYPE.get(value.getClass()));
                 value.writeNbt(valueNbt);
             }
-            
+
             valueNbt.put("values", valueList);
 
             // Add to the list of values
@@ -139,7 +140,7 @@ public class MultipleValueAbilityProvider extends AbilityProvider {
                 NyaLib.LOGGER.error("Value type {} not found while loading ability {}. Has the modlist been changed? Skipping the loading of this ability.", valueNbt.getString("valueType"), abilityId);
                 continue;
             }
-            
+
             NbtList valueList = valueNbt.getList("values");
             ObjectArrayList<AbilityValue<?>> readValues = new ObjectArrayList<>();
             for (int j = 0; j < valueList.size(); j++) {

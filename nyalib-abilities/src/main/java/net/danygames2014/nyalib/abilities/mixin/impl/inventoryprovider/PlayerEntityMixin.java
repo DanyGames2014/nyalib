@@ -14,23 +14,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class PlayerEntityMixin extends LivingEntity {
     @Unique
     NyaLibInventoryAbilityProvider inventoryProvider;
-    
+
     public PlayerEntityMixin(World world) {
         super(world);
     }
-    
-    @Inject(method = "<init>", at = @At("TAIL"))
-    public void initInventoryProvider(World world, CallbackInfo ci) {
-        //inventoryProvider = new NyaLibInventoryAbilityProvider((PlayerEntity) (Object) this);
-    }
-    
+
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void tickInventoryProvider(CallbackInfo ci) {
         if (!world.isRemote) {
             if (inventoryProvider == null) {
                 inventoryProvider = new NyaLibInventoryAbilityProvider((PlayerEntity) (Object) this);
             }
-            
+
             inventoryProvider.tick();
         }
     }

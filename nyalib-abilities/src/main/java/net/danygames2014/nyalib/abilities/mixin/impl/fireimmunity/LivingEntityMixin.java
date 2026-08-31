@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class LivingEntityMixin extends EntityMixin {
     @Unique
     public boolean nyalib$fireImmune = false;
-    
+
     @Inject(method = "tick", at = @At(value = "HEAD"))
     public void fetchFireImmunity(CallbackInfo ci) {
         nyalib$fireImmune = AbilityManager.getInstance().get((LivingEntity) (Object) this, Abilities.FIRE_IMMUNITY);

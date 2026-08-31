@@ -60,22 +60,22 @@ public class NyaLibInventoryAbilityProvider {
      */
     public void queryAbilities() {
         boolean changed = false;
-        
+
         // Loops thru all of the tracked items and makes them query their ability values and if those have changed since the last tick
         for (TrackedItemEntry trackedItem : trackedItems) {
             changed |= trackedItem.queryAbilities(player, playerInventory);
         }
-        
+
         // If any of the values have changed, then the ability values in the provider are updated
         if (changed) {
             abilities.clear();
-            
+
             for (TrackedItemEntry trackedItem : trackedItems) {
                 for (Map.Entry<Ability<?, ?>, AbilityValue<?>> entry : trackedItem.abilityValues.entrySet()) {
                     abilities.computeIfAbsent(entry.getKey(), k -> new ObjectArrayList<>()).add(entry.getValue());
                 }
             }
-            
+
             for (Map.Entry<Ability<?, ?>, ObjectArrayList<AbilityValue<?>>> entry : abilities.entrySet()) {
                 abilityProvider.setMultiple(entry.getKey(), entry.getValue());
             }
@@ -104,14 +104,14 @@ public class NyaLibInventoryAbilityProvider {
     public void rebuildTrackedItems() {
         abilityProvider.clear();
         trackedItems.clear();
-        
+
         // Main Inventory
         ItemStack[] main = playerInventory.main;
         for (int slot = 0, mainLength = main.length; slot < mainLength; slot++) {
             ItemStack stack = main[slot];
             if (stack != null && stack.getItem() instanceof InventoryAbilityItem inventoryAbilityItem) {
                 InventoryAbilityItemSlot slotType = slot < 9 ? InventoryAbilityItemSlot.HOTBAR : InventoryAbilityItemSlot.INVENTORY;
-                
+
                 Ability<?, ?>[] providedAbilities = inventoryAbilityItem.getProvidedAbilities(player, slotType);
                 if (providedAbilities.length > 0) {
                     trackedItems.add(new TrackedItemEntry(stack, inventoryAbilityItem, providedAbilities, slotType, slot));
@@ -144,9 +144,9 @@ public class NyaLibInventoryAbilityProvider {
         public final Ability<?, ?>[] providedAbilities;
         public final InventoryAbilityItemSlot slotType;
         public final int slot;
-        
+
         public Reference2ObjectOpenHashMap<Ability<?, ?>, AbilityValue<?>> abilityValues = new Reference2ObjectOpenHashMap<>();
-        
+
         public TrackedItemEntry(ItemStack stack, InventoryAbilityItem inventoryAbility, Ability<?, ?>[] providedAbilities, InventoryAbilityItemSlot slotType, int slot) {
             this.stack = stack;
             this.item = stack.getItem();
@@ -167,7 +167,7 @@ public class NyaLibInventoryAbilityProvider {
                     return true;
                 }
             }
-            
+
             return false;
         }
     }

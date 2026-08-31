@@ -13,6 +13,7 @@ public abstract class AbilityValue<T> {
 
     /**
      * Sets the current value of this ability value
+     *
      * @param value The value to set this ability value to
      */
     public abstract void set(T value);
@@ -20,6 +21,7 @@ public abstract class AbilityValue<T> {
     /**
      * Computes the ability of this values and the {@code previousValue} using an AND operation
      * <p> This is used when the {@link net.danygames2014.nyalib.abilities.ability.AbilityRule#AND} rule is used
+     *
      * @return The result of this operation
      */
     public abstract T computeAnd(T previousValue);
@@ -27,6 +29,7 @@ public abstract class AbilityValue<T> {
     /**
      * Computes the ability of this values and the {@code previousValue} using an OR operation
      * <p> This is used when the {@link net.danygames2014.nyalib.abilities.ability.AbilityRule#OR} rule is used
+     *
      * @return The result of this operation
      */
     public abstract T computeOr(T previousValue);
@@ -44,6 +47,7 @@ public abstract class AbilityValue<T> {
     /**
      * Compares this ability value to another object.
      * <p> When the other object is an {@link AbilityValue}, this method will also compare their values
+     *
      * @param other the object to compare to
      * @return <code>true</code> if the objects are equal and the values are equal, <code>false</code> otherwise
      */

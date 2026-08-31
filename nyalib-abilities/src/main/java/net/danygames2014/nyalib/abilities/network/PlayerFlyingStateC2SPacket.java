@@ -19,9 +19,9 @@ public class PlayerFlyingStateC2SPacket extends Packet implements ManagedPacket<
     public static final PacketType<PlayerFlyingStateC2SPacket> TYPE = PacketType.builder(false, true, PlayerFlyingStateC2SPacket::new).build();
 
     public boolean flying;
-    
+
     public PlayerFlyingStateC2SPacket() {
-        
+
     }
 
     public PlayerFlyingStateC2SPacket(boolean flying) {
@@ -50,11 +50,11 @@ public class PlayerFlyingStateC2SPacket extends Packet implements ManagedPacket<
     public void apply(NetworkHandler networkHandler) {
         SideUtil.run(() -> {}, () -> handleServer(networkHandler));
     }
-    
+
     @Environment(EnvType.SERVER)
     public void handleServer(NetworkHandler networkHandler) {
         PlayerEntity player = PlayerHelper.getPlayerFromPacketHandler(networkHandler);
-        
+
         if (player.nyalib$canFly()) {
             player.nyalib$setFlying(flying);
         } else {

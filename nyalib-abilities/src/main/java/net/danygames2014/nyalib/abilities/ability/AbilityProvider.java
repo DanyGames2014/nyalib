@@ -22,12 +22,12 @@ public class AbilityProvider {
     public final Identifier identifier;
     public final Entity entity;
     private final Reference2ObjectOpenHashMap<Ability<?, ?>, AbilityValue<?>> values;
-    
+
     public AbilityProvider(AbilityManager manager, Identifier identifier, Entity entity) {
         if (!AbilityRegistry.abilityProviderRegistered(identifier)) {
             throw new IllegalStateException("Ability provider " + identifier + " is not registered!");
         }
-        
+
         this.manager = manager;
         this.identifier = identifier;
         this.entity = entity;
@@ -47,6 +47,7 @@ public class AbilityProvider {
     /**
      * Retrives the value of the given ability in this provider
      * <p> Note: for retrieving the actual state of the ability, use {@link AbilityManager#get(Entity, Ability)}
+     *
      * @return the value of the given ability in this provider, or null if it is not set by this provider
      */
     @Nullable
@@ -70,53 +71,53 @@ public class AbilityProvider {
         values.clear();
         manager.markDirty(entity);
     }
-    
+
     public void writeNbt(NbtCompound nbt) {
         // If the identifier is null then something went wrong
         if (identifier == null) {
             NyaLib.LOGGER.warn("AbilityProvider identifier is null when saving!");
             return;
         }
-        
+
         nbt.putString("identifier", identifier.toString());
 
         NbtList valuesList = new NbtList();
         ObjectIterator<Reference2ObjectMap.Entry<Ability<?, ?>, AbilityValue<?>>> iterator = values.reference2ObjectEntrySet().fastIterator();
-        
+
         while (iterator.hasNext()) {
             Reference2ObjectMap.Entry<Ability<?, ?>, AbilityValue<?>> entry = iterator.next();
             NbtCompound valueNbt = new NbtCompound();
-            
+
             // Write the ability type
             Ability<?, ?> ability = entry.getKey();
             valueNbt.putString("abilityType", ability.identifier.toString());
-            
+
             // Write the value
             AbilityValue<?> value = entry.getValue();
             valueNbt.putString("valueType", AbilityValueTypeRegistry.CLASS_TO_TYPE.get(value.getClass()));
             value.writeNbt(valueNbt);
-            
+
             // Add to the list of values
             valuesList.add(valueNbt);
         }
-        
+
         nbt.put("values", valuesList);
     }
-    
+
     public void readNbt(NbtCompound nbt) {
         NbtList valuesList = nbt.getList("values");
         for (int i = 0; i < valuesList.size(); i++) {
             NbtCompound valueNbt = (NbtCompound) valuesList.get(i);
-            
+
             // Read the ability type
             Identifier abilityId = Identifier.of(valueNbt.getString("abilityType"));
-            
+
             Ability<?, ?> ability = AbilityRegistry.getAbility(abilityId);
             if (ability == null) {
                 NyaLib.LOGGER.error("Ability {} not found in registry. Has the modlist been changed? Skipping the loading of this ability.", abilityId);
                 continue;
             }
-            
+
             // Read the value
             AbilityValueFactory<?> valueFactory = AbilityValueTypeRegistry.TYPE_TO_FACTORY.get(valueNbt.getString("valueType"));
             if (valueFactory == null) {
@@ -129,7 +130,7 @@ public class AbilityProvider {
             // Add to the values
             values.put(ability, value);
         }
-        
+
         this.manager.markDirty(entity);
     }
 }

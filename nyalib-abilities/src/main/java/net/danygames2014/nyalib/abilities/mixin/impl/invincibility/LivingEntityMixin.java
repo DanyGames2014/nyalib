@@ -14,15 +14,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class LivingEntityMixin {
     @Inject(method = "damage", at = @At(value = "HEAD"), cancellable = true)
     public void negateDamage(Entity damageSource, int amount, CallbackInfoReturnable<Boolean> cir) {
-        if(AbilityManager.getInstance().get((LivingEntity) (Object) this, Abilities.INVINCIBILITY)) {
+        if (AbilityManager.getInstance().get((LivingEntity) (Object) this, Abilities.INVINCIBILITY)) {
             cir.setReturnValue(false);
-        };
+        }
     }
-    
+
     @Inject(method = "applyDamage", at = @At(value = "HEAD"), cancellable = true)
     public void negateApplyDamage(int amount, CallbackInfo ci) {
-        if(AbilityManager.getInstance().get((LivingEntity) (Object) this, Abilities.INVINCIBILITY)) {
+        if (AbilityManager.getInstance().get((LivingEntity) (Object) this, Abilities.INVINCIBILITY)) {
             ci.cancel();
-        };
+        }
     }
 }

@@ -47,7 +47,8 @@ public class AbilityManager {
     /**
      * Retrieves the value of an ability for an entity
      * <p> If it has not been computed yet, it will be computed
-     * @param entity The entity to retrieve the ability for
+     *
+     * @param entity  The entity to retrieve the ability for
      * @param ability The ability to retrieve the value of
      * @return The value of the ability for the entity or the default value if there are no providers for it
      */
@@ -64,10 +65,10 @@ public class AbilityManager {
             if (entity.world.isRemote) {
                 return ability.defaultValue.get();
             }
-            
+
             F abilityValue = compute(entity, ability);
             valueCache.put(ability, abilityValue);
-            
+
             return abilityValue;
         }
 
@@ -79,7 +80,7 @@ public class AbilityManager {
     private <F, H extends AbilityValue<F>, G extends Entity> F compute(G entity, Ability<G, H> ability) {
         Object2ObjectOpenHashMap<Identifier, AbilityProvider> providers = entity.getAbilityProviders();
         ObjectArrayList<H> values = new ObjectArrayList<>();
-        
+
         F value = null;
 
         // Query the values of all providers
@@ -93,7 +94,7 @@ public class AbilityManager {
                 values.add(provider.get(ability));
             }
         }
-        
+
         switch (ability.abilityRule) {
             case AND -> {
                 for (H providerValue : values) {
@@ -119,7 +120,7 @@ public class AbilityManager {
                 }
             }
         }
-        
+
         if (value == null) {
             value = ability.defaultValue.get();
         }
@@ -163,15 +164,15 @@ public class AbilityManager {
         if (entityCache == null) {
             return;
         }
-        
+
         entityCache.remove(ability);
-        
+
         if (ability.syncInstantly) {
             //noinspection unchecked
             get((G) entity, (Ability<G, H>) ability);
         }
     }
-    
+
     /**
      * Marks the entity ability dirty, forcing it to be recomputed next time it's requested
      */
@@ -180,7 +181,7 @@ public class AbilityManager {
         if (entityCache == null) {
             return;
         }
-        
+
         // Gather all the abilities that need to be instantly synced to the clients
         if (serverSide) {
             for (Ability<?, ?> ability : entityCache.keySet()) {

@@ -11,14 +11,15 @@ public class AbilityRegistry {
     // Abilities
     private final Object2ObjectOpenHashMap<Identifier, Ability<?, ?>> abilities = new Object2ObjectOpenHashMap<>();
     private final Reference2ObjectOpenHashMap<Ability<?, ?>, Identifier> abilityToIdentifier = new Reference2ObjectOpenHashMap<>();
-    
+
     // Ability Providers
     private final Object2ObjectOpenHashMap<Identifier, AbilityProviderFactory> abilityProviders = new Object2ObjectOpenHashMap<>();
-    
+
     // Ability Implementations
     private final Object2ObjectOpenHashMap<Identifier, AbilityImplementation<?>> abilityImplementations = new Object2ObjectOpenHashMap<>();
 
-    private AbilityRegistry() {}
+    private AbilityRegistry() {
+    }
 
     public static AbilityRegistry getInstance() {
         return INSTANCE;
@@ -48,7 +49,7 @@ public class AbilityRegistry {
     public static Identifier getIdentifier(Ability<?, ?> ability) {
         return INSTANCE.abilityToIdentifier.get(ability);
     }
-    
+
     // Ability Providers
     public static void registerAbilityProvider(Identifier identifier, AbilityProviderFactory factory) {
         AbilityRegistry r = INSTANCE;
@@ -64,11 +65,11 @@ public class AbilityRegistry {
         r.abilityProviders.put(identifier, factory);
         NyaLib.LOGGER.info("Registered ability provider {}", identifier);
     }
-    
+
     public static boolean abilityProviderRegistered(Identifier identifier) {
         return INSTANCE.abilityProviders.containsKey(identifier);
     }
-    
+
     public static AbilityProviderFactory getProviderFactory(Identifier identifier) {
         return INSTANCE.abilityProviders.getOrDefault(identifier, AbilityProvider::new);
     }
