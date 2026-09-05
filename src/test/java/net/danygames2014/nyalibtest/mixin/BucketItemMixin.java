@@ -30,7 +30,7 @@ public class BucketItemMixin extends Item implements CustomTooltipProvider {
         String fluidName = "Empty";
         
         if (stack.getItem() instanceof FluidBucket fluidBucket) {
-            Fluid fluid = fluidBucket.getFluid();
+            Fluid fluid = fluidBucket.getFluid(stack);
             if (fluid != null) {
                 fluidName = fluid.getTranslatedName();
             }

@@ -34,17 +34,17 @@ public class FluidCellItem extends TemplateItem implements FluidBucket {
 
 
     @Override
-    public Fluid getFluid() {
+    public Fluid getFluid(ItemStack stack) {
         return fluid;
     }
 
     @Override
-    public Item getEmptyBucketItem() {
+    public Item getEmptyBucketItem(ItemStack cursorStack) {
         return NyaLibTest.emptyCellItem;
     }
 
     @Override
-    public Item getFullBucketItem(Fluid fluid) {
+    public Item getFullBucketItem(Fluid fluid, ItemStack stack) {
         return FLUID_CELL_ITEMS.get(fluid);
     }
 
@@ -106,7 +106,7 @@ public class FluidCellItem extends TemplateItem implements FluidBucket {
                             world.setBlock(pos.x, pos.y, pos.z, this.fluid.getFlowingBlock().id, 0);
                         }
 
-                        return new ItemStack(this.getEmptyBucketItem());
+                        return new ItemStack(this.getEmptyBucketItem(stack));
                     }
                 }
             }

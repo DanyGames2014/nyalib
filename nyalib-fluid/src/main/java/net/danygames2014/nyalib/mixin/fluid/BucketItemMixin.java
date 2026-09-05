@@ -46,10 +46,10 @@ public class BucketItemMixin extends Item implements FluidBucket {
         int z = hitResult.blockZ;
 
         Fluid fluid = FluidRegistry.get(world.getBlockId(x, y, z));
-        if (fluid != null && this.getFullBucketItem(fluid) != null) {
+        if (fluid != null && this.getFullBucketItem(fluid, stack) != null) {
             world.setBlockState(x, y, z, States.AIR.get());
             SoundHelper.playSound(player, fluid.getFillSound(), 1.0F, 1.0F);
-            cir.setReturnValue(new ItemStack(this.getFullBucketItem(fluid)));
+            cir.setReturnValue(new ItemStack(this.getFullBucketItem(fluid, stack)));
         }
     }
 
@@ -63,7 +63,7 @@ public class BucketItemMixin extends Item implements FluidBucket {
 
     @Inject(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;setBlock(IIIII)Z", ordinal = 0), cancellable = true)
     public void playEmptySound(ItemStack stack, World world, PlayerEntity player, CallbackInfoReturnable<ItemStack> cir) {
-        Fluid fluid = getFluid();
+        Fluid fluid = getFluid(stack);
         
         if (fluid != null) {
             if (!fluid.isPlaceableInWorld()) {
@@ -75,7 +75,7 @@ public class BucketItemMixin extends Item implements FluidBucket {
     }
 
     @Override
-    public Fluid getFluid() {
+    public Fluid getFluid(ItemStack stack) {
         if (this.fluidBlockId < 0 && this.id == Item.MILK_BUCKET.id) {
             return Fluids.MILK;
         }
@@ -84,12 +84,12 @@ public class BucketItemMixin extends Item implements FluidBucket {
     }
 
     @Override
-    public Item getEmptyBucketItem() {
+    public Item getEmptyBucketItem(ItemStack cursorStack) {
         return Item.BUCKET;
     }
 
     @Override
-    public Item getFullBucketItem(Fluid fluid) {
+    public Item getFullBucketItem(Fluid fluid, ItemStack stack) {
         return fluid.getBucketItem();
     }
 }
