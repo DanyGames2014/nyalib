@@ -48,7 +48,7 @@ public class PlayerFlyingStateC2SPacket extends Packet implements ManagedPacket<
 
     @Override
     public void apply(NetworkHandler networkHandler) {
-        SideUtil.run(() -> {}, () -> handleServer(networkHandler));
+        SideUtil.runServer(() -> handleServer(networkHandler));
     }
 
     @Environment(EnvType.SERVER)

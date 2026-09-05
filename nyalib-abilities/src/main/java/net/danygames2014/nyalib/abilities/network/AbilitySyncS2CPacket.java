@@ -88,8 +88,7 @@ public class AbilitySyncS2CPacket extends Packet implements ManagedPacket<Abilit
 
     @Override
     public void apply(NetworkHandler networkHandler) {
-        SideUtil.run(() -> handleClient(networkHandler), () -> {
-        });
+        SideUtil.runClient(() -> handleClient(networkHandler));
     }
 
     @Environment(EnvType.CLIENT)

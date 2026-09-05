@@ -87,8 +87,7 @@ public class MultipartDataS2CPacket extends Packet implements ManagedPacket<Mult
 
     @Override
     public void apply(NetworkHandler networkHandler) {
-        SideUtil.run(() -> handleClient(networkHandler), () -> {
-        });
+        SideUtil.runClient(() -> handleClient(networkHandler));
     }
 
     // This will run on client

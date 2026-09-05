@@ -80,7 +80,7 @@ public class ScreenHandlerFluidSlotUpdateS2CPacket extends Packet implements Man
 
     @Override
     public void apply(NetworkHandler networkHandler) {
-        SideUtil.run(() -> handleClient(networkHandler), () -> {});
+        SideUtil.runClient(() -> handleClient(networkHandler));
     }
     
     @SuppressWarnings("RedundantLabeledSwitchRuleCodeBlock")

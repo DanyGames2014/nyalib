@@ -91,7 +91,7 @@ public class ClickFluidSlotC2SPacket extends Packet implements ManagedPacket<Cli
 
     @Override
     public void apply(NetworkHandler networkHandler) {
-        SideUtil.run(() -> {}, () -> handleServer(networkHandler));
+        SideUtil.runServer(() -> handleServer(networkHandler));
     }
 
     @Environment(EnvType.SERVER)

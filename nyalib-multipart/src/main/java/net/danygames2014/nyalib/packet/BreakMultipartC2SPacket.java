@@ -68,7 +68,7 @@ public class BreakMultipartC2SPacket extends Packet implements ManagedPacket<Bre
 
     @Override
     public void apply(NetworkHandler networkHandler) {
-        SideUtil.run(() -> {}, () -> handleServer(networkHandler));
+        SideUtil.runServer(() -> handleServer(networkHandler));
     }
 
     @Environment(EnvType.SERVER)

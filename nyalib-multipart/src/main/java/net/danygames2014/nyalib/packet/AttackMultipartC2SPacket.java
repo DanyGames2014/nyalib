@@ -63,7 +63,7 @@ public class AttackMultipartC2SPacket extends Packet implements ManagedPacket<At
 
     @Override
     public void apply(NetworkHandler networkHandler) {
-        SideUtil.run(() -> {}, () -> handleServer(networkHandler));
+        SideUtil.runServer(() -> handleServer(networkHandler));
     }
 
     @Environment(EnvType.SERVER)
