@@ -9,8 +9,6 @@
   "server": [
   ],
   "client": [
-    "templates.BakedModelManagerMixin",
-    "templates.JsonUnbakedModelAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

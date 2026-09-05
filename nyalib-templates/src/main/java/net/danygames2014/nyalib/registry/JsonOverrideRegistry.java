@@ -1,19 +1,18 @@
 package net.danygames2014.nyalib.registry;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.modificationstation.stationapi.api.util.Identifier;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 @Environment(EnvType.CLIENT)
 public class JsonOverrideRegistry {
-    public static final HashMap<Identifier, String> modelOverrides = new HashMap<>();
+    public static final Object2ObjectOpenHashMap<Identifier, String> modelOverrides = new Object2ObjectOpenHashMap<>();
 
-    public static final HashMap<Identifier, HashMap<String, Identifier>> modelTextureOverrides = new HashMap<>();
+    public static final Object2ObjectOpenHashMap<Identifier, Object2ObjectOpenHashMap<String, Identifier>> modelTextureOverrides = new Object2ObjectOpenHashMap<>();
 
-    public static final HashMap<Identifier, ArrayList<String>> blockstateOverrides = new HashMap<>();
+    public static final Object2ObjectOpenHashMap<Identifier, ObjectArrayList<String>> blockstateOverrides = new Object2ObjectOpenHashMap<>();
     
     // Item Model Override
     public static void registerItemModelOverride(Identifier itemIdentifier, String model) {
@@ -28,13 +27,9 @@ public class JsonOverrideRegistry {
     // Item Model Texture Override
     public static void registerItemModelTextureOverride(Identifier itemIdentifier, String texture, Identifier textureIdentifier) {
         Identifier identifier = Identifier.of(itemIdentifier.namespace + ":item/" + itemIdentifier.path + "#inventory");
-        
-        if (!modelTextureOverrides.containsKey(identifier)) {
-            modelTextureOverrides.put(identifier, new HashMap<>());
-        }
-        
-        HashMap<String, Identifier> textures = modelTextureOverrides.get(identifier);
-        textures.put(texture, textureIdentifier);
+
+        Object2ObjectOpenHashMap<String, Identifier> modelTextures = modelTextureOverrides.computeIfAbsent(identifier, (id) -> new Object2ObjectOpenHashMap<>());
+        modelTextures.put(texture, textureIdentifier);
     }
     
     public static void registerItemModelTextureOverride(String itemIdentifier, String texture, Identifier textureIdentifier) {
@@ -54,13 +49,9 @@ public class JsonOverrideRegistry {
     // Block Model Texture Override
     public static void registerBlockModelTextureOverride(Identifier blockIdentifier, String texture, Identifier textureIdentifier) {
         Identifier identifier = Identifier.of(blockIdentifier.namespace + ":block/" + blockIdentifier.path);
-        
-        if (!modelTextureOverrides.containsKey(identifier)) {
-            modelTextureOverrides.put(identifier, new HashMap<>());
-        }
 
-        HashMap<String, Identifier> textures = modelTextureOverrides.get(identifier);
-        textures.put(texture, textureIdentifier);
+        Object2ObjectOpenHashMap<String, Identifier> blockModelTextures = modelTextureOverrides.computeIfAbsent(identifier, (id) -> new Object2ObjectOpenHashMap<>());
+        blockModelTextures.put(texture, textureIdentifier);
     }
 
     public static void registerBlockModelTextureOverride(String blockIdentifier, String texture, Identifier textureIdentifier) {
@@ -69,13 +60,8 @@ public class JsonOverrideRegistry {
     
     // Blockstate Override
     public static void registerBlockstateOverride(Identifier blockIdentifier, String blockstate) {
-        Identifier identifier = Identifier.of(blockIdentifier.namespace + ":stationapi/blockstates/" + blockIdentifier.path + ".json");
-        
-        if (!blockstateOverrides.containsKey(identifier)) {
-            blockstateOverrides.put(identifier, new ArrayList<>());
-        }
-        
-        blockstateOverrides.get(identifier).add(blockstate);
+        ObjectArrayList<String> blockEntries = blockstateOverrides.computeIfAbsent(blockIdentifier, (id) -> new ObjectArrayList<>());
+        blockEntries.add(blockstate);
     }
 
     public static void registerBlockstateOverride(String blockIdentifier, String blockstate) {

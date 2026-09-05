@@ -18,7 +18,8 @@
     ],
     "stationapi:event_bus_client": [
       "net.danygames2014.nyalib.init.blocktemplates.UnbakedModelListener",
-      "net.danygames2014.nyalib.init.blocktemplates.RecipeListener"
+      "net.danygames2014.nyalib.init.blocktemplates.RecipeListener",
+      "net.danygames2014.nyalib.init.blocktemplates.RuntimeResourcesListener"
     ],
     "stationapi:event_bus_server": [
     ]
