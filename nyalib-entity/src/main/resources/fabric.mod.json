@@ -1,33 +1,30 @@
 {
   "schemaVersion": 1,
-  "id": "nyalib-compat",
+  "id": "nyalib-entity",
   "version": "${version}",
 
-  "name": "NyaLib Compat",
-  "description": "A module providing compatibility with other mods",
+  "name": "NyaLib Entity",
+  "description": "A module providing APIs for entities",
   "authors": [
     "DanyGames2014"
   ],
 
   "license": "MIT",
-  "icon": "assets/nyalib-compat/icon.png",
+  "icon": "assets/nyalib-entity/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "stationapi:event_bus": [
-      "net.danygames2014.nyalib.NyaLibCompat"
     ],
     "stationapi:event_bus_client": [
     ],
     "stationapi:event_bus_server": [
-    ],
-    "whatsthis": [
-      "net.danygames2014.nyalib.init.ProbeInfoProviderListener"
     ]
   },
   "mixins": [
-    "nyalib-compat.mixins.json"
+    "nyalib-entity.mixins.json"
   ],
+  "accessWidener": "nyalib-entity.accesswidener",
   "depends": {
     "minecraft": "1.0.0-beta.7.3"
   },
