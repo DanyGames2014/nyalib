@@ -1,1 +1,5 @@
 classTweaker v2 named
+
+accessible method net/minecraft/client/network/ClientNetworkHandler getEntity (I)Lnet/minecraft/entity/Entity;
+
+transitive-inject-interface net/minecraft/entity/Entity net/danygames2014/nyalib/entity/datatracker/mixininterface/NyaLibExtendedDataTrackerEntity

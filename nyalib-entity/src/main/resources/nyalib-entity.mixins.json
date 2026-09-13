@@ -4,8 +4,10 @@
   "package": "net.danygames2014.nyalib.entity.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "datatracker.EntityMixin"
   ],
   "server": [
+    "datatracker.EntityTrackerEntryMixin"
   ],
   "client": [
   ],
