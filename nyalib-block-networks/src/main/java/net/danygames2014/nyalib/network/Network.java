@@ -306,10 +306,8 @@ public class Network {
 
             // If the NBT data contains the blockId and the block is not loaded in world, use it to load the block definition
             if ((state.isAir() || block == null) && blockNbt.contains("blockId")) {
-                System.err.println("Block not found, loading from NBT: " + block);
                 Identifier blockId = Identifier.of(blockNbt.getString("blockId"));
                 block = BlockRegistry.INSTANCE.get(blockId);
-                System.err.println("Loaded block " + blockId + " -> " + block);
             }
             
             // Load the block into network
