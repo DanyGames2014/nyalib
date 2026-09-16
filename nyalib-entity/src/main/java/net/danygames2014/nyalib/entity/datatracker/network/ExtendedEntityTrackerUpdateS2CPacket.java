@@ -64,7 +64,6 @@ public class ExtendedEntityTrackerUpdateS2CPacket extends Packet implements Mana
             Entity entity = clientNetworkHandler.getEntity(this.entityId);
             if (entity != null) {
                 entity.getExtendedDataTracker().updateEntries(this.entries);
-                System.err.println("ExtendedDataTracker updated for entity " + entity.id);
             }
         }
     }

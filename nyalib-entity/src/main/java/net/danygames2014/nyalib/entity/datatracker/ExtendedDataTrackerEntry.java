@@ -23,7 +23,7 @@ public class ExtendedDataTrackerEntry {
         this.id = id;
         this.type = type;
         this.dirty = false;
-        type.read(this, stream);
+        type.readEntry(this, stream);
     }
 
     public Object getValue() {
@@ -36,5 +36,14 @@ public class ExtendedDataTrackerEntry {
     
     public void markDirty() {
         this.dirty = true;
+    }
+
+    @Override
+    public String toString() {
+        return "ExtendedDataTrackerEntry{" +
+                "id=" + id +
+                ", type=" + type +
+                ", value=" + value +
+                '}';
     }
 }

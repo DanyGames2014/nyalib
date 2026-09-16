@@ -15,7 +15,7 @@
   "environment": "*",
   "entrypoints": {
     "stationapi:event_bus": [
-      "net.danygames2014.nyalib.entity.datatracker.init.PacketTypeListener",
+      "net.danygames2014.nyalib.entity.datatracker.init.PacketListener",
       "net.danygames2014.nyalib.entity.datatracker.init.ExtendedDataTrackerListener"
     ],
     "stationapi:event_bus_client": [

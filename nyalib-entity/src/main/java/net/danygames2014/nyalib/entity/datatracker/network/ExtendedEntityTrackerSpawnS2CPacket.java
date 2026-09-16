@@ -65,7 +65,6 @@ public class ExtendedEntityTrackerSpawnS2CPacket extends Packet implements Manag
             Entity entity = clientNetworkHandler.getEntity(this.entityId);
             if (entity != null) {
                 entity.getExtendedDataTracker().updateEntries(this.entries);
-                System.err.println("ExtendedDataTracker initialized for spawned entity " + entity.id);
             }
         }
     }   

@@ -13,6 +13,11 @@ public class ShortExtendedDataTrackerDataType extends ExtendedDataTrackerDataTyp
     }
 
     @Override
+    public Short getDefaultValue() {
+        return 0;
+    }
+
+    @Override
     public void write(ExtendedDataTrackerEntry entry, DataOutputStream stream) throws IOException {
         stream.writeShort((Short) entry.getValue());
     }

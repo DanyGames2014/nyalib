@@ -7,23 +7,23 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class ByteExtendedDataTrackerDataType extends ExtendedDataTrackerDataType<Byte> {
-    public ByteExtendedDataTrackerDataType(Identifier id) {
+public class StringExtendedDataTrackerDataType extends ExtendedDataTrackerDataType<String> {
+    public StringExtendedDataTrackerDataType(Identifier id) {
         super(id);
     }
 
     @Override
-    public Byte getDefaultValue() {
-        return 0;
+    public String getDefaultValue() {
+        return null;
     }
 
     @Override
     public void write(ExtendedDataTrackerEntry entry, DataOutputStream stream) throws IOException {
-        stream.writeByte((Byte) entry.getValue());
+        stream.writeUTF((String) entry.getValue());
     }
 
     @Override
     public void read(ExtendedDataTrackerEntry entry, DataInputStream stream) throws IOException {
-        entry.setValue(stream.readByte());
+        entry.setValue(stream.readUTF());
     }
 }

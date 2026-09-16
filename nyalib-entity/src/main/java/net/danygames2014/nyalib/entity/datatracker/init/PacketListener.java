@@ -8,7 +8,7 @@ import net.mine_diver.unsafeevents.listener.EventListener;
 import net.modificationstation.stationapi.api.StationAPI;
 import net.modificationstation.stationapi.api.event.network.packet.PacketRegisterEvent;
 
-public class PacketTypeListener {
+public class PacketListener {
     @EventListener
     public void registerPackets(PacketRegisterEvent event) {
         StationAPI.EVENT_BUS.post(new ExtendedDataTrackerDataTypeRegistryEvent());
