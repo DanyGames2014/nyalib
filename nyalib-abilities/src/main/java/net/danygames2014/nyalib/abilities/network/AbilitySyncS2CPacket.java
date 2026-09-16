@@ -123,7 +123,6 @@ public class AbilitySyncS2CPacket extends Packet implements ManagedPacket<Abilit
         abilityValue.readNbt(abilityValueNbt);
 
         AbilityManager.getInstance().set(targetEntity, ability, abilityValue.get());
-        System.err.println("Received AbilitySyncS2CPacket: " + abilityIdentifier + " -> " + abilityValue.get());
     }
 
     @Override
