@@ -51,7 +51,7 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin implements Nya
         if (nyalib$flying && this.vehicle == null && AbilityManager.getInstance().get(playerEntity, Abilities.FLIGHT)) {
             double d3 = this.velocityY;
             float f = this.jumpMovementFactor;
-            this.jumpMovementFactor = AbilityManager.getInstance().get(playerEntity, Abilities.FLIGHT_SPEED); //* (float)(this.isSprinting() ? 2 : 1); TODO: Use CTRL to speed up flying
+            this.jumpMovementFactor = AbilityManager.getInstance().get(playerEntity, Abilities.FLIGHT_SPEED);
             original.call(instance, x, z);
             this.velocityY = d3 * 0.6;
             this.jumpMovementFactor = f;
@@ -65,10 +65,10 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin implements Nya
     @Override
     public float modifySpeedInAir(float original) {
         if (jumpMovementFactor != 0.02F) {
-            return jumpMovementFactor;
+            return (original - 0.02F) + jumpMovementFactor;
         }
 
-        return super.modifySpeedInAir(original);
+        return original;
     }
 
     @WrapWithCondition(method = "onLanding", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;onLanding(F)V"))
