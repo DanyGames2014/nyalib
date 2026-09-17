@@ -37,41 +37,40 @@ allprojects {
     }
 
     repositories {
-        // Used for Babric Loom Extensions
-        maven {
-            name = "Babric"
-            url = "https://maven.glass-launcher.net/babric"
-        }
-        
         // NyaRepo
         maven {
             name = "NyaRepo"
             url = "https://maven.fildand.cz/releases"
         }
 
-        // Used for many dependencies
+        // MeowRepo
+        maven {
+            name = "MeowRepo"
+            url = "https://maven.danygames2014.net/releases"
+        }
+
+        // Used for Babric Loom and Intermediary
+        maven {
+            name = "Babric"
+            url = "https://maven.glass-launcher.net/babric"
+        }
+
+        // Glass Maven Releases
         maven {
             name = "Glass Releases"
             url = "https://maven.glass-launcher.net/releases"
         }
 
-        // Used for Snapshots
+        // Glass Maven Snapshots
         maven {
             name = "Glass Snapshots"
             url = "https://maven.glass-launcher.net/snapshots"
         }
 
-
-        // Used for a StationAPI dependency.
+        // Used for a net.jodah.typetools (StationAPI dependency)
         maven {
             name = "Froge Maven"
             url = "https://maven.minecraftforge.net/"
-        }
-
-        // Used for projects that do not have a maven repository, but do have a GitHub repository with working build scripts.
-        maven {
-            name = "Jitpack"
-            url = "https://jitpack.io"
         }
 
         // Modrinth Maven
@@ -89,6 +88,12 @@ allprojects {
         }
 
         mavenCentral()
+        
+        // Used for projects that do not have a maven repository, but do have a GitHub repository with working build scripts.
+        maven {
+            name = "Jitpack"
+            url = "https://jitpack.io"
+        }
     }
 
     configurations {
