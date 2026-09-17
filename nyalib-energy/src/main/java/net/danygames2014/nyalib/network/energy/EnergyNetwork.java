@@ -24,7 +24,6 @@ public class EnergyNetwork extends Network {
     // The energy flow values in the last tick
     private final Object2ObjectOpenHashMap<Vec3i, EnergyFlowEntry> energyFlow;
 
-    // TODO: use a bit-mask to eliminate the evil's of division
     private static int energyNetworkCount = 0;
     private final int updateCheckOffset;
     
@@ -33,7 +32,7 @@ public class EnergyNetwork extends Network {
         
         // Offseting the updates to distribute them evenly among ticks
         energyNetworkCount++;
-        this.updateCheckOffset = energyNetworkCount % 30;
+        this.updateCheckOffset = energyNetworkCount & 0b00011111;
         
         consumerCache = new Object2ObjectOpenHashMap<>();
         consumerPathCache = new Object2ObjectOpenHashMap<>();
@@ -51,7 +50,7 @@ public class EnergyNetwork extends Network {
     public void tick() {
         super.tick();
 
-        if ((world.getTime() % 30) == this.updateCheckOffset) {
+        if ((world.getTime() & 0b00011111) == this.updateCheckOffset) {
             if (checkLoadedChanged()) {
                 update();
             }
