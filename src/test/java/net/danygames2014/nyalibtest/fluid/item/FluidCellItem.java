@@ -113,7 +113,7 @@ public class FluidCellItem extends TemplateItem implements FluidBucket {
             
             case ENTITY -> {
                 if (this.fluid == null && hitResult.entity instanceof CowEntity) {
-                    return new ItemStack(NyaLibTest.milkCellItem);
+                    return new ItemStack(FLUID_CELL_ITEMS.get(Fluids.MILK));
                 }
             }
         }

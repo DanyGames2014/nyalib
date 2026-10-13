@@ -8,6 +8,7 @@ import net.danygames2014.nyalib.event.NetworkTypeRegistryEvent;
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.danygames2014.nyalib.fluid.FluidBuilder;
 import net.danygames2014.nyalib.fluid.FluidRegistry;
+import net.danygames2014.nyalib.fluid.Fluids;
 import net.danygames2014.nyalib.network.NetworkType;
 import net.danygames2014.nyalibtest.abilities.AbilityStick;
 import net.danygames2014.nyalibtest.abilities.FireImmunityStick;
@@ -26,6 +27,7 @@ import net.danygames2014.nyalibtest.fluid.entity.FluidTankBlockEntity;
 import net.danygames2014.nyalibtest.fluid.entity.InfiniteWaterBlockEntity;
 import net.danygames2014.nyalibtest.fluid.entity.ManagedFluidTankBlockEntity;
 import net.danygames2014.nyalibtest.fluid.entity.SimpleFluidTankBlockEntity;
+import net.danygames2014.nyalibtest.fluid.item.CopperBucketItem;
 import net.danygames2014.nyalibtest.fluid.item.FluidCellItem;
 import net.danygames2014.nyalibtest.fluid.item.FluidPipetteItem;
 import net.danygames2014.nyalibtest.fluid.item.ManagedFluidPipetteItem;
@@ -93,12 +95,9 @@ public class NyaLibTest {
     public static Item fluidPippeteItem;
     public static Item managedfluidPipetteItem;
     public static Item emptyCellItem;
-    public static Item waterCellItem;
-    public static Item lavaCellItem;
-    public static Item milkCellItem;
-    public static Item fuelCellItem;
-    public static Item glowstoneCellItem;
-    public static Item gravelCellItem;
+    public static Item copperBucketItem;
+    public static Item waterCopperBucketItem;
+    public static Item milkCopperBucketItem;
 
     public static Item itemWithCustomOutlineRenderer;
 
@@ -252,6 +251,10 @@ public class NyaLibTest {
             String id = fluid.getIdentifier().namespace + "_" + fluid.getIdentifier().path + "_cell";
             new FluidCellItem(NAMESPACE.id(id), fluid).setTranslationKey(NAMESPACE, id);
         }
+        
+        copperBucketItem = new CopperBucketItem(NAMESPACE.id("copper_bucket"), 0).registerAutomaticModel();
+        waterCopperBucketItem = new CopperBucketItem(NAMESPACE.id("water_copper_bucket"), Fluids.WATER.getFlowingBlock().id).registerAutomaticModel();
+        milkCopperBucketItem = new CopperBucketItem(NAMESPACE.id("milk_copper_bucket"), Fluids.MILK.getFlowingBlock().id).registerAutomaticModel();
 
         multipartItem = new MultipartItem(NAMESPACE.id("multipart_item")).setTranslationKey(NAMESPACE, "multipart_item");
         stoneCoverMultipartItem = new CoverMultipartItem(NAMESPACE.id("stone_cover"), Block.STONE).setTranslationKey(NAMESPACE, "stone_cover");

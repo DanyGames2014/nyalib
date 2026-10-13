@@ -1,5 +1,7 @@
 package net.danygames2014.nyalib.mixin.fluid;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.danygames2014.nyalib.NyaLib;
 import net.danygames2014.nyalib.fluid.Fluid;
@@ -46,10 +48,18 @@ public class BucketItemMixin extends Item implements FluidBucket {
         int z = hitResult.blockZ;
 
         Fluid fluid = FluidRegistry.get(world.getBlockId(x, y, z));
-        if (fluid != null && this.getFullBucketItem(fluid, stack) != null) {
+        if (fluid != null) {
+            Item fullBucket = this.getFullBucketItem(fluid, stack);
+            
+            // If there is no full bucket item, return the original stack
+            if (fullBucket == null) {
+                cir.setReturnValue(stack);
+                return;
+            }
+            
             world.setBlockState(x, y, z, States.AIR.get());
             SoundHelper.playSound(player, fluid.getFillSound(), 1.0F, 1.0F);
-            cir.setReturnValue(new ItemStack(this.getFullBucketItem(fluid, stack)));
+            cir.setReturnValue(new ItemStack(fullBucket));
         }
     }
 
@@ -73,7 +83,12 @@ public class BucketItemMixin extends Item implements FluidBucket {
             SoundHelper.playSound(world, player.x, player.y, player.z, fluid.getEmptySound(), 0.5F, 1.0F, 16);
         }
     }
-
+    
+    @WrapOperation(method = "use", at = @At(value = "FIELD", target = "Lnet/minecraft/item/Item;BUCKET:Lnet/minecraft/item/Item;", ordinal = 1, opcode = Opcodes.GETSTATIC))
+    public Item overrideEmptyBucketReturn(Operation<Item> original, @Local(argsOnly = true, ordinal = 0) ItemStack stack) {
+        return this.getEmptyBucketItem(stack);
+    }
+    
     @Override
     public Fluid getFluid(ItemStack stack) {
         if (this.fluidBlockId < 0 && this.id == Item.MILK_BUCKET.id) {
