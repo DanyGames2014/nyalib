@@ -9,23 +9,32 @@ public class Abilities {
      * <p> Applicable to entities extending {@link net.minecraft.entity.LivingEntity}
      */
     public static FireImmunityAbility FIRE_IMMUNITY;
+    
     /**
      * Allows the player to double jump to initiate creative-like flight
      * <p> Applicable to entities extending {@link net.minecraft.entity.player.PlayerEntity}
      */
     public static FlightAbility FLIGHT;
+    
     /**
      * If the player can fly, determines the speed of the player's flight
      * <p> Applicable to entities extending {@link net.minecraft.entity.player.PlayerEntity}
      */
     public static FlightSpeedAbility FLIGHT_SPEED;
+    
     /**
      * Makes the entity invincible to any kind of damage
      * <p> Applicable to entities extending {@link net.minecraft.entity.LivingEntity}
      */
     public static InvincibilityAbility INVINCIBILITY;
-    
+
     // TODO: Extra Hearts Ability
+    /**
+     * Grants the entity extra hearts 
+     * <p> Applicable to entities extending {@link net.minecraft.entity.LivingEntity}
+     */
+    public static ExtraHeartsAbility EXTRA_HEARTS;
+    
     // TODO: Sprint Ability
     // TODO: Reach Ability
     // TODO: Step Height Ability

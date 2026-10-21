@@ -10,10 +10,7 @@ import net.danygames2014.nyalib.fluid.FluidBuilder;
 import net.danygames2014.nyalib.fluid.FluidRegistry;
 import net.danygames2014.nyalib.fluid.Fluids;
 import net.danygames2014.nyalib.network.NetworkType;
-import net.danygames2014.nyalibtest.abilities.AbilityStick;
-import net.danygames2014.nyalibtest.abilities.FireImmunityStick;
-import net.danygames2014.nyalibtest.abilities.FlightStick;
-import net.danygames2014.nyalibtest.abilities.InvincibilityStick;
+import net.danygames2014.nyalibtest.abilities.*;
 import net.danygames2014.nyalibtest.capability.block.ItemHandlerBlockCapabilityTesterBlock;
 import net.danygames2014.nyalibtest.capability.item.YoinkerItem;
 import net.danygames2014.nyalibtest.energy.*;
@@ -143,6 +140,7 @@ public class NyaLibTest {
     public static Item fireImmunityStick;
     public static Item flightStick;
     public static Item invicibilityStick;
+    public static Item extraHeartsStick;
 
     public static NetworkType basicNetworkType;
 
@@ -271,6 +269,7 @@ public class NyaLibTest {
         fireImmunityStick = new FireImmunityStick(NAMESPACE.id("fire_immunity_stick"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
         flightStick = new FlightStick(NAMESPACE.id("flight_stick"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
         invicibilityStick = new InvincibilityStick(NAMESPACE.id("invincibility_stick"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
+        extraHeartsStick = new ExtraHeartsStick(NAMESPACE.id("extra_hearts_stick"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
     }
 
     @EventListener
