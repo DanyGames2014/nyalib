@@ -10,6 +10,7 @@
     "datatracker.EntityTrackerEntryMixin"
   ],
   "client": [
+    "InGameHudMixin"
   ],
   "injectors": {
     "defaultRequire": 1
