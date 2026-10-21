@@ -29,7 +29,7 @@ public abstract class MultipartWorldMixin implements MultipartWorld, StationFlat
     private ObjectOpenHashSet<TickableComponent> tickableComponents;
 
     @Unique
-    private ObjectOpenHashSet<MultipartTickScheduler> tickSchedulers;
+    private final ObjectOpenHashSet<MultipartTickScheduler> tickSchedulers = new ObjectOpenHashSet<>();
 
     @Inject(method = "tickEntities", at = @At("TAIL"))
     public void tickMultipartComponents(CallbackInfo ci) {
@@ -59,7 +59,6 @@ public abstract class MultipartWorldMixin implements MultipartWorld, StationFlat
     )
     public void initializeMultipartComponentLists(CallbackInfo ci) {
         tickableComponents = new ObjectOpenHashSet<>();
-        tickSchedulers = new ObjectOpenHashSet<>();
     }
 
     @Override
