@@ -35,8 +35,10 @@ public class InGameHudMixin extends DrawContext {
             return;
         }
 
-        int currentIndex = heartsIndex - 1;
-        int prevIndex = heartsIndex - 2;
+        int heartTextures = 11;
+
+        int currentIndex = (heartsIndex - 1) % (heartTextures - 1);
+        int prevIndex = (heartsIndex - 2) % (heartTextures - 1);
 
         for(int i = 0; i < 10; ++i) {
             int x = scaledWidth / 2 - 91 + i * 8;
@@ -61,18 +63,5 @@ public class InGameHudMixin extends DrawContext {
             }
         }
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, minecraft.textureManager.getTextureId("/gui/icons.png"));
-    }
-
-    public void drawTextureColored(int x, int y, int u, int v, int width, int height, int color) {
-        float var7 = 0.00390625F;
-        float var8 = 0.00390625F;
-        Tessellator var9 = Tessellator.INSTANCE;
-        var9.startQuads();
-        var9.color(color);
-        var9.vertex((double)(x + 0), (double)(y + height), (double)this.zOffset, (double)((float)(u + 0) * var7), (double)((float)(v + height) * var8));
-        var9.vertex((double)(x + width), (double)(y + height), (double)this.zOffset, (double)((float)(u + width) * var7), (double)((float)(v + height) * var8));
-        var9.vertex((double)(x + width), (double)(y + 0), (double)this.zOffset, (double)((float)(u + width) * var7), (double)((float)(v + 0) * var8));
-        var9.vertex((double)(x + 0), (double)(y + 0), (double)this.zOffset, (double)((float)(u + 0) * var7), (double)((float)(v + 0) * var8));
-        var9.draw();
     }
 }

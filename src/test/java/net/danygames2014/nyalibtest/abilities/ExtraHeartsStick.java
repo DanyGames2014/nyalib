@@ -48,7 +48,7 @@ public class ExtraHeartsStick extends TemplateItem implements InventoryAbilityIt
     @Override
     public AbilityValue<?> getAbilityValue(Ability<?, ?> ability, PlayerEntity player, PlayerInventory playerInventory, ItemStack stack, InventoryAbilityItemSlot slotType, int slot) {
         if (ability == Abilities.EXTRA_HEARTS) {
-            return IntAbilityValue.of(200);
+            return IntAbilityValue.of(2000);
         }
         
         return IntAbilityValue.of(0);
