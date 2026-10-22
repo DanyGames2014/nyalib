@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.render.Tessellator;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,9 +21,6 @@ public class InGameHudMixin extends DrawContext {
     @Unique
     private final int[] heartHeights = new int[10];
 
-    @Unique
-    private final int[] colors = new int[] {0xFF0000, 0x00FFFF, 0x0000FF, 0x00FF00};
-
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(IIIIII)V", ordinal = 6))
     public void nyalibGetHeartHeights(float tickDelta, boolean screenOpen, int mouseX, int mouseY, CallbackInfo ci, @Local(name = "var16") int index, @Local(name = "var17") int height) {
         heartHeights[index] = height;
@@ -37,11 +35,8 @@ public class InGameHudMixin extends DrawContext {
             return;
         }
 
-        int heartColor = colors[heartsIndex % colors.length];
-        int prevHeartColor = 0;
-        if(heartsIndex > 1) {
-            prevHeartColor = colors[(heartsIndex - 1) % colors.length];
-        }
+        int currentIndex = heartsIndex - 1;
+        int prevIndex = heartsIndex - 2;
 
         for(int i = 0; i < 10; ++i) {
             int x = scaledWidth / 2 - 91 + i * 8;
@@ -49,24 +44,35 @@ public class InGameHudMixin extends DrawContext {
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, minecraft.textureManager.getTextureId("/assets/nyalib-entity/stationapi/textures/gui/heart.png"));
 
             if(heartsIndex > 1) {
-                GL11.glColor3f((float) ((prevHeartColor >> 16) & 0xFF) / 255.0f, (float) ((prevHeartColor >> 8) & 0xFF) / 255.0f, (float) (prevHeartColor & 0xFF) / 255.0f);
-                this.drawTexture(x, heartHeights[i], 0, 0, 9, 9);
+                int prevU = prevIndex * 18;
+                this.drawTexture(x, heartHeights[i], prevU, 0, 9, 9);
             }
 
             int healthForFull = (i * 2) + 2;
             int healthForHalf = (i * 2) + 1;
 
             if (remainder >= healthForHalf) {
-                GL11.glColor3f((float) ((heartColor >> 16) & 0xFF) / 255.0f, (float) ((heartColor >> 8) & 0xFF) / 255.0f, (float) (heartColor & 0xFF) / 255.0f);
-
+                int currentU = currentIndex * 18;
                 if (remainder >= healthForFull) {
-                    this.drawTexture(x, heartHeights[i], 0, 0, 9, 9);
+                    this.drawTexture(x, heartHeights[i], currentU, 0, 9, 9);
                 } else {
-                    this.drawTexture(x, heartHeights[i], 9, 0, 9, 9);
+                    this.drawTexture(x, heartHeights[i], currentU + 9, 0, 9, 9);
                 }
             }
         }
-        GL11.glColor3f(1f, 1f, 1f);
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, minecraft.textureManager.getTextureId("/gui/icons.png"));
+    }
+
+    public void drawTextureColored(int x, int y, int u, int v, int width, int height, int color) {
+        float var7 = 0.00390625F;
+        float var8 = 0.00390625F;
+        Tessellator var9 = Tessellator.INSTANCE;
+        var9.startQuads();
+        var9.color(color);
+        var9.vertex((double)(x + 0), (double)(y + height), (double)this.zOffset, (double)((float)(u + 0) * var7), (double)((float)(v + height) * var8));
+        var9.vertex((double)(x + width), (double)(y + height), (double)this.zOffset, (double)((float)(u + width) * var7), (double)((float)(v + height) * var8));
+        var9.vertex((double)(x + width), (double)(y + 0), (double)this.zOffset, (double)((float)(u + width) * var7), (double)((float)(v + 0) * var8));
+        var9.vertex((double)(x + 0), (double)(y + 0), (double)this.zOffset, (double)((float)(u + 0) * var7), (double)((float)(v + 0) * var8));
+        var9.draw();
     }
 }
