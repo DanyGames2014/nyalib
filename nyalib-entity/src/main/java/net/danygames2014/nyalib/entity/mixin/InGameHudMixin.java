@@ -22,12 +22,12 @@ public class InGameHudMixin extends DrawContext {
     private final int[] heartHeights = new int[10];
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(IIIIII)V", ordinal = 6))
-    public void nyalibGetHeartHeights(float tickDelta, boolean screenOpen, int mouseX, int mouseY, CallbackInfo ci, @Local(name = "var16") int index, @Local(name = "var17") int height) {
+    public void getHeartHeights(float tickDelta, boolean screenOpen, int mouseX, int mouseY, CallbackInfo ci, @Local(name = "var16") int index, @Local(name = "var17") int height) {
         heartHeights[index] = height;
     }
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/ClientPlayerEntity;isInFluid(Lnet/minecraft/block/material/Material;)Z", shift = At.Shift.BEFORE))
-    public void nyalibRenderHearts(float tickDelta, boolean screenOpen, int mouseX, int mouseY, CallbackInfo ci, @Local(name = "var6") int scaledWidth) {
+    public void renderHearts(float tickDelta, boolean screenOpen, int mouseX, int mouseY, CallbackInfo ci, @Local(name = "var6") int scaledWidth) {
         int heartsIndex = (int)Math.floor((double) minecraft.player.health / 20);
         int remainder = minecraft.player.health % 20;
 
