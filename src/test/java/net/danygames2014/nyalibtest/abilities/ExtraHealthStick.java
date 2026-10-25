@@ -32,7 +32,7 @@ public class ExtraHealthStick extends TemplateItem implements InventoryAbilityIt
         if (user.isSneaking()) {
             user.sendMessage("Extra hearts ability from manager " + managerValue);
         } else {
-            user.sendMessage("Health: " + user.health + "/" + (20 + managerValue));
+            user.sendMessage("Health: " + user.health + "/" + user.getMaxHealth());
         }
         
         return stack;
