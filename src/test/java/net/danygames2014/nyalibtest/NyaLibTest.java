@@ -269,7 +269,7 @@ public class NyaLibTest {
         fireImmunityStick = new FireImmunityStick(NAMESPACE.id("fire_immunity_stick"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
         flightStick = new FlightStick(NAMESPACE.id("flight_stick"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
         invicibilityStick = new InvincibilityStick(NAMESPACE.id("invincibility_stick"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
-        extraHeartsStick = new ExtraHeartsStick(NAMESPACE.id("extra_hearts_stick"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
+        extraHeartsStick = new ExtraHealthStick(NAMESPACE.id("extra_hearts_stick"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
     }
 
     @EventListener

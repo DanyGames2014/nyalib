@@ -28,9 +28,9 @@ public class AbilityListener {
         Abilities.INVINCIBILITY.setSyncType(AbilitySyncType.PLAYER_ONLY);
         event.registerAbility(Abilities.INVINCIBILITY);
         
-        Abilities.EXTRA_HEARTS = new ExtraHeartsAbility(NyaLib.NAMESPACE.id("extra_hearts"));
-        Abilities.EXTRA_HEARTS.setSyncType(AbilitySyncType.ALL);
-        event.registerAbility(Abilities.EXTRA_HEARTS);
+        Abilities.EXTRA_HEALTH = new ExtraHealthAbility(NyaLib.NAMESPACE.id("extra_hearts"));
+        Abilities.EXTRA_HEALTH.setSyncType(AbilitySyncType.ALL);
+        event.registerAbility(Abilities.EXTRA_HEALTH);
 
         event.registerAbilityProvider(NyaLib.NAMESPACE.id("inventory"), MultipleValueAbilityProvider::new);
     }

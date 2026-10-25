@@ -14,10 +14,10 @@ import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.template.item.TemplateItem;
 import net.modificationstation.stationapi.api.util.Identifier;
 
-public class ExtraHeartsStick extends TemplateItem implements InventoryAbilityItem {
+public class ExtraHealthStick extends TemplateItem implements InventoryAbilityItem {
     Identifier providerId;
     
-    public ExtraHeartsStick(Identifier identifier, Identifier providerId) {
+    public ExtraHealthStick(Identifier identifier, Identifier providerId) {
         super(identifier);
         this.providerId = providerId;
     }
@@ -27,12 +27,12 @@ public class ExtraHeartsStick extends TemplateItem implements InventoryAbilityIt
         if (world.isRemote) {
             return stack;
         }
-        
+
+        Integer managerValue = AbilityManager.getInstance().get(user, Abilities.EXTRA_HEALTH);
         if (user.isSneaking()) {
-            Integer managerValue = AbilityManager.getInstance().get(user, Abilities.EXTRA_HEARTS);
             user.sendMessage("Extra hearts ability from manager " + managerValue);
         } else {
-            user.sendMessage("Health: " + user.health + "/" + user.maxHealth);
+            user.sendMessage("Health: " + user.health + "/" + (20 + managerValue));
         }
         
         return stack;
@@ -41,14 +41,14 @@ public class ExtraHeartsStick extends TemplateItem implements InventoryAbilityIt
     @Override
     public Ability<?, ?>[] getProvidedAbilities(PlayerEntity player, InventoryAbilityItemSlot slotType) {
         return new Ability[] {
-                Abilities.EXTRA_HEARTS
+                Abilities.EXTRA_HEALTH
         };
     }
 
     @Override
     public AbilityValue<?> getAbilityValue(Ability<?, ?> ability, PlayerEntity player, PlayerInventory playerInventory, ItemStack stack, InventoryAbilityItemSlot slotType, int slot) {
-        if (ability == Abilities.EXTRA_HEARTS) {
-            return IntAbilityValue.of(2000);
+        if (ability == Abilities.EXTRA_HEALTH) {
+            return IntAbilityValue.of(200);
         }
         
         return IntAbilityValue.of(0);

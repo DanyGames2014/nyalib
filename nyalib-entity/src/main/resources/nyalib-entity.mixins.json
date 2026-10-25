@@ -10,7 +10,7 @@
     "datatracker.EntityTrackerEntryMixin"
   ],
   "client": [
-    "InGameHudMixin"
+    "maxhealth.InGameHudMixin"
   ],
   "injectors": {
     "defaultRequire": 1

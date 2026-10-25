@@ -28,12 +28,11 @@ public class Abilities {
      */
     public static InvincibilityAbility INVINCIBILITY;
 
-    // TODO: Extra Hearts Ability
     /**
-     * Grants the entity extra hearts 
+     * Grants the entity extra health 
      * <p> Applicable to entities extending {@link net.minecraft.entity.LivingEntity}
      */
-    public static ExtraHeartsAbility EXTRA_HEARTS;
+    public static ExtraHealthAbility EXTRA_HEALTH;
     
     // TODO: Sprint Ability
     // TODO: Reach Ability
