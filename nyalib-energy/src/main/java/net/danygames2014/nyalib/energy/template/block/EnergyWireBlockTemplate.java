@@ -24,10 +24,18 @@ public abstract class EnergyWireBlockTemplate extends TemplateBlock implements N
 
     @Override
     public boolean canConnectTo(World world, int x, int y, int z, @Nullable Network network, Direction direction) {
-        if (world.getBlockEntity(x + direction.getOffsetX(), y + direction.getOffsetY(), z + direction.getOffsetZ()) instanceof EnergyCapable energyCapable) {
+        int otherX = x + direction.getOffsetX();
+        int otherY = y + direction.getOffsetY();
+        int otherZ = z + direction.getOffsetZ();
+        
+        if (world.getBlockState(otherX, otherY, otherZ).getBlock() instanceof EnergyConductor) {
+            return NetworkNodeComponent.super.canConnectTo(world, x, y, z, network, direction);
+        }
+        
+        if (world.getBlockEntity(otherX, otherY, otherZ) instanceof EnergyCapable energyCapable) {
             return energyCapable.canConnectEnergy(direction.getOpposite());
         }
         
-        return NetworkNodeComponent.super.canConnectTo(world, x, y, z, network, direction);
+        return false;
     }
 }
