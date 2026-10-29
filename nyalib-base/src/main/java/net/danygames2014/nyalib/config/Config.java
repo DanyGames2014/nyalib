@@ -10,6 +10,6 @@ public class Config {
     
     public static class FluidConfig {
         @ConfigEntry(name = "Allow Placing Milk In World", description = "If enabled, milk can be placed in the world", requiresRestart = true, multiplayerSynced = true)
-        public Boolean allowPlacingMilkInWorld = false;
+        public Boolean allowPlacingMilkInWorld = true;
     }
 }
