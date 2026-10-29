@@ -27,5 +27,6 @@
   * Allows entities to have abilities provided either by custom providers or by items in their inventory
   * Items can implemented the InventoryAbilityItem
   * Mods can register custom abilities
-  * By default provides: Fire Immunity, Flight, Flight Speed, Invincibility
+  * By default provides: Fire Immunity, Flight, Flight Speed, Invincibility, Extra Health
   * If multiple mods provide the same ability, the result ability value depends on the rule set by the ability
+* Fix EnergyWireBlockTemplate not really caring about EnergyCapable.canConnectEnergy
