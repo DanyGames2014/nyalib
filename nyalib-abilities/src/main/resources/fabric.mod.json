@@ -25,10 +25,10 @@
     "stationapi:event_bus_server": [
     ]
   },
+  "accessWidener": "nyalib-abilities.accesswidener",
   "mixins": [
     "nyalib-abilities.mixins.json"
   ],
-  "accessWidener": "nyalib-abilities.accesswidener",
   "depends": {
     "minecraft": "1.0.0-beta.7.3"
   },

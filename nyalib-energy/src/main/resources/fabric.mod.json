@@ -25,6 +25,7 @@
     "stationapi:event_bus_server": [
     ]
   },
+  "accessWidener": "nyalib-energy.accesswidener",
   "mixins": [
     "nyalib-energy.mixins.json"
   ],

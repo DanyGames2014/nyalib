@@ -27,10 +27,10 @@
       "net.danygames2014.nyalib.NyaLib"
     ]
   },
+  "accessWidener": "nyalib-base.accesswidener",
   "mixins": [
     "nyalib-base.mixins.json"
   ],
-  "accessWidener": "nyalib-base.accesswidener",
   "depends": {
     "minecraft": "1.0.0-beta.7.3"
   },
