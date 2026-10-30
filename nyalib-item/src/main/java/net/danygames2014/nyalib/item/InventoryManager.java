@@ -72,6 +72,14 @@ public class InventoryManager {
             return false;
         }
         
+        if (stack == null) {
+            if (!entry.isItemAllowed(null)) {
+                return false;
+            }
+        } else if (!entry.isItemAllowed(stack.getItem())) {
+            return false;
+        }
+        
         entry.stack = stack;
         return true;
     }
@@ -164,7 +172,7 @@ public class InventoryManager {
         
         // Allow checks
         public boolean isItemAllowed(Item item) {
-            return allowedItems == null || allowedItems.contains(item);
+            return allowedItems == null || allowedItems.contains(item) || item == null;
         }
         
         public boolean isSideAllowed(@Nullable Direction side) {
