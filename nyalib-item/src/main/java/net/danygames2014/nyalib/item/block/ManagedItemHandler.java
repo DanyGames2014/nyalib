@@ -134,6 +134,7 @@ public interface ManagedItemHandler extends ItemHandler {
     // ItemCapable
     @Override
     default boolean canConnectItem(Direction side) {
+        // TODO: scan the inventory manager to see if there is any slot exposes to this side
         return true;
     }
 

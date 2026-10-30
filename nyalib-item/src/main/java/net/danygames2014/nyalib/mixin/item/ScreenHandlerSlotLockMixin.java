@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 
 @Mixin(ScreenHandler.class)
-public class ScreenHandlerMixin {
+public class ScreenHandlerSlotLockMixin {
     @SuppressWarnings("rawtypes")
     @Shadow
     public List slots;

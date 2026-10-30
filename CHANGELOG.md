@@ -30,3 +30,6 @@
   * By default provides: Fire Immunity, Flight, Flight Speed, Invincibility, Extra Health
   * If multiple mods provide the same ability, the result ability value depends on the rule set by the ability
 * Fix EnergyWireBlockTemplate not really caring about EnergyCapable.canConnectEnergy
+* InventoryManager and TankManager now check isItemAllowed and isFluidAllowed
+* Allow placing milk in world by default
+* ScreenHandler will no longer void an item if it cannot be inserted into a Managed Inventory
