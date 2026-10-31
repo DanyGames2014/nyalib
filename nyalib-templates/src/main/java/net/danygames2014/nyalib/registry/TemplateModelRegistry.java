@@ -230,6 +230,8 @@ public class TemplateModelRegistry {
         // TODO: Flower Pots
     }
     
+    // TODO: Leaves, swipe the code from GlassTek
+    
     public static void registerPane(Identifier blockIdentifier, Identifier texture, Identifier edgeTexture) {
         panes.put(blockIdentifier, new ObjectObjectImmutablePair<>(texture, edgeTexture));
         

@@ -134,6 +134,10 @@ public class EnergyNetwork extends Network {
     private final ObjectArrayList<ConsumerPath> validConsumers = new ObjectArrayList<>(10);
     private final ObjectArrayList<ConsumerPath> validConsumersRemoveQueue = new ObjectArrayList<>(10);
 
+    // TODO: Provide energy based on distance instead of absolute-equal distribution, will have to get the valid consumers based on distance
+    // TODO: Cache the lists of sources -> distance sorted consumers
+    // TODO: Literally free performance
+    
     /**
      * Provide energy to the energy net
      *
