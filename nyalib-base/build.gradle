@@ -1,7 +1,7 @@
 import static net.modificationstation.stationapi.gradle.SubprojectHelpers.addModuleDependencies
 import static net.modificationstation.stationapi.gradle.SubprojectHelpers.getSubprojectVersion
 
-archives_base_name = "nyalib-base"
+archives_base_name = "nyalib-multiblock"
 version = getSubprojectVersion(project, "1.0.0")
 
 loom {
