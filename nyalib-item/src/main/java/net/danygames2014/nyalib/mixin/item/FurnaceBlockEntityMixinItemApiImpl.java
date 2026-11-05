@@ -55,16 +55,12 @@ public abstract class FurnaceBlockEntityMixinItemApiImpl extends BlockEntity imp
             switch (side) {
                 // Extract from UP -> Input Slot
                 case UP -> {
-                    if (getItem(0, side) != null) {
-                        return extractItem(0, amount, side);
-                    }
+                    return extractItem(0, amount, side);
                 }
 
                 // Extract from any other side -> Output Slot
                 case DOWN, NORTH, SOUTH, EAST, WEST -> {
-                    if (getItem(2, side) != null) {
-                        return extractItem(2, amount, side);
-                    }
+                    return extractItem(2, amount, side);
                 }
             }
         }
@@ -75,7 +71,7 @@ public abstract class FurnaceBlockEntityMixinItemApiImpl extends BlockEntity imp
 
     @Override
     public ItemStack extractItem(int slot, int amount, @Nullable Direction side) {
-        if (slot >= 0 && slot < inventory.length) {
+        if (slot >= 0 && slot < getItemSlots(side)) {
             return this.removeStack(slot, amount);
         }
         
@@ -91,6 +87,8 @@ public abstract class FurnaceBlockEntityMixinItemApiImpl extends BlockEntity imp
                     if (getItem(0, side) != null && getItem(0, side).itemId == item.id && (meta == -1 || getItem(0, side).getDamage() == meta)) {
                         return extractItem(0, amount, side);
                     }
+                    
+                    return null;
                 }
 
                 // Extract from any other side -> Output Slot
@@ -98,6 +96,8 @@ public abstract class FurnaceBlockEntityMixinItemApiImpl extends BlockEntity imp
                     if (getItem(2, side) != null && getItem(2, side).itemId == item.id && (meta == -1 || getItem(2, side).getDamage() == meta)) {
                         return extractItem(2, amount, side);
                     }
+                    
+                    return null;
                 }
             }
             
@@ -157,7 +157,7 @@ public abstract class FurnaceBlockEntityMixinItemApiImpl extends BlockEntity imp
                 }
                 
                 case NORTH, SOUTH, EAST, WEST -> {
-                    if (FuelRegistry.getFuelTime(insertedStack) >= 0) {
+                    if (FuelRegistry.getFuelTime(insertedStack) > 0) {
                         // If the item has a fuel value, insert into fuel slot
                         insertedStack = insertItem(insertedStack, 1, side);
                     } else {
