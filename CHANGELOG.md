@@ -33,3 +33,5 @@
 * InventoryManager and TankManager now check isItemAllowed and isFluidAllowed
 * Allow placing milk in world by default
 * ScreenHandler will no longer void an item if it cannot be inserted into a Managed Inventory
+* Fix the Furnace Item Handler implementation
+* Change how energy is distributed in an EnergyNetwork to being distributed according to the conductor resistance and length

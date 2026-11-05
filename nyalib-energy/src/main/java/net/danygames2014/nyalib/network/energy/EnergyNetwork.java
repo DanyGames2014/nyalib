@@ -12,6 +12,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
+import java.util.Comparator;
 import java.util.Map;
 
 public class EnergyNetwork extends Network {
@@ -130,14 +131,10 @@ public class EnergyNetwork extends Network {
     //long time = System.nanoTime();
     //System.out.println(((System.nanoTime() - time) / 1000) + "uS");
 
-    // Reuseable object in provideEnergy
+    // Reuseable objects in provideEnergy
     private final ObjectArrayList<ConsumerPath> validConsumers = new ObjectArrayList<>(10);
     private final ObjectArrayList<ConsumerPath> validConsumersRemoveQueue = new ObjectArrayList<>(10);
 
-    // TODO: Provide energy based on distance instead of absolute-equal distribution, will have to get the valid consumers based on distance
-    // TODO: Cache the lists of sources -> distance sorted consumers
-    // TODO: Literally free performance
-    
     /**
      * Provide energy to the energy net
      *
@@ -154,51 +151,82 @@ public class EnergyNetwork extends Network {
             return 0;
         }
 
-        int iterations = 0;
+        // Tracking how much energy is left to distribute
         int remainingEnergy = energy;
-
+        
         // Fetch valid consumers
         validConsumers.clear();
         validConsumersRemoveQueue.clear();
         validConsumers.addAll(getValidConsumers(sourcePos));
 
-        
-        while (!validConsumers.isEmpty() && iterations++ < 10) {
-            // Try to evenly distribute the energy to all consumers
-            int energyPerConsumer = Math.max(remainingEnergy / validConsumers.size(), 1);
-            
-            for (ConsumerPath consumerPath : validConsumers) {
-                EnergyConsumer consumer = consumerPath.consumer;
-                NetworkPath path = consumerPath.path;
-
-                // Check if the consumer can even accept more energy
-                if (consumer.getRemainingCapacity() > 0) {
-                    // Insert Energy into the consumers
-                    int usedEnergy = traverseEnergy(consumer, path.endFace, path, voltage, Math.min(energyPerConsumer, remainingEnergy));
-
-                    // Reduce the remaining amount
-                    remainingEnergy -= usedEnergy;
-                    
-                    // If the consumer didn't take any energy, remove it from the list
-                    if (usedEnergy <= 0) {
-                        validConsumersRemoveQueue.add(consumerPath);
-                    }
-
-                    // If there is now energy remaining, end it
-                    if (remainingEnergy <= 0) {
-                        return energy;
-                    }
-                } else {
-                    // If the consumer can't accept more energy, remove it from the list
-                    validConsumersRemoveQueue.add(consumerPath);
-                }
+        /*
+            Pass 1: Distribute the energy evenly according to the pathing cost
+        */
+        double totalConductance = 0.0;
+        for (ConsumerPath path : validConsumers) {
+            if (path.consumer.getRemainingCapacity() > 0) {
+                totalConductance += path.conductance;
             }
-            
-            // Remove all the "satisfied" consumers from the list
-            validConsumers.removeAll(validConsumersRemoveQueue);
-            validConsumersRemoveQueue.clear();
         }
         
+        // If all consumers are full, return to avoid division by zero
+        if (totalConductance <= 0.0) {
+            return 0;
+        }
+
+        for (ConsumerPath path : validConsumers) {
+            EnergyConsumer consumer = path.consumer;
+            int consumerCapacity = consumer.getRemainingCapacity();
+            if (consumerCapacity <= 0) {
+                validConsumersRemoveQueue.add(path);
+                continue;
+            }
+            
+            // Calculates the share of energy this consumer will ideally get
+            int idealShare = (int) Math.round(energy * (path.conductance / totalConductance));
+            
+            // Calculates the share of energy this consumer will actually get
+            int realShare = Math.min(Math.min(idealShare, remainingEnergy), consumerCapacity);
+
+            if (realShare > 0) {
+                remainingEnergy -= traverseEnergy(consumer, path.path.endFace, path.path, voltage, realShare);
+
+                // If the consumer is now full, remove it from the list of valid consumers for the potential 2nd pass
+                if (consumer.getRemainingCapacity() <= 0) {
+                    validConsumersRemoveQueue.add(path);
+                }
+                
+                // If there is no more energy left, stop distributing
+                if (remainingEnergy <= 0) {
+                    break;
+                }
+            }
+        }
+
+        // Early return if no energy is remaining
+        if (remainingEnergy <= 0) {
+            // We don't need a minus remaining energy here
+            return energy;
+        }
+        
+        // Remove the satisfied consumers
+        validConsumers.removeAll(validConsumersRemoveQueue);
+        
+        /*
+            Pass 2: Distribute remaining energy
+        */
+        for (ConsumerPath path : validConsumers) {
+            EnergyConsumer consumer = path.consumer;
+            int realShare = Math.min(consumer.getRemainingCapacity(), remainingEnergy);
+
+            remainingEnergy -= traverseEnergy(consumer, path.path.endFace, path.path, voltage, realShare);
+
+            // If there is no more energy left, stop distributing
+            if (remainingEnergy <= 0) {
+                break;
+            }
+        }
+
         return energy - remainingEnergy;
     }
 
@@ -293,6 +321,7 @@ public class EnergyNetwork extends Network {
         }
 
         consumerPathCache.put(source, consumerPaths);
+        consumerPaths.sort(Comparator.comparingDouble(path -> path.path.cost));
         return consumerPaths;
     }
 
@@ -304,7 +333,16 @@ public class EnergyNetwork extends Network {
         return energyFlow.get(pos);
     }
 
-    public record ConsumerPath(EnergyConsumer consumer, NetworkPath path) {
+    public static final class ConsumerPath {
+        public final EnergyConsumer consumer;
+        public final NetworkPath path;
+        public final double conductance;
+
+        public ConsumerPath(EnergyConsumer consumer, NetworkPath path) {
+            this.consumer = consumer;
+            this.path = path;
+            this.conductance = 1.0D / path.cost;
+        }
     }
 
     public record ConsumerEntry(NetworkComponentEntry componentEntry, EnergyConsumer consumer) {

@@ -20,7 +20,7 @@ public class EnergyConsumerBlockEntity extends EnergyConsumerBlockEntityTemplate
         }
         
         if (powered) {
-            removeEnergy(1);
+            removeEnergy(2);
         }
 
         super.tick();
