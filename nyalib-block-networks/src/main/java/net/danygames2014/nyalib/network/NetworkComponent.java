@@ -1,13 +1,12 @@
 package net.danygames2014.nyalib.network;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * A base interface representing every NetworkComponent
@@ -24,8 +23,8 @@ public interface NetworkComponent {
     /**
      * @return A list of network types this component can participate in
      */
-    default ArrayList<NetworkType> getNetworkTypes() {
-        ArrayList<NetworkType> types = new ArrayList<>();
+    default ObjectArrayList<NetworkType> getNetworkTypes() {
+        ObjectArrayList<NetworkType> types = new ObjectArrayList<>();
         types.add(getNetworkType());
         return types;
     }
@@ -59,9 +58,9 @@ public interface NetworkComponent {
      * @param z     The z-position of this component
      * @return The retrieved {@link NetworkComponentEntry}
      */
-    default HashMap<Network, NetworkComponentEntry> getEntries(World world, int x, int y, int z) {
+    default Object2ObjectOpenHashMap<Network, NetworkComponentEntry> getEntries(World world, int x, int y, int z) {
         var validNetworkTypes = getNetworkTypes();
-        HashMap<Network, NetworkComponentEntry> entries = new HashMap<>();
+        Object2ObjectOpenHashMap<Network, NetworkComponentEntry> entries = new Object2ObjectOpenHashMap<>();
 
         // Loop thru all of the networks of all types
         for (var networkTypes : NetworkManager.getNetworks(world.dimension).entrySet()) {

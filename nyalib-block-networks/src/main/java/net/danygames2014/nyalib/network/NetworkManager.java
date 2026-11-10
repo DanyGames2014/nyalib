@@ -1,5 +1,8 @@
 package net.danygames2014.nyalib.network;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.danygames2014.nyalib.NyaLib;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NbtCompound;
@@ -10,8 +13,6 @@ import net.modificationstation.stationapi.api.registry.DimensionRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -21,64 +22,56 @@ public class NetworkManager {
     /**
      * For each Dimension there is a hashmap which takes network type Identifier as a key
      */
-    public static HashMap<Dimension, HashMap<Identifier, ArrayList<Network>>> NETWORKS = new HashMap<>();
+    public static Object2ObjectOpenHashMap<Dimension, Object2ObjectOpenHashMap<Identifier, ObjectArrayList<Network>>> NETWORKS = new Object2ObjectOpenHashMap<>();
 
+    public static Object2ObjectOpenHashMap<Dimension, ObjectOpenHashSet<Network>> removeQueue = new Object2ObjectOpenHashMap<>();
+    
     public static AtomicInteger NEXT_ID = new AtomicInteger(0);
 
-    public static ArrayList<Network> removeQueue = new ArrayList<>();
-
     // Getting Networks
-    public static ArrayList<Network> getNetworks(Dimension dimension, Identifier networkTypeIdentifier) {
+    public static ObjectArrayList<Network> getNetworks(Dimension dimension, Identifier networkTypeIdentifier) {
         if (NetworkLoader.isRemote) {
             NyaLib.LOGGER.warn("NetworkManager.getNetworks called on client but the world is remote!");
-            return new ArrayList<>();
+            return new ObjectArrayList<>();
         }
 
-        HashMap<Identifier, ArrayList<Network>> netDims = NETWORKS.get(dimension);
+        Object2ObjectOpenHashMap<Identifier, ObjectArrayList<Network>> netDims = NETWORKS.get(dimension);
 
         if (netDims == null) {
-            return new ArrayList<>();
+            return new ObjectArrayList<>();
         }
 
-        ArrayList<Network> nets = netDims.get(networkTypeIdentifier);
-        return nets != null ? nets : new ArrayList<>();
+        ObjectArrayList<Network> nets = netDims.get(networkTypeIdentifier);
+        return nets != null ? nets : new ObjectArrayList<>();
     }
 
-    public static HashMap<Identifier, ArrayList<Network>> getNetworks(Dimension dimension) {
+    public static Object2ObjectOpenHashMap<Identifier, ObjectArrayList<Network>> getNetworks(Dimension dimension) {
         if (NetworkLoader.isRemote) {
             NyaLib.LOGGER.warn("NetworkManager.getNetworks called on client but the world is remote!");
-            return new HashMap<>();
+            return new Object2ObjectOpenHashMap<>();
         }
         
         return NETWORKS.get(dimension);
     }
 
     // Adding a network
-    @SuppressWarnings("Java8MapApi")
     public static void addNetwork(Dimension dimension, Network network) {
         if (NetworkLoader.isRemote) {
             NyaLib.LOGGER.warn("NetworkManager.addNetwork called on client but the world is remote!");
             return;
         }
-        
-        HashMap<Identifier, ArrayList<Network>> dimNetworks = NETWORKS.get(dimension);
 
         if (network == null) {
             return;
         }
+        
+        Object2ObjectOpenHashMap<Identifier, ObjectArrayList<Network>> dimNetworks = NETWORKS.computeIfAbsent(dimension, dim -> new Object2ObjectOpenHashMap<>());
 
-        if (dimNetworks == null) {
-            dimNetworks = new HashMap<>();
-            NETWORKS.put(dimension, dimNetworks);
+        ObjectArrayList<Network> typeNetworks = dimNetworks.computeIfAbsent(network.type.getIdentifier(), id -> new ObjectArrayList<>());
+
+        if (!typeNetworks.contains(network)) {
+            typeNetworks.add(network);
         }
-
-        ArrayList<Network> typeNetworks = dimNetworks.get(network.type.getIdentifier());
-        if (typeNetworks == null) {
-            typeNetworks = new ArrayList<>();
-            dimNetworks.put(network.type.getIdentifier(), typeNetworks);
-        }
-
-        typeNetworks.add(network);
     }
 
     public static Network createNetwork(Dimension dimension, NetworkType networkType) {
@@ -106,10 +99,9 @@ public class NetworkManager {
             NyaLib.LOGGER.warn("NetworkManager.removeNetwork called on client but the world is remote!");
             return;
         }
-        
-        if (!removeQueue.contains(network)) {
-            removeQueue.add(network);
-        }
+
+        ObjectOpenHashSet<Network> dimRemoveQueue = removeQueue.computeIfAbsent(network.world.dimension, dim -> new ObjectOpenHashSet<>());
+        dimRemoveQueue.add(network);
     }
 
     public static void removeQueuedNetworks() {
@@ -118,22 +110,23 @@ public class NetworkManager {
             return;
         }
         
-        for (Network toremove : removeQueue) {
-            removeNetworkInternal(toremove);
+        for (Map.Entry<Dimension, ObjectOpenHashSet<Network>> dimRemoveQueueEntry : removeQueue.entrySet()) {
+            ObjectOpenHashSet<Network> dimRemoveQueue = dimRemoveQueueEntry.getValue();
+            
+            for (Network toremove : dimRemoveQueue) {
+                removeNetworkInternal(toremove, dimRemoveQueueEntry.getKey());
+            }
+            dimRemoveQueue.clear();
         }
     }
 
-    private static boolean removeNetworkInternal(Network toRemove) {
-        for (var dimensions : NETWORKS.entrySet()) {
-            for (var networks : dimensions.getValue().entrySet()) {
-                for (var network : networks.getValue()) {
-                    if (network == toRemove) {
-                        networks.getValue().remove(network);
-                        return true;
-                    }
-                }
+    private static boolean removeNetworkInternal(Network toRemove, Dimension dimension) {
+        for (ObjectArrayList<Network> networks : NETWORKS.get(dimension).values()) {
+            if (networks.remove(toRemove)) {
+                return true;
             }
         }
+        
         return false;
     }
 
@@ -158,6 +151,7 @@ public class NetworkManager {
                 return net;
             }
         }
+        
         return null;
     }
 
@@ -171,13 +165,13 @@ public class NetworkManager {
      * @param networkTypes The types of network to check for
      * @return Network if they exists on the coordinates.
      */
-    public static ArrayList<Network> getAt(Dimension dimension, int x, int y, int z, ArrayList<NetworkType> networkTypes) {
+    public static ObjectArrayList<Network> getAt(Dimension dimension, int x, int y, int z, ObjectArrayList<NetworkType> networkTypes) {
         if (NetworkLoader.isRemote) {
             NyaLib.LOGGER.warn("NetworkManager.getAt called on client but the world is remote!");
-            return new ArrayList<>();
+            return new ObjectArrayList<>();
         }
         
-        ArrayList<Network> networks = new ArrayList<>();
+        ObjectArrayList<Network> networks = new ObjectArrayList<>();
 
         for (NetworkType networkType : networkTypes) {
             for (Network net : getNetworks(dimension, networkType.getIdentifier())) {
@@ -199,15 +193,15 @@ public class NetworkManager {
      * @param z         z-position to checj
      * @return Networks if any exist on the coordinates.
      */
-    public static ArrayList<Network> getAt(Dimension dimension, int x, int y, int z) {
+    public static ObjectArrayList<Network> getAt(Dimension dimension, int x, int y, int z) {
         if (NetworkLoader.isRemote) {
             NyaLib.LOGGER.warn("NetworkManager.getAt called on client but the world is remote!");
-            return new ArrayList<>();
+            return new ObjectArrayList<>();
         }
         
-        ArrayList<Network> networks = new ArrayList<>();
+        ObjectArrayList<Network> networks = new ObjectArrayList<>();
 
-        for (ArrayList<Network> netsOfType : getNetworks(dimension).values()) {
+        for (ObjectArrayList<Network> netsOfType : getNetworks(dimension).values()) {
             for (Network net : netsOfType) {
                 if (net.isAt(x, y, z)) {
                     networks.add(net);
@@ -227,13 +221,13 @@ public class NetworkManager {
      * @param z     z-position to checj
      * @return An ArrayList of networks neighboring this block
      */
-    public static ArrayList<Network> getNeighbors(World world, int x, int y, int z) {
+    public static ObjectArrayList<Network> getNeighbors(World world, int x, int y, int z) {
         if (NetworkLoader.isRemote) {
             NyaLib.LOGGER.warn("NetworkManager.getNeighbors called on client but the world is remote!");
-            return new ArrayList<>();
+            return new ObjectArrayList<>();
         }
         
-        ArrayList<Network> neighborNets = new ArrayList<>();
+        ObjectArrayList<Network> neighborNets = new ObjectArrayList<>();
 
         for (var networksOfType : getNetworks(world.dimension).values()) {
             for (var network : networksOfType) {
@@ -258,13 +252,13 @@ public class NetworkManager {
      * @param networkTypeIdentifier The type of network to check for
      * @return An ArrayList of networks neighboring this block
      */
-    public static ArrayList<Network> getNeighbors(World world, int x, int y, int z, Identifier networkTypeIdentifier) {
+    public static ObjectArrayList<Network> getNeighbors(World world, int x, int y, int z, Identifier networkTypeIdentifier) {
         if (NetworkLoader.isRemote) {
             NyaLib.LOGGER.warn("NetworkManager.getNeighbors called on client but the world is remote!");
-            return new ArrayList<>();
+            return new ObjectArrayList<>();
         }
         
-        ArrayList<Network> neighborNets = new ArrayList<>();
+        ObjectArrayList<Network> neighborNets = new ObjectArrayList<>();
 
         for (Network network : getNetworks(world.dimension, networkTypeIdentifier)) {
             for (Direction direction : Direction.values()) {
@@ -298,9 +292,9 @@ public class NetworkManager {
         for (NetworkType networkType : component.getNetworkTypes()) {
 
             // Query all the networks which neighbor this block
-            ArrayList<PotentialNeighbor> nodeNeighbors = new ArrayList<>(2);
-            ArrayList<PotentialNeighbor> edgeNeighbors = new ArrayList<>(2);
-            ArrayList<Network> potentialNets = new ArrayList<>();
+            ObjectArrayList<PotentialNeighbor> nodeNeighbors = new ObjectArrayList<>(2);
+            ObjectArrayList<PotentialNeighbor> edgeNeighbors = new ObjectArrayList<>(2);
+            ObjectArrayList<Network> potentialNets = new ObjectArrayList<>();
 
             potentialNets.addAll(getNetworks(world.dimension, networkType.getIdentifier()));
 
@@ -314,11 +308,11 @@ public class NetworkManager {
                         // Check if the components can connect to each other
                         if (component.canConnectTo(world, x, y, z, potentialNet, direction)) {
                             NetworkComponentEntry componentEntry = potentialNet.getEntry(side);
-                            if (componentEntry.component().canConnectTo(world, side.x, side.y, side.z, null, direction.getOpposite())) {
+                            if (componentEntry.component.canConnectTo(world, side.x, side.y, side.z, null, direction.getOpposite())) {
                                 // If they can connect to each other, then its a valid neighbor
-                                if (componentEntry.component() instanceof NetworkNodeComponent) {
+                                if (componentEntry.component instanceof NetworkNodeComponent) {
                                     nodeNeighbors.add(new PotentialNeighbor(componentEntry, potentialNet, side));
-                                } else if (componentEntry.component() instanceof NetworkEdgeComponent) {
+                                } else if (componentEntry.component instanceof NetworkEdgeComponent) {
                                     edgeNeighbors.add(new PotentialNeighbor(componentEntry, potentialNet, side));
                                 }
                             }
@@ -343,7 +337,7 @@ public class NetworkManager {
                     // If there are some networks, connect to all of them
                     default -> {
                         for (PotentialNeighbor neighbor : nodeNeighbors) {
-                            if (neighbor.entry.component() instanceof NetworkNodeComponent) {
+                            if (neighbor.entry.component instanceof NetworkNodeComponent) {
                                 neighbor.network.addBlock(x, y, z, component, true);
                                 neighbor.network.update();
                             }
@@ -394,7 +388,7 @@ public class NetworkManager {
 
                         // If the neighbor is not a stub, add it to the network, but also leave it in its own network
                     } else if (neighbor.network.components.size() > 1 && networkToJoin != null) {
-                        networkToJoin.addBlock(neighbor.position.x, neighbor.position.y, neighbor.position.z, neighbor.entry.block(), true);
+                        networkToJoin.addBlock(neighbor.position.x, neighbor.position.y, neighbor.position.z, neighbor.entry.block, true);
                         networkToJoin.update();
                     }
 
@@ -431,7 +425,7 @@ public class NetworkManager {
         }
         
         for (Network net : getAt(world.dimension, x, y, z, component.getNetworkTypes())) {
-            ArrayList<Vec3i> neighborBlocks = new ArrayList<>();
+            ObjectArrayList<Vec3i> neighborBlocks = new ObjectArrayList<>();
             for (Direction direction : Direction.values()) {
                 var neighborPos = new Vec3i(x + direction.getOffsetX(), y + direction.getOffsetY(), z + direction.getOffsetZ());
                 if (net.isAt(neighborPos.x, neighborPos.y, neighborPos.z)) {
@@ -463,14 +457,14 @@ public class NetworkManager {
                 default -> {
                     net.removeBlock(x, y, z, true);
 
-                    ArrayList<ArrayList<Vec3i>> potentialNetworks = new ArrayList<>(4);
+                    ObjectArrayList<ObjectArrayList<Vec3i>> potentialNetworks = new ObjectArrayList<>(4);
                     // Walk thru all the sides
                     for (Direction dir : Direction.values()) {
                         Vec3i side = new Vec3i(x + dir.getOffsetX(), y + dir.getOffsetY(), z + dir.getOffsetZ());
 
                         // If the network reaches this neighbor side, walk thru all the blocks
                         if (net.isAt(side.x, side.y, side.z)) {
-                            ArrayList<Vec3i> discoveredBlocks = net.walk(side);
+                            ObjectArrayList<Vec3i> discoveredBlocks = net.walk(side);
 
                             NyaLib.LOGGER.debug("Discovered a potential network of {} blocks", discoveredBlocks.size());
 
@@ -479,7 +473,7 @@ public class NetworkManager {
                             // Check if the first block of this potential networks exists in the other potential networks
                             // We dont have to check every block because if theyre connected
                             // somewhere they *should* have access to the same block
-                            for (ArrayList<Vec3i> potentialNet : potentialNetworks) {
+                            for (ObjectArrayList<Vec3i> potentialNet : potentialNetworks) {
                                 for (Vec3i neighbor : discoveredBlocks) {
                                     if (world.getBlockState(neighbor.x, neighbor.y, neighbor.z).getBlock() instanceof NetworkNodeComponent && potentialNet.contains(neighbor)) {
                                         exists = true;
@@ -618,8 +612,8 @@ public class NetworkManager {
         NbtCompound dimensionNbt = dimensionsNbt.getCompound(dimIdentifier.toString());
 
         // Get all the networks in this dimension and iterate over them
-        NETWORKS.computeIfAbsent(dim, k -> new HashMap<>());
-        for (Map.Entry<Identifier, ArrayList<Network>> networksOfType : getNetworks(dim).entrySet()) {
+        NETWORKS.computeIfAbsent(dim, k -> new Object2ObjectOpenHashMap<>());
+        for (Map.Entry<Identifier, ObjectArrayList<Network>> networksOfType : getNetworks(dim).entrySet()) {
             Identifier type = networksOfType.getKey();
             var networks = networksOfType.getValue();
 
@@ -683,7 +677,6 @@ public class NetworkManager {
                 }
             }
         }
-
     }
 
 }

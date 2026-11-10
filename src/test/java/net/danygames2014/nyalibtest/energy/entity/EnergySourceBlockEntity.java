@@ -21,7 +21,7 @@ public class EnergySourceBlockEntity extends EnergySourceBlockEntityTemplate {
         }
 
         if (powered) {
-            addEnergy(1);
+            addEnergy(7);
         }
     }
     
@@ -37,7 +37,7 @@ public class EnergySourceBlockEntity extends EnergySourceBlockEntityTemplate {
 
     @Override
     public int getMaxEnergyOutput(@Nullable Direction direction) {
-        return 1;
+        return 7;
     }
 
     @Override

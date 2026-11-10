@@ -8,10 +8,9 @@ import net.danygames2014.nyalib.event.NetworkTypeRegistryEvent;
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.danygames2014.nyalib.fluid.FluidBuilder;
 import net.danygames2014.nyalib.fluid.FluidRegistry;
+import net.danygames2014.nyalib.fluid.Fluids;
 import net.danygames2014.nyalib.network.NetworkType;
-import net.danygames2014.nyalibtest.abilities.AbilityStick;
-import net.danygames2014.nyalibtest.abilities.FireImmunityStick;
-import net.danygames2014.nyalibtest.abilities.FlightStick;
+import net.danygames2014.nyalibtest.abilities.*;
 import net.danygames2014.nyalibtest.capability.block.ItemHandlerBlockCapabilityTesterBlock;
 import net.danygames2014.nyalibtest.capability.item.YoinkerItem;
 import net.danygames2014.nyalibtest.energy.*;
@@ -25,6 +24,7 @@ import net.danygames2014.nyalibtest.fluid.entity.FluidTankBlockEntity;
 import net.danygames2014.nyalibtest.fluid.entity.InfiniteWaterBlockEntity;
 import net.danygames2014.nyalibtest.fluid.entity.ManagedFluidTankBlockEntity;
 import net.danygames2014.nyalibtest.fluid.entity.SimpleFluidTankBlockEntity;
+import net.danygames2014.nyalibtest.fluid.item.CopperBucketItem;
 import net.danygames2014.nyalibtest.fluid.item.FluidCellItem;
 import net.danygames2014.nyalibtest.fluid.item.FluidPipetteItem;
 import net.danygames2014.nyalibtest.fluid.item.ManagedFluidPipetteItem;
@@ -92,12 +92,9 @@ public class NyaLibTest {
     public static Item fluidPippeteItem;
     public static Item managedfluidPipetteItem;
     public static Item emptyCellItem;
-    public static Item waterCellItem;
-    public static Item lavaCellItem;
-    public static Item milkCellItem;
-    public static Item fuelCellItem;
-    public static Item glowstoneCellItem;
-    public static Item gravelCellItem;
+    public static Item copperBucketItem;
+    public static Item waterCopperBucketItem;
+    public static Item milkCopperBucketItem;
 
     public static Item itemWithCustomOutlineRenderer;
 
@@ -142,6 +139,9 @@ public class NyaLibTest {
     public static Item abilityStick2;
     public static Item fireImmunityStick;
     public static Item flightStick;
+    public static Item invicibilityStick;
+    public static Item extraHeartsStick;
+    public static Item antiExtraHealthStick;
 
     public static NetworkType basicNetworkType;
 
@@ -195,13 +195,6 @@ public class NyaLibTest {
 
         // Capability
         itemHandlerBlockCapabilityTester = new ItemHandlerBlockCapabilityTesterBlock(NAMESPACE.id("item_handler_block_capability")).setTranslationKey(NAMESPACE, "item_handler_block_capability");
-        improperCapabilityTester = new ImproperCapabilityTesterItem(NAMESPACE.id("improper_capability_tester")).setTranslationKey(NAMESPACE, "improper_capability_tester").registerAutomaticModel();
-        
-        // Ability
-        abilityStick1 = new AbilityStick(NAMESPACE.id("ability_stick_1"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
-        abilityStick2 = new AbilityStick(NAMESPACE.id("ability_stick_2"), NyaLibTest.NAMESPACE.id("stick2")).registerAutomaticModel();
-        fireImmunityStick = new FireImmunityStick(NAMESPACE.id("fire_immunity_stick"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
-        flightStick = new FlightStick(NAMESPACE.id("flight_stick"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
     }
 
     @EventListener
@@ -257,12 +250,28 @@ public class NyaLibTest {
             String id = fluid.getIdentifier().namespace + "_" + fluid.getIdentifier().path + "_cell";
             new FluidCellItem(NAMESPACE.id(id), fluid).setTranslationKey(NAMESPACE, id);
         }
+        
+        copperBucketItem = new CopperBucketItem(NAMESPACE.id("copper_bucket"), 0).registerAutomaticModel();
+        waterCopperBucketItem = new CopperBucketItem(NAMESPACE.id("water_copper_bucket"), Fluids.WATER.getFlowingBlock().id).registerAutomaticModel();
+        milkCopperBucketItem = new CopperBucketItem(NAMESPACE.id("milk_copper_bucket"), Fluids.MILK.getFlowingBlock().id).registerAutomaticModel();
 
         multipartItem = new MultipartItem(NAMESPACE.id("multipart_item")).setTranslationKey(NAMESPACE, "multipart_item");
         stoneCoverMultipartItem = new CoverMultipartItem(NAMESPACE.id("stone_cover"), Block.STONE).setTranslationKey(NAMESPACE, "stone_cover");
         diamondBlockCoverMultipartItem = new CoverMultipartItem(NAMESPACE.id("diamond_cover"), Block.DIAMOND_BLOCK).setTranslationKey(NAMESPACE, "diamond_cover");
 
         itemWithCustomOutlineRenderer = new ItemWithCustomOutlineRenderer(NAMESPACE.id("custom_outline_renderer")).setTranslationKey(NAMESPACE, "custom_outline_renderer");
+
+        // Capability
+        improperCapabilityTester = new ImproperCapabilityTesterItem(NAMESPACE.id("improper_capability_tester")).setTranslationKey(NAMESPACE, "improper_capability_tester").registerAutomaticModel();
+        
+        // Ability
+        abilityStick1 = new AbilityStick(NAMESPACE.id("ability_stick_1"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
+        abilityStick2 = new AbilityStick(NAMESPACE.id("ability_stick_2"), NyaLibTest.NAMESPACE.id("stick2")).registerAutomaticModel();
+        fireImmunityStick = new FireImmunityStick(NAMESPACE.id("fire_immunity_stick"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
+        flightStick = new FlightStick(NAMESPACE.id("flight_stick"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
+        invicibilityStick = new InvincibilityStick(NAMESPACE.id("invincibility_stick"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
+        extraHeartsStick = new ExtraHealthStick(NAMESPACE.id("extra_health_stick"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
+        antiExtraHealthStick = new AntiExtraHealthStick(NAMESPACE.id("anti_extra_health_stick"), NyaLibTest.NAMESPACE.id("stick1")).registerAutomaticModel();
     }
 
     @EventListener

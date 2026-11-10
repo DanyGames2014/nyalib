@@ -15,7 +15,8 @@
     "item.ItemMixin",
     "item.ItemStackMixin",
     "item.PlayerInventoryMixin",
-    "item.ScreenHandlerMixin",
+    "item.ScreenHandlerManagedInventoryMixin",
+    "item.ScreenHandlerSlotLockMixin",
     "item.SlotMixin"
   ],
   "server": [

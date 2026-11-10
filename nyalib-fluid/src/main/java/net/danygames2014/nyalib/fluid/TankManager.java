@@ -74,6 +74,14 @@ public class TankManager {
             return false;
         }
 
+        if (stack == null) {
+            if (!entry.isFluidAllowed(null)) {
+                return false;
+            }
+        } else if (!entry.isFluidAllowed(stack.fluid)) {
+            return false;
+        }
+
         entry.stack = stack;
         return true;
     }
@@ -193,7 +201,7 @@ public class TankManager {
 
         // Allow checks
         public boolean isFluidAllowed(Fluid fluid) {
-            return allowedFluids == null || allowedFluids.contains(fluid);
+            return allowedFluids == null || allowedFluids.contains(fluid) || fluid == null;
         }
 
         public boolean isSideAllowed(@Nullable Direction side) {

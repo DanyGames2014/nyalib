@@ -3,7 +3,7 @@ package net.danygames2014.nyalibtest.abilities;
 import net.danygames2014.nyalib.abilities.ability.AbilityManager;
 import net.danygames2014.nyalib.abilities.ability.AbilityProvider;
 import net.danygames2014.nyalib.abilities.ability.impl.Abilities;
-import net.danygames2014.nyalib.abilities.value.BooleanAbilityValue;
+import net.danygames2014.nyalib.abilities.ability.value.BooleanAbilityValue;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;

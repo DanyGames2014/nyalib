@@ -20,7 +20,7 @@ public class BucketItemMixin extends Item implements CustomTooltipProvider {
 
     @Inject(method = "<init>", at = @At(value = "RETURN"))
     public void increaseStackSize(int id, int fluidBlockId, CallbackInfo ci) {
-        if (fluidBlockId == 0) {
+        if (fluidBlockId == 0 && id == 69 /* Bucket id */) {
             this.maxCount = 16;
         }
     }
@@ -30,7 +30,7 @@ public class BucketItemMixin extends Item implements CustomTooltipProvider {
         String fluidName = "Empty";
         
         if (stack.getItem() instanceof FluidBucket fluidBucket) {
-            Fluid fluid = fluidBucket.getFluid();
+            Fluid fluid = fluidBucket.getFluid(stack);
             if (fluid != null) {
                 fluidName = fluid.getTranslatedName();
             }

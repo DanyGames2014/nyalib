@@ -20,7 +20,7 @@ public class EnergyConsumerBlockEntity extends EnergyConsumerBlockEntityTemplate
         }
         
         if (powered) {
-            removeEnergy(1);
+            removeEnergy(2);
         }
 
         super.tick();
@@ -47,8 +47,16 @@ public class EnergyConsumerBlockEntity extends EnergyConsumerBlockEntityTemplate
     }
 
     @Override
-    public boolean canConnectEnergy(Direction direction) {
-        return true;
+    public boolean canConnectEnergy(Direction side) {
+        switch (side) {
+            case UP, DOWN -> {
+                return false;
+            }
+
+            default -> {
+                return true;
+            }
+        }
     }
 
     @Override

@@ -2,7 +2,6 @@ package net.danygames2014.nyalib.init.blocktemplates;
 
 import com.mojang.datafixers.util.Either;
 import net.danygames2014.nyalib.NyaLib;
-import net.danygames2014.nyalib.mixin.templates.JsonUnbakedModelAccessor;
 import net.danygames2014.nyalib.registry.JsonOverrideRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -28,7 +27,7 @@ public class UnbakedModelListener {
             NyaLib.LOGGER.debug("Loaded model override for " + event.identifier);
 
             if (JsonOverrideRegistry.modelTextureOverrides.containsKey(event.identifier)) {
-                Map<String, Either<SpriteIdentifier, String>> textureMap = ((JsonUnbakedModelAccessor) (Object) model).getTextureMap();
+                Map<String, Either<SpriteIdentifier, String>> textureMap = model.getTextureMap();
 
                 for (Map.Entry<String, Identifier> entry : JsonOverrideRegistry.modelTextureOverrides.get(event.identifier).entrySet()) {
                     textureMap.put(entry.getKey(), Either.left(SpriteIdentifier.of(Atlases.GAME_ATLAS_TEXTURE, entry.getValue())));

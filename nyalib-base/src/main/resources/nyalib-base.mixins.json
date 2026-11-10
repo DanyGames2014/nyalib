@@ -4,7 +4,6 @@
   "package": "net.danygames2014.nyalib.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "FlattenedChunkMixin"
   ],
   "server": [
   ],

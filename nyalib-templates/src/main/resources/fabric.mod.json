@@ -18,7 +18,8 @@
     ],
     "stationapi:event_bus_client": [
       "net.danygames2014.nyalib.init.blocktemplates.UnbakedModelListener",
-      "net.danygames2014.nyalib.init.blocktemplates.RecipeListener"
+      "net.danygames2014.nyalib.init.blocktemplates.RecipeListener",
+      "net.danygames2014.nyalib.init.blocktemplates.RuntimeResourcesListener"
     ],
     "stationapi:event_bus_server": [
     ]
@@ -29,5 +30,11 @@
   ],
   "depends": {
     "minecraft": "1.0.0-beta.7.3"
+  },
+  "custom": {
+    "modmenu": {
+      "parent": "nyalib",
+      "badges": ["library"]
+    }
   }
 }

@@ -134,7 +134,7 @@ public interface ManagedItemHandler extends ItemHandler {
     // ItemCapable
     @Override
     default boolean canConnectItem(Direction side) {
-        return true;
+        return getInventoryManager().getItemSlots(side) > 0;
     }
 
     // Managed Item Handler

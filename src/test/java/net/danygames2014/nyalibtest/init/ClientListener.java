@@ -20,7 +20,7 @@ public class ClientListener {
                 @Override
                 public int getColor(ItemStack stack, int tintIndex) {
                     if (stack.getItem() instanceof FluidCellItem fluidCellItem && fluidCell.fluid != null) {
-                        return fluidCellItem.getFluid().getColor();
+                        return fluidCellItem.getFluid(stack).getColor();
                     }
                     
                     return 0xAAFFFFFF;

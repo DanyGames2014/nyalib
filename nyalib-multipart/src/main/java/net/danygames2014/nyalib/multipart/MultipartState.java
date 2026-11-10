@@ -145,8 +145,7 @@ public class MultipartState {
             if (!world.isRemote) {
                 world.blockUpdateEvent(x, y, z);
                 //noinspection Convert2MethodRef
-                SideUtil.run(() -> {
-                }, () -> sendUpdateToClient());
+                SideUtil.runServer(() -> sendUpdateToClient());
             }
 
             world.setBlockDirty(x, y, z);

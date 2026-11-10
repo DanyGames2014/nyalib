@@ -85,7 +85,7 @@ public class FluidInventoryS2CPacket extends Packet implements ManagedPacket<Flu
 
     @Override
     public void apply(NetworkHandler networkHandler) {
-        SideUtil.run(() -> handleClient(networkHandler), () -> {});
+        SideUtil.runClient(() -> handleClient(networkHandler));
     }
 
     @Environment(EnvType.CLIENT)

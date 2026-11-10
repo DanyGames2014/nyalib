@@ -4,94 +4,120 @@ import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.danygames2014.nyalib.NyaLib;
-import net.danygames2014.nyalib.abilities.value.AbilityValue;
-import net.danygames2014.nyalib.abilities.value.AbilityValueFactory;
-import net.danygames2014.nyalib.abilities.value.AbilityValueTypeRegistry;
+import net.danygames2014.nyalib.abilities.ability.value.AbilityValue;
+import net.danygames2014.nyalib.abilities.ability.value.AbilityValueFactory;
+import net.danygames2014.nyalib.abilities.ability.value.AbilityValueTypeRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.modificationstation.stationapi.api.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Allows mods to provide their desired values to abilities for the given entity
+ * <p>These abilities are then computed according to the Ability's {@link AbilityRule}
+ */
 public class AbilityProvider {
-    private final AbilityManager manager;
-    public Identifier identifier;
-    public Entity entity;
+    protected final AbilityManager manager;
+    public final Identifier identifier;
+    public final Entity entity;
     private final Reference2ObjectOpenHashMap<Ability<?, ?>, AbilityValue<?>> values;
-    
+
     public AbilityProvider(AbilityManager manager, Identifier identifier, Entity entity) {
         if (!AbilityRegistry.abilityProviderRegistered(identifier)) {
             throw new IllegalStateException("Ability provider " + identifier + " is not registered!");
         }
-        
+
         this.manager = manager;
         this.identifier = identifier;
         this.entity = entity;
         this.values = new Reference2ObjectOpenHashMap<>();
     }
 
+    /**
+     * Sets the value of the given ability in this provider
+     */
     public <G extends Entity, H extends AbilityValue<?>> void set(Ability<G, H> ability, AbilityValue<?> value) {
-        values.put(ability, value);
-        manager.markDirty(entity);
+        AbilityValue<?> oldValue = values.put(ability, value);
+        if (!value.equals(oldValue)) {
+            manager.markDirty(entity, ability);
+        }
     }
-    
+
+    /**
+     * Retrives the value of the given ability in this provider
+     * <p> Note: for retrieving the actual state of the ability, use {@link AbilityManager#get(Entity, Ability)}
+     *
+     * @return the value of the given ability in this provider, or null if it is not set by this provider
+     */
     @Nullable
     public <G extends Entity, H extends AbilityValue<?>> H get(Ability<G, H> ability) {
         //noinspection unchecked
         return (H) values.get(ability);
     }
-    
+
+    /**
+     * Removes the value of the given ability from this provider thus making this provider no longer contribute to this ability
+     */
     public <G extends Entity, H extends AbilityValue<?>> void remove(Ability<G, H> ability) {
         values.remove(ability);
+        manager.markDirty(entity, ability);
+    }
+
+    /**
+     * Clears all of the ability values in this provider
+     */
+    public void clear() {
+        values.clear();
         manager.markDirty(entity);
     }
-    
+
     public void writeNbt(NbtCompound nbt) {
         // If the identifier is null then something went wrong
         if (identifier == null) {
             NyaLib.LOGGER.warn("AbilityProvider identifier is null when saving!");
             return;
         }
-        
+
         nbt.putString("identifier", identifier.toString());
 
         NbtList valuesList = new NbtList();
         ObjectIterator<Reference2ObjectMap.Entry<Ability<?, ?>, AbilityValue<?>>> iterator = values.reference2ObjectEntrySet().fastIterator();
-        
+
         while (iterator.hasNext()) {
             Reference2ObjectMap.Entry<Ability<?, ?>, AbilityValue<?>> entry = iterator.next();
             NbtCompound valueNbt = new NbtCompound();
-            
+
             // Write the ability type
             Ability<?, ?> ability = entry.getKey();
             valueNbt.putString("abilityType", ability.identifier.toString());
-            
+
             // Write the value
             AbilityValue<?> value = entry.getValue();
             valueNbt.putString("valueType", AbilityValueTypeRegistry.CLASS_TO_TYPE.get(value.getClass()));
             value.writeNbt(valueNbt);
-            
+
             // Add to the list of values
             valuesList.add(valueNbt);
         }
-        
+
         nbt.put("values", valuesList);
     }
-    
+
     public void readNbt(NbtCompound nbt) {
         NbtList valuesList = nbt.getList("values");
         for (int i = 0; i < valuesList.size(); i++) {
             NbtCompound valueNbt = (NbtCompound) valuesList.get(i);
-            
+
             // Read the ability type
             Identifier abilityId = Identifier.of(valueNbt.getString("abilityType"));
-            
+
             Ability<?, ?> ability = AbilityRegistry.getAbility(abilityId);
             if (ability == null) {
                 NyaLib.LOGGER.error("Ability {} not found in registry. Has the modlist been changed? Skipping the loading of this ability.", abilityId);
                 continue;
             }
-            
+
             // Read the value
             AbilityValueFactory<?> valueFactory = AbilityValueTypeRegistry.TYPE_TO_FACTORY.get(valueNbt.getString("valueType"));
             if (valueFactory == null) {
@@ -104,7 +130,7 @@ public class AbilityProvider {
             // Add to the values
             values.put(ability, value);
         }
-        
+
         this.manager.markDirty(entity);
     }
 }

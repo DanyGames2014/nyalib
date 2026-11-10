@@ -1,5 +1,6 @@
 package net.danygames2014.nyalibtest.energy;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.nyalib.energy.template.block.EnergyWireBlockTemplate;
 import net.danygames2014.nyalib.multipart.MultipartState;
 import net.danygames2014.nyalib.network.Network;
@@ -11,8 +12,6 @@ import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.Identifier;
 
-import java.util.ArrayList;
-
 public class WireBlock extends EnergyWireBlockTemplate {
     public WireBlock(Identifier identifier) {
         super(identifier, Material.WOOL);
@@ -21,7 +20,7 @@ public class WireBlock extends EnergyWireBlockTemplate {
     @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
         if (player.isSneaking()) {
-            ArrayList<Network> networks = NetworkManager.getAt(world.dimension, x, y, z, this.getNetworkTypes());
+            ObjectArrayList<Network> networks = NetworkManager.getAt(world.dimension, x, y, z, this.getNetworkTypes());
             StringBuilder sb = new StringBuilder();
             sb.append("This block (x:" + x + " y:" + y + " z:" + z + ") is in networks:");
             for (var net : networks) {

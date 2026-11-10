@@ -8,16 +8,16 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.block.BlockState;
+import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings({"unused", "UnusedReturnValue"})
 public class Network {
-    protected HashMap<Vec3i, NetworkComponentEntry> components;
+    protected Object2ObjectOpenHashMap<Vec3i, NetworkComponentEntry> components;
     public NetworkPathManager pathManager;
     public World world;
     public NetworkType type;
@@ -26,7 +26,7 @@ public class Network {
     public Network(World world, NetworkType type) {
         this.world = world;
         this.type = type;
-        components = new HashMap<>();
+        components = new Object2ObjectOpenHashMap<>();
         pathManager = new NetworkPathManager(this);
     }
 
@@ -67,7 +67,7 @@ public class Network {
         Object2ObjectOpenHashMap<Vec3i, NetworkComponentEntry> edges = new Object2ObjectOpenHashMap<>();
 
         for (Map.Entry<Vec3i, NetworkComponentEntry> entry : components.entrySet()) {
-            if (entry.getValue().block() instanceof NetworkEdgeComponent) {
+            if (entry.getValue().block instanceof NetworkEdgeComponent) {
                 edges.put(entry.getKey(), entry.getValue());
             }
         }
@@ -82,7 +82,7 @@ public class Network {
         Object2ObjectOpenHashMap<Vec3i, NetworkComponentEntry> nodes = new Object2ObjectOpenHashMap<>();
 
         for (Map.Entry<Vec3i, NetworkComponentEntry> entry : components.entrySet()) {
-            if (!(entry.getValue().block() instanceof NetworkEdgeComponent)) {
+            if (!(entry.getValue().block instanceof NetworkEdgeComponent)) {
                 nodes.put(entry.getKey(), entry.getValue());
             }
         }
@@ -109,7 +109,7 @@ public class Network {
      * @return The NetworkPath if it was found. <code>null</code> if it was now
      */
     public NetworkPath getPath(NetworkComponentEntry from, NetworkComponentEntry to) {
-        return getPath(from.pos(), to.pos());
+        return getPath(from.pos, to.pos);
     }
 
     /**
@@ -126,7 +126,7 @@ public class Network {
     public void addBlock(int x, int y, int z, Block block, boolean notify) {
         if (block instanceof NetworkComponent component) {
             Vec3i pos = new Vec3i(x, y, z);
-            components.put(pos, new NetworkComponentEntry(pos, block, component, new NbtCompound()));
+            components.put(pos, new NetworkComponentEntry(world, pos, block, component, new NbtCompound()));
             if (notify) {
                 component.onAddedToNet(world, x, y, z, this);
             }
@@ -138,7 +138,7 @@ public class Network {
         if (components.containsKey(pos)) {
 
             if (notify) {
-                if (components.get(pos).block() instanceof NetworkComponent component) {
+                if (components.get(pos).block instanceof NetworkComponent component) {
                     component.onRemovedFromNet(world, x, y, z, this);
                 }
             }
@@ -179,17 +179,17 @@ public class Network {
         for (Map.Entry<Vec3i, NetworkComponentEntry> block : components.entrySet()) {
             Vec3i pos = block.getKey();
 
-            if (block.getValue().block() instanceof NetworkComponent component) {
+            if (block.getValue().block instanceof NetworkComponent component) {
                 component.update(world, pos.x, pos.y, pos.z, this);
             }
         }
     }
 
-    public ArrayList<Vec3i> walk(Vec3i start) {
+    public ObjectArrayList<Vec3i> walk(Vec3i start) {
         // ArrayList for list of blocks yet to explore
-        ArrayList<Vec3i> open = new ArrayList<>();
+        ObjectArrayList<Vec3i> open = new ObjectArrayList<>();
         // ArrayList for list of blocks that have been found
-        ArrayList<Vec3i> closed = new ArrayList<>();
+        ObjectArrayList<Vec3i> closed = new ObjectArrayList<>();
 
         // Add the starting position to explore
         open.add(start);
@@ -204,9 +204,9 @@ public class Network {
                 Vec3i side = new Vec3i(pos.x + dir.getOffsetX(), pos.y + dir.getOffsetY(), pos.z + dir.getOffsetZ());
                 if (components.containsKey(side) && !closed.contains(side)) {
                     // Check if the side block can connect to this block and reverse
-                    if (getEntry(pos).component().canConnectTo(world, pos.x, pos.y, pos.z, this, dir) && getEntry(side).component().canConnectTo(world, side.x, side.y, side.z, this, dir.getOpposite())) {
+                    if (getEntry(pos).component.canConnectTo(world, pos.x, pos.y, pos.z, this, dir) && getEntry(side).component.canConnectTo(world, side.x, side.y, side.z, this, dir.getOpposite())) {
                         // Check if the component is an edge, or a node
-                        NetworkComponent component = getEntry(side).component();
+                        NetworkComponent component = getEntry(side).component;
                         if (component instanceof NetworkNodeComponent) {
                             open.add(side);
                         } else if (component instanceof NetworkEdgeComponent) {
@@ -248,12 +248,17 @@ public class Network {
             blockNbt.putInt("x", pos.x);
             blockNbt.putInt("y", pos.y);
             blockNbt.putInt("z", pos.z);
+            
+            Identifier blockId = BlockRegistry.INSTANCE.getId(entry.getValue().getBlock());
+            if (blockId != null) {
+                blockNbt.putString("blockId", String.valueOf(blockId));
+            }
 
-            if (entry.getValue().block() instanceof NetworkComponent component) {
+            if (entry.getValue().block instanceof NetworkComponent component) {
                 component.writeNbt(world, pos.x, pos.y, pos.z, this, blockNbt);
             }
 
-            blockNbt.put("entryData", entry.getValue().data());
+            blockNbt.put("entryData", entry.getValue().data);
 
             blocksNbt.add(blockNbt);
         }
@@ -280,7 +285,7 @@ public class Network {
             return null;
         }
 
-        network.components = new HashMap<>();
+        network.components = new Object2ObjectOpenHashMap<>();
 
         network.id = tag.getInt("id");
         NbtList blocksNbt = tag.getList("blocks");
@@ -296,8 +301,15 @@ public class Network {
             Vec3i pos = new Vec3i(blockNbt.getInt("x"), blockNbt.getInt("y"), blockNbt.getInt("z"));
 
             // Fetch the type of the block
-            Block block = world.getBlockState(pos.x, pos.y, pos.z).getBlock();
+            BlockState state = world.getBlockState(pos.x, pos.y, pos.z);
+            Block block = state.getBlock();
 
+            // If the NBT data contains the blockId and the block is not loaded in world, use it to load the block definition
+            if ((state.isAir() || block == null) && blockNbt.contains("blockId")) {
+                Identifier blockId = Identifier.of(blockNbt.getString("blockId"));
+                block = BlockRegistry.INSTANCE.get(blockId);
+            }
+            
             // Load the block into network
             if (block instanceof NetworkComponent component) {
                 // Mod NBT
@@ -306,7 +318,7 @@ public class Network {
                 // Put the block in Network
                 network.components.put(
                         pos,
-                        new NetworkComponentEntry(pos, block, component, blockNbt.getCompound("entryData"))
+                        new NetworkComponentEntry(world, pos, block, component, blockNbt.getCompound("entryData"))
                 );
 
                 component.onAddedToNet(world, pos.x, pos.y, pos.z, network);
@@ -336,7 +348,7 @@ public class Network {
                 
                 // We have not yet verified this component
                 // Walk the network from this component and add it to the continuous networks
-                ArrayList<Vec3i> walk = network.walk(component);
+                ObjectArrayList<Vec3i> walk = network.walk(component);
                 continuousSegments.add(new ObjectArrayList<>(walk));
                 
                 // Add all the found blocks to found blocks in order to not verify them again
@@ -346,6 +358,7 @@ public class Network {
             if (foundBlocks.size() != network.components.size()) {
                 NyaLib.LOGGER.warn("Unable to verify that all blocks in network {} are present.", network.id);
             }
+            
             if (continuousSegments.size() == 1) {
                 NyaLib.LOGGER.info("All of the blocks in the network {} are a single continuous segment.", network.id);
             } else {

@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "nyalib-entity",
+  "version": "${version}",
+
+  "name": "NyaLib Entity",
+  "description": "A module providing APIs for entities",
+  "authors": [
+    "DanyGames2014"
+  ],
+
+  "license": "MIT",
+  "icon": "assets/nyalib-entity/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "stationapi:event_bus": [
+      "net.danygames2014.nyalib.entity.datatracker.init.PacketListener",
+      "net.danygames2014.nyalib.entity.datatracker.init.ExtendedDataTrackerListener"
+    ],
+    "stationapi:event_bus_client": [
+    ],
+    "stationapi:event_bus_server": [
+    ]
+  },
+  "accessWidener": "nyalib-entity.accesswidener",
+  "mixins": [
+    "nyalib-entity.mixins.json"
+  ],
+  "depends": {
+    "minecraft": "1.0.0-beta.7.3"
+  },
+  "custom": {
+    "modmenu": {
+      "parent": "nyalib",
+      "badges": ["library"]
+    }
+  }
+}

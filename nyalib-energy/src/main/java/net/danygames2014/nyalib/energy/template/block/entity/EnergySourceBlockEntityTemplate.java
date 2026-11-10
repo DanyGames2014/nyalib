@@ -33,7 +33,7 @@ public abstract class EnergySourceBlockEntityTemplate extends BlockEntity implem
 
         // Reset the extracted counter
         extracted = 0;
-
+        
         // First check if we have anything to actually send
         if (energy > 0) {
             // If we do, first try to send to adjacent energy consumers

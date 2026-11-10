@@ -5,10 +5,15 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "EntityMixin",
+    "impl.extrahearts.LivingEntityMixin",
+    "impl.extrahearts.PlayerEntityMixin",
     "impl.fireimmunity.EntityMixin",
     "impl.fireimmunity.LivingEntityMixin",
     "impl.fly.LivingEntityMixin",
-    "impl.fly.PlayerEntityMixin"
+    "impl.fly.PlayerEntityMixin",
+    "impl.inventoryprovider.PlayerEntityMixin",
+    "impl.invincibility.LivingEntityMixin",
+    "impl.invincibility.PlayerEntityMixin"
   ],
   "server": [
   ],

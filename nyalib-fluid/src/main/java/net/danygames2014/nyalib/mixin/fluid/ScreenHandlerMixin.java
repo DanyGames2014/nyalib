@@ -140,7 +140,7 @@ public abstract class ScreenHandlerMixin implements FluidScreenHandler {
 
             // Bucket
             if (cursorStack.getItem() instanceof FluidBucket bucket) {
-                Fluid bucketFluid = bucket.getFluid();
+                Fluid bucketFluid = bucket.getFluid(cursorStack);
                 FluidStack invFluidStack = inv.getFluid(index, null);
 
                 //noinspection StatementWithEmptyBody
@@ -151,7 +151,7 @@ public abstract class ScreenHandlerMixin implements FluidScreenHandler {
                     // The bucket is empty, try to fill it
 
                     // If the fluid has a bucket item, try to form it
-                    if (bucket.getFullBucketItem(invFluidStack.fluid) != null) {
+                    if (bucket.getFullBucketItem(invFluidStack.fluid, cursorStack) != null) {
                         int iterationLimit = 127;
                         while (iterationLimit-- > 0) {
                             if (inv.getFluid(index, null) == null) {
@@ -165,7 +165,7 @@ public abstract class ScreenHandlerMixin implements FluidScreenHandler {
                                 if (extractedStack != null) {
                                     if (extractedStack.amount >= Fluids.BUCKET_SIZE) {
                                         player.inventory.getCursorStack().count--;
-                                        if (!pushItemBuffer(bucket.getFullBucketItem(invFluidStack.fluid), player)) {
+                                        if (!pushItemBuffer(bucket.getFullBucketItem(invFluidStack.fluid, cursorStack), player)) {
                                             iterationLimit = 0;
                                         }
 
@@ -193,13 +193,13 @@ public abstract class ScreenHandlerMixin implements FluidScreenHandler {
                     // The bucket has fluid, try to deposit it into the slot
 
                     // Try to form the empty bucket item 
-                    if (bucket.getEmptyBucketItem() != null) {
+                    if (bucket.getEmptyBucketItem(cursorStack) != null) {
                         PlayerInventory playerI = player.inventory;
 
                         int iterationLimit = 127;
                         while (iterationLimit-- > 0) {
                             // If the remaining items in the cursor stack are the empty form, break
-                            if (playerI.getCursorStack() == null || playerI.getCursorStack().getItem() == bucket.getEmptyBucketItem()) {
+                            if (playerI.getCursorStack() == null || playerI.getCursorStack().getItem() == bucket.getEmptyBucketItem(cursorStack)) {
                                 break;
                             }
 
@@ -230,7 +230,7 @@ public abstract class ScreenHandlerMixin implements FluidScreenHandler {
                             }
 
                             playerI.getCursorStack().count--;
-                            if (!pushItemBuffer(bucket.getEmptyBucketItem(), player)) {
+                            if (!pushItemBuffer(bucket.getEmptyBucketItem(cursorStack), player)) {
                                 break;
                             }
 
