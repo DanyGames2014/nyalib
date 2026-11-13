@@ -15,7 +15,6 @@
   * Moved part of saving to be off-thread
 * Moved BlockEntityInit into the NyaLib Block module
 * Add ItemStack context to FluidBucket methods
-* Update to StationAPI 2.0.0-alpha.6.4
 * Block Templates now use StationAPI Runtime Resources Event
 * Fix custom bucket items extending FluidBucket not being handled properly
 * Extended Data Tracker
@@ -35,3 +34,4 @@
 * ScreenHandler will no longer void an item if it cannot be inserted into a Managed Inventory
 * Fix the Furnace Item Handler implementation
 * Change how energy is distributed in an EnergyNetwork to being distributed according to the conductor resistance and length
+* Update to StationAPI 2.0.0-alpha.6.5
