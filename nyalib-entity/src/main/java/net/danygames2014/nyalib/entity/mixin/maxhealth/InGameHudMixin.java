@@ -42,7 +42,7 @@ public class InGameHudMixin extends DrawContext {
         for(int i = 0; i < 10; ++i) {
             int x = scaledWidth / 2 - 91 + i * 8;
 
-            GL11.glBindTexture(GL11.GL_TEXTURE_2D, minecraft.textureManager.getTextureId("/assets/nyalib-entity/stationapi/textures/gui/heart.png"));
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, minecraft.textureManager.getTextureId("/assets/nyalib-entity/stationapi/textures/gui/extra-hearts.png"));
 
             if(heartsIndex > 1) {
                 int prevU = prevIndex * 18;
