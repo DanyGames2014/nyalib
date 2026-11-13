@@ -14,8 +14,11 @@ import net.danygames2014.nyalibtest.abilities.*;
 import net.danygames2014.nyalibtest.capability.block.ItemHandlerBlockCapabilityTesterBlock;
 import net.danygames2014.nyalibtest.capability.item.YoinkerItem;
 import net.danygames2014.nyalibtest.energy.*;
+import net.danygames2014.nyalibtest.energy.cable.GoldenCableBlock;
+import net.danygames2014.nyalibtest.energy.cable.RubberCableBlock;
 import net.danygames2014.nyalibtest.energy.entity.EnergyConsumerBlockEntity;
 import net.danygames2014.nyalibtest.energy.entity.EnergySourceBlockEntity;
+import net.danygames2014.nyalibtest.energy.material.CableMaterial;
 import net.danygames2014.nyalibtest.fluid.FluidTankBlock;
 import net.danygames2014.nyalibtest.fluid.InfiniteWaterBlock;
 import net.danygames2014.nyalibtest.fluid.ManagedFluidTankBlock;
@@ -48,6 +51,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
+import net.minecraft.block.MapColor;
 import net.minecraft.block.PressurePlateActivationRule;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.gui.screen.Screen;
@@ -84,6 +88,9 @@ public class NyaLibTest {
     public static Block highResistanceEnergyWireBlock;
     public static Block lossyEnergyWireBlock;
     public static Item multimeter;
+    public static Material cableMaterial = new CableMaterial(MapColor.LIGHT_GRAY);
+    public static Block rubberCable;
+    public static Block goldenCable;
 
     public static Block fluidTankBlock;
     public static Block simpleFluidTankBlock;
@@ -169,6 +176,8 @@ public class NyaLibTest {
         lowResistanceEnergyWireBlock = new LowResistanceWireBlock(NAMESPACE.id("low_resistance_energy_wire")).setTranslationKey(NAMESPACE, "low_resistance_energy_wire");
         highResistanceEnergyWireBlock = new HighResistanceWireBlock(NAMESPACE.id("high_resistance_energy_wire")).setTranslationKey(NAMESPACE, "high_resistance_energy_wire");
         lossyEnergyWireBlock = new LossyEnergyWireBlock(NAMESPACE.id("lossy_energy_wire")).setTranslationKey(NAMESPACE, "lossy_energy_wire");
+        rubberCable = new RubberCableBlock(NAMESPACE.id("rubber_cable"), cableMaterial).setTranslationKey(NAMESPACE, "rubber_cable").setHardness(0.2F).setResistance(0.5F).setSoundGroup(Block.WOOL_SOUND_GROUP);
+        goldenCable = new GoldenCableBlock(NAMESPACE.id("golden_cable"), cableMaterial).setTranslationKey(NAMESPACE, "golden_cable").setHardness(0.2F).setResistance(0.5F).setSoundGroup(Block.WOOL_SOUND_GROUP);
 
         // Block Templates
         spongeStairs = new StairsBlockTemplate(NAMESPACE.id("sponge_stairs"), Block.SPONGE).setTranslationKey(NAMESPACE, "sponge_stairs");

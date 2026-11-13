@@ -1,0 +1,69 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "nyalibtest:block/cable/golden/center_6"
+      }
+    },
+    {
+      "apply": {
+        "model": "nyalibtest:block/cable/golden/side_6",
+        "uvlock": false,
+        "y": 90
+      },
+      "when": {
+        "north": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "nyalibtest:block/cable/golden/side_6",
+        "uvlock": false,
+        "y": 180
+      },
+      "when": {
+        "east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "nyalibtest:block/cable/golden/side_6",
+        "uvlock": false,
+        "y": 270
+      },
+      "when": {
+        "south": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "nyalibtest:block/cable/golden/side_6",
+        "uvlock": false,
+        "y": 0
+      },
+      "when": {
+        "west": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "nyalibtest:block/cable/golden/top_bottom_6",
+        "uvlock": false,
+        "x": 180
+      },
+      "when": {
+        "up": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "nyalibtest:block/cable/golden/top_bottom_6",
+        "uvlock": false,
+        "x": 0
+      },
+      "when": {
+        "down": "true"
+      }
+    }
+  ]
+}

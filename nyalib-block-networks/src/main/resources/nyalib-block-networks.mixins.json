@@ -6,7 +6,6 @@
   "mixins": [
     "blocknetworks.BlockMixin",
     "blocknetworks.BlockWithEntityMixin",
-    "blocknetworks.FlattenedChunkMixin",
     "blocknetworks.WorldMixin"
   ],
   "server": [

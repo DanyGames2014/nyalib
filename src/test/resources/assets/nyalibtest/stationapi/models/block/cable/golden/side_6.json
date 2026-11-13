@@ -1,0 +1,6 @@
+{
+  "parent": "nyalibtest:block/cable/template/side_6",
+  "textures": {
+    "texture": "nyalibtest:block/cable/golden_6"
+  }
+}

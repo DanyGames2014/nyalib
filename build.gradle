@@ -2,8 +2,8 @@ import static net.modificationstation.stationapi.gradle.SubprojectHelpers.addDep
 
 plugins {
     id "maven-publish"
-    id "fabric-loom" version "1.17.20"
-    id "babric-loom-extension" version "1.17.4"
+    id "fabric-loom" version "1.17.21"
+    id "babric-loom-extension" version "1.17.5"
     id "com.modrinth.minotaur" version "2.+"
 }
 
